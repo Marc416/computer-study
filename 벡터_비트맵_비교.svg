@@ -1,0 +1,52 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="600" height="400" fill="#f0f0f0" rx="10"/>
+
+  <!-- 제목 -->
+  <text x="300" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">벡터 그래픽 = 수학 명령어의 모음</text>
+
+  <!-- 왼쪽: 도형들 -->
+  <text x="150" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#555">이런 그림이 저장되는 방식 ↓</text>
+
+  <!-- 집 그리기 (벡터) -->
+  <!-- 집 본체 -->
+  <rect x="80" y="160" width="140" height="100" fill="#4ECDC4" stroke="#333" stroke-width="2"/>
+  <!-- 지붕 -->
+  <polygon points="150,90 60,160 240,160" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+  <!-- 문 -->
+  <rect x="130" y="210" width="40" height="50" fill="#2C3E50" rx="3"/>
+  <!-- 창문 -->
+  <rect x="95" y="180" width="25" height="25" fill="#AED9E0" stroke="#333" stroke-width="1"/>
+  <rect x="180" y="180" width="25" height="25" fill="#AED9E0" stroke="#333" stroke-width="1"/>
+  <!-- 태양 -->
+  <circle cx="50" cy="100" r="25" fill="#F9D71C"/>
+  <!-- 나무 -->
+  <rect x="262" y="210" width="15" height="50" fill="#8B4513"/>
+  <circle cx="269" cy="195" r="30" fill="#27AE60"/>
+
+  <!-- 오른쪽: 코드 표현 -->
+  <rect x="320" y="80" width="260" height="280" fill="#1e1e1e" rx="8"/>
+  <text x="335" y="105" font-family="monospace" font-size="10" fill="#569CD6">&lt;svg&gt;</text>
+  <text x="345" y="125" font-family="monospace" font-size="9" fill="#9CDCFE">&lt;rect</text>
+  <text x="355" y="140" font-family="monospace" font-size="9" fill="#CE9178">x="80" y="160"</text>
+  <text x="355" y="155" font-family="monospace" font-size="9" fill="#CE9178">fill="#4ECDC4"/&gt;</text>
+  <text x="345" y="180" font-family="monospace" font-size="9" fill="#6A9955">// 집 본체: 사각형</text>
+
+  <text x="345" y="205" font-family="monospace" font-size="9" fill="#9CDCFE">&lt;polygon</text>
+  <text x="355" y="220" font-family="monospace" font-size="9" fill="#CE9178">points="150,90</text>
+  <text x="355" y="235" font-family="monospace" font-size="9" fill="#CE9178">60,160 240,160"/&gt;</text>
+  <text x="345" y="255" font-family="monospace" font-size="9" fill="#6A9955">// 지붕: 삼각형(꼭짓점3개)</text>
+
+  <text x="345" y="280" font-family="monospace" font-size="9" fill="#9CDCFE">&lt;circle</text>
+  <text x="355" y="295" font-family="monospace" font-size="9" fill="#CE9178">cx="50" r="25"</text>
+  <text x="355" y="310" font-family="monospace" font-size="9" fill="#CE9178">fill="#F9D71C"/&gt;</text>
+  <text x="345" y="330" font-family="monospace" font-size="9" fill="#6A9955">// 태양: 원</text>
+
+  <text x="335" y="350" font-family="monospace" font-size="10" fill="#569CD6">&lt;/svg&gt;</text>
+
+  <!-- 화살표 -->
+  <text x="305" y="200" font-size="20" fill="#333">→</text>
+
+  <!-- 하단 설명 -->
+  <text x="300" y="390" text-anchor="middle" font-size="12" fill="#777">좌표와 수식으로 저장 → 아무리 확대해도 다시 계산하니까 깨지지 않음!</text>
+</svg>
