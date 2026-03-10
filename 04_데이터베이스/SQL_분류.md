@@ -15,6 +15,7 @@
 | CREATE | 생성 | 테이블, 뷰, 인덱스 등 새로 만들기 |
 | ALTER | 수정 | 기존 구조 변경 (컬럼 추가/삭제 등) |
 | DROP | 삭제 | 테이블 자체를 완전히 제거 |
+| RENAME | 이름변경 | 테이블 이름 변경 |
 | TRUNCATE | 초기화 | 데이터만 전부 삭제 (구조는 유지) |
 
 ### 2. DML (데이터 조작어, Data Manipulation Language)
@@ -57,6 +58,29 @@
 | SAVEPOINT | 롤백할 지점 지정 |
 
 - ⚠️ 교재에 따라 COMMIT/ROLLBACK을 **DCL에 포함**하기도 하고 **TCL로 분리**하기도 함
+
+### 🧠 TCL ⊂ DCL 암기법: "DCL = 컨트롤 타워"
+- 컨트롤 타워에서 하는 일 두 가지:
+  1. **출입 통제** → GRANT / REVOKE (권한 제어)
+  2. **작업 확정/취소** → COMMIT / ROLLBACK (트랜잭션 제어)
+- 공통점: 둘 다 **데이터 자체를 건드리지 않고 "제어"만 함** → 그래서 DCL로 묶임
+- 시험 팁: 선택지에 COMMIT이 DCL에 있다고 바로 틀린 게 아님! 다른 항목도 비교해서 **가장 정확한 조합**을 골라야 함
+
+### 5. DDL 제약조건 (CHECK 등) — CREATE / ALTER에서만 사용
+
+- 제약조건은 **테이블의 "규칙"을 정하는 것** → DDL(CREATE, ALTER)에서만 등장
+- 비유: 건물 설계할 때 "이 방은 5명까지만 입장 가능" 같은 규칙을 거는 것
+
+| 제약조건 | 의미 | 예시 |
+|---------|------|------|
+| **PRIMARY KEY** | 기본키 (유일 + NOT NULL) | `id INT PRIMARY KEY` |
+| **FOREIGN KEY** | 외래키 (다른 테이블 참조) | `REFERENCES 부서(부서코드)` |
+| **UNIQUE** | 중복 불가 | `email VARCHAR(50) UNIQUE` |
+| **NOT NULL** | NULL 불가 | `이름 VARCHAR(20) NOT NULL` |
+| **CHECK** | 값의 범위/조건 지정 | `CHECK (나이 >= 18)` |
+| **DEFAULT** | 기본값 설정 | `등급 VARCHAR(10) DEFAULT '일반'` |
+
+- ⚠️ **시험 포인트**: CHECK 등 제약조건은 DML(SELECT, INSERT)이나 DCL(GRANT)에는 안 쓰임!
 
 ## 시험 빈출 포인트
 
