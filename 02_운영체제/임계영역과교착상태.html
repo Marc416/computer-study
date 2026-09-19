@@ -20,46 +20,159 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"동시에 건드리면 값이 깨진다"는 문제</h4>
+      <p>은행 계좌 잔액이 10만 원이다. 남편이 ATM에서 5만 원을 뽑고, 같은 순간 아내가 다른 ATM에서 5만 원을 뽑는다. 정상이라면 잔액은 0원이 되어야 한다. 그런데 컴퓨터 안에서 "출금"은 한 번에 끝나는 동작이 아니라 <b>① 잔액을 읽고 → ② 5만 원을 빼고 → ③ 다시 저장</b>하는 세 단계다. 두 프로세스가 ①을 <b>동시에</b> 수행해 둘 다 "10만 원"을 읽어버리면, 둘 다 5만 원을 빼고 둘 다 "5만 원"을 저장한다. 10만 원을 인출했는데 잔액이 5만 원으로 남는다.</p>
+      <p>이렇게 <b>실행 순서(타이밍)에 따라 결과가 달라지는 상황</b>을 경쟁 상태(race condition)라 하고, 문제를 일으키는 그 코드 구간이 <b>임계영역</b>이다. 해결책은 간단하다 — <b>임계영역에는 한 번에 한 프로세스만 들어가게 문을 잠근다(상호배제).</b></p>
+      <p>그런데 문을 잠그기 시작하면 새로운 문제가 생긴다. A가 1번 방을 잠근 채 2번 방을 기다리고, B가 2번 방을 잠근 채 1번 방을 기다리면 <b>둘 다 영원히 멈춘다.</b> 이것이 <b>교착상태</b>다. 즉 이 단원은 "동시성 문제를 잠금으로 해결했더니, 그 잠금 때문에 생긴 두 번째 문제까지 다루는" 하나의 연결된 이야기다.</p>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="경쟁 상태 예시: 두 프로세스가 잔액 10만원을 동시에 읽어 각각 5만원을 빼고 저장하여, 10만원을 인출했는데 잔액이 5만원으로 남는 과정">
+        <text x="20" y="18" font-size="13" font-weight="700">경쟁 상태(race condition) — 잠그지 않으면 이렇게 깨진다</text>
+        <line x1="120" y1="32" x2="120" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <line x1="400" y1="32" x2="400" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <text x="60" y="48" font-size="12" text-anchor="middle" font-weight="700">시간</text>
+        <text x="260" y="48" font-size="12" text-anchor="middle" font-weight="700">프로세스 A (남편)</text>
+        <text x="550" y="48" font-size="12" text-anchor="middle" font-weight="700">프로세스 B (아내)</text>
+
+        <text x="60" y="80" font-size="12" text-anchor="middle">t1</text>
+        <rect x="135" y="64" width="250" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="260" y="81" font-size="12" text-anchor="middle">잔액 읽기 → 100,000</text>
+
+        <text x="60" y="114" font-size="12" text-anchor="middle">t2</text>
+        <rect x="415" y="98" width="250" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="540" y="115" font-size="12" text-anchor="middle">잔액 읽기 → 100,000</text>
+
+        <text x="60" y="148" font-size="12" text-anchor="middle">t3</text>
+        <rect x="135" y="132" width="250" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="260" y="149" font-size="12" text-anchor="middle">100,000 − 50,000 = 50,000</text>
+
+        <text x="60" y="182" font-size="12" text-anchor="middle">t4</text>
+        <rect x="415" y="166" width="250" height="24" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="540" y="183" font-size="12" text-anchor="middle">100,000 − 50,000 = 50,000</text>
+
+        <text x="60" y="216" font-size="12" text-anchor="middle">t5</text>
+        <rect x="135" y="200" width="530" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="400" y="218" font-size="12.5" text-anchor="middle" font-weight="700">둘 다 50,000 저장 → 10만원 인출했는데 잔액 5만원 (5만원이 증발)</text>
+
+        <text x="20" y="252" font-size="11.5" opacity="0.8">해결: t1~t5를 임계영역으로 묶고 한 번에 한 프로세스만 들어가게 한다(상호배제)</text>
+      </svg>
+      <figcaption>경쟁 상태의 전형적인 시나리오 — "읽고·계산하고·저장하는" 세 단계 사이에 다른 프로세스가 끼어들면 갱신이 사라진다(lost update). 임계영역과 상호배제가 필요한 이유다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">🔒</span>주요 개념 — 임계영역과 상호배제</h2>
 
-    <h3>임계영역(Critical Section)이란?</h3>
+    <h3>임계영역(Critical Section)이란? <span class="page-ref">📖 기출문제집 p.224</span></h3>
     <p>둘 이상의 프로세스가 동시에 접근하면 안 되는 <b>공유자원(임계자원)</b>을 이용하는 프로그램 코드 부분. 한 프로세스가 임계영역에서 실행 중이면 다른 프로세스는 진입할 수 없고, 그 시점에는 <b>공유데이터의 읽기·쓰기가 불가능</b>하다.</p>
+    <div class="deep">
+      <h4>용어를 정확히 구분하자 — 자주 틀리는 지점</h4>
+      <ul>
+        <li><b>임계자원</b> = 동시에 공유할 수 없는 <b>자원 자체</b> (예: 그 계좌 잔액 변수, 프린터)</li>
+        <li><b>임계영역</b> = 그 자원을 <b>사용하는 코드 구간</b> (자원이 아니라 "코드 부분"이다)</li>
+        <li>"임계영역에 진입한 프로세스가 <b>있는 동안</b>"은 다른 프로세스가 읽기조차 불가 — 선택지에서 "읽기만 가능/쓰기만 가능"처럼 반쪽만 허용한다고 하면 전부 오답이다</li>
+      </ul>
+    </div>
 
-    <h3>임계영역 문제 해결의 3가지 필수 조건</h3>
+    <h3>임계영역 문제 해결의 3가지 필수 조건 <span class="page-ref">📖 기출문제집 p.225</span></h3>
     <table>
-      <tr><th>조건</th><th>의미</th></tr>
-      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 프로세스가 임계영역에 있으면 다른 프로세스는 <b>진입 불가</b></td></tr>
-      <tr><td>진행 (Progress)</td><td>임계영역이 비어있을 때, 누가 들어갈지는 <b>무한정 연기되지 않고</b> 유한 시간 내 결정되어야 함</td></tr>
-      <tr><td>한정 대기 (Bounded Waiting)</td><td>진입 요청 후 허용될 때까지, 다른 프로세스가 먼저 진입하는 <b>횟수에 한계</b>가 있어야 함</td></tr>
+      <tr><th>조건</th><th>의미</th><th>이 조건이 없으면?</th></tr>
+      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 프로세스가 임계영역에 있으면 다른 프로세스는 <b>진입 불가</b></td><td>애초에 경쟁 상태가 발생 (위 은행 예시)</td></tr>
+      <tr><td>진행 (Progress)</td><td>임계영역이 비어있을 때, 누가 들어갈지는 <b>무한정 연기되지 않고</b> 유한 시간 내 결정되어야 함</td><td>빈 방을 앞에 두고 아무도 못 들어가는 교통정체 발생</td></tr>
+      <tr><td>한정 대기 (Bounded Waiting)</td><td>진입 요청 후 허용될 때까지, 다른 프로세스가 먼저 진입하는 <b>횟수에 한계</b>가 있어야 함</td><td>특정 프로세스만 계속 새치기 → <b>기아(starvation)</b> 발생</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 해결책은 프로세스의 <b>수행 속도에 대해 어떤 가정도 하면 안 된다</b> (속도와 무관하게 항상 일정한 결과가 보장돼야 함).</div>
+    <div class="tip"><b>함정 주의:</b> 해결책은 프로세스의 <b>수행 속도에 대해 어떤 가정도 하면 안 된다</b>. "CPU가 빠르니까 금방 끝나겠지" 같은 가정에 기대면 느린 장비에서 깨진다 — 속도와 무관하게 항상 일정한 결과가 보장돼야 한다. (2018 서울시 기출의 정답 근거)</div>
+    <div class="analogy"><b>화장실 한 칸 비유:</b> 상호배제 = "한 명만 들어간다", 진행 = "비어 있으면 누군가는 바로 들어가야지 서로 눈치만 보면 안 된다", 한정대기 = "새치기가 무한정 반복돼서 한 사람이 영영 못 들어가면 안 된다".</div>
 
-    <h3>세마포어 (Semaphore)</h3>
+    <h3>세마포어 (Semaphore) <span class="page-ref">📖 기출문제집 p.227</span></h3>
     <ul>
       <li>다익스트라(Dijkstra)가 제안한 <b>동기화 도구</b>, 정수형 공유 변수(counter)와 P·V 연산으로 정의</li>
       <li><b>P 연산(wait)</b>: counter를 1 감소, 자원 사용 <b>허가를 기다리며 임계영역에 진입</b>하는 연산</li>
       <li><b>V 연산(signal)</b>: counter를 1 증가, 자원 사용을 마치고 <b>임계영역에서 나오며</b> 대기 중인 프로세스를 깨움</li>
-      <li>종류: <b>이진(binary) 세마포어</b> (0/1만 가짐), <b>계수형(counting) 세마포어</b> (여러 개 자원 관리)</li>
-      <li>세마포어 연산 자체는 <b>수행 중 인터럽트되지 않는다</b> (원자적 연산)</li>
+      <li>종류: <b>이진(binary) 세마포어</b> (0/1만 가짐 = 화장실 1칸), <b>계수형(counting) 세마포어</b> (여러 개 자원 관리 = 화장실 n칸)</li>
+      <li>세마포어 연산 자체는 <b>수행 중 인터럽트되지 않는다</b> (원자적 연산) — 그렇지 않으면 세마포어 변수 자체가 또 경쟁 상태에 빠진다</li>
     </ul>
-    <div class="tip"><b>함정 주의:</b> "P연산=signal, V연산=wait"처럼 뒤바꿔 내는 문제 주의. <b>P=wait=진입, V=signal=탈출</b>. 또한 세마포어 구현 시 <b>바쁜 대기(busy waiting)</b>는 CPU 시간을 낭비하는 단점이 있다 (장점 아님).</div>
 
-    <h3>모니터(Monitor)</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="세마포어 P연산과 V연산의 동작: counter가 1일 때 P연산으로 0이 되며 진입하고, 두 번째 프로세스는 counter가 0이라 대기하며, V연산으로 counter가 1로 돌아오면 대기하던 프로세스가 깨어난다">
+        <defs>
+          <marker id="sm1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="18" font-size="13" font-weight="700">이진 세마포어 S = 1 (자원 1개)로 임계영역 보호하기</text>
+
+        <text x="20" y="48" font-size="12" font-weight="700">① 초기 상태</text>
+        <rect x="150" y="34" width="70" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="185" y="52" font-size="12.5" text-anchor="middle">S = 1</text>
+        <text x="240" y="52" font-size="12" opacity="0.8">자원이 하나 비어 있다는 뜻</text>
+
+        <text x="20" y="90" font-size="12" font-weight="700">② A가 P(S)</text>
+        <line x1="120" y1="84" x2="145" y2="84" stroke="currentColor" stroke-width="1.5" marker-end="url(#sm1)"/>
+        <rect x="150" y="76" width="70" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="185" y="94" font-size="12.5" text-anchor="middle" font-weight="700">S = 0</text>
+        <rect x="250" y="76" width="200" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="94" font-size="12" text-anchor="middle">A가 임계영역 진입 ✔</text>
+        <text x="465" y="94" font-size="11.5" opacity="0.8">S를 1 감소시키고 들어감</text>
+
+        <text x="20" y="132" font-size="12" font-weight="700">③ B도 P(S)</text>
+        <line x1="120" y1="126" x2="145" y2="126" stroke="currentColor" stroke-width="1.5" marker-end="url(#sm1)"/>
+        <rect x="150" y="118" width="70" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="185" y="136" font-size="12.5" text-anchor="middle">S = 0</text>
+        <rect x="250" y="118" width="200" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5,4"/>
+        <text x="350" y="136" font-size="12" text-anchor="middle">B는 대기 큐에서 블록 ⏸</text>
+        <text x="465" y="136" font-size="11.5" opacity="0.8">S가 0이면 들어갈 수 없음</text>
+
+        <text x="20" y="174" font-size="12" font-weight="700">④ A가 V(S)</text>
+        <line x1="120" y1="168" x2="145" y2="168" stroke="currentColor" stroke-width="1.5" marker-end="url(#sm1)"/>
+        <rect x="150" y="160" width="70" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="185" y="178" font-size="12.5" text-anchor="middle" font-weight="700">S = 1</text>
+        <rect x="250" y="160" width="200" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="178" font-size="12" text-anchor="middle">A 탈출 + B를 깨움 🔔</text>
+        <text x="465" y="178" font-size="11.5" opacity="0.8">S를 1 증가시키고 나감</text>
+
+        <text x="20" y="216" font-size="12" font-weight="700">⑤ B 진입</text>
+        <rect x="150" y="202" width="70" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="185" y="220" font-size="12.5" text-anchor="middle">S = 0</text>
+        <rect x="250" y="202" width="200" height="26" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="220" font-size="12" text-anchor="middle">B가 임계영역 진입 ✔</text>
+
+        <text x="20" y="262" font-size="12.5" font-weight="700">P = 진입(감소), V = 탈출(증가)</text>
+        <text x="20" y="282" font-size="12" opacity="0.85">P는 "Passeren(통과)", V는 "Vrijgeven(반납)" — 네덜란드어에서 온 이름이다.</text>
+      </svg>
+      <figcaption>세마포어의 P·V 연산 흐름 — P는 counter를 줄이며 들어가고(0이면 대기), V는 counter를 늘리며 나오면서 대기 중인 프로세스를 깨운다.</figcaption>
+    </figure>
+
+    <div class="tip"><b>함정 주의 (매년 나옴):</b> "P연산=signal, V연산=wait"처럼 뒤바꿔 내는 문제 주의. <b>P=wait=진입=감소, V=signal=탈출=증가</b>. 또한 세마포어 구현 시 <b>바쁜 대기(busy waiting)</b>는 CPU 시간을 <b>낭비하는 단점</b>이다 (방지 효과가 아님).</div>
+    <div class="deep">
+      <h4>바쁜 대기(busy waiting)가 왜 문제인가</h4>
+      <p>가장 단순한 세마포어 구현은 "S가 0이면 <b>while문을 돌면서 계속 다시 확인</b>"하는 방식이다. 문제는 그 while문이 도는 동안에도 <b>CPU를 붙잡고 있다</b>는 것 — 아무 일도 안 하면서 CPU만 태운다. 그래서 이 루프를 스핀락(spinlock)이라고도 부른다.</p>
+      <p>개선책은 대기하는 프로세스를 <b>대기 큐에 넣고 블록(block)</b>시켜 CPU를 다른 프로세스에 넘기고, V 연산 때 <b>wakeup</b>으로 깨우는 방식이다. 시험에서 "P·V 연산의 구현 방법에 따라 바쁜 대기를 해결할 수 있다"는 <b>맞는 설명</b>이고, "바쁜 대기를 추가해서 CPU 낭비를 방지한다"는 <b>틀린 설명</b>이다 — 방향을 정확히 구분할 것.</p>
+    </div>
+
+    <h3>모니터(Monitor) <span class="page-ref">📖 기출문제집 p.228</span></h3>
     <p>공유자원을 <b>내부적으로 숨기고</b> 접근을 위한 인터페이스만 제공하여, 자원을 보호하고 프로세스 간 동기화를 자동으로 처리하는 고수준 동기화 도구.</p>
+    <div class="analogy"><b>세마포어 vs 모니터:</b> 세마포어는 <b>프로그래머가 직접 P·V를 짝 맞춰 호출</b>해야 해서 하나라도 빠뜨리면 바로 버그다. 모니터는 <b>그 잠금을 언어·라이브러리가 대신 걸어주는</b> 방식 — 자바의 <code>synchronized</code>가 모니터 개념이다. "알아서 잠가주는 고수준 도구 = 모니터"로 기억.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔗</span>주요 개념 — 교착상태(Deadlock)</h2>
 
-    <h3>교착상태 발생 4대 필요조건 (모두 만족해야 발생) <span class="page-ref">📖 기출문제집 p.231</span></h3>
+    <h3>교착상태 발생 4대 필요조건 (모두 만족해야 발생) <span class="page-ref">📖 기출문제집 p.229~231</span></h3>
     <table>
-      <tr><th>조건</th><th>의미</th></tr>
-      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 번에 한 프로세스만 자원 사용 가능</td></tr>
-      <tr><td>점유와 대기 (Hold and Wait)</td><td>자원을 <b>가진 채로</b> 다른 자원을 요청하며 대기</td></tr>
-      <tr><td>비선점 (Non-preemption)</td><td>자원을 <b>강제로 빼앗을 수 없음</b> — 점유 프로세스가 끝나야 해제</td></tr>
-      <tr><td>순환 대기 (Circular Wait)</td><td>프로세스들이 <b>원형으로</b> 서로 상대의 자원을 요청</td></tr>
+      <tr><th>조건</th><th>의미</th><th>기차 비유</th></tr>
+      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 번에 한 프로세스만 자원 사용 가능</td><td>단선 철로에는 기차 한 대만 들어갈 수 있다</td></tr>
+      <tr><td>점유와 대기 (Hold and Wait)</td><td>자원을 <b>가진 채로</b> 다른 자원을 요청하며 대기</td><td>구간 A에 들어선 채로 구간 B가 비기를 기다린다</td></tr>
+      <tr><td>비선점 (Non-preemption)</td><td>자원을 <b>강제로 빼앗을 수 없음</b> — 점유 프로세스가 끝나야 해제</td><td>남의 기차를 억지로 끌어낼 수 없다</td></tr>
+      <tr><td>순환 대기 (Circular Wait)</td><td>프로세스들이 <b>원형으로</b> 서로 상대의 자원을 요청</td><td>마주 보고 진입한 두 기차가 서로 상대가 비켜주기를 기다린다</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "조건 중 하나만 만족해도 발생한다"는 틀렸다 — <b>4가지를 모두 만족</b>해야 교착상태가 발생한다. 또한 이 4조건은 "비환형 대기"가 아니라 "<b>순환(환형) 대기</b>"가 맞는 조건 이름이다.</div>
+    <div class="tip"><b>함정 주의 (출제 1순위):</b> ① "조건 중 <b>하나만</b> 만족해도 발생한다" → 틀림, <b>4가지 모두</b> 만족해야 한다. ② 조건 이름은 "<b>비</b>선점"과 "<b>순환(환형)</b> 대기"다 — 선택지에 <b>"선점(preemption)"</b>이나 <b>"비환형 대기(non-circular wait)"</b>가 나오면 그게 바로 정답(= 조건이 아닌 것)이다.</div>
+    <div class="deep">
+      <h4>왜 "4개 모두"여야 하는가 — 예방 전략의 근거</h4>
+      <p>4개가 모두 모여야 교착이 성립한다는 말은 뒤집으면 <b>하나만 깨뜨려도 교착은 절대 발생하지 않는다</b>는 뜻이다. 교착상태 <b>예방(prevention)</b> 전략이 바로 이 논리 위에 서 있다.</p>
+      <p>다만 <b>상호배제만은 깨뜨릴 수 없다.</b> 상호배제를 포기한다는 건 "여러 프로세스가 프린터를 동시에 쓰게 허용한다"는 말인데, 그러면 애초에 임계영역을 보호하려던 목적 자체가 사라진다. 그래서 <b>예방은 나머지 3개(점유와대기·비선점·순환대기) 중 하나를 부정</b>하는 방식으로만 이루어진다.</p>
+    </div>
 
     <figure class="diagram">
       <svg viewBox="0 0 500 400" role="img" aria-label="자원할당그래프: P1은 R1을 할당받은 채 R2를 요청하고, P2는 R2를 할당받은 채 R1을 요청하여 순환 대기가 발생한다">
@@ -92,41 +205,81 @@
       <figcaption>자원할당그래프(Resource Allocation Graph) — 실선은 "할당", 점선은 "요청"이다. P1→R2→P2→R1→P1으로 화살표가 원을 그리는 <b>순환(사이클)</b>이 생기면 상호배제·점유와대기·비선점 조건이 이미 성립한 상태에서 순환대기까지 겹쳐 교착상태가 확정된다.</figcaption>
     </figure>
 
-    <h3>교착상태 처리 방법 4가지</h3>
+    <div class="tip"><b>그래프 문제 푸는 법:</b> ① 원(○)은 프로세스, 사각형(□)은 자원 유형, 사각형 안의 점(●)은 그 자원의 <b>인스턴스 개수</b>다. ② 사이클을 찾는다. ③ <b>자원마다 인스턴스가 1개뿐이면 사이클 = 교착상태 확정</b>이지만, 인스턴스가 여러 개면 사이클이 있어도 교착이 아닐 수 있다(다른 인스턴스가 반납되면 풀림). 국회직 2022 기출이 이 차이를 물었다.</div>
+
+    <h3>교착상태 처리 방법 4가지 <span class="page-ref">📖 기출문제집 p.234~235</span></h3>
     <table>
       <tr><th>방법</th><th>전략</th><th>구체적 기법</th></tr>
       <tr><td><b>예방 (Prevention)</b></td><td>4조건 중 <b>상호배제를 제외한</b> 하나를 부정 → 발생 가능성을 원천 차단</td><td>점유대기 부정(자원 일괄할당), 비선점 부정(자원 강제회수), 순환대기 부정(자원에 고유번호 부여, 오름차순으로만 요청)</td></tr>
       <tr><td><b>회피 (Avoidance)</b></td><td>발생 가능성은 인정하되, <b>안전 상태를 유지</b>하도록 자원 할당을 통제</td><td><b>은행원(banker's) 알고리즘</b></td></tr>
       <tr><td><b>탐지/발견 (Detection)</b></td><td>발생을 허용한 뒤 <b>자원 할당 그래프의 사이클</b> 등으로 탐지</td><td>자원할당그래프 사이클 검사</td></tr>
-      <tr><td><b>회복 (Recovery)</b></td><td>탐지된 교착상태 관련 <b>프로세스·자원을 제거/철회</b></td><td>프로세스 강제 종료, 자원 선점</td></tr>
+      <tr><td><b>회복 (Recovery)</b></td><td>탐지된 교착상태 관련 <b>프로세스·자원을 제거/철회</b></td><td>프로세스 강제 종료, 자원 선점(롤백)</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> <b>상호배제는 예방 대상에서 제외</b> — 상호배제 자체를 부정하면 임계영역 보호가 무너지므로 교착상태 예방 방법으로 쓸 수 없다.</div>
+    <div class="tip"><b>함정 주의:</b> <b>상호배제는 예방 대상에서 제외</b> — 상호배제 자체를 부정하면 임계영역 보호가 무너지므로 교착상태 예방 방법으로 쓸 수 없다. 선택지에 "필요로 하는 자원에 대해 <b>배타적 통제권</b>을 갖게 한다"가 나오면 그건 상호배제 = <b>해결책이 아니다</b>.</div>
 
-    <h3>은행원(Banker's) 알고리즘 — 교착상태 회피</h3>
+    <h4 style="margin:18px 0 6px;font-size:14px;">예방 기법을 조건별로 매칭하기 (이 표가 시험의 핵심)</h4>
+    <table>
+      <tr><th>부정할 조건</th><th>구체적 기법</th><th>부작용</th></tr>
+      <tr><td><b>점유와 대기</b> 부정</td><td>프로세스 시작 시점에 <b>필요한 자원을 모두 한꺼번에 할당</b>받고 시작 (일괄할당). 하나라도 못 받으면 아예 시작 안 함</td><td>자원을 미리 잡아두어 <b>이용률 저하</b>, 일괄할당 대기로 성능 저하</td></tr>
+      <tr><td><b>비선점</b> 부정</td><td>자원을 점유한 프로세스가 다른 자원을 요청했는데 못 받으면 <b>자신이 가진 것을 일단 반납</b>하고, 나중에 전부 다시 요청</td><td>반납·재요청 반복 시 작업 손실, <b>기아 상태</b> 가능</td></tr>
+      <tr><td><b>순환 대기</b> 부정</td><td>모든 자원에 <b>고유 번호를 매기고 오름차순으로만</b> 요청 허용 (낮은 번호 점유 후 높은 번호 요청은 OK, 그 반대는 거부)</td><td>실제 사용 순서와 번호 순서가 안 맞으면 비효율</td></tr>
+      <tr><td><b>상호 배제</b> 부정</td><td colspan="2"><b>불가능 — 예방 기법으로 쓸 수 없다</b> (자원 보호 목적 자체가 무너짐)</td></tr>
+    </table>
+
+    <h3>은행원(Banker's) 알고리즘 — 교착상태 회피 <span class="page-ref">📖 기출문제집 p.232~233</span></h3>
     <ul>
       <li>자원 요청이 들어오면, <b>일단 할당했다고 가정(시뮬레이션)</b>하고 안전 상태(safe state)가 유지되는지 검사</li>
       <li>안전하면 할당, <b>불안전(unsafe) 상태</b>가 될 것 같으면 할당을 거부(대기)</li>
       <li>회피(avoidance) 알고리즘이지 <b>회복(recovery) 알고리즘이 아님</b></li>
+      <li>프로세스들이 <b>최대 요구량을 미리 선언</b>해야 쓸 수 있다는 것이 현실적 한계</li>
     </ul>
-    <div class="tip"><b>함정 주의:</b> "불안전 상태는 항상 교착상태로 빠진다"는 틀렸다 — 불안전 상태는 교착상태로 빠질 <b>가능성이 있을 뿐</b>, 반드시 빠지는 것은 아니다.</div>
+    <div class="deep">
+      <h4>이름이 왜 "은행원"인가</h4>
+      <p>은행이 고객에게 대출해 줄 때를 생각하면 된다. 고객 3명이 각각 최대 한도 7억·5억·3억을 요구할 수 있다고 신고했고, 은행 금고에는 10억이 있다. 은행원은 대출 요청이 올 때마다 <b>"이걸 빌려줘도, 남은 돈으로 적어도 한 명은 한도까지 채워줘서 끝내게 하고, 그 사람이 갚은 돈으로 다음 사람을 끝내는 식으로 전원을 처리할 수 있는가?"</b>를 확인한다. 그런 순서가 하나라도 존재하면 <b>안전 상태</b>, 전혀 없으면 <b>불안전 상태</b>다.</p>
+      <p><b>안전 순서(safe sequence)</b>란 바로 그 "전원을 끝낼 수 있는 처리 순서"를 말한다.</p>
+    </div>
 
-    <h3>기타 관련 문제</h3>
+    <div class="tip">
+      <b>학습용 예제 — 안전 상태 판정하기</b> (총 자원 10개, 프로세스 3개)
+      <table style="margin-top:8px;">
+        <tr><th>프로세스</th><th>최대 요구량</th><th>현재 할당</th><th>추가로 필요(= 최대−할당)</th></tr>
+        <tr><td>P1</td><td>7</td><td>3</td><td>4</td></tr>
+        <tr><td>P2</td><td>5</td><td>2</td><td>3</td></tr>
+        <tr><td>P3</td><td>3</td><td>2</td><td>1</td></tr>
+      </table>
+      <ol class="steps">
+        <li>현재 할당 합계 = 3+2+2 = 7 → <b>남은 가용 자원 = 10 − 7 = 3</b></li>
+        <li>가용 3으로 끝낼 수 있는 프로세스를 찾는다 → P3(1 필요) 가능 → P3 실행 후 <b>가진 2까지 반납</b> → 가용 = 3−1+3 = <b>5</b></li>
+        <li>가용 5로 P2(3 필요) 가능 → 실행 후 반납 → 가용 = 5−3+5 = <b>7</b></li>
+        <li>가용 7로 P1(4 필요) 가능 → 전원 완료</li>
+        <li>안전 순서 <b>&lt;P3, P2, P1&gt;</b>이 존재하므로 이 상태는 <b>안전 상태</b> → 요청을 승인해도 된다</li>
+      </ol>
+      만약 어떤 순서로도 전원을 끝낼 수 없다면 <b>불안전 상태</b>이며, 은행원 알고리즘은 그 할당 요청을 <b>거부(대기)</b>시킨다.
+    </div>
+
+    <div class="tip"><b>함정 주의:</b> "불안전 상태는 <b>항상</b> 교착상태로 빠진다" → 틀림. 불안전 상태는 교착상태로 빠질 <b>가능성이 있을 뿐</b>이다. 반대로 "<b>교착상태는 불안전 상태에 속한다</b>"는 맞는 설명이다 (포함 관계 방향을 정확히: 교착상태 ⊂ 불안전 상태).</div>
+
+    <h3>기타 관련 포인트</h3>
     <ul>
-      <li>가변분할 메모리의 <b>외부 단편화</b>는 통합(coalescing)·압축(compaction)으로 해결 (교착상태와는 별개 문제, 짝지어 나오는 문제 주의)</li>
-      <li>자원형이 1개, 자원 수 R, 프로세스 수 P, 프로세스당 최대 요구자원 수 k일 때 교착상태를 근본적으로 방지하는 조건: <b>R ≥ (k-1) × P + 1</b></li>
+      <li>가변분할 메모리의 <b>외부 단편화</b>는 통합(coalescing)·압축(compaction)으로 해결 (교착상태와는 별개 문제인데 짝지어 내는 문제가 있다 — 2017 교육청 기출)</li>
+      <li>자원형이 1개, 총 자원 수 R, 프로세스 수 P, 프로세스당 최대 요구자원 수 k일 때 교착상태를 근본적으로 방지하는 조건: <b>R ≥ (k−1) × P + 1</b></li>
+      <li><b>교착상태 ≠ 기아(starvation)</b>: 교착상태는 서로를 기다리며 <b>전원이</b> 멈춘 상태, 기아는 다른 프로세스는 진행하는데 <b>특정 프로세스만</b> 계속 밀려나 자원을 못 받는 상태다</li>
     </ul>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>임계영역 해결 3조건: 상호배제·진행·한정대기 (순서·이름 정확히 암기)</li>
-      <li>세마포어 P(wait)=진입/감소, V(signal)=탈출/증가 — 뒤바꿔 내는 문제 많음</li>
-      <li>교착상태 4조건은 <b>모두 만족</b>해야 발생 (하나만 만족 X)</li>
+      <li>임계영역 해결 3조건: <b>상호배제·진행·한정대기</b> (이름 정확히 암기)</li>
+      <li>해결책은 프로세스의 <b>수행 속도를 가정하면 안 된다</b></li>
+      <li>세마포어 <b>P(wait)=진입/감소, V(signal)=탈출/증가</b> — 뒤바꿔 내는 문제 매년 출제</li>
+      <li>세마포어 연산은 <b>인터럽트되지 않는다</b>(원자적) / <b>바쁜 대기는 단점</b>(CPU 낭비)</li>
+      <li>교착상태 4조건은 <b>모두 만족</b>해야 발생 — 선택지의 "선점", "비환형 대기"는 조건이 아님</li>
       <li>예방(prevention)은 <b>상호배제 제외</b>한 3조건 중 하나를 부정</li>
-      <li>은행원 알고리즘 = <b>회피(avoidance)</b>, 회복(recovery) 아님</li>
-      <li>자원에 고유번호를 매겨 오름차순으로만 요청하게 하는 것 = <b>순환대기 조건의 부정</b></li>
-      <li>바쁜 대기(busy waiting)는 세마포어의 <b>단점</b> (CPU 시간 낭비)</li>
+      <li>자원에 고유번호를 매겨 오름차순으로만 요청 = <b>순환대기 조건의 부정</b> / 시작 시 일괄할당 = <b>점유와대기 부정</b> / 못 받으면 반납 = <b>비선점 부정</b></li>
+      <li>은행원 알고리즘 = <b>회피(avoidance)</b>, 회복(recovery)·예방 아님</li>
+      <li>교착상태 ⊂ 불안전 상태 (불안전하다고 반드시 교착은 아님)</li>
+      <li>R ≥ (k−1)×P + 1 공식으로 프로세스 수 구하는 계산 문제</li>
     </ul>
   </section>
 
@@ -136,12 +289,268 @@
       <tr><th>구분</th><th>교착상태 예방</th><th>교착상태 회피</th><th>교착상태 탐지·회복</th></tr>
       <tr><td>전략</td><td>4조건 중 하나 원천 차단</td><td>안전상태 유지하며 자원 할당</td><td>발생 허용 후 찾아서 해결</td></tr>
       <tr><td>대표 기법</td><td>자원 순서화, 일괄 할당</td><td>은행원 알고리즘</td><td>자원할당그래프, 프로세스 강제종료</td></tr>
+      <tr><td>시점</td><td>발생 <b>전</b> (구조적으로 불가능하게)</td><td>발생 <b>전</b> (할당 때마다 검사)</td><td>발생 <b>후</b></td></tr>
       <tr><td>단점</td><td>자원 이용률 저하</td><td>최대 요구량을 미리 알아야 함</td><td>오버헤드, 이미 발생 후 대응</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>P 연산 (wait)</th><th>V 연산 (signal)</th></tr>
-      <tr><td>동작</td><td>counter -1, 자원 사용 시작(진입)</td><td>counter +1, 자원 반납(탈출)</td></tr>
+      <tr><td>동작</td><td>counter −1, 자원 사용 시작(진입)</td><td>counter +1, 자원 반납(탈출)</td></tr>
+      <tr><td>counter가 부족하면</td><td>대기 큐에서 블록</td><td>대기 중인 프로세스를 깨움(wakeup)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>교착상태(Deadlock)</th><th>기아(Starvation)</th></tr>
+      <tr><td>멈추는 대상</td><td>서로 물린 프로세스들 <b>전부</b></td><td><b>특정</b> 프로세스만</td></tr>
+      <tr><td>원인</td><td>순환적 대기</td><td>불공정한 스케줄링·우선순위</td></tr>
+      <tr><td>해결</td><td>예방·회피·탐지·회복</td><td>에이징(aging)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2009 지방직 · 기출문제집 p.224</span></div>
+      <p class="q-body">운영체제에서 <b>임계구역(Critical Section)</b>에 대한 설명으로 옳은 것은?</p>
+      <ol class="choices">
+        <li>동시에 여러 개의 프로세스가 진입 가능하나 한 개 프로세스만 공유데이터 읽기만 가능하다.</li>
+        <li>동시에 여러 개의 프로세스가 진입 가능하나 한 개 프로세스만 공유데이터 쓰기만 가능하다.</li>
+        <li>주어진 시점에 오직 하나의 프로세스만 진입할 수 있고 공유데이터의 읽기와 쓰기는 불가능하다.</li>
+        <li>주어진 시점에 오직 하나의 프로세스만 진입할 수 있고 공유데이터의 읽기와 쓰기는 가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>두 부분으로 나눠 판단하면 쉽다.</p>
+          <ol class="steps">
+            <li><b>몇 개가 들어가나?</b> → 상호배제에 의해 <b>오직 하나</b>. 따라서 "여러 개가 진입 가능"이라는 ①·②는 즉시 탈락.</li>
+            <li><b>들어간 프로세스는 뭘 하나?</b> → 임계영역은 애초에 <b>공유 데이터를 읽거나 쓰기 위해</b> 들어가는 구간이다. 진입한 프로세스는 당연히 읽기·쓰기를 모두 할 수 있다 → ③ 탈락.</li>
+            <li>남는 것은 ④.</li>
+          </ol>
+          <p><b>함정:</b> ③번은 "다른 프로세스는 접근 불가"라는 말을 "진입한 프로세스도 못 읽는다"로 잘못 옮긴 선택지다. <b>금지되는 것은 바깥 프로세스의 접근</b>이지, 들어간 프로세스의 작업이 아니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2018 서울시 · 기출문제집 p.225</span></div>
+      <p class="q-body">임계지역(critical section) 문제에 대한 해결책이 가져야 하는 성질로 <b>가장 옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>한 번에 한 프로세스만이 임계지역을 수행하도록 해야 한다.</li>
+        <li>프로세스는 자신이 임계지역을 수행하지 않으면서 다른 프로세스가 임계지역을 수행하는 것을 막으면 안 된다.</li>
+        <li>프로세스의 임계지역 진입은 유한 시간 내에 이루어져야 한다.</li>
+        <li>임계지역 문제의 해결책에서는 프로세스의 수행 속도에 대해 적절한 가정을 할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>①은 <b>상호배제</b>, ②는 <b>진행</b>(자기가 안 쓰면서 남을 막지 마라), ③은 <b>한정대기</b>(유한 시간 내 진입) — 3대 조건 그대로다.</li>
+            <li>④만 성격이 다르다. 올바른 해결책은 <b>어떤 속도 가정도 하지 않아야</b> 한다. 프로세스들은 CPU 속도·스케줄링에 관계없이 <b>항상 같은 결과</b>가 보장되어야 하기 때문이다.</li>
+          </ol>
+          <p><b>정리:</b> "속도를 가정해도 된다/타이밍에 의존해도 된다"는 문장이 보이면 <b>무조건 오답</b>이다. 동기화의 본질이 "타이밍에 의존하지 않게 만드는 것"이기 때문이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2022 국가직 · 기출문제집 p.227</span></div>
+      <p class="q-body">운영체제의 <b>세마포어(Semaphore)</b>에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>프로세스 간 상호배제(Mutual Exclusion)의 원리를 보장하는 데 사용된다.</li>
+        <li>여러 개의 프로세스가 동시에 그 값을 수정하지 못한다.</li>
+        <li>세마포어에 대한 연산은 수행 중에 인터럽트 될 수 있다.</li>
+        <li>세마포어는 플래그 변수와 그 변수를 검사하거나 증감시키는 연산들로 정의된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (인터럽트 될 수 <b>없다</b>)</p>
+        <div class="explain">
+          <p>세마포어 연산은 <b>원자적(atomic)</b>이어야 한다. 즉 P·V 연산은 시작하면 <b>중간에 끊기지 않고</b> 끝까지 수행된다.</p>
+          <ol class="steps">
+            <li>만약 P 연산 도중(예: counter를 읽고 아직 감소시키기 전)에 인터럽트가 걸려 다른 프로세스가 끼어들면?</li>
+            <li>두 프로세스가 모두 "counter는 1이네"를 읽고 <b>둘 다 임계영역에 진입</b>해 버린다.</li>
+            <li>즉 <b>세마포어 변수 자체가 경쟁 상태에 빠진다</b> — 동기화 도구가 동기화에 실패하는 자기모순.</li>
+          </ol>
+          <p>그래서 ②("동시에 값을 수정하지 못한다")는 맞는 설명이고, 이는 ③이 틀렸다는 근거이기도 하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2012 국가직 · 기출문제집 p.227</span></div>
+      <p class="q-body">세마포어(semaphore)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>세마포어는 임계구역 문제를 해결하기 위해 사용할 수 있는 동기화 도구이다.</li>
+        <li>세마포어의 종류에는 이진(binary) 세마포어와 계수형(counting) 세마포어가 있다.</li>
+        <li>구현할 때 세마포어 연산에 바쁜 대기(busy waiting)를 추가하여 CPU의 시간 낭비를 방지할 수 있다.</li>
+        <li>표준 단위 연산인 P(wait)와 V(signal)에 의해서 접근되는 정수형 공유변수이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (바쁜 대기는 CPU 시간을 <b>낭비시키는</b> 단점)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>바쁜 대기란 임계영역에 못 들어간 프로세스가 <b>while 루프를 돌며 계속 재확인</b>하는 방식이다.</li>
+            <li>그 루프가 도는 동안에도 <b>CPU를 점유</b>하므로, 다른 프로세스가 생산적으로 쓸 수 있었던 CPU 시간을 그냥 태운다.</li>
+            <li>따라서 바쁜 대기는 <b>방지책이 아니라 그 자체가 문제(단점)</b>다. 해결책은 대기 프로세스를 <b>블록시켜 대기 큐에 넣는</b> 구현이다.</li>
+          </ol>
+          <p><b>비교해서 외우기:</b> "P·V 연산의 <b>구현 방법에 따라</b> 바쁜 대기를 <b>해결</b>할 수 있다" → 맞는 문장. "바쁜 대기를 <b>추가해서</b> 낭비를 <b>방지</b>한다" → 틀린 문장. 방향이 정반대다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2011 지방직 / 2024 국가직 · 기출문제집 p.229</span></div>
+      <p class="q-body">교착상태가 발생하는 <b>필요조건에 해당하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>상호 배제 (mutual exclusion)</li>
+        <li>점유와 대기 (hold and wait)</li>
+        <li>비환형 대기 (non-circular wait)</li>
+        <li>비선점 (non-preemption)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 비환형 대기 (올바른 조건은 <b>환형(순환) 대기</b>)</p>
+        <div class="explain">
+          <p>4대 조건: <b>상호배제 · 점유와대기 · 비선점 · 순환(환형)대기</b>.</p>
+          <ol class="steps">
+            <li>③은 "<b>비</b>환형 대기" — 원을 이루지 <b>않는다</b>는 뜻이므로 조건의 정반대다.</li>
+            <li>같은 유형으로 2024 국가직에서는 "<b>선점(preemption)</b>"이 오답 선택지로 나왔다. 올바른 조건은 "<b>비</b>선점"이다.</li>
+          </ol>
+          <p><b>출제 패턴 정리:</b> 이 유형은 <b>"비"라는 글자를 붙이거나 떼서</b> 함정을 만든다. 정확한 조건 이름은 "<b>비</b>선점"과 "순환(환형)대기" — 즉 <b>비선점에는 '비'가 붙고, 순환대기에는 '비'가 안 붙는다.</b></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2015 서울시 · 기출문제집 p.235</span></div>
+      <p class="q-body">교착상태(deadlock)를 해결할 수 있는 방법으로 <b>적당하지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>프로세스들이 필요로 하는 자원에 대해 배타적인 통제권을 갖게 한다.</li>
+        <li>자원에 선형으로 고유번호를 할당하고, 각 프로세스는 현재 점유한 자원의 고유번호보다 큰 번호 방향으로만 자원을 요구하도록 한다.</li>
+        <li>한 프로세스가 실행되는 데 필요한 모든 자원을 할당한 후 실행시킨다.</li>
+        <li>자원을 점유하고 있는 프로세스가 다른 자원을 요구할 때, 점유하고 있는 자원을 반납하고 요구하도록 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>각 선택지가 <b>어떤 조건을 부정하는지</b> 매칭해 보면 답이 드러난다.</p>
+          <ol class="steps">
+            <li>② 자원에 번호를 매겨 <b>오름차순으로만</b> 요청 → <b>순환대기 부정</b> ✔ 해결책</li>
+            <li>③ 필요한 자원을 <b>모두 할당받은 뒤</b> 실행 (일괄할당) → <b>점유와대기 부정</b> ✔ 해결책</li>
+            <li>④ 추가 자원을 못 받으면 <b>가진 것을 반납</b> → <b>비선점 부정</b> ✔ 해결책</li>
+            <li>① "배타적 통제권을 갖게 한다" = <b>상호배제 그 자체</b>. 이는 교착상태의 <b>필요조건</b>이지 해결책이 아니며, 부정할 수도 없다 → 정답</li>
+          </ol>
+          <p><b>핵심:</b> 예방 기법은 <b>상호배제를 제외한 3조건</b>만 건드린다. "배타적 통제권 / 한 시점에 한 프로세스만 사용" 같은 표현이 보이면 상호배제이고, 그건 해결책이 아니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2025 계리직 · 기출문제집 p.235</span></div>
+      <p class="q-body">다음 기법이 <b>예방(prevention)하는 교착상태 발생 조건</b>은?</p>
+      <div class="tip" style="margin:8px 0;">운영체제는 시스템 내 모든 자원에 번호를 지정한다. 낮은 번호의 자원을 점유한 프로세스가 높은 번호의 자원을 요청할 때, 이를 허용한다. 그러나 높은 번호의 자원을 점유한 프로세스가 낮은 번호의 자원을 요청할 때, 이는 허용하지 않는다.</div>
+      <ol class="choices">
+        <li>비선점 (nonpreemption)</li>
+        <li>원형 대기 (circular waiting)</li>
+        <li>상호 배제 (mutual exclusion)</li>
+        <li>점유와 대기 (hold-and-wait)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 원형 대기</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>모든 자원 요청이 <b>번호가 커지는 방향으로만</b> 일어난다고 하자.</li>
+            <li>순환이 생기려면 화살표를 따라가다 <b>출발점으로 되돌아와야</b> 한다. 그런데 번호는 계속 커지기만 하므로 <b>되돌아올 수 없다</b>.</li>
+            <li>즉 구조적으로 사이클이 만들어지지 않는다 → <b>원형(순환) 대기 조건의 부정</b>.</li>
+          </ol>
+          <p><b>빠른 판별법:</b> "자원에 <b>번호·순서</b>를 매긴다"는 말이 나오면 무조건 <b>순환대기 부정</b>이다. 반면 "<b>전부 한꺼번에</b> 할당"은 점유와대기 부정, "<b>반납 후 재요청</b>"은 비선점 부정이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2023 계리직 · 기출문제집 p.233</span></div>
+      <p class="q-body">교착상태(deadlock)와 은행원 알고리즘(banker's algorithm)에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>교착상태는 불안전한 상태(unsafe state)에 속한다.</li>
+        <li>은행원 알고리즘은 교착상태 회복(recovery) 알고리즘이다.</li>
+        <li>불안전한 상태(unsafe state)는 항상 교착상태로 빠지게 된다.</li>
+        <li>은행원 알고리즘은 불안전한 상태(unsafe state)에서 교착상태로 전이되는 것을 거부한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>상태의 포함 관계를 정확히 잡는 문제다: <b>안전 상태</b> ↔ <b>불안전 상태</b>로 나뉘고, <b>교착상태는 불안전 상태의 부분집합</b>이다.</p>
+          <ol class="steps">
+            <li>① 교착상태 ⊂ 불안전 상태 → <b>맞음</b></li>
+            <li>② 은행원 알고리즘은 <b>회피(avoidance)</b> 알고리즘이다 (회복 아님) → 틀림</li>
+            <li>③ 불안전 상태는 교착으로 빠질 <b>가능성이 있을 뿐</b> 항상 빠지는 것은 아니다 → 틀림</li>
+            <li>④ 은행원 알고리즘은 애초에 <b>불안전 상태로 들어가는 할당 자체를 거부</b>해 안전 상태를 유지한다. "불안전 상태에서 교착으로 가는 것만 막는다"는 서술은 부정확 → 틀림</li>
+          </ol>
+          <p><b>한 줄 정리:</b> 안전 ⊃ (요청 승인 가능) / 불안전 ⊃ 교착상태. 은행원 알고리즘은 <b>안전 상태의 울타리 밖으로 나가지 않도록</b> 문을 잠그는 도구다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2025 법원직 · 기출문제집 p.238</span></div>
+      <p class="q-body">어느 시스템에 하나의 자원형만 존재하고 이에 <b>5개의 단위자원</b>이 있으며, 이 시스템에 <b>p개의 프로세스</b>가 존재한다. 각 프로세스가 어느 순간에도 <b>최대 2개</b>까지의 단위자원만을 필요로 한다면, 교착상태 발생을 근본적으로 없애기 위한 필요충분조건은?</p>
+      <ol class="choices">
+        <li>p ≤ 2</li>
+        <li>p ≤ 3</li>
+        <li>p ≤ 4</li>
+        <li>p ≤ 5</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ p ≤ 4</p>
+        <div class="explain">
+          <p>공식: <b>R ≥ (k − 1) × P + 1</b> (R = 총 자원 수, k = 프로세스당 최대 요구량, P = 프로세스 수)</p>
+          <ol class="steps">
+            <li>값을 대입: 5 ≥ (2 − 1) × p + 1</li>
+            <li>5 ≥ p + 1 → <b>p ≤ 4</b></li>
+          </ol>
+          <p><b>공식이 왜 저런가 (외우지 말고 이해하기):</b> 최악의 상황은 <b>모든 프로세스가 "최대 요구량 − 1"개씩만 쥔 채</b> 마지막 1개를 서로 기다리는 경우다. 이때 자원이 <b>딱 1개라도 남아 있으면</b> 그 1개를 받은 프로세스가 작업을 끝내고 <b>가진 걸 전부 반납</b>하므로 연쇄적으로 전부 풀린다.</p>
+          <ol class="steps">
+            <li>최악의 점유량 = (k−1) × P = (2−1) × p = p개</li>
+            <li>여기에 여유분 <b>1개</b>가 더 있어야 하므로 필요한 총 자원 R ≥ p + 1</li>
+            <li>R = 5이므로 p + 1 ≤ 5 → p ≤ 4 (프로세스 5개면 각자 1개씩 쥐고 남는 자원이 0이 되어 교착)</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">총 자원 12개인 시스템에 프로세스 3개가 있다. 최대 요구량은 P1=10, P2=4, P3=9이고 현재 할당량은 P1=5, P2=2, P3=2이다. 이 상태는 <b>안전 상태인가?</b> 안전하다면 안전 순서를 구하라.</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 안전 상태이며, 안전 순서는 &lt;P2, P1, P3&gt; (또는 &lt;P2, P3, P1&gt;)</p>
+        <div class="explain">
+          <table>
+            <tr><th>프로세스</th><th>최대</th><th>할당</th><th>추가 필요</th></tr>
+            <tr><td>P1</td><td>10</td><td>5</td><td>5</td></tr>
+            <tr><td>P2</td><td>4</td><td>2</td><td>2</td></tr>
+            <tr><td>P3</td><td>9</td><td>2</td><td>7</td></tr>
+          </table>
+          <ol class="steps">
+            <li>할당 합계 = 5+2+2 = 9 → <b>가용 = 12 − 9 = 3</b></li>
+            <li>가용 3으로 끝낼 수 있는 프로세스 찾기: P1은 5 필요(✗), P2는 2 필요(✔), P3은 7 필요(✗) → <b>P2 선택</b></li>
+            <li>P2 완료 후 자신이 쥔 2를 반납 → 가용 = 3 − 2 + 4 = <b>5</b></li>
+            <li>가용 5로: P1은 5 필요(✔) → <b>P1 선택</b>. 완료 후 반납 → 가용 = 5 − 5 + 10 = <b>10</b></li>
+            <li>가용 10으로 P3(7 필요) 완료 가능 → 전원 완료, 따라서 <b>안전 상태</b></li>
+          </ol>
+          <p><b>풀이 요령:</b> ① "추가 필요 = 최대 − 할당" 열을 먼저 만든다 → ② 가용 자원으로 끝낼 수 있는 프로세스를 하나 고른다 → ③ 그 프로세스가 <b>가진 것까지 전부 반납</b>한다고 보고 가용을 갱신한다(= 가용 + 그 프로세스의 할당량) → ④ 전원이 끝나면 안전. 3단계에서 "추가로 준 것만 돌려받는다"고 착각하면 계산이 틀어진다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -149,13 +558,18 @@
     <div class="keywords">
       <span class="chip">임계영역</span>
       <span class="chip">Critical Section</span>
+      <span class="chip">임계자원</span>
+      <span class="chip">경쟁상태</span>
       <span class="chip">상호배제</span>
       <span class="chip">진행</span>
       <span class="chip">한정대기</span>
       <span class="chip">세마포어</span>
       <span class="chip">P연산</span>
       <span class="chip">V연산</span>
+      <span class="chip">이진세마포어</span>
+      <span class="chip">계수형세마포어</span>
       <span class="chip">바쁜대기</span>
+      <span class="chip">원자적연산</span>
       <span class="chip">모니터</span>
       <span class="chip">교착상태</span>
       <span class="chip">Deadlock</span>
@@ -165,7 +579,10 @@
       <span class="chip">교착상태예방</span>
       <span class="chip">교착상태회피</span>
       <span class="chip">은행원알고리즘</span>
+      <span class="chip">안전상태</span>
+      <span class="chip">안전순서</span>
       <span class="chip">자원할당그래프</span>
+      <span class="chip">기아</span>
     </div>
   </section>
 

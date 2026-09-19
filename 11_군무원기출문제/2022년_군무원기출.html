@@ -11,192 +11,713 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">11. 군무원 기출문제</a> / 2022년</div>
   <h1 class="page-title">2022년 군무원 기출문제</h1>
-  <p class="page-subtitle">25문항 · 이미 배운 개념의 복습용 — 새 개념만 간단히 추가 설명 · 기출문제집 p.847~858</p>
+  <p class="page-subtitle">25문항 전체 · 먼저 풀고 해설을 펼쳐 채점하세요 · 기출문제집 p.847~858</p>
 
   <div class="summary-box">
-    <span class="tag">핵심 요약</span>
-    <p>대부분 컴퓨터구조·운영체제·네트워크·DB·프로그래밍언어에서 이미 다룬 개념의 재확인 문제. <b>비식별화(k-익명성 등)</b>, <b>디자인패턴</b>, <b>암달의 법칙</b>은 이 회차에서 처음 나오는 새 개념.</p>
+    <span class="tag">풀이 방법</span>
+    <p>각 문제의 <b>지문과 선택지만 보고 먼저 답을 고른 뒤</b>, "해설 보기"를 눌러 채점하세요.</p>
+    <p>해설에는 <b>정답 · 풀이 과정 · 오답 선택지가 틀린 이유 · 관련 개념 문서 링크</b>가 들어 있습니다.</p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">📊</span>2022년 출제 경향</h2>
+    <div class="deep">
+      <h4>한눈에 보는 분포</h4>
+      <p><b>컴퓨터구조 5 · 운영체제 5 · 네트워크 5 · DB 3 · 프로그래밍언어 3 · SW공학 2 · 정보보안 1 · 신기술 1</b>문항으로, 특정 과목에 쏠리지 않고 전 범위에서 고르게 나왔다.</p>
+      <p><b>계산 문제는 3개뿐</b>이다 — 1의 보수→16진수 변환(Q1), 암달의 법칙(Q14), 메모리 배치전략(Q21). 나머지 22문항은 <b>"가장 옳지 않은 것"을 고르는 개념 판별형</b>이라, 각 개념의 <b>정의 한 줄과 대표적 함정</b>만 정확히 알면 풀린다.</p>
+      <p><b>이 해에 처음 등장한 개념</b>: 개인정보 비식별화(k-익명성/l-다양성/t-근접성), 디자인 패턴, 암달의 법칙, NFT. 나머지는 전부 기존 과목에서 반복 출제되던 내용이다.</p>
+      <p><b>가장 잘 틀리는 3문항</b>: Q14(암달의 법칙 — 공식을 모르면 손도 못 댐), Q21(최초/최적/최악 적합을 한 문제에서 동시에 물음), Q23(사설 IP 대역 숫자를 정확히 외워야 함).</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">🖥️</span>컴퓨터구조 / 논리회로</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q1. 2진수 11010010의 1의 보수를 16진수로? <span class="page-ref">p.847</span></p>
-      <p class="a">정답 ① 2D₁₆ — 비트 반전(1↔0) 후 4비트씩 묶어 16진수로 변환</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/보수와실수표현.html">보수와 실수표현</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2022 군무원 · 기출문제집 p.847</span></div>
+      <p class="q-body">다음 중 2진수 <code>11010010</code>의 <b>1의 보수</b>(one's complement)를 <b>16진수</b>로 표현한 것으로 옳은 것은?</p>
+      <ol class="choices">
+        <li>2D₁₆</li>
+        <li>2C₁₆</li>
+        <li>D3₁₆</li>
+        <li>2E₁₆</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 2D₁₆</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>1의 보수 = 모든 비트를 반전</b>(1↔0): <code>1101 0010</code> → <code>0010 1101</code></li>
+            <li>16진수 변환은 <b>4비트씩 묶어서</b>: <code>0010</code> | <code>1101</code></li>
+            <li>0010₂ = 2, 1101₂ = D → <b>2D₁₆</b></li>
+          </ol>
+          <p><b>함정:</b> ③ D3은 두 묶음의 앞뒤를 바꿔 읽은 오답, ④ 2E는 1101(=13=D)을 1110(=14=E)으로 잘못 반전한 경우다. <b>보수를 먼저, 16진수 변환을 나중에</b> 하는 순서를 지킬 것.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/보수와실수표현.html">보수와 실수표현</a>, <a href="../01_컴퓨터구조/데이터표현과진법.html">데이터표현과 진법</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q2. 멀티플렉서·디멀티플렉서는 순차회로다? <span class="page-ref">p.847</span></p>
-      <p class="a">정답 ④(틀린 설명) — 멀티플렉서·디멀티플렉서는 <b>조합논리회로</b>다</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/논리회로.html">조합논리회로와 순서논리회로</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2022 군무원 · 기출문제집 p.847</span></div>
+      <p class="q-body">논리회로의 <b>조합회로</b>(combinational circuit)와 <b>순차회로</b>(sequential circuit)에 대한 설명 중 <b>가장 올바르지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>조합회로는 현재의 입력에 의해서만 출력값이 결정된다.</li>
+        <li>순차회로는 현재의 입력과 저장된 값에 의해 출력값이 결정된다.</li>
+        <li>복호기(decoder)와 부호기(encoder)는 조합회로로 구성되는 것이 일반적이다.</li>
+        <li>멀티플렉서(multiplexer)와 디멀티플렉서(demultiplexer)는 순차회로로 구성되는 것이 일반적이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (멀티플렉서·디멀티플렉서는 <b>조합</b>회로다)</p>
+        <div class="explain">
+          <p>판별 기준은 하나다 — <b>"과거 상태를 기억해야 하는가?"</b></p>
+          <ul>
+            <li><b>조합회로</b>(기억 없음): 가산기, 인코더/디코더, <b>MUX/DEMUX</b> — 지금 들어온 선택신호만 보고 즉시 출력을 정한다</li>
+            <li><b>순차회로</b>(기억 있음): 플립플롭, 레지스터, 카운터 — 이전 값을 붙들고 있어야 동작한다</li>
+          </ul>
+          <p><b>함정:</b> MUX는 "선택"이라는 말 때문에 뭔가 상태를 기억할 것처럼 느껴지지만, 선택신호가 바뀌면 즉시 출력이 바뀔 뿐 아무것도 저장하지 않는다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/논리회로.html">조합논리회로와 순서논리회로</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q15. 멀티코어 CPU에서 각 코어는 독립된 캐시를 가질 수 없다? <span class="page-ref">p.853</span></p>
-      <p class="a">정답 ③(틀린 설명) — 각 코어는 <b>독립된 캐시</b>를 가질 수 있다(L1은 보통 코어 전용)</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 15</span><span class="q-src">2022 군무원 · 기출문제집 p.853</span></div>
+      <p class="q-body">캐시 메모리에 대한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>CPU 캐시 메모리는 주기억장치와 CPU 사이에 위치하여 두 장치 간의 속도 차에 의한 데이터 처리 지연을 해소한다.</li>
+        <li>주기억장치에 비하여 용량은 적으나 속도는 빠른 메모리를 사용한다.</li>
+        <li>멀티 코어 프로세서의 경우 각 코어별로 독립된 캐시 메모리를 가질 수 없다.</li>
+        <li>캐시 메모리는 데이터 지역성의 원리를 이용하여 작동한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (각 코어는 <b>독립된 캐시를 가질 수 있다</b>)</p>
+        <div class="explain">
+          <p>실제 멀티코어 CPU의 캐시 구성은 이렇게 되어 있다.</p>
+          <ul>
+            <li><b>L1 캐시</b>: 코어마다 <b>전용</b>으로 하나씩 (가장 빠름, 가장 작음)</li>
+            <li><b>L2 캐시</b>: 보통 코어 전용</li>
+            <li><b>L3 캐시</b>: 여러 코어가 <b>공유</b></li>
+          </ul>
+          <p>즉 "독립된 캐시"와 "공유 캐시"가 <b>계층에 따라 둘 다 존재</b>한다. ③처럼 "가질 수 없다"고 단정하면 틀린다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q17. 캐시에서 교체 기법이 불필요하지만 효율이 낮을 수 있는 사상 방식은? <span class="page-ref">p.854</span></p>
-      <p class="a">정답 ② 직접 사상(Direct Mapping) — 주소가 정해진 한 곳에만 매핑되어 교체 정책 자체가 필요 없음</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 17</span><span class="q-src">2022 군무원 · 기출문제집 p.854</span></div>
+      <p class="q-body">캐시 기억장치에서 <b>교체 기법이 불필요</b>하고 캐시 효율이 낮아질 수 있는 <b>사상(mapping) 방식</b>으로 가장 옳은 것은?</p>
+      <ol class="choices">
+        <li>간접 사상</li>
+        <li>직접 사상(Direct Mapping)</li>
+        <li>완전 연관 사상(Fully Associative)</li>
+        <li>세트 연관 사상(Set Associative)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 직접 사상</p>
+        <div class="explain">
+          <p><b>"교체 기법이 필요한가"는 곧 "들어갈 자리에 선택권이 있는가"와 같은 질문이다.</b></p>
+          <table>
+            <tr><th>사상 방식</th><th>들어갈 수 있는 자리</th><th>교체 알고리즘</th></tr>
+            <tr><td>직접 사상</td><td><b>딱 한 곳</b>으로 정해져 있음</td><td><b>불필요</b> (선택의 여지가 없으니 무조건 덮어씀)</td></tr>
+            <tr><td>완전 연관</td><td>아무 곳이나 가능</td><td>필요 (LRU 등으로 골라야 함)</td></tr>
+            <tr><td>세트 연관</td><td>지정된 세트 안 아무 곳</td><td>필요</td></tr>
+          </table>
+          <p>직접 사상은 하드웨어가 단순하고 빠른 대신, 서로 다른 블록이 <b>같은 자리를 두고 계속 밀어내는 충돌</b>이 생겨 적중률이 떨어질 수 있다. 문제에서 "효율이 낮아질 수 있다"고 한 게 바로 이 현상이다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q18. 실시간 복구가 가능하고 중요 파일 저장용으로 쓰이는 RAID 방식은? <span class="page-ref">p.854</span></p>
-      <p class="a">정답 ② RAID 1(미러링) — 모든 데이터를 그대로 복사 저장</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">마이크로오퍼레이션과 기억장치</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 18</span><span class="q-src">2022 군무원 · 기출문제집 p.854</span></div>
+      <p class="q-body">다음에서 설명하는 <b>RAID 방식</b>으로 옳은 것은?</p>
+      <div class="tip" style="margin:8px 0;">
+        · 모든 데이터를 실시간으로 복구가 가능해 디스크 오류가 발생해도 중요한 데이터를 즉시 사용할 수 있다.<br>
+        · 시스템 소프트웨어나 중요한 파일을 저장하는 용도로만 사용된다.
+      </div>
+      <ol class="choices">
+        <li>RAID 0</li>
+        <li>RAID 1</li>
+        <li>RAID 2</li>
+        <li>RAID 5</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② RAID 1 (미러링)</p>
+        <div class="explain">
+          <p>"<b>실시간 복구</b>"라는 표현이 결정적 힌트다. 패리티로 계산해서 복원하는 방식(RAID 2·5)은 복구에 <b>연산 시간이 걸리지만</b>, 미러링은 <b>똑같은 사본이 이미 있으므로</b> 즉시 갖다 쓰면 된다.</p>
+          <table>
+            <tr><th>레벨</th><th>방식</th><th>복구</th></tr>
+            <tr><td>RAID 0</td><td>스트라이핑(분산 저장)</td><td><b>복구 불가</b> — 중복 저장이 없음</td></tr>
+            <tr><td>RAID 1</td><td><b>미러링(똑같이 복사)</b></td><td><b>즉시 복구</b>, 대신 용량 효율 50%</td></tr>
+            <tr><td>RAID 5</td><td>블록 분산 + 패리티 분산</td><td>패리티로 계산해 복구 (시간 소요)</td></tr>
+          </table>
+          <p><b>함정:</b> ① RAID 0은 속도만 빠르고 <b>복구가 아예 안 된다</b> — "RAID니까 안전하겠지"라고 넘기면 틀린다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">마이크로오퍼레이션과 기억장치</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🧵</span>운영체제</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q12. DMA는 메모리 간 복사(메모리↔메모리 전송)에는 쓸 수 없다? <span class="page-ref">p.852</span></p>
-      <p class="a">정답 ④(틀린 설명) — DMA는 메모리↔I/O뿐 아니라 <b>메모리↔메모리 복사에도 사용 가능</b></p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2022 군무원 · 기출문제집 p.852</span></div>
+      <p class="q-body"><b>DMA</b>(Direct Memory Access) 입출력 기능에 대한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>하드웨어 하위시스템이 CPU와 독립적으로 메인시스템 메모리에 접근할 수 있게 해주는 기능이다.</li>
+        <li>장치 컨트롤러가 데이터의 한 블록을 이동시키는데 이 과정에서 CPU의 개입은 불필요하다.</li>
+        <li>데이터가 전송되는 동안 CPU는 다른 작업을 수행할 수 있게 되어 CPU 효율성이 향상된다.</li>
+        <li>메모리 간 복사 또는 데이터 이동에는 쓰일 수 없는 한계가 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (DMA는 <b>메모리↔메모리 복사에도 사용 가능</b>하다)</p>
+        <div class="explain">
+          <p>DMA의 본질은 "CPU를 거치지 않고 <b>버스를 직접 써서</b> 데이터를 옮기는 것"이다. 옮기는 양쪽이 I/O와 메모리든, 메모리와 메모리든 상관없다. 실제로 memory-to-memory DMA 전송은 널리 쓰인다.</p>
+          <p><b>①②③은 모두 DMA의 정확한 정의</b>다. DMA 문제는 대부분 "CPU가 개입하는가"를 묻는데, 정답은 항상 <b>"블록 전송 중에는 개입하지 않고, 전송이 끝나면 인터럽트로 알린다"</b>이다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q14. 100초 프로그램의 40%가 순차실행, 60%를 4개 프로세서로 병렬화하면 최단 시간은? <span class="page-ref">p.853</span></p>
-      <p class="a">정답 ② 55초</p>
-      <div class="tip" style="margin-top:8px;">
-        <b>암달의 법칙(Amdahl's Law)</b> — 병렬화해도 <b>순차 실행 구간은 그대로 병목</b>이 된다는 법칙
-        <ol class="steps">
-          <li>향상 배수 = 1 / (순차비율 + 병렬비율/프로세서수) = 1 / (0.4 + 0.6/4) = 1 / 0.55</li>
-          <li>= 약 1.818배 향상</li>
-          <li>새로운 시간 = 100초 / 1.818 ≈ <b>55초</b> (100 × 0.55 = 55로 계산해도 동일)</li>
-        </ol>
-        💡 <b>암기팁:</b> "아무리 코어를 늘려도 순차 구간(40%)은 절대 안 줄어든다" — 그래서 무한대로 늘려도 최소 100×0.4=40초보다는 빨라질 수 없음
-      </div>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 14</span><span class="q-src">2022 군무원 · 기출문제집 p.853</span></div>
+      <p class="q-body">어떤 프로그램이 단일 프로세서로 실행하면 <b>100초</b>가 소요되며, 이 프로그램의 <b>40%는 반드시 순차적으로 실행</b>되어야 한다고 가정했을 때, <b>4개의 프로세서</b>를 이용하여 실행할 경우 이론적으로 가능한 최단 시간에 가장 가까운 것은?</p>
+      <ol class="choices">
+        <li>25초</li>
+        <li>55초</li>
+        <li>75초</li>
+        <li>100초</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 55초</p>
+        <div class="explain">
+          <p><b>암달의 법칙(Amdahl's Law)</b> — 병렬화해도 순차 구간은 절대 줄지 않으므로 그 부분이 병목이 된다.</p>
+          <ol class="steps">
+            <li>순차 구간: 100초 × 40% = <b>40초</b> → 프로세서를 아무리 늘려도 <b>그대로 40초</b></li>
+            <li>병렬 구간: 100초 × 60% = 60초 → 4개로 나누면 60 ÷ 4 = <b>15초</b></li>
+            <li>총 시간 = 40 + 15 = <b>55초</b></li>
+          </ol>
+          <p><b>공식으로 풀면:</b> 향상 배수 = 1 / (순차비율 + 병렬비율/프로세서수) = 1 / (0.4 + 0.6/4) = 1/0.55 ≈ 1.82배 → 100 ÷ 1.82 ≈ 55초. <b>계산이 헷갈리면 위처럼 초 단위로 쪼개서 더하는 편이 실수가 적다.</b></p>
+          <p><b>함정:</b> ① 25초는 100÷4로 <b>전체를 병렬화했다고 착각</b>한 오답이다. 또한 프로세서를 무한대로 늘려도 <b>40초 밑으로는 절대 못 내려간다</b>는 것이 이 법칙의 핵심 메시지다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q16. 프로세스들이 서로의 자원을 무한정 기다리며 진행이 멈추는 상태는? <span class="page-ref">p.854</span></p>
-      <p class="a">정답 ① deadlock(교착상태)</p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/임계영역과교착상태.html">임계영역과 교착상태</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 16</span><span class="q-src">2022 군무원 · 기출문제집 p.854</span></div>
+      <p class="q-body">다중 프로그램 실행 환경에서 <b>일련의 프로세스들이 서로가 가진 자원을 무한정 기다리며 더 이상 진행될 수 없는 상태</b>를 일컫는 용어로 가장 옳은 것은?</p>
+      <ol class="choices">
+        <li>deadlock</li>
+        <li>pipelining</li>
+        <li>preemption</li>
+        <li>mutual exclusion</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① deadlock (교착상태)</p>
+        <div class="explain">
+          <p>선택지 넷이 전부 헷갈리게 배치돼 있으니 각각의 정확한 뜻을 잡아두자.</p>
+          <ul>
+            <li><b>deadlock(교착상태)</b>: 서로의 자원을 기다리며 <b>영원히 멈춘</b> 상태 ← 정답</li>
+            <li><b>pipelining</b>: 명령어 처리를 단계별로 겹쳐 실행하는 <b>성능 향상</b> 기법 (전혀 다른 개념)</li>
+            <li><b>preemption(선점)</b>: 실행 중인 프로세스에서 자원을 <b>빼앗는</b> 것 — 오히려 교착상태를 <b>푸는</b> 방법 중 하나</li>
+            <li><b>mutual exclusion(상호배제)</b>: 한 번에 하나만 쓰게 하는 <b>원칙</b> — 교착상태의 <b>필요조건 4가지 중 하나</b>일 뿐, 교착상태 자체는 아님</li>
+          </ul>
+          <p><b>함정:</b> ④ 상호배제는 교착상태와 늘 같이 나오기 때문에 가장 많이 걸리는 오답이다. <b>"조건"과 "결과"를 구분</b>할 것.</p>
+          <p>💡 관련: <a href="../02_운영체제/임계영역과교착상태.html">임계영역과 교착상태</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q20. 운영체제 발달과정 순서는? <span class="page-ref">p.855</span></p>
-      <p class="a">정답 ② 일괄처리 → 시분할 → 다중모드 → 분산처리</p>
-      <p class="memo">❌ 헷갈리는 포인트: 다중모드 시스템은 일괄·시분할·실시간·다중처리를 <b>모두 포함하는 통합 단계</b>라 시분할보다 뒤에 온다</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 20</span><span class="q-src">2022 군무원 · 기출문제집 p.855</span></div>
+      <p class="q-body">운영체제의 <b>발달과정 순서</b>를 나열한 것으로 가장 옳은 것은?</p>
+      <ol class="choices">
+        <li>일괄처리 → 다중모드 → 시분할 → 분산처리</li>
+        <li>일괄처리 → 시분할 → 다중모드 → 분산처리</li>
+        <li>시분할 → 일괄처리 → 분산처리 → 다중모드</li>
+        <li>시분할 → 분산처리 → 일괄처리 → 다중모드</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 일괄처리 → 시분할 → 다중모드 → 분산처리</p>
+        <div class="explain">
+          <p>발달 순서는 <b>"컴퓨터가 한 번에 상대할 수 있는 사용자 수"가 늘어나는 흐름</b>으로 이해하면 외우기 쉽다.</p>
+          <ol class="steps">
+            <li><b>일괄처리</b>: 작업을 모아 한꺼번에 처리 — 사용자는 기다릴 수밖에 없음 (가장 원시적)</li>
+            <li><b>시분할</b>: CPU 시간을 잘게 쪼개 여러 사용자가 <b>동시에 쓰는 것처럼</b> 만듦</li>
+            <li><b>다중모드</b>: 일괄·시분할·실시간·다중처리를 <b>모두 통합</b>해 제공 → 앞의 것들이 다 있어야 가능하므로 시분할보다 <b>뒤</b></li>
+            <li><b>분산처리</b>: 여러 대의 컴퓨터를 네트워크로 묶어 처리 (가장 발전된 형태)</li>
+          </ol>
+          <p><b>함정:</b> ①번은 다중모드를 시분할보다 앞에 두었다. <b>"통합" 단계는 통합할 것들이 먼저 생긴 뒤에야 나올 수 있다</b>는 논리로 걸러내면 된다.</p>
+          <p>💡 관련: <a href="../02_운영체제/운영체제정의.html">운영체제 정의</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q21. 4K/15K/10K/5K/20K 빈 공간에 5K 프로그램을 최초·최적·최악 적합으로 각각 배치하면? <span class="page-ref">p.855</span></p>
-      <p class="a">정답 ③ 최초적합=2번(15K), 최적적합=4번(5K, 딱 맞음), 최악적합=5번(20K, 가장 큼)</p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/기억장치관리정책.html">기억장치 관리정책</a> — 최초=순서대로 첫 번째로 들어가는 곳, 최적=남는 공간이 가장 적은 곳, 최악=남는 공간이 가장 큰 곳</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 21</span><span class="q-src">2022 군무원 · 기출문제집 p.855</span></div>
+      <p class="q-body">기억장치 배치 전략인 <b>최초 적합</b>(first-fit), <b>최적 적합</b>(best-fit), <b>최악 적합</b>(worst-fit)으로 각각 <b>5K의 프로그램</b>을 할당할 때, 할당 영역으로 가장 옳은 것은?</p>
+      <table>
+        <tr><th>할당영역</th><th>크기</th></tr>
+        <tr><td>운영체제</td><td>—</td></tr>
+        <tr><td>1</td><td>4K 공백</td></tr>
+        <tr><td>2</td><td>15K 공백</td></tr>
+        <tr><td>3</td><td>10K 공백</td></tr>
+        <tr><td>4</td><td>5K 공백</td></tr>
+        <tr><td>5</td><td>20K 공백</td></tr>
+      </table>
+      <ol class="choices">
+        <li>2, 3, 2</li>
+        <li>2, 3, 5</li>
+        <li>2, 4, 5</li>
+        <li>2, 4, 1</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 최초=2번, 최적=4번, 최악=5번</p>
+        <div class="explain">
+          <p>세 전략은 <b>"5K가 들어갈 수 있는 곳"(4K 제외 → 2·3·4·5번) 중에서 무엇을 고르느냐</b>만 다르다.</p>
+          <ol class="steps">
+            <li><b>최초 적합</b>: 위에서부터 훑어 <b>처음 만나는 충분한 공간</b> → 1번(4K)은 5K가 안 들어가니 통과 → <b>2번(15K)</b></li>
+            <li><b>최적 적합</b>: 들어갈 수 있는 곳 중 <b>가장 작은</b> 곳 (남는 공간 최소) → 15K·10K·5K·20K 중 <b>4번(5K, 딱 맞아 남는 공간 0)</b></li>
+            <li><b>최악 적합</b>: 들어갈 수 있는 곳 중 <b>가장 큰</b> 곳 → <b>5번(20K)</b></li>
+          </ol>
+          <p><b>왜 "최악"이란 이름인데도 쓰는가:</b> 큰 공간에 넣으면 <b>남는 조각도 크게 남아</b> 다음 프로그램이 들어갈 수 있다. 최적 적합은 자투리가 너무 작게 남아 아무도 못 쓰는 <b>외부 단편화</b>를 만들기 쉽다.</p>
+          <p><b>함정:</b> ①②처럼 최적 적합을 3번(10K)으로 고르는 오답이 많다. <b>"딱 맞는 5K가 있으면 그게 최적"</b>임을 놓치지 말 것.</p>
+          <p>💡 관련: <a href="../02_운영체제/기억장치관리정책.html">기억장치 관리정책</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🌐</span>네트워크</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q5. 802.11a/b/g/n 중 전송속도가 가장 느린 것은? <span class="page-ref">p.849</span></p>
-      <p class="a">정답 ① 802.11b (11Mbps, DSSS 방식) — a/g는 54Mbps, n은 600Mbps</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2022 군무원 · 기출문제집 p.849</span></div>
+      <p class="q-body">무선 LAN의 종류 중에 <b>가장 전송속도가 느린 것</b>은?</p>
+      <ol class="choices">
+        <li>802.11b</li>
+        <li>802.11a</li>
+        <li>802.11g</li>
+        <li>802.11n</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 802.11b (11Mbps)</p>
+        <div class="explain">
+          <table>
+            <tr><th>규격</th><th>최대 속도</th><th>주파수</th><th>전송방식</th></tr>
+            <tr><td><b>802.11b</b></td><td><b>11Mbps</b> (최저)</td><td>2.4GHz</td><td>DSSS</td></tr>
+            <tr><td>802.11a</td><td>54Mbps</td><td>5GHz</td><td>OFDM</td></tr>
+            <tr><td>802.11g</td><td>54Mbps</td><td>2.4GHz</td><td>DSSS/OFDM</td></tr>
+            <tr><td>802.11n</td><td>600Mbps</td><td>2.4/5GHz</td><td>OFDM (MIMO)</td></tr>
+            <tr><td>802.11ac</td><td>약 2.6Gbps</td><td>5GHz</td><td>OFDM (MU-MIMO)</td></tr>
+          </table>
+          <p><b>암기 포인트:</b> 알파벳 순서가 아니라 <b>b가 가장 느리고(11Mbps), a와 g가 같은 54Mbps</b>, n부터 급격히 빨라진다(MIMO 도입). "a보다 b가 빠를 것 같다"는 착각을 조심할 것.</p>
+          <p>💡 관련: <a href="../03_네트워크/LAN과매체접근방식.html">LAN과 매체접근방식</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q6. 255.255.255.0은 A클래스 서브넷 마스크다? <span class="page-ref">p.849</span></p>
-      <p class="a">정답 ②(틀린 설명) — 255.255.255.0은 <b>C클래스</b>의 기본 서브넷 마스크. A클래스 기본값은 255.0.0.0</p>
-      <p class="memo">💡 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2022 군무원 · 기출문제집 p.849</span></div>
+      <p class="q-body">인터넷 주소로 사용되는 <b>IPv4 주소</b>에 대한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>IPv4는 32-bit로 구성되어 있으며 네트워크 주소와 호스트 주소로 구성된다.</li>
+        <li>255.255.255.0는 A클래스를 지정하기 위한 서브넷 마스크로 사용된다.</li>
+        <li>192.168.1.100은 C클래스 사설 IP(내부 IP) 주소로 사용될 수 있다.</li>
+        <li>공인 IP 주소는 인터넷에서 유일한 주소로써 일반적으로 ISP가 제공한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (255.255.255.0은 <b>C클래스</b>의 기본 서브넷 마스크)</p>
+        <div class="explain">
+          <p>클래스별 기본 서브넷 마스크는 <b>네트워크 부분이 몇 바이트인가</b>로 정해진다.</p>
+          <table>
+            <tr><th>클래스</th><th>네트워크 부분</th><th>기본 서브넷 마스크</th></tr>
+            <tr><td>A</td><td>1바이트</td><td><b>255.0.0.0</b></td></tr>
+            <tr><td>B</td><td>2바이트</td><td>255.255.0.0</td></tr>
+            <tr><td>C</td><td>3바이트</td><td><b>255.255.255.0</b></td></tr>
+          </table>
+          <p><b>암기법:</b> 255가 몇 개인지 = 네트워크 바이트 수. A는 1개, B는 2개, C는 3개. 문제의 255.255.255.0은 255가 <b>3개</b>이므로 C클래스다.</p>
+          <p>💡 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q13. HTTP는 네트워크 계층 프로토콜이다? <span class="page-ref">p.853</span></p>
-      <p class="a">정답 ①(틀린 설명) — HTTP는 <b>응용 계층</b> 프로토콜</p>
-      <p class="memo">💡 관련: <a href="../03_네트워크/OSI7계층.html">OSI 7계층</a>, <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">TCP/IP 응용·전송계층</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 13</span><span class="q-src">2022 군무원 · 기출문제집 p.853</span></div>
+      <p class="q-body">웹에 대한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>HTTP는 네트워크 계층의 프로토콜로서 확장이 가능하다.</li>
+        <li>HTTP는 브라우저가 웹 서버와 통신하기 위해 많이 사용된다.</li>
+        <li>HTTP 클라이언트와 서버 간에 연결 상태를 유지하지 않는 프로토콜이다.</li>
+        <li>URL은 웹 페이지, 이미지, 비디오 등 리소스의 위치를 가리키는 문자열이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (HTTP는 <b>응용 계층</b> 프로토콜)</p>
+        <div class="explain">
+          <p>계층별 대표 프로토콜을 묶어서 외워두면 이런 문제는 즉답할 수 있다.</p>
+          <table>
+            <tr><th>계층</th><th>대표 프로토콜</th></tr>
+            <tr><td><b>응용</b></td><td><b>HTTP</b>, FTP, SMTP, POP3, IMAP, DNS, Telnet</td></tr>
+            <tr><td>전송</td><td>TCP, UDP</td></tr>
+            <tr><td>인터넷(네트워크)</td><td>IP, ICMP, ARP, RARP</td></tr>
+          </table>
+          <p>③번의 "연결 상태를 유지하지 않는다"는 HTTP의 <b>비상태(stateless)</b> 특성으로 <b>맞는 설명</b>이다. 이걸 틀린 것으로 착각하기 쉬우니 주의.</p>
+          <p>💡 관련: <a href="../03_네트워크/OSI7계층.html">OSI 7계층</a>, <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">TCP/IP 응용·전송계층</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q22. 회선교환 방식은 처리속도가 다른 통신기기 간에도 정보전송이 가능하다? <span class="page-ref">p.856</span></p>
-      <p class="a">정답 ②(틀린 설명) — 회선교환은 <b>고정 대역폭·고정 경로</b>라 속도 변환이 불가능. 이건 패킷교환의 장점</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 22</span><span class="q-src">2022 군무원 · 기출문제집 p.856</span></div>
+      <p class="q-body">데이터를 송신 측에서 수신 측으로 전송할 때, 한 링크에서 다른 링크로 데이터를 교환하는 방법 중 <b>회선 교환 방식</b>의 설명으로 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>경로가 설정되면 교환 노드에서 처리 지연이 거의 없다.</li>
+        <li>처리속도가 다른 통신 기기 간에도 정보를 전송할 수 있다.</li>
+        <li>음성이나 동영상 등 실시간 전송이 요구되는 미디어 전송에 적합하다.</li>
+        <li>경로가 설정되면 사용자에게는 고정적인 전송률로 정보를 전송할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (속도·코드 변환이 <b>불가능</b>한 것이 회선교환의 한계)</p>
+        <div class="explain">
+          <p>회선교환은 <b>통화하듯 물리적 길을 통째로 하나 잡아두고 쓰는</b> 방식이다. 그래서 다음 성질이 따라온다.</p>
+          <ul>
+            <li>연결만 되면 <b>지연 거의 없음</b>, <b>고정 대역폭·고정 전송률</b> → ①③④ 모두 맞는 설명</li>
+            <li>반대로 <b>속도나 코드 변환이 안 된다</b> → 양쪽 기기 속도가 다르면 통신 불가</li>
+          </ul>
+          <p><b>속도가 다른 기기끼리 연결하는 것은 패킷교환의 장점</b>이다. 패킷교환은 중간 노드가 패킷을 <b>저장했다 전달(store-and-forward)</b>하므로 속도 차를 흡수할 수 있다. 이 대비가 시험의 단골 포인트다.</p>
+          <p>💡 관련: <a href="../03_네트워크/다중화방식과데이터교환.html">다중화방식과 데이터교환</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q23. B클래스 사설 IP 호스트 범위는 172.15.0.1~172.30.255.254다? <span class="page-ref">p.856</span></p>
-      <p class="a">정답 ④(틀린 설명) — B클래스 사설 IP 대역은 <b>172.16.0.0~172.31.255.255</b> (172.15가 아니라 172.16부터)</p>
-      <p class="memo">💡 사설 IP 3대역: A(10.x), B(172.16~172.31.x), C(192.168.x) — 통째로 암기</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 23</span><span class="q-src">2022 군무원 · 기출문제집 p.856</span></div>
+      <p class="q-body">IPv4 주소 체계에서 <b>B 클래스</b>에 대한 설명으로 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>가장 왼쪽 2비트가 10이다.</li>
+        <li>중형 기관 및 기업에서 사용된다.</li>
+        <li>네트워크 주소는 128.0.0.0 ~ 191.255.0.0까지 표현된다.</li>
+        <li>사설주소의 호스트 사용가능 범위는 172.15.0.1 ~ 172.30.255.254이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (B클래스 사설 대역은 <b>172.16.0.0 ~ 172.31.255.255</b>)</p>
+        <div class="explain">
+          <p>사설 IP 3대역은 <b>숫자를 통째로 외우는 수밖에 없다.</b> 시험은 이 숫자를 한두 칸 틀리게 바꿔 출제한다.</p>
+          <table>
+            <tr><th>클래스</th><th>사설 IP 대역</th></tr>
+            <tr><td>A</td><td>10.0.0.0 ~ 10.255.255.255</td></tr>
+            <tr><td><b>B</b></td><td><b>172.16.0.0 ~ 172.31.255.255</b></td></tr>
+            <tr><td>C</td><td>192.168.0.0 ~ 192.168.255.255</td></tr>
+          </table>
+          <p>④번은 <b>172.15</b>(→16이어야 함)와 <b>172.30</b>(→31이어야 함) 두 군데가 틀렸다. <b>"16에서 31까지, 16칸"</b>으로 기억해두면 흔들리지 않는다.</p>
+          <p>💡 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🔐</span>정보보안 <span style="font-size:12px;font-weight:400;color:var(--text-dim)">(새 개념)</span></h2>
+    <h2><span class="emoji">🔐</span>정보보안</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q7. 개인정보 비식별화 — k-익명성/l-다양성/t-근접성 중 옳지 않은 설명은? <span class="page-ref">p.850</span></p>
-      <p class="a">정답 ④(틀린 설명) — 개인정보보호법상 <b>동의 없이도</b> 통계작성·과학적연구·공익적기록보존 목적이면 가명정보 활용 가능</p>
-      <div class="tip" style="margin-top:8px;">
-        <b>비식별화 3단계 (처음 보는 개념이면 이렇게 암기)</b>
-        <ul>
-          <li><b>k-익명성</b>: 같은 값이 <b>최소 k개</b> 존재하게 만들어서 "이게 누구 정보인지" 특정 못하게 함</li>
-          <li><b>l-다양성</b>: k-익명성만으로는 그룹 안 값이 전부 같으면(동질성 공격) 뚫리므로, 그룹 안에 <b>서로 다른 민감정보가 최소 l개</b> 있게 함</li>
-          <li><b>t-근접성</b>: l-다양성도 그룹별 분포가 전체와 너무 다르면(쏠림 공격) 뚫리므로, <b>그룹 분포를 전체 분포와 비슷하게</b> 맞춤</li>
-        </ul>
-        💡 <b>암기팁:</b> k(개수)→l(다양성)→t(분포유사성) 순서로 점점 더 정교하게 보완해가는 3단계
-      </div>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2022 군무원 · 기출문제집 p.850</span></div>
+      <p class="q-body">인공지능 학습 데이터 등에 포함된 개인정보의 <b>비식별화</b>에 관한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>k-익명성은 주어진 데이터 집합에서 같은 값이 적어도 k개 이상 존재하도록 하는 것을 말한다.</li>
+        <li>l-다양성은 비식별 조치 과정에서 l개 이상 서로 다른 민감한 정보를 갖도록 동질 집합을 구성하는 것을 말한다.</li>
+        <li>t-근접성은 동질 집합에서 특정 정보의 분포와 전체 데이터 집합에서 정보의 분포가 t 이하의 차이를 보이게 하는 것을 말한다.</li>
+        <li>정보주체의 동의 없이는 과학적 연구, 통계작성, 공익적 기록보존을 목적으로라도 가명정보를 활용할 수 없다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (개인정보보호법상 <b>동의 없이도</b> 가명정보 처리 가능)</p>
+        <div class="explain">
+          <p><b>「개인정보 보호법」 제28조의2</b>: 개인정보처리자는 <b>통계작성 · 과학적 연구 · 공익적 기록보존</b> 등을 위하여 <b>정보주체의 동의 없이</b> 가명정보를 처리할 수 있다. (단, 제3자 제공 시 특정 개인을 알아볼 수 있는 정보는 포함 금지)</p>
+          <p>①②③은 비식별화 3단계 모델의 정확한 정의다. <b>세 모델은 앞의 것의 약점을 뒤의 것이 보완하는 구조</b>로 이해하면 순서가 외워진다.</p>
+          <ol class="steps">
+            <li><b>k-익명성</b>: 같은 값이 <b>최소 k개</b> 있게 만들어 개인 특정을 막음 → 하지만 그룹 안 민감정보가 <b>전부 똑같으면</b> 그냥 뚫린다(동질성 공격)</li>
+            <li><b>l-다양성</b>: 그래서 그룹 안에 <b>서로 다른 민감정보가 최소 l개</b> 있게 함 → 하지만 그룹 분포가 전체와 <b>너무 쏠려 있으면</b> 또 추론된다(쏠림·유사성 공격)</li>
+            <li><b>t-근접성</b>: 그래서 <b>그룹 분포를 전체 분포와 t 이하 차이</b>로 맞춤 (가장 강한 보호)</li>
+          </ol>
+          <p>💡 <b>암기팁:</b> k(개수) → l(다양성) → t(분포 유사성) 순으로 점점 정교해진다.</p>
+          <p>💡 관련: <a href="../06_정보보안/암호화와정보보안.html">암호화와 정보보안</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🏗️</span>소프트웨어공학</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q8. 디자인패턴은 소스/기계코드로 바로 전환되는 완성된 설계를 제공한다? <span class="page-ref">p.850</span></p>
-      <p class="a">정답 ③(틀린 설명) — 디자인패턴은 <b>구조적 문제 해결 방안(템플릿)</b>이지, 코드로 바로 변환되는 완성품이 아니다</p>
-      <p class="memo">💡 디자인패턴 3분류: 생성(Creational)·구조(Structural)·행위(Behavioral) 패턴. 어댑터 패턴 = 서로 다른 인터페이스를 호환되게 변환</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2022 군무원 · 기출문제집 p.850</span></div>
+      <p class="q-body">소프트웨어 <b>디자인 패턴</b>(design pattern)에 대한 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>생성(creational)패턴, 구조(structural)패턴, 행위(behavioral)패턴 등으로 분류할 수 있다.</li>
+        <li>각기 다른 소프트웨어 모듈이나 기능 간의 설계 또는 해결책 간의 공통되는 요소를 재사용할 수 있게 해준다.</li>
+        <li>소스나 기계 코드로 바로 전환될 수 있는 완성된 디자인을 제공함으로써 소프트웨어 개발 효율을 향상하게 한다.</li>
+        <li>어댑터 패턴은 클래스의 인터페이스를 다른 인터페이스로 변환하는 데 활용되며, 비호환적 인터페이스를 갖춘 클래스들이 함께 작동하도록 지원한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (디자인 패턴은 <b>코드로 바로 전환되는 완성품이 아니다</b>)</p>
+        <div class="explain">
+          <p>디자인 패턴은 <b>"이런 상황에서는 이렇게 설계하면 좋더라"는 경험을 정리한 설계 템플릿</b>이다. 알고리즘처럼 그대로 코드로 옮겨 쓰는 것이 아니라, <b>상황에 맞게 변형해서 적용</b>해야 한다.</p>
+          <table>
+            <tr><th>분류</th><th>목적</th><th>예시</th></tr>
+            <tr><td>생성(Creational)</td><td>객체를 <b>어떻게 만들까</b></td><td>싱글톤, 팩토리 메서드</td></tr>
+            <tr><td>구조(Structural)</td><td>객체를 <b>어떻게 조립할까</b></td><td><b>어댑터</b>, 데코레이터</td></tr>
+            <tr><td>행위(Behavioral)</td><td>객체끼리 <b>어떻게 소통할까</b></td><td>옵서버, 전략(Strategy)</td></tr>
+          </table>
+          <p>💡 <b>어댑터 패턴</b>은 이름 그대로 <b>돼지코(전원 어댑터)</b>다 — 규격이 안 맞는 둘 사이에 끼워 넣어 호환되게 만든다. ④는 맞는 설명이다.</p>
+          <p>💡 관련: <a href="../05_소프트웨어공학/객체지향과UML.html">객체지향과 UML</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q9. 객체지향 프로그래밍은 절차지향보다 실행 속도가 빠르다? <span class="page-ref">p.851</span></p>
-      <p class="a">정답 ④(틀린 설명) — 캡슐화·격리구조 때문에 절차지향보다 <b>실행 속도는 느리다</b> (대신 재사용성·유지보수성이 좋음)</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2022 군무원 · 기출문제집 p.851</span></div>
+      <p class="q-body"><b>객체지향 프로그래밍</b>과 관련된 설명 중 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>클래스 내의 세부 구현에 대한 접근 제한을 통해 정보 은닉(information hiding) 효과를 달성할 수 있다.</li>
+        <li>상속(inheritance) 기능으로 부모 클래스의 특성과 기능을 물려받을 수 있으며, 오버라이딩으로 일부만 변경할 수도 있다.</li>
+        <li>다형성(polymorphism)을 활용하면 하나의 변수나 함수의 의미를 상황에 따라 다르게 해석할 수 있게 된다.</li>
+        <li>객체지향 프로그래밍은 실행 속도가 빨라지는 장점이 있으나 코드의 재사용성이 절차적 프로그래밍 방식에 비하여 저하하는 단점이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (장단점이 <b>완전히 거꾸로</b> 서술됨)</p>
+        <div class="explain">
+          <p>④는 두 가지를 동시에 뒤집어 놓은 전형적인 오답이다.</p>
+          <ul>
+            <li><b>실행 속도</b>: 객체지향은 캡슐화·동적 바인딩 등의 부담 때문에 절차지향보다 <b>느리다</b> (문제는 "빠르다"고 함 → 오답)</li>
+            <li><b>재사용성</b>: 상속·다형성 덕분에 객체지향이 <b>더 높다</b> (문제는 "저하한다"고 함 → 오답)</li>
+          </ul>
+          <p><b>정리:</b> 객체지향의 강점은 <b>속도가 아니라 재사용성·유지보수성</b>이다. "느리지만 관리하기 좋다"가 한 줄 요약.</p>
+          <p>💡 관련: <a href="../05_소프트웨어공학/객체지향과UML.html">객체지향과 UML</a>, <a href="../08_프로그래밍언어/JAVA기초와객체지향.html">JAVA 기초와 객체지향</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🗄️</span>데이터베이스</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q10. DBMS의 필수 기능이 아닌 것은? <span class="page-ref">p.851</span></p>
-      <p class="a">정답 ① 이식(migration) 기능 — DBMS 필수 3기능은 <b>정의·조작·제어</b></p>
-      <p class="memo">💡 관련: <a href="../04_데이터베이스/데이터베이스_특징.md">데이터베이스 특징</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2022 군무원 · 기출문제집 p.851</span></div>
+      <p class="q-body">다음 중 <b>DBMS의 필수 기능</b>으로 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>이식(migration) 기능</li>
+        <li>정의(definition) 기능</li>
+        <li>조작(manipulation) 기능</li>
+        <li>제어(control) 기능</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 이식(migration) 기능</p>
+        <div class="explain">
+          <p>DBMS 필수 3대 기능은 <b>정의 · 조작 · 제어</b>다. 각각이 SQL의 세 갈래와 그대로 대응한다.</p>
+          <table>
+            <tr><th>기능</th><th>내용</th><th>대응 SQL</th></tr>
+            <tr><td>정의(Definition)</td><td>데이터 구조(스키마)를 정의</td><td>DDL (CREATE, ALTER, DROP)</td></tr>
+            <tr><td>조작(Manipulation)</td><td>데이터를 넣고 빼고 고침</td><td>DML (SELECT, INSERT, UPDATE, DELETE)</td></tr>
+            <tr><td>제어(Control)</td><td>보안·무결성·동시성 관리</td><td>DCL (GRANT, REVOKE, COMMIT)</td></tr>
+          </table>
+          <p>💡 <b>암기법: "정·조·제"</b> 세 글자. 이식(migration)은 다른 시스템으로 옮기는 부가 작업일 뿐 필수 기능이 아니다.</p>
+          <p>💡 관련: <a href="../04_데이터베이스/데이터베이스_특징.md">데이터베이스 특징</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q11. 데이터 중복성 문제 중 옳지 않은 설명은? <span class="page-ref">p.852</span></p>
-      <p class="a">정답 ④(틀린 설명) — 무결성 문제는 "제어의 분산" 때문이 아니라, <b>중복된 값 간 불일치</b>로 인해 발생</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2022 군무원 · 기출문제집 p.852</span></div>
+      <p class="q-body">데이터베이스에서 데이터의 <b>중복성으로 발생하는 문제</b>와 설명이 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>일관성: 중복된 데이터 간에 내용이 일치하지 않는 상황의 발생</li>
+        <li>보안성: 중복된 모든 데이터에 동등한 보안 수준 유지에 어려움</li>
+        <li>경제성: 저장 공간의 낭비와 반복 작업으로 비용의 증가</li>
+        <li>무결성: 제어의 분산으로 연계된 응용프로그램 간의 불일치</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>중복성이 일으키는 네 가지 문제는 <b>모두 "같은 데이터가 여러 곳에 있다"는 사실 하나에서 나온다.</b></p>
+          <ul>
+            <li><b>일관성</b>: 한쪽만 고치면 값이 서로 달라짐 ✓</li>
+            <li><b>보안성</b>: 흩어진 사본마다 같은 수준으로 보호하기 어려움 ✓</li>
+            <li><b>경제성</b>: 저장공간·갱신작업 낭비 ✓</li>
+            <li><b>무결성</b>: 중복된 값들 사이의 <b>제약조건을 지키기 어려워</b> 발생 — ④는 원인을 "제어의 분산"이라고 엉뚱하게 설명함 ✗</li>
+          </ul>
+          <p>무결성 문제의 원인은 <b>중복된 값 간의 불일치</b>이지 제어 주체가 분산되어서가 아니다.</p>
+          <p>💡 관련: <a href="../04_데이터베이스/데이터베이스_특징.md">데이터베이스 특징</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q25. 관계 데이터모델 용어 설명 중 옳은 것은? <span class="page-ref">p.857~858</span></p>
-      <p class="a">정답 ① 도메인 = 하나의 속성이 가질 수 있는 값들의 집합</p>
-      <p class="memo">❌ 자주 뒤바뀌는 함정: 차수(Degree)=<b>속성(열) 개수</b>, 카디널리티(Cardinality)=<b>튜플(행) 개수</b> — 문제는 이걸 서로 바꿔서 오답을 만듦. 관련: <a href="../04_데이터베이스/릴레이션_특성.md">릴레이션 특성</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 25</span><span class="q-src">2022 군무원 · 기출문제집 p.857~858</span></div>
+      <p class="q-body"><b>관계 데이터모델의 용어</b>에 대한 설명으로 <b>가장 옳은 것</b>은?</p>
+      <ol class="choices">
+        <li>도메인: 하나의 속성이 가질 수 있는 값들의 집합</li>
+        <li>차수: 하나의 릴레이션에서 튜플의 전체 개수</li>
+        <li>카디널리티: 하나의 릴레이션에서 속성의 전체 개수</li>
+        <li>튜플: 하나의 개체에 관한 데이터를 2차원 테이블의 구조로 저장한 것</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 도메인 = 하나의 속성이 가질 수 있는 값들의 집합</p>
+        <div class="explain">
+          <p>②③은 <b>차수와 카디널리티를 서로 바꿔</b> 놓은 것이고, ④는 튜플의 정의 자리에 <b>릴레이션의 정의</b>를 넣은 것이다.</p>
+          <table>
+            <tr><th>용어</th><th>정확한 뜻</th><th>표에서</th></tr>
+            <tr><td>릴레이션</td><td>2차원 테이블 그 자체</td><td>표 전체</td></tr>
+            <tr><td>튜플(Tuple)</td><td>한 행을 이루는 값들의 모음</td><td><b>행</b></td></tr>
+            <tr><td>속성(Attribute)</td><td>각 열</td><td><b>열</b></td></tr>
+            <tr><td>도메인(Domain)</td><td>속성이 가질 수 있는 <b>값의 범위</b></td><td>열의 값 집합</td></tr>
+            <tr><td><b>차수(Degree)</b></td><td><b>속성(열)의 개수</b></td><td>열 수</td></tr>
+            <tr><td><b>카디널리티(Cardinality)</b></td><td><b>튜플(행)의 개수</b></td><td>행 수</td></tr>
+          </table>
+          <p>💡 <b>암기법:</b> <b>차수(Degree)는 D로 시작 → 세로(열)</b>, <b>카디널리티는 Cardinality → 행의 카운트</b>로 묶어두면 헷갈리지 않는다. 이 둘을 바꾸는 함정은 거의 매년 나온다.</p>
+          <p>💡 관련: <a href="../04_데이터베이스/릴레이션_특성.md">릴레이션 특성</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">💻</span>프로그래밍언어</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q3. 0부터 n까지 합을 구하는 C 반복문 빈칸은? <span class="page-ref">p.848</span></p>
-      <p class="a">정답 ③ <code>for (int i=0; i&lt;=n; i++) result = result + i;</code> — n을 <b>포함</b>해야 하므로 조건은 <code>i&lt;=n</code></p>
-      <p class="memo">💡 관련: <a href="../08_프로그래밍언어/C언어_함정모음.md">C언어 함정모음</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2022 군무원 · 기출문제집 p.848</span></div>
+      <p class="q-body">숫자 0부터 n까지(<b>n을 포함</b>) 합을 구하는 함수를 C 언어로 구현하고자 한다. n은 0보다 크거나 같은 경우만 고려한다. <code>/* 공란 */</code> 에 채워져야 할 코드로 가장 옳은 것은?</p>
+      <div class="tip" style="margin:8px 0;"><code>int sum(int n) {<br>&nbsp;&nbsp;int result = 0;<br>&nbsp;&nbsp;/* 공란 */<br>&nbsp;&nbsp;return result;<br>}</code></div>
+      <ol class="choices">
+        <li><code>for (int i = 0; i++; i &lt; n) result = result + i;</code></li>
+        <li><code>for (int i = 0; i++; i &lt;= n) result = result + i;</code></li>
+        <li><code>for (int i = 0; i &lt;= n; i++) result = result + i;</code></li>
+        <li><code>for (int i = 0; i &lt; n; i++) result = result + i;</code></li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ <code>for (int i = 0; i &lt;= n; i++)</code></p>
+        <div class="explain">
+          <p>두 가지를 동시에 확인해야 한다.</p>
+          <ol class="steps">
+            <li><b>for문 구조</b>는 <code>for(초기식; <b>조건식</b>; <b>증감식</b>)</code> 순서다 → ①②는 조건식 자리에 <code>i++</code>가, 증감식 자리에 비교식이 들어가 <b>순서가 뒤바뀐</b> 오답</li>
+            <li><b>n을 포함</b>해야 하므로 조건은 <code>i &lt;= n</code> → ④의 <code>i &lt; n</code>은 n을 빼먹어 합이 모자람</li>
+          </ol>
+          <p><b>검산:</b> n=3일 때 정답 코드는 i=0,1,2,3 → 0+1+2+3 = 6 ✓. ④번 코드는 i=0,1,2 → 3이 되어 틀린다.</p>
+          <p>💡 관련: <a href="../08_프로그래밍언어/C언어_함정모음.md">C언어 함정모음</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q4. Java에서 컴파일 오류를 일으키는 코드는? <span class="page-ref">p.848</span></p>
-      <p class="a">정답 ③ <code>static CS cs = new C();</code> — 자식 타입 변수에 <b>부모 클래스 객체는 대입 불가</b> (반대는 가능: 부모 타입 = 자식 객체 OK)</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2022 군무원 · 기출문제집 p.848</span></div>
+      <p class="q-body">다음 Java 프로그램의 Example 클래스 내부 코드 중에서 <b>컴파일 오류를 일으키는</b> 잘못된 코드는?</p>
+      <div class="tip" style="margin:8px 0;"><code>class C {}<br>class CS extends C {}<br>interface I {}<br>class CI extends C implements I {}</code></div>
+      <ol class="choices">
+        <li><code>static I i = new CI();</code></li>
+        <li><code>static C ca = new CI();</code></li>
+        <li><code>static CS cs = new C();</code></li>
+        <li><code>static C cb = new CS();</code></li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ <code>static CS cs = new C();</code></p>
+        <div class="explain">
+          <p><b>대원칙: 변수 타입은 객체 타입과 같거나, 그보다 "더 넓은(부모)" 타입이어야 한다.</b> 자식 타입 변수에 부모 객체를 넣는 것은 불가능하다.</p>
+          <ul>
+            <li>상속 관계: <code>C</code>(부모) ← <code>CS</code>(자식), <code>C</code>(부모) ← <code>CI</code>(자식, <code>I</code> 구현)</li>
+            <li>① <code>I i = new CI()</code> — CI가 I를 구현했으므로 <b>OK</b></li>
+            <li>② <code>C ca = new CI()</code> — 부모 타입에 자식 객체, <b>OK</b></li>
+            <li>③ <code>CS cs = new C()</code> — <b>자식 타입(CS)에 부모 객체(C)</b> → <b>컴파일 오류</b></li>
+            <li>④ <code>C cb = new CS()</code> — 부모 타입에 자식 객체, <b>OK</b></li>
+          </ul>
+          <p>💡 <b>직관적 이해:</b> "모든 <b>학생</b>은 <b>사람</b>이다"는 참이므로 <code>사람 p = new 학생()</code>은 되지만, "모든 사람이 학생"은 아니므로 <code>학생 s = new 사람()</code>은 안 된다.</p>
+          <p>💡 관련: <a href="../08_프로그래밍언어/JAVA기초와객체지향.html">JAVA 기초와 객체지향</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q19. <code>list=[1,2,3,4,5,6]; print(list[-2:-4:-1])</code> 결과는? <span class="page-ref">p.855</span></p>
-      <p class="a">정답 ② [5, 4] — 뒤에서 2번째(5)부터 시작해 -1씩(역방향) 이동하며 뒤에서 4번째(4) <b>전까지</b> 출력</p>
-      <p class="memo">💡 파이썬 슬라이싱 <code>[start:stop:step]</code>에서 step이 음수면 역방향, stop 인덱스는 결과에 <b>포함 안 됨</b></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 19</span><span class="q-src">2022 군무원 · 기출문제집 p.855</span></div>
+      <p class="q-body">다음 <b>파이썬</b> 코드의 실행 결과로 옳은 것은?</p>
+      <div class="tip" style="margin:8px 0;"><code>list = [1, 2, 3, 4, 5, 6]<br>print(list[-2:-4:-1])</code></div>
+      <ol class="choices">
+        <li>[4, 3]</li>
+        <li>[4, 3, 2]</li>
+        <li>[5, 4]</li>
+        <li>[5, 4, 3]</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ [5, 4]</p>
+        <div class="explain">
+          <p>음수 인덱스를 먼저 표로 그려놓고 시작하면 실수하지 않는다.</p>
+          <table>
+            <tr><th>값</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+            <tr><th>양수 index</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><th>음수 index</th><td>-6</td><td>-5</td><td>-4</td><td>-3</td><td><b>-2</b></td><td>-1</td></tr>
+          </table>
+          <ol class="steps">
+            <li><code>[start:stop:step]</code> = <code>[-2 : -4 : -1]</code> → <b>-2번(값 5)에서 시작</b></li>
+            <li>step이 <b>-1이므로 역방향</b>으로 한 칸씩 이동</li>
+            <li>stop인 <b>-4번(값 3)은 포함하지 않고 그 직전까지</b> → -2(5), -3(4)에서 멈춤</li>
+            <li>결과: <b>[5, 4]</b></li>
+          </ol>
+          <p><b>함정:</b> ④ [5,4,3]은 stop을 포함시킨 오답이다. <b>파이썬 슬라이싱의 stop은 항상 배타적(포함 안 함)</b>임을 기억할 것.</p>
+          <p>💡 관련: <a href="../08_프로그래밍언어/Python기초.html">Python 기초</a></p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">☁️</span>신기술 / 약어</h2>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 24</span><span class="q-src">2022 군무원 · 기출문제집 p.857</span></div>
+      <p class="q-body">약어의 표현으로 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>NFC : Near Field Communication</li>
+        <li>NFT : Non-Funded Token</li>
+        <li>OTP : One Time Password</li>
+        <li>OTT : Over The Top</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (NFT = <b>Non-Fungible Token</b>, 대체 <b>불가능한</b> 토큰)</p>
+        <div class="explain">
+          <p><b>Fungible</b>은 "대체 가능한"이라는 뜻이다. 비트코인 1개는 다른 비트코인 1개와 똑같이 교환되므로 fungible이지만, NFT는 <b>토큰마다 고유한 인식 값</b>이 있어 서로 바꿀 수 없다(<b>Non-Fungible</b>). 그래서 디지털 그림·수집품의 소유권 증명에 쓰인다.</p>
+          <table>
+            <tr><th>약어</th><th>풀이</th><th>뜻</th></tr>
+            <tr><td>NFC</td><td>Near Field Communication</td><td>근거리 무선통신 (교통카드 등)</td></tr>
+            <tr><td><b>NFT</b></td><td><b>Non-Fungible Token</b></td><td>대체 불가능 토큰 (블록체인 기반)</td></tr>
+            <tr><td>OTP</td><td>One Time Password</td><td>일회용 비밀번호</td></tr>
+            <tr><td>OTT</td><td>Over The Top</td><td>인터넷 동영상 서비스 (넷플릭스 등)</td></tr>
+          </table>
+          <p>💡 관련: <a href="../09_신기술동향/정보기술동향.html">정보기술 동향</a></p>
+        </div>
+      </details>
     </div>
   </section>
 

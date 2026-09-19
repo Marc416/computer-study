@@ -11,13 +11,23 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / OSI 7계층</div>
   <h1 class="page-title">OSI 7계층</h1>
-  <p class="page-subtitle">계층별 PDU·기능·프로토콜, 데이터링크 계층의 오류제어(ARQ) · PART 03. 데이터통신론</p>
+  <p class="page-subtitle">계층별 PDU·기능·프로토콜, 캡슐화, 데이터링크 계층의 오류제어(ARQ) · PART 03. 데이터통신론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p>OSI 7계층은 통신을 <b>7단계로 쪼개서</b> 각자 자기 일만 하게 만든 표준 설계도다. 아래(물리)로 갈수록 "선으로 실제 신호를 어떻게 보낼까"에 가깝고, 위(응용)로 갈수록 "사람이 쓰는 서비스"에 가깝다.</p>
     <p>계층마다 부르는 데이터 단위(PDU)가 다르다: <b>비트→프레임→패킷→세그먼트→데이터</b> (물리→데이터링크→네트워크→전송→그 위).</p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"통신"이라는 거대한 일을 7조각으로 쪼갠 이유</h4>
+      <p>인터넷으로 메일 한 통을 보내려면 실제로는 <b>수십 가지 일</b>이 동시에 벌어져야 한다. 글자를 컴퓨터가 알아먹는 코드로 바꾸고, 너무 크면 조각내고, 상대방 주소를 찾고, 어느 길로 갈지 정하고, 전기 신호로 바꿔 선에 태우고, 중간에 깨진 조각이 있으면 다시 보내고… 이걸 <b>하나의 거대한 프로그램으로 만들면 어떤 일이 벌어질까?</b> 랜선을 와이파이로 바꾸는 순간 프로그램 전체를 다시 짜야 한다.</p>
+      <p>그래서 ISO는 이 일을 <b>7개 계층으로 잘라서, 각 계층이 바로 위·아래 계층하고만 약속(인터페이스)을 지키게</b> 만들었다. 그러면 물리 계층을 랜선에서 와이파이로 바꿔도 위쪽 6개 계층은 <b>손댈 필요가 없다.</b> 이게 계층화(layering)의 전부이고, 시험에서 "OSI 모델의 목적"을 물으면 답은 항상 이것이다.</p>
+      <p><b>공부 전략:</b> 이 단원은 암기 과목이다. 단, 무작정 외우면 안 되고 <b>"이 계층이 없으면 무슨 일이 안 되는가"</b>를 기준으로 외우면 헷갈리지 않는다. 예: 네트워크 계층이 없으면 → 다른 동네로 못 간다(경로를 모름). 전송 계층이 없으면 → 도착했는지 확인할 수 없고, 같은 컴퓨터 안의 여러 프로그램 중 누구에게 줄지 모른다.</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
@@ -83,7 +93,7 @@
           <rect x="225" y="315" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
           <text x="280" y="350" font-size="12.5" text-anchor="middle">패킷</text>
           <rect x="350" y="315" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <text x="525" y="340" font-size="11.5" text-anchor="middle">IP · ICMP · IGMP</text>
+          <text x="525" y="340" font-size="11.5" text-anchor="middle">IP · ICMP · IGMP · X.25</text>
           <text x="525" y="358" font-size="10.5" text-anchor="middle" opacity="0.75">장비: 라우터(router)</text>
         </g>
 
@@ -94,7 +104,7 @@
           <rect x="225" y="390" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
           <text x="280" y="425" font-size="12.5" text-anchor="middle">프레임</text>
           <rect x="350" y="390" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
-          <text x="525" y="415" font-size="11.5" text-anchor="middle">HDLC · Ethernet · PPP</text>
+          <text x="525" y="415" font-size="11.5" text-anchor="middle">HDLC · Ethernet · PPP · SLIP · FDDI</text>
           <text x="525" y="433" font-size="10.5" text-anchor="middle" opacity="0.75">장비: 브리지·스위치</text>
         </g>
 
@@ -115,21 +125,119 @@
       <figcaption>OSI 7계층 구조 — 계층 번호가 낮을수록(1에 가까울수록) 물리적 신호에 가깝고, 높을수록(7에 가까울수록) 사람이 쓰는 서비스에 가깝다. 가운데 열이 <b>PDU(프로토콜 데이터 단위)</b> — 시험에 가장 많이 나오는 표.</figcaption>
     </figure>
 
+    <div class="analogy"><b>7계층 암기법:</b> 아래(1)부터 <b>"물·데·네·전·세·표·응"</b> (물리-데이터링크-네트워크-전송-세션-표현-응용). 영어로는 <b>"Please Do Not Throw Sausage Pizza Away"</b> (Physical-Data link-Network-Transport-Session-Presentation-Application).</div>
+
+    <h3>캡슐화(Encapsulation) — 데이터가 내려가면서 옷을 껴입는다</h3>
+    <p>계층 구조에서 가장 중요한 동작이 <b>캡슐화</b>다. 송신측에서 데이터가 위에서 아래로 내려갈 때 <b>각 계층이 자기 일에 필요한 정보(헤더)를 앞에 덧붙인다.</b> 그래서 같은 데이터인데도 계층마다 이름(PDU)이 달라지는 것이다 — 붙은 헤더가 다르니까 다른 물건이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 340" role="img" aria-label="캡슐화 과정: 응용 계층의 데이터에 전송 계층이 TCP 헤더를 붙여 세그먼트가 되고, 네트워크 계층이 IP 헤더를 붙여 패킷이 되고, 데이터링크 계층이 프레임 헤더와 트레일러를 붙여 프레임이 되며, 물리 계층에서 비트 스트림으로 전송된다">
+        <defs>
+          <marker id="enc-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="10" y="22" font-size="12" font-weight="700">응용·표현·세션 (7~5)</text>
+        <rect x="250" y="8" width="200" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="350" y="30" font-size="12.5" text-anchor="middle">데이터 (Data)</text>
+        <text x="600" y="30" font-size="12" opacity="0.8">← PDU: 데이터</text>
+        <line x1="350" y1="44" x2="350" y2="66" stroke="currentColor" stroke-width="1.5" marker-end="url(#enc-ar)"/>
+
+        <text x="10" y="92" font-size="12" font-weight="700">전송 (4)</text>
+        <rect x="190" y="70" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="220" y="92" font-size="11.5" text-anchor="middle" font-weight="700">TCP H</text>
+        <rect x="250" y="70" width="200" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="92" font-size="12" text-anchor="middle">데이터</text>
+        <text x="600" y="92" font-size="12" opacity="0.8">← 세그먼트</text>
+        <line x1="350" y1="106" x2="350" y2="128" stroke="currentColor" stroke-width="1.5" marker-end="url(#enc-ar)"/>
+
+        <text x="10" y="154" font-size="12" font-weight="700">네트워크 (3)</text>
+        <rect x="130" y="132" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="160" y="154" font-size="11.5" text-anchor="middle" font-weight="700">IP H</text>
+        <rect x="190" y="132" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="220" y="154" font-size="11" text-anchor="middle">TCP H</text>
+        <rect x="250" y="132" width="200" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="154" font-size="12" text-anchor="middle">데이터</text>
+        <text x="600" y="154" font-size="12" opacity="0.8">← 패킷</text>
+        <line x1="350" y1="168" x2="350" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#enc-ar)"/>
+
+        <text x="10" y="216" font-size="12" font-weight="700">데이터링크 (2)</text>
+        <rect x="70" y="194" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="100" y="216" font-size="11" text-anchor="middle" font-weight="700">프레임 H</text>
+        <rect x="130" y="194" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="160" y="216" font-size="11" text-anchor="middle">IP H</text>
+        <rect x="190" y="194" width="60" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="220" y="216" font-size="11" text-anchor="middle">TCP H</text>
+        <rect x="250" y="194" width="200" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="216" font-size="12" text-anchor="middle">데이터</text>
+        <rect x="450" y="194" width="55" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="477" y="216" font-size="10.5" text-anchor="middle" font-weight="700">트레일러</text>
+        <text x="600" y="216" font-size="12" opacity="0.8">← 프레임</text>
+        <line x1="350" y1="230" x2="350" y2="252" stroke="currentColor" stroke-width="1.5" marker-end="url(#enc-ar)"/>
+
+        <text x="10" y="278" font-size="12" font-weight="700">물리 (1)</text>
+        <rect x="70" y="256" width="435" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5 3"/>
+        <text x="287" y="278" font-size="12.5" text-anchor="middle">0 1 0 1 1 0 0 1 1 1 0 1 0 0 1 0 …</text>
+        <text x="600" y="278" font-size="12" opacity="0.8">← 비트</text>
+
+        <text x="10" y="315" font-size="11.5" opacity="0.85">각 계층이 헤더를 붙일 때마다 PDU 이름이 바뀐다. 수신측은 정확히 <tspan font-weight="700">반대 순서</tspan>로 헤더를 하나씩 벗겨(역캡슐화)</text>
+        <text x="10" y="332" font-size="11.5" opacity="0.85">최종적으로 원래 데이터만 응용 계층에 전달한다. 데이터링크 계층만 뒤에도 <tspan font-weight="700">트레일러(오류검출용 FCS)</tspan>를 붙이는 점이 특징.</text>
+      </svg>
+      <figcaption>캡슐화 — 데이터가 아래 계층으로 내려갈수록 헤더가 하나씩 덧붙고, 그때마다 PDU 이름(데이터→세그먼트→패킷→프레임→비트)이 바뀐다. 데이터링크 계층은 유일하게 <b>뒤쪽에 트레일러</b>까지 붙인다.</figcaption>
+    </figure>
+    <div class="tip"><b>시험 포인트:</b> 송신측은 <b>상위→하위</b>, 수신측은 <b>하위→상위</b> 순으로 처리한다. "수신측에서 패킷을 받으면 상위 계층에서 하위 계층 순으로 처리된다"는 서술은 <b>매년 나오는 오답</b>이다 (아래 연습문제 7번).</div>
+
     <h3>계층별 핵심 기능 요약</h3>
     <table>
-      <tr><th>계층</th><th>PDU</th><th>핵심 기능</th></tr>
-      <tr><td><b>7. 응용</b></td><td>데이터</td><td>사용자가 쓰는 서비스 자체 (메일, 웹, 파일전송)</td></tr>
-      <tr><td><b>6. 표현</b></td><td>데이터</td><td>데이터 <b>형식 변환·압축·암호화</b> — "이 그림이 JPG인지 BMP인지" 같은 표현 방식 담당</td></tr>
-      <tr><td><b>5. 세션</b></td><td>데이터</td><td>통신 <b>세션(대화)의 설정·유지·종료</b>, 동기화 지점 관리</td></tr>
-      <tr><td><b>4. 전송</b></td><td>세그먼트</td><td><b>종단 간(end-to-end)</b> 신뢰성 보장: 오류제어·흐름제어·연결관리, 포트번호로 프로세스 구분</td></tr>
-      <tr><td><b>3. 네트워크</b></td><td>패킷</td><td><b>경로 선택(라우팅)</b>, 논리 주소(IP)로 목적지까지 찾아감</td></tr>
-      <tr><td><b>2. 데이터링크</b></td><td>프레임</td><td><b>인접 노드 간</b> 프레임 전송, 오류제어·흐름제어, 물리 주소(MAC) 사용</td></tr>
-      <tr><td><b>1. 물리</b></td><td>비트</td><td>전기적·기계적 신호 전송 (전압 레벨, 커넥터 규격 등)</td></tr>
+      <tr><th>계층</th><th>PDU</th><th>핵심 기능</th><th>없으면 못 하는 일</th></tr>
+      <tr><td><b>7. 응용</b></td><td>데이터</td><td>사용자가 쓰는 서비스 자체 (메일, 웹, 파일전송)</td><td>사람이 쓸 수 있는 서비스가 없음</td></tr>
+      <tr><td><b>6. 표현</b></td><td>데이터</td><td>데이터 <b>형식 변환·압축·암호화</b> — "이 그림이 JPG인지 BMP인지" 같은 표현 방식 담당</td><td>서로 다른 기종이 데이터를 해석 못 함</td></tr>
+      <tr><td><b>5. 세션</b></td><td>데이터</td><td>통신 <b>세션(대화)의 설정·유지·종료</b>, 동기화 지점(체크포인트) 관리</td><td>끊긴 지점부터 이어받기 불가</td></tr>
+      <tr><td><b>4. 전송</b></td><td>세그먼트</td><td><b>종단 간(end-to-end)</b> 신뢰성 보장: 오류제어·흐름제어·연결관리, 포트번호로 프로세스 구분</td><td>도착 확인 불가, 어느 앱에 줄지 모름</td></tr>
+      <tr><td><b>3. 네트워크</b></td><td>패킷</td><td><b>경로 선택(라우팅)</b>, 논리 주소(IP)로 목적지까지 찾아감</td><td>다른 네트워크로 못 나감</td></tr>
+      <tr><td><b>2. 데이터링크</b></td><td>프레임</td><td><b>인접 노드 간</b> 프레임 전송, 오류제어·흐름제어·순서제어, 물리 주소(MAC) 사용</td><td>옆 장비까지도 안전하게 못 보냄</td></tr>
+      <tr><td><b>1. 물리</b></td><td>비트</td><td>전기적·기계적 신호 전송 (전압 레벨, 커넥터 규격 등)</td><td>애초에 선에 신호를 못 실음</td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> "네트워크 계층이 압축·암호화를 담당한다" → ❌ 그건 <b>표현 계층</b>의 일이다. 네트워크 계층은 경로선택(라우팅)만 한다. 시험에서 표현 계층 설명을 네트워크/전송 계층에 슬쩍 바꿔치기하는 문제가 매우 잦다.</div>
 
+    <h3>가장 많이 틀리는 두 쌍: 데이터링크 vs 전송, 네트워크 vs 표현</h3>
+    <div class="deep">
+      <h4>① 데이터링크(2계층) vs 전송(4계층) — 둘 다 "오류제어·흐름제어"를 한다</h4>
+      <p>기출 선지를 보면 <b>두 계층 모두 "오류 제어와 흐름 제어를 수행한다"</b>고 적혀 있어서 헷갈린다. 구분 기준은 딱 하나, <b>"어디서 어디까지를 책임지는가"</b>다.</p>
+      <ul>
+        <li><b>데이터링크 = 점대점(point-to-point), 인접 노드 간</b> — 내 PC에서 바로 옆 스위치까지, 그 스위치에서 다음 라우터까지처럼 <b>한 구간씩</b> 책임진다.</li>
+        <li><b>전송 = 종단 간(end-to-end)</b> — 중간에 라우터가 10개를 거치든 말든 <b>출발 호스트에서 최종 도착 호스트까지 전체</b>를 책임진다.</li>
+      </ul>
+      <p>그래서 문제에 <b>"인접한 노드", "점대점", "프레임"</b>이 보이면 데이터링크, <b>"종단 간", "종점 호스트 사이", "end-to-end"</b>가 보이면 전송 계층이다. 이 키워드만 잡으면 이 유형은 전부 맞는다.</p>
+      <p>추가로 <b>"종단 간 경로설정"</b>은 데이터링크 기능이 <b>아니다</b> — 경로설정 자체는 네트워크 계층 일이다(연습문제 4번).</p>
+    </div>
+    <div class="deep">
+      <h4>② 네트워크(3계층) vs 표현(6계층) — 출제자가 가장 좋아하는 바꿔치기</h4>
+      <p>"송수신 컴퓨터의 <b>응용프로그램 간 송수신되는 데이터의 구문(syntax)과 의미(semantics)</b>에 관련된 기능으로 <b>변환·암호화·압축</b>을 수행한다" — 이 문장은 <b>100% 표현 계층</b>의 정의다. 출제자는 이 문장 앞의 주어만 "네트워크 계층"으로 바꿔서 오답 선지를 만든다(연습문제 8번이 정확히 그것).</p>
+      <p><b>기억법:</b> 압축·암호화에 들어가는 <b>"축·호"</b> → <b>표</b>현. 경로·라우팅은 네트워크.</p>
+    </div>
+
+    <h3>상위 계층 vs 하위 계층</h3>
+    <table>
+      <tr><th>구분</th><th>포함 계층</th><th>역할</th></tr>
+      <tr><td><b>상위 계층</b> (사용자 지원)</td><td>5. 세션 · 6. 표현 · 7. 응용</td><td>소프트웨어적 처리 — 사용자와 애플리케이션 사이의 상호운용성</td></tr>
+      <tr><td><b>전송 계층</b> (연결 고리)</td><td>4. 전송</td><td>상위·하위를 이어주는 다리, 종단 간 신뢰성 보장</td></tr>
+      <tr><td><b>하위 계층</b> (네트워크 지원)</td><td>1. 물리 · 2. 데이터링크 · 3. 네트워크</td><td>하드웨어적 처리 — 물리적 전달·주소지정·경로 선택</td></tr>
+    </table>
+
+    <h3>계층별 표준·프로토콜 매칭 (암기 필수) <span class="page-ref">📖 기출문제집 p.304~305</span></h3>
+    <table>
+      <tr><th>계층</th><th>대표 표준·프로토콜</th><th>대표 장비</th></tr>
+      <tr><td>7. 응용</td><td>HTTP, FTP, SMTP, POP3, IMAP, <b>Telnet</b>, DNS, SNMP</td><td>—</td></tr>
+      <tr><td>6. 표현</td><td>SSL/TLS, MPEG, JPEG, ASCII 변환</td><td>—</td></tr>
+      <tr><td>5. 세션</td><td>NetBIOS, RPC</td><td>—</td></tr>
+      <tr><td>4. 전송</td><td><b>TCP, UDP</b> (ISDN·Telnet은 전송 계층이 아님!)</td><td>게이트웨이(4계층 이상)</td></tr>
+      <tr><td>3. 네트워크</td><td>IP, ICMP, IGMP, ARP/RARP, <b>X.25</b></td><td>라우터</td></tr>
+      <tr><td>2. 데이터링크</td><td><b>HDLC</b>, Ethernet, PPP, <b>SLIP</b>, FDDI, MAC/LLC</td><td>브리지, 스위치</td></tr>
+      <tr><td>1. 물리</td><td><b>RS-232C</b></td><td>리피터, 허브</td></tr>
+    </table>
+    <div class="tip"><b>단골 오답 3종:</b> ① <b>Telnet</b>을 전송 계층에 넣기(→응용) ② <b>ISDN</b>을 전송 계층 표준이라 하기(→전송 계층 표준은 TCP/UDP) ③ <b>SLIP·FDDI</b>를 네트워크 계층에 넣기(→데이터링크). 세 개만 조심해도 이 유형은 안 틀린다.</div>
+
     <h3>데이터링크 계층의 오류제어 — 정지대기(Stop-and-Wait) ARQ <span class="page-ref">📖 기출문제집 p.299</span></h3>
-    <p>데이터링크 계층은 <b>한 프레임을 보내고 응답(ACK/NAK)이 올 때까지 기다렸다가</b> 다음 프레임을 보낸다. 에러가 있으면 NAK를 받고 같은 프레임을 재전송한다.</p>
+    <p>데이터링크 계층은 <b>한 프레임을 보내고 응답(ACK/NAK)이 올 때까지 기다렸다가</b> 다음 프레임을 보낸다. 에러가 있으면 NAK를 받고 같은 프레임을 재전송한다. 이때 오가는 프레임은 <b>정보 프레임 / 긍정응답 프레임(ACK) / 부정응답 프레임(NAK)</b> 세 종류다 ("비트 프레임"이라는 것은 없다 — 연습문제 5번의 함정).</p>
     <figure class="diagram">
       <svg viewBox="0 0 620 240" role="img" aria-label="정지대기 ARQ 방식: 송신측이 프레임1을 보내고 ACK를 받은 뒤 프레임2를 보내지만 에러로 NAK를 받아 프레임2를 재전송하는 타임라인">
         <defs>
@@ -160,16 +268,18 @@
       <figcaption>정지대기 ARQ — 가장 단순한 오류제어 방식. 한 번에 프레임 1개만 보내고 확인받은 뒤 다음 것을 보내므로 안전하지만 느리다 (이후 배우는 슬라이딩 윈도우가 이 속도 문제를 해결).</figcaption>
     </figure>
 
-    <h3>프로토콜의 일반적 기능</h3>
-    <ul>
-      <li><b>단편화·재합성</b>: 큰 데이터를 작게 쪼개고, 받은 뒤 다시 합침</li>
-      <li><b>캡슐화</b>: 데이터에 제어정보(헤더)를 덧붙임</li>
-      <li><b>연결제어</b>: 연결형(TCP)/비연결형(UDP) 방식 선택</li>
-      <li><b>흐름제어</b>: 받는 쪽이 감당 못할 속도로 보내지 않게 조절</li>
-      <li><b>오류제어</b>: 에러 검출·재전송</li>
-      <li><b>순서제어</b>: 프레임 번호를 매겨 순서 보장</li>
-      <li><b>동기화, 주소지정</b></li>
-    </ul>
+    <h3>프로토콜의 일반적 기능 <span class="page-ref">📖 기출문제집 p.296</span></h3>
+    <table>
+      <tr><th>기능</th><th>설명</th></tr>
+      <tr><td><b>단편화·재합성</b></td><td>큰 데이터를 전송 가능한 크기로 쪼개고, 받은 뒤 다시 합침</td></tr>
+      <tr><td><b>캡슐화</b></td><td>데이터에 제어정보(헤더)를 덧붙임</td></tr>
+      <tr><td><b>연결제어</b></td><td>연결형(TCP)/비연결형(UDP) 방식의 설정·유지·해제</td></tr>
+      <tr><td><b>흐름제어</b></td><td>받는 쪽이 감당 못할 속도로 보내지 않게 조절</td></tr>
+      <tr><td><b>오류제어</b></td><td>에러 검출·재전송</td></tr>
+      <tr><td><b>순서제어</b></td><td>프레임 번호를 매겨 순서 보장</td></tr>
+      <tr><td><b>동기화</b></td><td>송수신측의 상태를 일치시킴 (<b>"비동기화"는 프로토콜 기능이 아니다</b> — 연습문제 1번 함정)</td></tr>
+      <tr><td><b>주소지정</b></td><td>송신자·수신자를 식별</td></tr>
+    </table>
   </section>
 
   <section class="block">
@@ -177,11 +287,14 @@
     <ul class="point-list">
       <li>계층별 PDU 암기: <b>물리=비트, 데이터링크=프레임, 네트워크=패킷, 전송=세그먼트</b> (그 위는 그냥 "데이터")</li>
       <li>표현 계층 = <b>변환·암호화·압축</b> (네트워크/전송 계층으로 바꿔치기하는 오답 주의)</li>
-      <li>전송 계층 = <b>종단간(end-to-end) 신뢰성</b>, 프로토콜은 TCP/UDP</li>
-      <li>네트워크 계층 = <b>라우팅(경로선택)</b>, 장비는 라우터</li>
-      <li>데이터링크 계층 = <b>인접 노드 간</b> 프레임 전송, 오류·흐름제어, 장비는 브리지/스위치</li>
+      <li>전송 계층 = <b>종단간(end-to-end)</b> 신뢰성, 프로토콜은 TCP/UDP, "종점 호스트 사이" 키워드</li>
+      <li>네트워크 계층 = <b>라우팅(경로선택)·트래픽 제어</b>, 장비는 라우터</li>
+      <li>데이터링크 계층 = <b>인접 노드 간(점대점)</b> 프레임 전송, 오류·흐름·순서제어, 장비는 브리지/스위치</li>
+      <li>데이터링크 기능이 <b>아닌</b> 것: 연결 제어, 종단 간 경로설정 (둘 다 상위 계층 일)</li>
       <li>수신측 처리 순서는 <b>하위→상위</b> (송신측은 상위→하위) — 반대로 서술하면 오답</li>
-      <li>계층-프로토콜 매칭: RS-232C(물리) / HDLC·Ethernet(데이터링크) / IP·ICMP(네트워크) / TCP·UDP(전송) / HTTP·SMTP·Telnet(응용) / SSL·MPEG(표현)</li>
+      <li>계층-프로토콜 매칭: RS-232C(물리) / HDLC·Ethernet·SLIP·FDDI(데이터링크) / IP·ICMP·IGMP·X.25(네트워크) / TCP·UDP(전송) / HTTP·SMTP·<b>Telnet</b>(응용) / SSL·MPEG(표현)</li>
+      <li>오류제어 프레임 3종: <b>정보 프레임 / ACK(긍정응답) / NAK(부정응답)</b> — "비트 프레임"은 없는 용어</li>
+      <li>프로토콜의 일반 기능에 <b>"비동기화"는 없다</b> (동기화가 맞음)</li>
     </ul>
   </section>
 
@@ -190,14 +303,313 @@
     <table>
       <tr><th>구분</th><th>표현 계층</th><th>세션 계층</th></tr>
       <tr><td>역할</td><td>데이터 형식 변환·암호화·압축</td><td>대화(세션) 시작~종료 관리</td></tr>
+      <tr><td>키워드</td><td>구문·의미, 압축, 암호화</td><td>접속 설정·유지·해제, 동기화 지점</td></tr>
       <tr><td>예시 프로토콜</td><td>SSL/TLS, JPEG, MPEG</td><td>NetBIOS, RPC</td></tr>
     </table>
     <table>
-      <tr><th>구분</th><th>데이터링크 계층</th><th>네트워크 계층</th></tr>
-      <tr><td>전송 범위</td><td>인접한 두 노드 사이(한 구간)</td><td>출발지~목적지 전체 경로</td></tr>
-      <tr><td>주소</td><td>MAC(물리) 주소</td><td>IP(논리) 주소</td></tr>
-      <tr><td>PDU</td><td>프레임</td><td>패킷</td></tr>
+      <tr><th>구분</th><th>데이터링크 계층</th><th>네트워크 계층</th><th>전송 계층</th></tr>
+      <tr><td>전송 범위</td><td>인접한 두 노드(한 구간, 점대점)</td><td>출발지~목적지 경로 선택</td><td>종단 호스트 간 전체(end-to-end)</td></tr>
+      <tr><td>주소</td><td>MAC(물리) 주소</td><td>IP(논리) 주소</td><td>포트 번호</td></tr>
+      <tr><td>PDU</td><td>프레임</td><td>패킷</td><td>세그먼트</td></tr>
+      <tr><td>오류·흐름제어</td><td>O (구간 단위)</td><td>X (경로선택만)</td><td>O (종단 간)</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2016 국회 · 기출문제집 p.296</span></div>
+      <p class="q-body">프로토콜은 컴퓨터 간 데이터 전송의 효율성과 신뢰성을 보장하기 위해 여러 가지 기능을 수행한다. 다음 중 <b>프로토콜의 일반적인 기능에 해당하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>주소 지정</li>
+        <li>오류 제어</li>
+        <li>데이터 분할 및 조합</li>
+        <li>비동기화</li>
+        <li>흐름 제어 및 캡슐화</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 비동기화</p>
+        <div class="explain">
+          <p>프로토콜의 일반적 기능은 <b>단편화와 재합성, 캡슐화, 연결 제어, 흐름 제어, 오류 제어, 순서 제어, 동기화, 주소 설정</b>이다.</p>
+          <p><b>함정:</b> "동기화"는 있지만 "<b>비</b>동기화"는 없다. 송수신측의 상태를 <b>맞추는</b> 것이 프로토콜의 일이지, 일부러 어긋나게 만드는 기능은 존재할 이유가 없다. 한 글자 붙여서 만든 전형적인 오답이니 선지를 끝까지 읽어야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2021 국가직 · 기출문제집 p.297</span></div>
+      <p class="q-body">OSI 7계층에서 계층별로 사용하는 프로토콜의 데이터 단위가 아래와 같을 때, ㉠~㉢에 들어갈 내용을 바르게 연결한 것은?</p>
+      <table>
+        <tr><th>계층</th><th>데이터 단위</th></tr>
+        <tr><td>트랜스포트(Transport) 계층</td><td>( ㉠ )</td></tr>
+        <tr><td>네트워크(Network) 계층</td><td>( ㉡ )</td></tr>
+        <tr><td>데이터링크(Datalink) 계층</td><td>( ㉢ )</td></tr>
+        <tr><td>물리(Physical) 계층</td><td>비트</td></tr>
+      </table>
+      <ol class="choices">
+        <li>㉠ 세그먼트 · ㉡ 프레임 · ㉢ 패킷</li>
+        <li>㉠ 패킷 · ㉡ 세그먼트 · ㉢ 프레임</li>
+        <li>㉠ 세그먼트 · ㉡ 패킷 · ㉢ 프레임</li>
+        <li>㉠ 패킷 · ㉡ 프레임 · ㉢ 세그먼트</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 세그먼트 · 패킷 · 프레임</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>물리 계층부터 위로 올라가며 외운다: <b>비트 → 프레임 → 패킷 → 세그먼트</b></li>
+            <li>문제 표는 <b>위에서 아래로</b> 전송→네트워크→데이터링크→물리 순이므로, 순서를 뒤집어 <b>세그먼트 → 패킷 → 프레임 → 비트</b></li>
+            <li>따라서 ㉠=세그먼트, ㉡=패킷, ㉢=프레임</li>
+          </ol>
+          <p><b>암기법:</b> "비(트)-프(레임)-패(킷)-세(그먼트)" = <b>"비프패세"</b>를 아래에서 위로. 표가 거꾸로 제시되는 경우가 많으니 <b>어느 방향인지 먼저 확인</b>하는 습관을 들일 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2007 국가직 · 기출문제집 p.298</span></div>
+      <p class="q-body">다음은 OSI 7계층 중 어느 계층을 설명한 것인가?</p>
+      <div class="tip" style="margin:8px 0;">
+        • 순서제어: 정보의 순차적 전송을 위한 프레임 번호 부여<br>
+        • 프레임 동기: 정보 전송 시 처리가 용이하도록 프레임 단위로 전송<br>
+        • 흐름제어: 연속적인 프레임 전송 시 수신여부의 확인
+      </div>
+      <ol class="choices">
+        <li>세션 계층</li>
+        <li>데이터링크 계층</li>
+        <li>트랜스포트 계층</li>
+        <li>프레젠테이션 계층</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 데이터링크 계층</p>
+        <div class="explain">
+          <p>설명에 <b>"프레임"이 세 번</b> 나온다. PDU가 프레임인 계층은 <b>데이터링크 계층</b> 하나뿐이므로 다른 선지를 볼 것도 없다.</p>
+          <p><b>데이터링크 계층의 5대 기능</b>(통째로 외우면 유리):</p>
+          <ol class="steps">
+            <li><b>프레임</b>: 비트들을 프레임이라는 논리적 단위로 구성</li>
+            <li><b>주소지정</b>: 직전 노드와 다음 노드의 물리(MAC) 주소를 포함</li>
+            <li><b>순서제어</b>: 프레임 번호를 부여해 순서 보장</li>
+            <li><b>흐름제어</b>: 한 번에 보낼 데이터 양 조절</li>
+            <li><b>오류제어</b>: 오류 검출·정정</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2017 서울시 · 기출문제집 p.300</span></div>
+      <p class="q-body">통신 S/W 구조에서 제2계층인 데이터링크 계층의 <b>주기능이 아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>데이터링크 계층에서 전송할 프레임(Frame) 제작 기능</li>
+        <li>점대점(Point to Point) 링크 간의 오류제어 기능</li>
+        <li>종단(End to End) 간 경로설정 기능</li>
+        <li>점대점(Point to Point) 링크 간의 흐름제어 기능</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 종단(End to End) 간 경로설정 기능</p>
+        <div class="explain">
+          <p>선지 ①·②·④에는 <b>"프레임", "점대점(Point to Point)"</b>이라는 데이터링크 키워드가 박혀 있다. 반면 ③에는 <b>"종단 간(End to End)"</b>과 <b>"경로설정"</b>이 있다.</p>
+          <ol class="steps">
+            <li><b>경로설정(라우팅)</b> = 네트워크 계층(3계층)의 대표 기능</li>
+            <li><b>종단 간(End to End)</b> = 전송 계층(4계층)의 대표 키워드</li>
+            <li>둘 다 데이터링크(2계층)와는 거리가 멀다 → ③이 정답</li>
+          </ol>
+          <p><b>같은 유형:</b> "데이터링크 계층 기능이 아닌 것" 문제에서 <b>연결 제어(Connection control)</b>가 정답으로 나온 적도 있다(2008 국가직). 데이터링크는 <b>프레임·오류·흐름·순서·주소지정</b>만 한다고 못 박아두자.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2015 서울시 · 기출문제집 p.299</span></div>
+      <p class="q-body">데이터링크 계층에서 전송 오류를 해결하는 과정에서 사용하는 <b>프레임의 종류가 아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>부정 응답 프레임</li>
+        <li>비트 프레임</li>
+        <li>긍정 응답 프레임</li>
+        <li>정보 프레임</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 비트 프레임</p>
+        <div class="explain">
+          <p>오류제어(정지대기 ARQ)에서 오가는 프레임은 딱 3종류다.</p>
+          <ol class="steps">
+            <li><b>정보 프레임</b>: 실제 데이터를 담아 보내는 프레임</li>
+            <li><b>긍정 응답 프레임(ACK)</b>: 오류 없이 잘 받았다는 응답</li>
+            <li><b>부정 응답 프레임(NAK)</b>: 오류가 발생했으니 다시 보내라는 응답</li>
+          </ol>
+          <p><b>함정:</b> "비트"는 <b>물리 계층의 PDU 이름</b>이지 프레임의 한 종류가 아니다. 그럴듯한 단어를 조합해 만든 가짜 용어를 끼워넣는 전형적인 출제 방식이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2014 국가직 · 기출문제집 p.300</span></div>
+      <p class="q-body">OSI 7계층 중 <b>종점 호스트 사이</b>의 데이터 전송을 다루는 계층으로서 종점 간의 연결 관리, 오류 제어와 흐름 제어 등을 수행하는 계층은?</p>
+      <ol class="choices">
+        <li>전송 계층(transport layer)</li>
+        <li>링크 계층(link layer)</li>
+        <li>네트워크 계층(network layer)</li>
+        <li>세션 계층(session layer)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 전송 계층(transport layer)</p>
+        <div class="explain">
+          <p>결정적 키워드는 <b>"종점 호스트 사이(종단 간)"</b>다. 오류 제어·흐름 제어는 데이터링크도 하지만, 그건 <b>인접 노드 간</b>이다.</p>
+          <p>전송 계층의 추가 특징도 함께 정리해두자:</p>
+          <ul>
+            <li>네트워크 계층에서 올라온 데이터를 <b>실제 운영체제의 프로그램(프로세스)</b>과 연결한다 → 그래서 헤더에 <b>포트 주소</b>가 들어간다</li>
+            <li>수신한 데이터의 <b>순서를 재조립</b>하고, 오류 패킷은 <b>재전송</b>시킨다</li>
+            <li><b>연결형(TCP)과 비연결형(UDP) 두 가지 운용 모드</b>를 모두 제공한다 (2020 지방직 기출의 정답 근거)</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2018 국회 · 기출문제집 p.302</span></div>
+      <p class="q-body">OSI(Open System Interconnection) 7계층에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>7계층에서 물리적 전송 매체와 직접적으로 연관이 있는 계층은 물리 계층이다.</li>
+        <li>수신측에서 패킷을 수신하게 되면 상위 계층에서 하위 계층 순으로 처리된다.</li>
+        <li>전송 계층의 대표적인 프로토콜은 TCP, UDP 등이 있다.</li>
+        <li>네트워크 계층에서는 라우팅 및 패킷 전송의 기능을 수행한다.</li>
+        <li>응용 계층에서는 전자 사서함, 파일 전송 등의 서비스를 제공한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (수신측은 하위 계층 → 상위 계층 순으로 처리된다)</p>
+        <div class="explain">
+          <p>캡슐화 그림을 떠올리면 바로 보인다.</p>
+          <ol class="steps">
+            <li><b>송신측</b>: 응용(7) → 물리(1). 내려가면서 헤더를 <b>덧붙인다</b>(캡슐화)</li>
+            <li><b>수신측</b>: 물리(1) → 응용(7). 올라가면서 헤더를 <b>벗긴다</b>(역캡슐화)</li>
+            <li>수신측은 선에서 들어온 <b>비트부터</b> 받으므로, 당연히 가장 아래 물리 계층이 먼저 처리한다</li>
+          </ol>
+          <p><b>함정:</b> "수신측 = 상위→하위"는 매년 반복되는 오답이다. <b>"받는 쪽은 밑에서부터"</b>라고 한 문장으로 외워두자.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2015 지방직 · 기출문제집 p.303</span></div>
+      <p class="q-body">데이터 통신의 표준참조모델인 OSI 모델의 각 계층에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>물리 계층은 송수신 시스템의 연결에서 전송 매체의 종류, 송수신되는 신호의 전압 레벨 등을 정의한다.</li>
+        <li>네트워크 계층은 송수신 컴퓨터의 응용프로그램 간 송수신되는 데이터의 구문과 의미에 관련된 기능으로 변환, 암호화, 압축을 수행한다.</li>
+        <li>전송 계층은 연결된 네트워크의 기능이나 특성에 영향을 받지 않고 오류제어와 흐름제어 기능을 수행하여 신뢰성 있는 데이터 전송을 보장하며, 프로토콜은 TCP, UDP 등이 있다.</li>
+        <li>응용 계층은 최상위 계층으로 프로토콜은 FTP, HTTP 등이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (변환·암호화·압축은 <b>표현 계층</b>의 기능)</p>
+        <div class="explain">
+          <p>②번 문장은 토씨 하나 안 틀린 <b>표현(Presentation) 계층의 정의</b>인데, 주어만 "네트워크 계층"으로 바꿔놓았다.</p>
+          <p>표현 계층의 3대 기능:</p>
+          <ol class="steps">
+            <li><b>변환</b>: 송신자 형식 → 표준 형식 → 수신자가 이해할 형식으로 번역 (이미지가 bmp인지 jpg인지 같은 "표현 방식")</li>
+            <li><b>암호화</b>: 송신측 암호화 / 수신측 복호화로 보안 제공</li>
+            <li><b>압축</b>: 전송률을 높이기 위해 압축, 수신측에서 압축 해제</li>
+          </ol>
+          <p><b>비슷한 기출:</b> 2019 국회·2023 소방경채에서도 "압축 및 암호화 담당 계층"을 묻고 답은 모두 <b>표현 계층</b>이었다. 반대로 네트워크 계층이 담당하는 건 <b>경로 선택·트래픽 제어·패킷 전송·중계</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2022 국회 · 기출문제집 p.305</span></div>
+      <p class="q-body">OSI 7계층과 해당 프로토콜을 연결한 것으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>응용 계층 — HTTP, SMTP</li>
+        <li>표현 계층 — MPEG, SSL</li>
+        <li>전송 계층 — TCP, TELNET</li>
+        <li>네트워크 계층 — IP, ICMP</li>
+        <li>데이터링크 계층 — Ethernet, FDDI</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 전송 계층 — TCP, TELNET</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>전송 계층 프로토콜은 <b>TCP와 UDP 딱 두 개</b>다</li>
+            <li><b>TELNET은 원격접속 서비스</b>로 <b>응용 계층</b> 프로토콜이다</li>
+            <li>따라서 ③이 잘못된 연결</li>
+          </ol>
+          <p><b>같은 유형의 다른 답:</b> 2008 국가직에서는 "전송 계층 — ISDN"이 오답이었다. <b>전송 계층 자리에 TCP·UDP가 아닌 뭔가가 끼어 있으면 그게 답</b>이라고 생각해도 거의 맞는다.</p>
+          <p>참고로 ⑤의 <b>FDDI</b>(광섬유 토큰패싱 100Mbps LAN 기술)는 데이터링크 계층이 맞다. 이걸 네트워크/인터넷 계층에 넣은 오답도 자주 나온다(2025 법원직).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2024 국가직 · 기출문제집 p.305</span></div>
+      <p class="q-body">OSI 모형의 <b>네트워크 계층 프로토콜에 속하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>ICMP</li>
+        <li>IGMP</li>
+        <li>IP</li>
+        <li>SLIP</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ SLIP</p>
+        <div class="explain">
+          <p><b>SLIP</b>(Serial Line Internet Protocol)은 전화선·RS-232 같은 <b>직렬 회선</b>으로 인터넷에 접속하기 위한 <b>데이터링크 계층</b> 프로토콜이다.</p>
+          <ul>
+            <li>오류 검출 기능, 링크 설정·절단 기능이 <b>없고</b> IP 외의 프로토콜을 지원하지 않는 단점 때문에 현재는 <b>PPP</b>가 주류다</li>
+            <li>나머지 ICMP(오류·상황 보고), IGMP(멀티캐스트 그룹 관리), IP는 모두 네트워크(인터넷) 계층이 맞다</li>
+          </ul>
+          <p><b>구분법:</b> 이름에 <b>"Line/Link"</b>(SLIP, PPP, HDLC)가 들어가면 데이터링크, <b>"Internet"</b>(IP, ICMP, IGMP)이 들어가면 네트워크 계층이라고 외우면 대부분 맞는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2025 법원직 · 기출문제집 p.304</span></div>
+      <p class="q-body">다음 설명 중 가장 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>OSI 7의 5계층은 세션 계층으로 응용 사이의 연결을 설정·관리·해제하는 통신제어 구조를 제공한다.</li>
+        <li>OSI 7의 1계층은 데이터가 전송되는 동안 연결을 유지하거나 해제하는 기계적, 전기적, 기능적, 절차적 특성을 정의한다.</li>
+        <li>OSI 7의 3계층은 단말기 사이에 오류수정과 흐름제어를 수행하여 신뢰성 있고 명확한 데이터를 전송하는 계층이다.</li>
+        <li>OSI 7 계층은 상위계층과 하위계층으로 구분할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (오류수정·흐름제어로 신뢰성 있는 전송을 하는 것은 <b>4계층=전송 계층</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>3계층(네트워크)의 일은 <b>경로 선택(라우팅)과 패킷 전달</b>이다</li>
+            <li>"단말기 사이(종단 간)에 오류수정·흐름제어로 신뢰성 보장" = <b>4계층(전송)</b>의 정의</li>
+            <li>따라서 ③의 계층 번호가 틀렸다</li>
+          </ol>
+          <p><b>이 유형의 공략법:</b> 계층 번호가 함께 나오면 <b>번호부터 확인</b>한다. 설명 자체는 교과서 그대로 가져다 쓰고 번호만 한 칸 옮기는 방식이 가장 흔한 오답 제조법이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">송신 호스트에서 데이터가 캡슐화되는 과정에서, <b>IP 헤더가 붙은 직후</b>의 PDU 이름은 무엇이며, 그 다음 계층에서 추가로 붙는 것은 무엇인가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: IP 헤더가 붙으면 <b>패킷</b>, 다음(데이터링크) 계층에서 <b>프레임 헤더 + 트레일러</b>가 붙어 <b>프레임</b>이 된다</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>응용~세션에서 내려온 <b>데이터</b>에 전송 계층이 TCP 헤더를 붙임 → <b>세그먼트</b></li>
+            <li>네트워크 계층이 <b>IP 헤더</b>를 붙임 → <b>패킷</b> (IP 헤더에 출발지·목적지 IP가 들어감)</li>
+            <li>데이터링크 계층이 앞에 <b>프레임 헤더(MAC 주소)</b>, 뒤에 <b>트레일러(오류검출용 FCS)</b>를 붙임 → <b>프레임</b></li>
+            <li>물리 계층이 이 프레임을 <b>비트</b>(전기 신호)로 바꿔 전송</li>
+          </ol>
+          <p><b>포인트:</b> 헤더는 모든 계층이 <b>앞에</b> 붙이지만, <b>트레일러(뒤에 붙는 것)는 데이터링크 계층만</b> 붙인다. 오류 검출을 위한 FCS를 맨 뒤에 둬야 프레임 전체를 다 받은 뒤 검사할 수 있기 때문이다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -209,6 +621,9 @@
       <span class="chip">프레임</span>
       <span class="chip">패킷</span>
       <span class="chip">세그먼트</span>
+      <span class="chip">캡슐화</span>
+      <span class="chip">역캡슐화</span>
+      <span class="chip">트레일러</span>
       <span class="chip">물리계층</span>
       <span class="chip">데이터링크계층</span>
       <span class="chip">네트워크계층</span>
@@ -216,10 +631,16 @@
       <span class="chip">세션계층</span>
       <span class="chip">표현계층</span>
       <span class="chip">응용계층</span>
-      <span class="chip">캡슐화</span>
+      <span class="chip">점대점</span>
+      <span class="chip">종단간(end-to-end)</span>
       <span class="chip">정지대기ARQ</span>
       <span class="chip">ACK</span>
       <span class="chip">NAK</span>
+      <span class="chip">RS-232C</span>
+      <span class="chip">HDLC</span>
+      <span class="chip">SLIP</span>
+      <span class="chip">FDDI</span>
+      <span class="chip">X.25</span>
       <span class="chip">라우터</span>
       <span class="chip">브리지</span>
     </div>

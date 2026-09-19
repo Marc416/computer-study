@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"주소가 모자란다"에서 시작된 이야기</h4>
+      <p>IPv4 주소는 32비트, 즉 전 세계에 약 43억 개뿐이다. 초창기에는 이걸 A(1600만 대)·B(6만 대)·C(254대) 세 덩어리로 뭉텅뭉텅 나눠줬다. 문제는 <b>직원 300명인 회사</b>다. C클래스(254대) 하나로는 모자라고, B클래스(6만 대)를 주면 <b>59,700개를 낭비</b>한다. 이런 낭비가 쌓여 주소가 급속히 고갈됐다.</p>
+      <p>해결책이 <b>서브넷팅</b>이다. 큰 덩어리 하나를 받아서 <b>내부적으로 잘게 쪼개 쓰는 것</b>. 쪼개는 방법은 딱 하나 — <b>호스트ID 비트 중 앞쪽 몇 개를 훔쳐다 "서브넷 번호"로 쓴다.</b> 3비트를 훔치면 2³=8개의 작은 망으로 나뉘고, 대신 각 망의 호스트 수는 1/8로 줄어든다. 여기에 "클래스라는 고정 경계 자체를 없애자"고 한 것이 <b>CIDR(/24, /27 같은 표기)</b>이다.</p>
+      <p>그래서 이 단원의 모든 계산 문제는 결국 <b>같은 질문 하나</b>다: "32비트 중 몇 번째에서 잘랐는가?" 자른 위치만 찾으면 서브넷마스크·네트워크주소·브로드캐스트주소·호스트 개수가 <b>전부 자동으로 따라 나온다.</b></p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — IPv4 클래스 체계 <span class="page-ref">📖 기출문제집 p.336~338</span></h2>
 
     <p>IPv4 주소는 32비트, 8비트씩 4묶음(옥텟)으로 나뉘고 각 묶음을 점(.)으로 구분해 10진수로 쓴다. <b>첫 옥텟의 맨 앞 비트 패턴</b>으로 클래스가 정해지고, 그 패턴이 클래스마다 네트워크ID와 호스트ID의 경계를 다르게 만든다.</p>
@@ -60,6 +70,18 @@
     </figure>
 
     <div class="tip"><b>암기 규칙:</b> 첫 옥텟 값이 <b>127 이하 → A</b>, <b>191 이하 → B</b>, <b>223 이하 → C</b>. 딱 이 세 경계값(127/191/223)만 외우면 어떤 IP든 3초 안에 클래스 판별 가능.</div>
+
+    <div class="deep">
+      <h4>왜 하필 127 / 191 / 223인가</h4>
+      <p>외워야 할 숫자처럼 보이지만 사실은 <b>계산해서 나오는 값</b>이다. 첫 옥텟 8비트에서 앞부분을 고정하기 때문이다.</p>
+      <ul>
+        <li>A: 맨 앞 <b>0</b> 고정 → <code>0xxxxxxx</code> → 00000000(0) ~ 01111111(<b>127</b>)</li>
+        <li>B: 앞 두 비트 <b>10</b> 고정 → <code>10xxxxxx</code> → 10000000(128) ~ 10111111(<b>191</b>)</li>
+        <li>C: 앞 세 비트 <b>110</b> 고정 → <code>110xxxxx</code> → 11000000(192) ~ 11011111(<b>223</b>)</li>
+        <li>D: 앞 네 비트 <b>1110</b> 고정 → 11100000(224) ~ 11101111(239), 멀티캐스트용</li>
+      </ul>
+      <p>즉 숫자를 못 외웠어도 <b>"앞 비트를 고정하면 범위가 반씩 잘린다"</b>만 기억하면 그 자리에서 유도할 수 있다.</p>
+    </div>
   </section>
 
   <section class="block">
@@ -67,16 +89,89 @@
 
     <p>서브넷마스크는 IP주소 32비트 중 <b>네트워크(+서브넷) 부분을 1, 호스트 부분을 0</b>으로 표시한 것이다. <b>IP주소 AND 서브넷마스크 = 네트워크 주소</b>가 계산의 전부다. 회사가 큰 네트워크 하나를 여러 부서용 작은 네트워크로 쪼갤 때, 원래 호스트ID 비트 중 앞쪽 몇 개를 "서브넷ID"로 빌려와 쓴다.</p>
 
+    <figure class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="C클래스에서 호스트 비트 3개를 서브넷 ID로 빌려오면 서브넷 8개가 생기고 각 서브넷의 호스트 비트는 5개로 줄어든다는 다이어그램">
+        <text x="10" y="20" font-size="13" font-weight="700">서브넷팅 전 — C클래스 기본 (마스크 255.255.255.0 = /24)</text>
+        <rect x="10" y="32" width="450" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="235" y="58" font-size="12" text-anchor="middle">네트워크ID (24비트)</text>
+        <rect x="460" y="32" width="150" height="42" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <text x="535" y="58" font-size="12" text-anchor="middle" opacity="0.75">호스트ID (8비트)</text>
+        <text x="620" y="58" font-size="11.5">→ 254대</text>
+
+        <line x1="535" y1="80" x2="535" y2="112" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="545" y="102" font-size="11.5" opacity="0.85">앞 3비트를 "빌려온다"</text>
+
+        <text x="10" y="140" font-size="13" font-weight="700">서브넷팅 후 — 3비트 차용 (마스크 255.255.255.224 = /27)</text>
+        <rect x="10" y="152" width="450" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="235" y="178" font-size="12" text-anchor="middle">네트워크ID (24비트)</text>
+        <rect x="460" y="152" width="56" height="42" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="488" y="172" font-size="10.5" text-anchor="middle">서브넷</text>
+        <text x="488" y="187" font-size="10.5" text-anchor="middle">3비트</text>
+        <rect x="516" y="152" width="94" height="42" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <text x="563" y="178" font-size="11" text-anchor="middle" opacity="0.75">호스트 5비트</text>
+
+        <text x="10" y="222" font-size="12">서브넷 개수 = 2³ = <tspan font-weight="700">8개</tspan></text>
+        <text x="250" y="222" font-size="12">서브넷당 주소 = 2⁵ = <tspan font-weight="700">32개</tspan></text>
+        <text x="480" y="222" font-size="12">쓸 수 있는 호스트 = 32−2 = <tspan font-weight="700">30대</tspan></text>
+        <text x="10" y="242" font-size="11" opacity="0.75">※ 빌려온 비트 수만큼 서브넷이 2배씩 늘고, 서브넷당 호스트는 그만큼 반씩 줄어든다 (총합은 그대로)</text>
+      </svg>
+      <figcaption>서브넷팅의 전부 — 호스트ID 비트를 몇 개 빌려오느냐가 서브넷 개수(2ⁿ)와 서브넷당 호스트 수를 동시에 결정한다.</figcaption>
+    </figure>
+
     <div class="tip">
       <b>서브넷 개수 ↔ 필요 비트 수:</b> 서브넷을 2ⁿ개로 나누려면 호스트ID에서 <b>n비트</b>를 빌려와야 한다 (2¹=2개, 2²=4개, 2³=8개...)
     </div>
+
+    <div class="deep">
+      <h4>만능 계산법 — "블록 크기(매직 넘버)" 하나로 다 푼다</h4>
+      <p>서브넷 문제는 아래 3줄이면 <b>어떤 유형이든</b> 풀린다. 시험장에서 이것만 떠올려라.</p>
+      <ol class="steps">
+        <li><b>블록 크기 = 256 − (마스크의 마지막 0이 아닌 옥텟 값)</b><br>예: 마스크 255.255.255.<b>224</b> → 블록 크기 = 256 − 224 = <b>32</b></li>
+        <li><b>블록 경계는 0에서 시작해 블록 크기만큼 계속 더한 값</b><br>예: 0, 32, 64, 96, 128, 160, 192, 224 — 이게 각 서브넷의 <b>네트워크 주소</b>다</li>
+        <li><b>각 블록의 마지막 값 = 그 블록의 브로드캐스트 주소</b>, 그 사이가 사용 가능 호스트<br>예: 32번 블록 → 네트워크 32, 브로드캐스트 63, 호스트는 33~62 (30개)</li>
+      </ol>
+      <p>주어진 IP가 어느 블록에 속하는지는 <b>"해당 옥텟 값 ÷ 블록 크기"의 몫</b>으로 바로 나온다. 예를 들어 34 ÷ 32 = 몫 1 → <b>1번째 블록(32~63)</b>에 속한다.</p>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 200" role="img" aria-label="마스크 255.255.255.224일 때 마지막 옥텟 0부터 255까지가 32칸짜리 블록 8개로 나뉘고, 각 블록의 시작이 네트워크 주소 끝이 브로드캐스트 주소가 된다는 그림">
+        <text x="10" y="20" font-size="13" font-weight="700">마스크 255.255.255.224 → 블록 크기 32 → 0~255가 8개 구획으로 잘린다</text>
+
+        <g font-size="10" text-anchor="middle">
+          <rect x="20" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="61" y="58">0 ~ 31</text><text x="61" y="72" opacity="0.7">호스트 1~30</text>
+          <rect x="102" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <text x="143" y="58" font-weight="700">32 ~ 63</text><text x="143" y="72" opacity="0.7">호스트 33~62</text>
+          <rect x="184" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="225" y="58">64 ~ 95</text>
+          <rect x="266" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="307" y="58">96 ~ 127</text>
+          <rect x="348" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="389" y="58">128 ~ 159</text>
+          <rect x="430" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="471" y="58">160 ~ 191</text>
+          <rect x="512" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="553" y="58">192 ~ 223</text>
+          <rect x="594" y="40" width="82" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="635" y="58">224 ~ 255</text>
+        </g>
+
+        <line x1="143" y1="95" x2="143" y2="115" stroke="currentColor" stroke-width="1.5"/>
+        <text x="152" y="112" font-size="12">예: 211.168.83.<tspan font-weight="700">34</tspan> 는 34÷32 = 몫 1 → <tspan font-weight="700">두 번째 블록(32~63)</tspan>에 속한다</text>
+
+        <text x="20" y="145" font-size="12">→ 네트워크 주소 = 211.168.83.<tspan font-weight="700">32</tspan> (블록 시작, 호스트비트 전부 0)</text>
+        <text x="20" y="165" font-size="12">→ 브로드캐스트 주소 = 211.168.83.<tspan font-weight="700">63</tspan> (블록 끝, 호스트비트 전부 1)</text>
+        <text x="20" y="185" font-size="12">→ 실제 배정 가능 호스트 = 33 ~ 62, 총 <tspan font-weight="700">30대</tspan> (양 끝 2개 제외)</text>
+      </svg>
+      <figcaption>블록 크기만 구하면 네트워크 주소·브로드캐스트 주소·호스트 범위가 자로 잰 듯 한 번에 정해진다 — 서브넷 계산 문제의 90%가 이 그림 하나로 풀린다.</figcaption>
+    </figure>
 
     <p><b>예제 1. C클래스 네트워크 하나를 8개의 서브넷으로 나눌 때 서브넷마스크는?</b></p>
     <ol class="steps">
       <li>C클래스 기본 마스크는 255.255.255.0 (호스트ID 8비트 전부 사용 가능)</li>
       <li>8개의 서브넷 = 2³ 이므로 <b>3비트</b>를 호스트ID에서 서브넷ID로 빌려온다</li>
       <li>마지막 옥텟을 비트로 쓰면: 앞 3비트가 서브넷용(1로 표시) → <code>11100000</code></li>
-      <li><code>11100000</code>을 10진수로 변환 → <b>224</b></li>
+      <li><code>11100000</code>을 10진수로 변환 → <b>224</b> (128+64+32)</li>
       <li>정답: <b>255.255.255.224</b> (남은 5비트가 서브넷당 호스트ID)</li>
     </ol>
 
@@ -85,41 +180,70 @@
       <li>/27 = 32비트 중 <b>왼쪽 27비트가 네트워크ID(서브넷 포함)</b>라는 뜻</li>
       <li>27비트를 8비트씩 끊으면: 8+8+8=24비트(앞 3옥텟 전부 1) + 남은 3비트</li>
       <li>4번째 옥텟은 8비트 중 앞 3비트만 1 → <code>11100000</code> = <b>224</b></li>
-      <li>정답: <b>255.255.255.224</b> (예제1과 결과가 같다 — /27과 "3비트 서브넷"은 동일한 말)</li>
+      <li>정답: <b>255.255.255.224</b> (예제1과 결과가 같다 — /27과 "C클래스에서 3비트 서브넷"은 같은 말)</li>
     </ol>
+
+    <div class="tip">
+      <b>자주 쓰는 마스크 값은 표로 외워두면 빠르다</b> (마지막 옥텟 기준)
+      <table style="margin-top:8px;">
+        <tr><th>빌린 비트</th><th>마지막 옥텟</th><th>10진수</th><th>CIDR</th><th>블록 크기</th><th>서브넷 수</th><th>호스트 수</th></tr>
+        <tr><td>1비트</td><td>10000000</td><td>128</td><td>/25</td><td>128</td><td>2</td><td>126</td></tr>
+        <tr><td>2비트</td><td>11000000</td><td>192</td><td>/26</td><td>64</td><td>4</td><td>62</td></tr>
+        <tr><td>3비트</td><td>11100000</td><td>224</td><td>/27</td><td>32</td><td>8</td><td>30</td></tr>
+        <tr><td>4비트</td><td>11110000</td><td>240</td><td>/28</td><td>16</td><td>16</td><td>14</td></tr>
+        <tr><td>5비트</td><td>11111000</td><td>248</td><td>/29</td><td>8</td><td>32</td><td>6</td></tr>
+        <tr><td>6비트</td><td>11111100</td><td>252</td><td>/30</td><td>4</td><td>64</td><td>2</td></tr>
+      </table>
+      <p style="margin-top:6px;">※ 마스크 값은 항상 <b>128 → 192 → 224 → 240 → 248 → 252 → 254 → 255</b> 순서로만 나온다. 이 목록에 없는 값(예: 126, 130)이 보이면 <b>그 자체로 틀린 마스크</b>다.</p>
+    </div>
 
     <p><b>예제 3. IP주소 117.17.23.253/27이 속한 네트워크 주소와 사용 가능 호스트 수는?</b></p>
     <ol class="steps">
-      <li>/27 → 서브넷마스크 255.255.255.224 (예제2에서 구함)</li>
-      <li>마지막 옥텟 253을 2진수로: <code>11111101</code></li>
-      <li>네트워크ID로 쓰이는 왼쪽 3비트만 남기고 나머지를 0으로: <code>11100000</code> = <b>224</b></li>
-      <li>네트워크 주소 = <b>117.17.23.224</b></li>
-      <li>호스트ID는 5비트 남았으므로 표현 가능한 값은 2⁵=32개, 그중 <b>전부0(네트워크주소)·전부1(브로드캐스트주소)</b> 2개는 호스트로 못 씀</li>
+      <li>/27 → 서브넷마스크 255.255.255.224, 블록 크기 = 256−224 = <b>32</b></li>
+      <li>마지막 옥텟 253이 속한 블록: 253 ÷ 32 = 몫 7 → <b>7번째 블록(224~255)</b></li>
+      <li>네트워크 주소 = 블록 시작 = <b>117.17.23.224</b><br>(비트로 확인: 253 = <code>11111101</code>, 앞 3비트만 남기고 0으로 → <code>11100000</code> = 224)</li>
+      <li>브로드캐스트 주소 = 블록 끝 = <b>117.17.23.255</b></li>
+      <li>호스트ID 5비트 → 주소 2⁵ = 32개, 그중 <b>네트워크주소·브로드캐스트주소 2개는 호스트에 못 씀</b></li>
       <li>사용 가능한 호스트 수 = 32 − 2 = <b>30개</b></li>
     </ol>
 
-    <p><b>예제 4. C클래스 211.168.83.0 네트워크를 서브넷마스크 255.255.255.224로 나눴을 때, 211.168.83.34가 속한 서브넷의 브로드캐스트 주소는?</b></p>
+    <p><b>예제 4. C클래스 211.168.83.0을 서브넷마스크 255.255.255.224로 나눴을 때, 211.168.83.34가 속한 서브넷의 브로드캐스트 주소는?</b></p>
     <ol class="steps">
-      <li>서브넷마스크 224 = <code>11100000</code> → 호스트ID는 5비트, 서브넷 크기 = 2⁵ = 32개 주소 단위로 구획</li>
-      <li>34를 32로 나눈 몫만큼 구획이 이동: 34 ÷ 32 = 1구획 남고 2 → <b>34가 속한 구획은 32~63</b></li>
-      <li>그 구획의 마지막 주소(호스트ID 전부 1)가 브로드캐스트 주소</li>
+      <li>블록 크기 = 256 − 224 = <b>32</b></li>
+      <li>34 ÷ 32 = 몫 1 → 34는 <b>1번째 블록(32~63)</b>에 속한다</li>
+      <li>그 블록의 마지막 주소(호스트ID 전부 1)가 브로드캐스트 주소</li>
       <li>정답: <b>211.168.83.63</b></li>
     </ol>
-    <div class="tip"><b>빠른 요령:</b> 서브넷마스크가 224(=2⁵ 간격)면 네 번째 옥�터 값은 항상 <b>0, 32, 64, 96...</b> 단위로 구획이 나뉜다. 어떤 호스트든 "몇 번째 32칸 구획에 있는지"만 찾으면 그 구획의 시작(네트워크주소)과 끝(브로드캐스트주소)이 바로 나온다.</div>
+    <div class="tip"><b>흔한 실수:</b> "브로드캐스트니까 무조건 .255"라고 찍으면 틀린다. 서브넷팅을 하면 <b>각 서브넷마다 자기만의 브로드캐스트 주소</b>가 생긴다(31, 63, 95, 127...). .255는 마지막 서브넷의 것일 뿐이다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔧</span>주요 개념 — 사설 IP·DHCP·NAT</h2>
+    <p>주소 고갈을 늦춘 또 하나의 장치가 <b>사설(private) IP</b>다. 집·회사 내부에서만 쓰는 전용 대역을 정해두고, 인터넷으로 나갈 때만 공인 IP 하나로 바꿔 쓴다(NAT). 여러분 노트북의 <code>192.168.x.x</code>가 바로 이것이다.</p>
+    <table>
+      <tr><th>구분</th><th>내용</th></tr>
+      <tr><td>사설 IP 대역</td><td>10.0.0.0/8 · 172.16.0.0/12 · <b>192.168.0.0/16</b> — 인터넷에서 라우팅되지 않음</td></tr>
+      <tr><td><b>NAT</b></td><td>사설 IP ↔ 공인 IP 변환. 여러 내부 기기가 공인 IP 하나를 공유할 수 있게 해줌</td></tr>
+      <tr><td><b>DHCP</b></td><td>부팅 시 서버가 IP를 <b>자동 할당</b>해주는 프로토콜 (유동 IP). 기기가 많은 환경에서 필수</td></tr>
+      <tr><td>고정 IP</td><td>관리자가 직접 지정. 서버처럼 주소가 변하면 안 되는 장비에 사용</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "IP 주소는 컴퓨터 고유의 값이라 다른 네트워크로 옮겨도 그대로 쓴다" → ❌ 틀림. IP는 <b>그 네트워크 안에서의 위치</b>를 나타내므로, 네트워크를 옮기면 그 망에 맞는 주소를 새로 받아야 한다(그래서 DHCP가 필요하다). 기기 고유의 값은 IP가 아니라 <b>MAC 주소</b>다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🌐</span>주요 개념 — IPv6 <span class="page-ref">📖 기출문제집 p.343~347</span></h2>
+    <p>서브넷팅·NAT로 버텼지만 근본 해결책은 <b>주소를 아예 늘리는 것</b>이었다. 그래서 32비트를 <b>128비트</b>로 확장한 것이 IPv6다. 주소 개수가 2⁹⁶배(약 43억의 43억 배의 43억 배)로 늘어나 사실상 고갈 걱정이 없다.</p>
     <table>
       <tr><th>구분</th><th>IPv4</th><th>IPv6</th></tr>
-      <tr><td>주소 길이</td><td>32비트 (4바이트)</td><td><b>128비트 (16바이트)</b> — IPv4의 4배</td></tr>
+      <tr><td>주소 길이</td><td>32비트 (4바이트)</td><td><b>128비트 (16바이트)</b> — 길이가 IPv4의 4배</td></tr>
       <tr><td>표기</td><td>8비트×4, 점(.)구분, 10진수</td><td>16비트×8, <b>콜론(:)</b>구분, 16진수</td></tr>
-      <tr><td>헤더</td><td>가변, 체크섬 필드 있음</td><td>기본헤더 40바이트 고정, <b>체크섬 필드 없음</b>(속도↑)</td></tr>
+      <tr><td>헤더</td><td>가변(20~60바이트), 체크섬 필드 있음</td><td>기본헤더 <b>40바이트 고정</b>, <b>체크섬 필드 없음</b>(라우터 처리 부담↓)</td></tr>
       <tr><td>주소 생략</td><td>없음</td><td>연속된 0은 <code>::</code>로 <b>딱 1번만</b> 생략 가능</td></tr>
       <tr><td>보안</td><td>IPSec 별도 설치</td><td><b>IPSec 자체(내장) 지원</b></td></tr>
       <tr><td>주소 종류</td><td>유니캐스트·멀티캐스트·브로드캐스트</td><td>유니캐스트·멀티캐스트·<b>애니캐스트</b>(브로드캐스트 없음)</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "IPv6는 IPv4보다 주소가 2배 길다" → ❌ <b>4배</b>다 (32bit→128bit). "IPv6는 브로드캐스트 주소를 지원한다" → ❌ IPv6엔 브로드캐스트가 없고 대신 <b>애니캐스트</b>가 추가됐다.</div>
+    <div class="tip"><b>함정 주의:</b> "IPv6는 IPv4보다 주소가 2배 길다" → ❌ <b>4배</b>다 (32bit→128bit). "IPv6 헤더는 20바이트" → ❌ <b>40바이트</b>(20바이트는 IPv4 기본 헤더). "IPv6는 브로드캐스트를 지원한다" → ❌ IPv6엔 브로드캐스트가 없고 대신 <b>애니캐스트</b>가 추가됐다.</div>
+    <div class="analogy"><b>애니캐스트가 뭔가:</b> 같은 주소를 가진 서버가 여러 대 있을 때 <b>그중 가장 가까운 하나</b>에만 전달하는 방식이다. 멀티캐스트가 "그룹 전원에게", 브로드캐스트가 "전체에게"라면 애니캐스트는 "아무나 제일 가까운 한 명에게"다. CDN·DNS 서버가 이 방식을 쓴다.</div>
   </section>
 
   <section class="block">
@@ -128,10 +252,11 @@
       <li>첫 옥텟 값만 보고 클래스 판별: 127이하=A, 191이하=B, 223이하=C</li>
       <li>서브넷 2ⁿ개로 나누려면 호스트ID에서 <b>n비트</b>를 빌려온다 — 개수↔비트수 변환이 핵심</li>
       <li>CIDR "/n" = 네트워크ID 비트수 n개라는 뜻, 서브넷마스크로 직접 변환 가능</li>
-      <li>네트워크주소 = IP AND 마스크, 브로드캐스트주소 = 호스트ID 전부 1</li>
+      <li><b>블록 크기 = 256 − 마스크 값</b> — 이 한 줄로 네트워크주소·브로드캐스트·호스트범위가 전부 나온다</li>
       <li>사용 가능 호스트 수 = 2^(호스트비트수) − 2 (네트워크주소·브로드캐스트주소 제외)</li>
-      <li>서브넷마스크 값(224, 192, 240 등)만 보고 "몇 칸 단위로 구획되는지" 바로 계산하는 연습 필수</li>
-      <li>IPv6은 128비트, 4배, 콜론표기, 체크섬없음, IPSec내장, 애니캐스트 추가 — 세트로 암기</li>
+      <li>유효한 마스크 값은 128·192·224·240·248·252·254·255 뿐 — 1이 중간에 끊기면 틀린 마스크</li>
+      <li>서브넷마다 브로드캐스트 주소가 따로 있다 (무조건 .255가 아님)</li>
+      <li>IPv6은 128비트, 4배, 콜론표기, 헤더 40바이트 고정, 체크섬없음, IPSec내장, 애니캐스트 추가 — 세트로 암기</li>
     </ul>
   </section>
 
@@ -141,12 +266,221 @@
       <tr><th>구분</th><th>클래스 기반(Classful) 주소</th><th>CIDR(Classless) 주소</th></tr>
       <tr><td>네트워크ID 경계</td><td>클래스(A/B/C)로 고정</td><td>/n으로 자유롭게 지정</td></tr>
       <tr><td>유연성</td><td>낮음(주소 낭비 발생)</td><td>높음(필요한 만큼만 할당)</td></tr>
+      <tr><td>표기 예</td><td>211.168.83.0 (C클래스)</td><td>211.168.83.0/27</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>네트워크 주소</th><th>브로드캐스트 주소</th></tr>
       <tr><td>호스트ID 값</td><td>전부 0</td><td>전부 1</td></tr>
+      <tr><td>블록 내 위치</td><td>블록의 첫 번째 주소</td><td>블록의 마지막 주소</td></tr>
       <tr><td>용도</td><td>네트워크 자체를 가리킴(호스트 할당 불가)</td><td>해당 네트워크 전체에 전송(호스트 할당 불가)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>IP 주소</th><th>MAC 주소</th></tr>
+      <tr><td>성격</td><td>논리 주소 — 네트워크에서의 <b>위치</b></td><td>물리 주소 — 장비 <b>고유</b> 번호</td></tr>
+      <tr><td>변경</td><td>망을 옮기면 바뀜</td><td>기기에 고정(변하지 않음)</td></tr>
+      <tr><td>계층</td><td>네트워크 계층(3계층)</td><td>데이터링크 계층(2계층)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요. 계산 문제는 반드시 손으로 블록 크기부터 구하는 습관을 들이세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2017 교육청 · 기출문제집 p.339</span></div>
+      <p class="q-body">IPv4 주소 체계에서 사용 <b>가능한 서브넷 마스크의 표현으로 옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>255.192.0.0</li>
+        <li>255.255.126.0</li>
+        <li>255.255.240.0</li>
+        <li>255.255.252.0</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 255.255.126.0</p>
+        <div class="explain">
+          <p>서브넷 마스크는 <b>1이 왼쪽부터 끊기지 않고 연속</b>해야 한다. 0이 한 번 나오면 그 뒤는 전부 0이어야 한다.</p>
+          <ol class="steps">
+            <li>① 255.192.0.0 → <code>11111111.11000000.00000000.00000000</code> — 1이 연속 ✅</li>
+            <li>② 255.255.<b>126</b>.0 → <code>11111111.11111111.<b>01111110</b>.00000000</code> — <b>0으로 시작해 1이 나왔다가 다시 0</b> ❌</li>
+            <li>③ 255.255.240.0 → <code>...11110000...</code> ✅</li>
+            <li>④ 255.255.252.0 → <code>...11111100...</code> ✅</li>
+          </ol>
+          <p><b>빠른 판별법:</b> 각 옥텟 값이 <b>0, 128, 192, 224, 240, 248, 252, 254, 255</b> 중 하나가 아니면 무조건 틀린 마스크다. 126은 이 목록에 없다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2023 소방경채 · 기출문제집 p.339</span></div>
+      <p class="q-body">C 클래스의 네트워크 한 개를 <b>8개의 서브넷</b>으로 나누고자 할 때 필요한 서브넷마스크 값으로 옳은 것은?</p>
+      <ol class="choices">
+        <li>255.255.255.128</li>
+        <li>255.255.255.192</li>
+        <li>255.255.255.224</li>
+        <li>255.255.255.248</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 255.255.255.224</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>C클래스 기본 마스크 = 255.255.255.0 → 호스트ID 8비트</li>
+            <li>서브넷 <b>8개 = 2³</b> → 호스트ID에서 <b>3비트</b>를 빌려온다</li>
+            <li>마지막 옥텟: 앞 3비트를 1로 → <code>11100000</code></li>
+            <li>10진수 변환: 128 + 64 + 32 = <b>224</b> → 255.255.255.224</li>
+          </ol>
+          <p><b>함정:</b> ①(128)은 1비트만 빌려 <b>2개</b>, ②(192)는 2비트로 <b>4개</b>, ④(248)는 5비트로 <b>32개</b>의 서브넷이 된다. "개수 → 2의 지수 → 비트 수" 변환에서 한 칸씩 밀리는 실수가 가장 많다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2021 지방직 · 기출문제집 p.340</span></div>
+      <p class="q-body">IPv4 CIDR 표기법에서 네트워크 접두사(prefix)의 길이가 <b>25</b>일 때, 이에 해당하는 서브넷 마스크는?</p>
+      <ol class="choices">
+        <li>255.255.255.0</li>
+        <li>255.255.255.128</li>
+        <li>255.255.255.192</li>
+        <li>255.255.255.224</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 255.255.255.128</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>/25 = 왼쪽 <b>25비트가 1</b>이라는 뜻</li>
+            <li>앞 3옥텟에서 24비트를 다 쓴다 → 255.255.255.</li>
+            <li>남은 1비트를 4번째 옥텟 맨 앞에 → <code>10000000</code></li>
+            <li><code>10000000</code> = <b>128</b> → 255.255.255.128</li>
+          </ol>
+          <p><b>암기 지름길:</b> /25=128, /26=192, /27=224, /28=240. "25부터 시작해 1씩 늘 때마다 128 → 192 → 224 → 240"으로 외워두면 변환 과정을 생략할 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2010 지방직 · 기출문제집 p.338</span></div>
+      <p class="q-body">A회사에 인터넷 <b>클래스 B 주소</b>가 할당되었다. A회사 조직이 <b>64개의 서브넷</b>을 가지고 있다면 각 서브넷에서 사용할 수 있는 주소의 개수는? (단, 특수주소를 포함한다.)</p>
+      <ol class="choices">
+        <li>256</li>
+        <li>512</li>
+        <li>1024</li>
+        <li>2048</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 1024</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>B클래스 → 네트워크ID 16비트, <b>호스트ID 16비트</b></li>
+            <li>서브넷 <b>64개 = 2⁶</b> → 호스트ID에서 <b>6비트</b>를 서브넷ID로 빌려온다</li>
+            <li>남은 호스트 비트 = 16 − 6 = <b>10비트</b></li>
+            <li>각 서브넷의 주소 개수 = 2¹⁰ = <b>1024개</b> (문제에서 특수주소를 포함하라 했으므로 −2를 하지 않는다)</li>
+          </ol>
+          <p><b>함정:</b> 습관적으로 −2를 해서 1022를 고르면 틀린다. <b>"특수주소 포함"이면 2ⁿ 그대로, "사용 가능한 호스트"면 2ⁿ−2</b> — 문제 문구를 반드시 확인할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2010 계리직 · 기출문제집 p.342</span></div>
+      <p class="q-body">회사에서 211.168.83.0(클래스 C) 네트워크를 사용한다. 내부적으로 5개의 서브넷을 쓰기 위해 서브넷 마스크를 <b>255.255.255.224</b>로 설정하였다. 이때 <b>211.168.83.34</b>가 속한 서브넷의 <b>브로드캐스트 주소</b>는?</p>
+      <ol class="choices">
+        <li>211.168.83.15</li>
+        <li>211.168.83.47</li>
+        <li>211.168.83.63</li>
+        <li>211.168.83.255</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 211.168.83.63</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>블록 크기 = 256 − 224 = <b>32</b></li>
+            <li>블록 경계: 0, 32, 64, 96, 128, 160, 192, 224</li>
+            <li>34가 속한 블록: 34 ÷ 32 = 몫 1 → <b>32~63 블록</b></li>
+            <li>브로드캐스트 = 블록의 마지막 주소 = <b>211.168.83.63</b><br>(비트로 확인: 네트워크 32 = <code>00100000</code>, 호스트비트 5개를 전부 1로 → <code>00111111</code> = 63)</li>
+          </ol>
+          <p><b>함정:</b> ④(.255)는 "브로드캐스트는 무조건 255"라는 착각을 노린 선택지다. 서브넷팅을 하면 <b>서브넷마다 브로드캐스트가 따로</b> 생긴다(31, 63, 95, ...). ②(.47)는 블록 크기를 16으로 잘못 계산했을 때 나오는 값이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2023 계리직 · 기출문제집 p.340</span></div>
+      <p class="q-body">IP주소가 <b>117.17.23.253/27</b>인 호스트에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>이 주소의 네트워크 주소는 117.17.23.0이다.</li>
+        <li>이 주소의 서브넷 마스크는 255.255.255.224이다.</li>
+        <li>이 주소는 클래스 기반의 주소지정으로 C클래스 주소이다.</li>
+        <li>이 주소가 포함된 네트워크에서 사용될 수 있는 IP주소는 254개이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 서브넷 마스크는 255.255.255.224</p>
+        <div class="explain">
+          <p>선택지를 하나씩 검증하는 종합 문제다.</p>
+          <ol class="steps">
+            <li><b>②(정답)</b>: /27 → 왼쪽 27비트가 1 → 마지막 옥텟 <code>11100000</code> = 224 → <b>255.255.255.224</b> ✅</li>
+            <li><b>①</b>: 블록 크기 = 256−224 = 32, 253 ÷ 32 = 몫 7 → 블록 224~255 → 네트워크 주소는 <b>117.17.23.224</b>이지 .0이 아니다 ❌</li>
+            <li><b>③</b>: 첫 옥텟이 <b>117</b> → 0~127 범위 → <b>A클래스</b>다 (C클래스는 192~223) ❌</li>
+            <li><b>④</b>: 호스트 비트가 5개 → 전체 32개, 특수주소 2개 빼면 <b>30개</b>. 254개는 /24일 때의 값이다 ❌</li>
+          </ol>
+          <p><b>정리:</b> 이 한 문제에 이 단원의 4가지 계산(마스크 변환·네트워크 주소·클래스 판별·호스트 수)이 전부 들어 있다. 틀린 선택지도 각각 왜 틀렸는지 계산해보면 복습이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2020 국회 · 기출문제집 p.341</span></div>
+      <p class="q-body">두 컴퓨터 A, B가 각각 <b>192.168.0.1</b>과 <b>192.168.0.65</b>의 주소를 사용할 때, 이 두 컴퓨터가 <b>서로 다른 서브넷</b>에 존재하기 위해 사용해야 하는 서브넷 마스크로 옳은 것은?</p>
+      <ol class="choices">
+        <li>0.0.0.0</li>
+        <li>255.255.255.0</li>
+        <li>255.255.255.192</li>
+        <li>255.255.255.128</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 255.255.255.192</p>
+        <div class="explain">
+          <p>"다른 서브넷에 있다" = <b>두 주소의 네트워크 부분이 서로 달라진다</b>는 뜻이다. 그러려면 두 주소가 <b>처음으로 달라지는 비트</b>가 네트워크 부분 안에 들어와야 한다.</p>
+          <ol class="steps">
+            <li>마지막 옥텟을 2진수로: 1 = <code>0<b>0</b>000001</code>, 65 = <code>0<b>1</b>000001</code></li>
+            <li>두 값은 <b>왼쪽에서 두 번째 비트</b>에서 처음 갈린다</li>
+            <li>따라서 최소 <b>2비트</b>까지가 네트워크(서브넷) 부분이어야 구분된다 → <code>11000000</code> = <b>192</b></li>
+            <li>정답: <b>255.255.255.192</b></li>
+          </ol>
+          <p><b>블록으로 확인:</b> 마스크 192 → 블록 크기 64 → 블록은 0~63, 64~127... <b>1은 0번 블록, 65는 64번 블록</b>이므로 서로 다른 서브넷 ✅<br>
+          <b>함정 ④(128):</b> 블록 크기 128 → 0~127이 한 블록 → 1과 65가 <b>같은 블록</b>에 들어가 버린다 ❌</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2025 지방직 · 기출문제집 p.343</span></div>
+      <p class="q-body">IP 주소에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>IPv4는 8바이트 주소 체계이다.</li>
+        <li>IPv6는 16바이트 주소 체계이다.</li>
+        <li>IPv6의 헤더 크기는 20바이트이다.</li>
+        <li>IPv4 주소가 143.248.166.12이면 클래스 C에 해당한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② IPv6는 16바이트 주소 체계이다</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>②(정답)</b>: IPv6 = 128비트 = 128 ÷ 8 = <b>16바이트</b> ✅</li>
+            <li><b>①</b>: IPv4 = 32비트 = <b>4바이트</b> (8바이트 아님) ❌</li>
+            <li><b>③</b>: IPv6 기본 헤더는 <b>40바이트 고정</b>. 20바이트는 <b>IPv4</b> 기본 헤더 크기다 ❌</li>
+            <li><b>④</b>: 첫 옥텟 <b>143</b> → 128~191 범위 → <b>B클래스</b> ❌</li>
+          </ol>
+          <p><b>세트로 외우기:</b> IPv4 = 32비트 = 4바이트 = 헤더 20바이트 / IPv6 = 128비트 = 16바이트 = 헤더 40바이트. 비트·바이트·헤더 세 숫자를 묶어서 기억하면 이 유형은 전부 잡힌다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -160,9 +494,14 @@
       <span class="chip">호스트ID</span>
       <span class="chip">서브넷마스크</span>
       <span class="chip">서브넷팅</span>
+      <span class="chip">블록 크기</span>
       <span class="chip">CIDR</span>
       <span class="chip">네트워크주소</span>
       <span class="chip">브로드캐스트주소</span>
+      <span class="chip">사설IP</span>
+      <span class="chip">NAT</span>
+      <span class="chip">DHCP</span>
+      <span class="chip">MAC 주소</span>
       <span class="chip">IPv6</span>
       <span class="chip">애니캐스트</span>
       <span class="chip">IPSec</span>

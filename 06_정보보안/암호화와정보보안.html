@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"어떻게 처음 보는 사람과 비밀을 나누는가"라는 문제</h4>
+      <p>암호화 자체는 옛날부터 있었다. 문제는 <b>키를 어떻게 전달하느냐</b>다. 같은 키로 잠그고 여는 방식(대칭키)은 빠르고 간단하지만, 그 키를 상대에게 보내는 순간 도청당하면 끝이다. "비밀을 지키려면 먼저 비밀을 안전하게 보내야 한다"는 순환 논리에 빠진다.</p>
+      <p>1970년대에 <b>디피와 헬만</b>이 이 문제를 깬다. 잠그는 키와 여는 키를 <b>다르게</b> 만들면, 잠그는 키는 아예 <b>온 세상에 공개해도 상관없다</b>는 발상이다. 누구나 자물쇠를 채울 수 있지만 열쇠는 나만 갖고 있는 우편함과 같다. 이것이 공개키 암호화이고, 오늘날 인터넷 쇼핑·공인인증서·HTTPS가 전부 이 위에 서 있다.</p>
+      <p>시험에서 이 단원이 어려운 이유는 딱 하나다 — <b>"어느 상황에서 누구의, 어떤 키를 쓰는가"</b>가 목적(비밀유지냐 신원증명이냐)에 따라 정반대로 바뀌기 때문이다. 아래 "키 사용 방향" 다이어그램 하나만 확실히 잡으면 이 단원 문제의 절반은 해결된다. 나머지 절반은 공격 기법 이름 맞추기라 암기로 충분하다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">🔐</span>주요 개념 — 암호화</h2>
 
     <h3>대칭키 암호화 vs 공개키(비대칭키) 암호화 <span class="page-ref">📖 기출문제집 p.370~373</span></h3>
@@ -53,21 +63,21 @@
         <text x="60" y="265" font-size="12" text-anchor="middle">철수</text>
         <rect x="150" y="235" width="140" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="220" y="255" font-size="11.5" text-anchor="middle">평문 → 암호화</text>
-        <text x="220" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 <b>공개키</b>)</text>
+        <text x="220" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 공개키)</text>
         <line x1="90" y1="260" x2="150" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
         <line x1="290" y1="260" x2="380" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
         <text x="335" y="250" font-size="11" text-anchor="middle">암호문</text>
         <rect x="380" y="235" width="150" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
         <text x="455" y="255" font-size="11.5" text-anchor="middle">암호문 → 복호화</text>
-        <text x="455" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 <b>개인키</b>만 가능)</text>
+        <text x="455" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 개인키만 가능)</text>
         <line x1="530" y1="260" x2="590" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
         <circle cx="620" cy="260" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="620" y="265" font-size="12" text-anchor="middle">영희</text>
-        <text x="620" y="315" font-size="10.5" text-anchor="middle" opacity="0.8">개인키는<br/>본인만 보관</text>
+        <text x="620" y="310" font-size="10.5" text-anchor="middle" opacity="0.8">개인키는 본인만 보관</text>
 
         <rect x="150" y="360" width="500" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="400" y="385" font-size="11.5" text-anchor="middle">공개키는 누구나 가질 수 있음 → 아무나 영희에게 비밀 메시지를 보낼 수 있지만,</text>
-        <text x="400" y="403" font-size="11.5" text-anchor="middle">복호화(여는 것)는 <b>개인키를 가진 영희만</b> 가능 — 키를 미리 공유할 필요가 없다</text>
+        <text x="400" y="403" font-size="11.5" text-anchor="middle">복호화(여는 것)는 개인키를 가진 영희만 가능 — 키를 미리 공유할 필요가 없다</text>
       </svg>
       <figcaption>대칭키는 하나의 키를 공유하므로 빠르지만 키 전달 과정이 약점이고, 공개키는 두 개의 서로 다른 키(공개키/개인키)를 쓰므로 느리지만 키를 안전하게 나눠줄 필요가 없다.</figcaption>
     </figure>
@@ -79,24 +89,99 @@
       <tr><td>대표 알고리즘</td><td>DES, 3중 DES, AES, SEED, ARIA, LEA</td><td>RSA, Diffie-Hellman, DSA</td></tr>
       <tr><td>용도</td><td>일반 데이터 암호화(대용량)</td><td>키 교환, 전자서명, 인증</td></tr>
       <tr><td>부인 방지</td><td>불가능</td><td>가능 (전자서명)</td></tr>
-      <tr><td>키 관리</td><td>사용자 n명이면 <sub>n</sub>C<sub>2</sub>개(많음)</td><td>사용자 n명이면 2n개(적음)</td></tr>
+      <tr><td>키 관리</td><td>사용자 n명이면 n(n−1)/2개(많음)</td><td>사용자 n명이면 2n개(적음)</td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> "공개키 암호화가 대칭키보다 빠르다" → ❌ 반대다, <b>대칭키가 더 빠름</b>. "국내 개발 대칭키 알고리즘"은 <b>ARIA, SEED, LEA, HIGHT</b> — RSA·DES·AES는 국내개발 아님.</div>
+
+    <div class="deep">
+      <h4>왜 공개키가 느린가, 그리고 왜 키 개수는 오히려 적은가</h4>
+      <p><b>속도:</b> 대칭키(AES 등)는 비트를 뒤섞고 치환하는 단순 연산의 반복이라 하드웨어로 순식간에 처리된다. 반면 RSA는 <b>거대한 소수의 곱셈과 거듭제곱</b>이라는 수학 연산에 기반한다 — 큰 수를 소인수분해하기 어렵다는 성질이 보안의 근거이기 때문에, 계산 자체가 무거울 수밖에 없다. 그래서 실무에서는 <b>"공개키로 대칭키를 안전하게 전달하고, 실제 데이터는 대칭키로 암호화"</b>하는 하이브리드 방식을 쓴다(HTTPS가 정확히 이 방식).</p>
+      <p><b>키 개수:</b> 대칭키는 <b>사람 쌍마다</b> 별도의 비밀키가 필요하다. n명이면 쌍의 개수인 <b>n(n−1)/2개</b>가 된다 — 10명이면 45개, 100명이면 4,950개로 폭증한다. 반면 공개키는 <b>사람마다 (공개키, 개인키) 한 쌍</b>만 가지면 되므로 <b>2n개</b>다 — 100명이어도 200개다. "사용자가 늘면 관리할 키가 폭증하는 쪽은 대칭키"라는 것이 시험 포인트.</p>
+      <ul>
+        <li>계산 예: 5명이 대칭키로 서로 통신 → 5×4/2 = <b>10개</b>의 키 필요</li>
+        <li>같은 5명이 공개키 방식 → 2×5 = <b>10개</b> (같아 보이지만 10명이면 대칭키 45개 vs 공개키 20개로 격차가 벌어진다)</li>
+      </ul>
+    </div>
+
+    <h3>★ 키 사용 방향 — 이 단원 최대 함정 <span class="page-ref">📖 기출문제집 p.373~374</span></h3>
+    <p>같은 공개키 암호 시스템인데도 <b>목적에 따라 쓰는 키가 정반대</b>다. 매년 출제되고 매년 틀리는 유형이라 그림으로 확실히 잡고 가야 한다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 740 380" role="img" aria-label="비밀 유지가 목적이면 받는 사람의 공개키로 암호화하고 받는 사람의 개인키로 복호화하며, 신원 증명이 목적이면 보내는 사람의 개인키로 서명하고 보내는 사람의 공개키로 검증한다">
+        <defs>
+          <marker id="kd1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="20" y="22" font-size="13" font-weight="700">① 비밀 유지(기밀성)가 목적 — 암호화</text>
+        <circle cx="70" cy="80" r="28" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="78" font-size="11.5" text-anchor="middle">철수</text>
+        <text x="70" y="92" font-size="9.5" text-anchor="middle" opacity="0.7">(송신)</text>
+        <line x1="100" y1="80" x2="250" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#kd1)"/>
+        <text x="175" y="66" font-size="11.5" text-anchor="middle" font-weight="700">영희의 공개키로 암호화</text>
+        <text x="175" y="100" font-size="10.5" text-anchor="middle" opacity="0.75">(누구나 가질 수 있는 키)</text>
+        <rect x="250" y="55" width="110" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="305" y="85" font-size="12" text-anchor="middle">암호문</text>
+        <line x1="360" y1="80" x2="510" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#kd1)"/>
+        <text x="435" y="66" font-size="11.5" text-anchor="middle" font-weight="700">영희의 개인키로 복호화</text>
+        <text x="435" y="100" font-size="10.5" text-anchor="middle" opacity="0.75">(영희만 가진 키)</text>
+        <circle cx="545" cy="80" r="28" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="545" y="78" font-size="11.5" text-anchor="middle">영희</text>
+        <text x="545" y="92" font-size="9.5" text-anchor="middle" opacity="0.7">(수신)</text>
+        <text x="600" y="76" font-size="11">→ 영희만</text>
+        <text x="600" y="92" font-size="11">읽을 수 있다</text>
+        <text x="30" y="135" font-size="12" font-weight="700">둘 다 "받는 사람(영희)"의 키를 쓴다</text>
+
+        <line x1="10" y1="160" x2="730" y2="160" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+
+        <text x="20" y="192" font-size="13" font-weight="700">② 신원 증명(인증·부인방지)이 목적 — 전자서명</text>
+        <circle cx="70" cy="250" r="28" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="248" font-size="11.5" text-anchor="middle">철수</text>
+        <text x="70" y="262" font-size="9.5" text-anchor="middle" opacity="0.7">(서명자)</text>
+        <line x1="100" y1="250" x2="250" y2="250" stroke="currentColor" stroke-width="1.5" marker-end="url(#kd1)"/>
+        <text x="175" y="236" font-size="11.5" text-anchor="middle" font-weight="700">철수의 개인키로 서명</text>
+        <text x="175" y="270" font-size="10.5" text-anchor="middle" opacity="0.75">(철수만 가진 키)</text>
+        <rect x="250" y="225" width="110" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="305" y="248" font-size="11.5" text-anchor="middle">문서 +</text>
+        <text x="305" y="264" font-size="11.5" text-anchor="middle">전자서명</text>
+        <line x1="360" y1="250" x2="510" y2="250" stroke="currentColor" stroke-width="1.5" marker-end="url(#kd1)"/>
+        <text x="435" y="236" font-size="11.5" text-anchor="middle" font-weight="700">철수의 공개키로 검증</text>
+        <text x="435" y="270" font-size="10.5" text-anchor="middle" opacity="0.75">(누구나 검증 가능)</text>
+        <circle cx="545" cy="250" r="28" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="545" y="248" font-size="11.5" text-anchor="middle">영희</text>
+        <text x="545" y="262" font-size="9.5" text-anchor="middle" opacity="0.7">(검증자)</text>
+        <text x="600" y="246" font-size="11">→ 철수가 썼음이</text>
+        <text x="600" y="262" font-size="11">증명된다</text>
+        <text x="30" y="305" font-size="12" font-weight="700">둘 다 "보내는 사람(철수)"의 키를 쓴다</text>
+
+        <rect x="60" y="325" width="620" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="370" y="344" font-size="12.5" text-anchor="middle" font-weight="700">암기: "비밀로 하고 싶으면 받는 사람 키, 내가 썼다고 증명하려면 내 키"</text>
+        <text x="370" y="362" font-size="11.5" text-anchor="middle">항상 공개키로 잠그고(또는 검증하고) 개인키로 연다(또는 서명한다)</text>
+      </svg>
+      <figcaption>목적이 <b>기밀성</b>이면 받는 사람의 키 쌍을, <b>인증·부인방지</b>면 보내는 사람의 키 쌍을 쓴다 — 어느 쪽이든 "개인키는 본인만 쓰고, 공개키는 나머지 모두가 쓴다"는 원칙은 동일하다.</figcaption>
+    </figure>
+    <div class="tip"><b>문제 푸는 요령:</b> "철수가 영희에게 <b>비밀</b> 메시지를 보낸다" → 등장하는 키는 전부 <b>영희의</b> 것(영희 공개키로 암호화, 영희 개인키로 복호화). 선택지에 "철수의 공개키로 암호화"가 있으면 그게 오답이다. 반대로 "철수가 <b>서명</b>한다"면 전부 <b>철수의</b> 것.</div>
 
     <h3>PKI (공개키 기반 구조)와 전자서명</h3>
     <ul>
       <li><b>PKI</b>: 인증기관(CA)이 공개키와 소유자 정보를 묶어 <b>인증서</b>를 발급 — "이 공개키는 진짜 이 사람 것"을 보증</li>
       <li><b>전자서명</b>: 송신자가 <b>자신의 개인키</b>로 서명 → 수신자는 <b>송신자의 공개키</b>로 검증 (암호화와는 키 사용 방향이 반대!)</li>
       <li>전자서명이 제공하는 것: <b>무결성 확인 + 부인 방지</b> (내용을 숨기는 게 목적이 아니라 "누가 썼는지" 증명하는 것)</li>
+      <li>PKI가 제공하는 것: 무결성·전자서명·부인방지, 그리고 <b>안전하고 편리한 공개키 획득</b></li>
     </ul>
+    <div class="deep">
+      <h4>인증서가 왜 필요한가 — 공개키의 약점</h4>
+      <p>공개키는 누구나 가져갈 수 있다. 그런데 바로 그 점이 문제다. <b>공격자가 "이게 영희의 공개키야"라며 자기 공개키를 뿌리면?</b> 철수는 그것으로 암호화해 보내고, 공격자가 자기 개인키로 열어본다. 공개키 자체는 안전해도 <b>"이 공개키가 진짜 영희 것인지" 보증하는 장치가 없으면</b> 시스템이 무너진다.</p>
+      <p>그래서 <b>인증기관(CA)</b>이 등장한다. CA가 "영희의 공개키는 이것이 맞다"고 자기 개인키로 서명한 문서가 바로 <b>인증서</b>다. 브라우저에 자물쇠 아이콘이 뜨는 것이 이 검증을 통과했다는 뜻이다. 즉 <b>PKI = 공개키 + 인증서 + CA + 관리 절차</b>를 묶은 전체 체계다.</p>
+    </div>
     <div class="tip"><b>함정 주의:</b> 공개키로 "암호화"할 때는 <b>상대방의 공개키</b>를 쓰지만, 전자서명(서명)할 때는 <b>자신의 개인키</b>를 쓴다 — 목적(비밀유지 vs 신원증명)에 따라 키 사용 방향이 반대임을 헷갈리지 말 것.</div>
 
-    <h3>해시 함수</h3>
-    <ul>
-      <li><b>일방향성</b>: 해시값에서 원문을 역산할 수 없음 (암호화처럼 되돌리는 게 목적이 아님)</li>
-      <li>평문 길이가 <b>가변</b>이어도 해시값 길이는 <b>항상 고정</b></li>
-      <li>원문이 <b>한 글자만 달라져도</b> 해시값은 완전히 달라짐 → 무결성(위변조 여부) 검증에 사용</li>
-    </ul>
+    <h3>해시 함수 <span class="page-ref">📖 기출문제집 p.375~376</span></h3>
+    <table>
+      <tr><th>특성</th><th>의미</th><th>왜 중요한가</th></tr>
+      <tr><td><b>일방향성</b></td><td>해시값에서 원문을 역산할 수 없음</td><td>비밀번호를 해시로 저장하면 DB가 털려도 원문 비밀번호는 안전</td></tr>
+      <tr><td><b>고정 길이 출력</b></td><td>평문이 1글자든 1GB든 해시값 길이는 <b>항상 동일</b></td><td>어떤 파일이든 같은 크기의 "지문"으로 비교 가능</td></tr>
+      <tr><td><b>눈사태 효과</b></td><td>원문이 한 글자만 달라져도 해시값이 <b>완전히</b> 달라짐</td><td>파일이 조금이라도 변조되면 즉시 탐지 → 무결성 검증</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> 해시는 <b>양방향이 아니라 일방향</b>이고, 목적은 <b>정보를 숨기는 것(암호화)이 아니라 위변조를 막는 것(무결성)</b>이다. 이 둘을 뒤바꾼 선택지가 단골 오답이다. 대표 알고리즘: MD5, SHA-1, SHA-256.</div>
   </section>
 
   <section class="block">
@@ -128,13 +213,32 @@
       </svg>
       <figcaption>정보보안 문제의 절반은 "이 공격이 셋 중 무엇을 노리는가"를 묻는다 — 스니핑=기밀성, 변조=무결성, DoS=가용성 공격으로 짝지어 암기.</figcaption>
     </figure>
-    <div class="tip"><b>함정 주의:</b> 3대 요구사항은 <b>기밀성·무결성·가용성</b>뿐이다. "안전성(Safety)", "신뢰성" 등은 3요소에 포함되지 않는 오답 선택지로 자주 나온다.</div>
+    <div class="deep">
+      <h4>공격 ↔ 3요소 매칭표 (이대로 외우면 끝)</h4>
+      <table>
+        <tr><th>노리는 것</th><th>공격 방식</th><th>대표 공격</th></tr>
+        <tr><td><b>기밀성</b> (읽기)</td><td>몰래 훔쳐본다</td><td>스니핑, 도청, 키로거, 스파이웨어</td></tr>
+        <tr><td><b>무결성</b> (변경)</td><td>몰래 바꿔치기한다</td><td>중간자공격(MITM), 데이터 변조, 파밍(DNS 변조)</td></tr>
+        <tr><td><b>가용성</b> (사용)</td><td>아예 못 쓰게 만든다</td><td>DoS, DDoS, 랜섬웨어(파일 잠금)</td></tr>
+      </table>
+      <p>헷갈릴 때는 동사로 생각하라 — <b>훔쳐보면 기밀성, 고치면 무결성, 막으면 가용성</b>이다.</p>
+    </div>
+    <div class="tip"><b>함정 주의:</b> 3대 요구사항은 <b>기밀성·무결성·가용성</b>뿐이다. "안전성(Safety)", "신뢰성" 등은 3요소에 포함되지 않는 오답 선택지로 자주 나온다. 또한 "무결성 = 모든 사용자가 수정 가능"이라는 표현은 정반대 서술이므로 오답.</div>
+
+    <h3>인증(Authentication)의 3가지 요소</h3>
+    <table>
+      <tr><th>인증 요소</th><th>근거</th><th>예시</th></tr>
+      <tr><td><b>지식 기반</b> (알고 있는 것)</td><td>인증자와 검증자만 아는 <b>지식</b>을 비교</td><td>비밀번호, PIN, 보안 질문</td></tr>
+      <tr><td><b>소지 기반</b> (갖고 있는 것)</td><td>본인만 소지한 <b>물건</b>을 확인</td><td>OTP 토큰, 보안카드, 스마트카드</td></tr>
+      <tr><td><b>생체 기반</b> (신체 특성)</td><td>본인의 <b>신체적 특징</b>을 이용</td><td>지문, 홍채, 얼굴, 정맥</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "<b>소지</b>기반은 인증자와 검증자만 아는 지식을 비교" → ❌ 그건 <b>지식</b>기반의 정의다. 지식/소지/생체의 정의를 서로 바꿔 놓는 것이 단골 함정이다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🦠</span>주요 개념 — 악성코드와 공격기법</h2>
 
-    <h3>악성코드 종류</h3>
+    <h3>악성코드 종류 <span class="page-ref">📖 기출문제집 p.377~378</span></h3>
     <table>
       <tr><th>종류</th><th>특징</th></tr>
       <tr><td>바이러스 (Virus)</td><td>다른 프로그램 파일에 <b>자신을 복사</b>하여 감염시킴, 숙주 필요</td></tr>
@@ -142,10 +246,21 @@
       <tr><td>트로이 목마</td><td>정상 프로그램으로 위장하여 내부에 악성코드를 숨김, 자기복제 <b>안 함</b></td></tr>
       <tr><td>랜섬웨어</td><td>파일을 <b>암호화</b>해 사용 불가능하게 만든 뒤 복구 대가로 금전 요구</td></tr>
       <tr><td>스파이웨어</td><td>사용자 몰래 정보를 수집해 외부로 전송</td></tr>
+      <tr><td>매크로 바이러스</td><td>문서 프로그램의 <b>매크로 언어</b>를 이용해 <b>데이터 파일</b>(문서 등)을 감염</td></tr>
     </table>
+    <div class="deep">
+      <h4>바이러스 · 웜 · 트로이목마 — 두 가지 질문으로 구분</h4>
+      <p>셋을 구분하는 기준은 딱 두 개다: <b>① 스스로 복제하는가? ② 다른 파일에 붙는가?</b></p>
+      <ul>
+        <li><b>바이러스</b>: 복제 O, 파일 감염 O → 숙주 파일이 있어야 산다 (감기 바이러스처럼)</li>
+        <li><b>웜</b>: 복제 O, 파일 감염 X → 숙주 없이 <b>네트워크를 타고 스스로</b> 퍼진다</li>
+        <li><b>트로이 목마</b>: 복제 X, 파일 감염 X → 사용자가 <b>직접 설치</b>해야 동작 (위장이 전부)</li>
+      </ul>
+      <p>그래서 "웜이 다른 프로그램 파일의 일부분에 자신을 복사한다"는 서술은 <b>바이러스의 설명</b>이라 오답이다 — 이 문장 그대로 기출에 나왔다.</p>
+    </div>
     <div class="tip"><b>함정 주의:</b> "웜은 다른 파일을 감염시킨다" → ❌ 웜은 <b>자기복제만</b> 하고 파일 감염은 <b>바이러스</b>의 특징이다.</div>
 
-    <h3>사회공학적 공격 기법 (사람을 속이는 공격)</h3>
+    <h3>사회공학적 공격 기법 (사람을 속이는 공격) <span class="page-ref">📖 기출문제집 p.378~379</span></h3>
     <table>
       <tr><th>기법</th><th>방법</th></tr>
       <tr><td>스니핑 (Sniffing)</td><td>네트워크 패킷을 <b>엿듣기</b>만 함 (기밀성 공격)</td></tr>
@@ -154,11 +269,13 @@
       <tr><td>파밍 (Pharming)</td><td>DNS 자체를 변조해 <b>정상 URL을 입력해도</b> 가짜 사이트로 연결</td></tr>
       <tr><td>스미싱 (Smishing)</td><td>문자메시지(SMS) 링크로 악성코드 설치·소액결제 유도</td></tr>
       <tr><td>세션 하이재킹</td><td>이미 인증된 <b>세션을 가로채서</b> 로그인 절차 없이 접속</td></tr>
-      <tr><td>ARP 스푸핑</td><td>MAC 주소를 위조해 랜(LAN) 내부 통신 흐름을 왜곡 (데이터링크 계층 공격)</td></tr>
+      <tr><td>ARP 스푸핑 / ARP Redirect</td><td>MAC 주소를 위조해 랜(LAN) 내부 통신 흐름을 왜곡 → 스니핑을 가능하게 함</td></tr>
+      <tr><td>키로거 (Key Logger)</td><td>키보드 입력을 가로채 비밀번호 등을 탈취</td></tr>
     </table>
     <div class="tip"><b>피싱 vs 파밍 구분법:</b> 피싱은 "가짜 링크를 <b>클릭</b>하게" 속이고, 파밍은 <b>정상 주소를 입력해도</b> DNS가 조작되어 가짜 사이트로 끌려간다 — 사용자 행동과 무관하게 당하는 게 파밍.</div>
+    <div class="analogy"><b>이름으로 외우기:</b> 피싱(Phishing)=fishing, <b>미끼</b>를 던져 낚는다 / 파밍(Pharming)=farming, <b>농장처럼 길목 자체</b>(DNS)를 장악해 수확한다 / 스미싱(Smishing)=SMS+phishing, <b>문자</b>로 낚는다.</div>
 
-    <h3>서비스 거부 공격 (DoS/DDoS) — 가용성을 노리는 공격</h3>
+    <h3>서비스 거부 공격 (DoS/DDoS) — 가용성을 노리는 공격 <span class="page-ref">📖 기출문제집 p.380~381</span></h3>
     <figure class="diagram">
       <svg viewBox="0 0 640 260" role="img" aria-label="DDoS 공격: 공격자가 다수의 좀비 PC를 조종해 동시에 목표 서버로 대량의 트래픽을 보내 서비스를 마비시킨다">
         <defs>
@@ -187,25 +304,30 @@
     <table>
       <tr><th>공격 유형</th><th>원리</th></tr>
       <tr><td>SYN Flooding</td><td>존재하지 않는 클라이언트인 척 접속 요청을 반복해 서버의 접속 대기 공간을 고갈</td></tr>
-      <tr><td>Ping of Death</td><td>처리할 수 없는 초과 크기의 ICMP 패킷을 보내 재조립 과정에서 자원 고갈</td></tr>
+      <tr><td>Ping of Death</td><td>처리할 수 없는 초과 크기의 ICMP 패킷을 세분화해 보내 <b>재조립</b> 과정에서 자원 고갈</td></tr>
       <tr><td>Land 공격</td><td>출발지 IP와 목적지 IP를 <b>동일하게</b> 위조해 응답 루프 유발</td></tr>
       <tr><td>Teardrop</td><td>패킷 조각을 비정상적으로 만들어 재조립 과정을 방해</td></tr>
       <tr><td>Smurf</td><td>공격대상 IP로 위장해 다수에게 ICMP를 브로드캐스트 → 응답이 대상에 몰림</td></tr>
     </table>
+    <div class="tip"><b>DoS가 아닌 것 구분:</b> <b>Session Hijacking</b>(세션 가로채기)과 <b>ARP Redirect</b>(스니핑 유도)는 <b>DoS 공격이 아니다</b> — "서비스 거부 공격을 모두 고르시오" 문제에서 이 둘이 오답으로 섞여 나온다. DoS의 목적은 오직 <b>가용성 저하</b>임을 기준으로 판단하라.</div>
 
-    <h3>웹 보안 공격 · 시큐어 코딩</h3>
+    <h3>웹 보안 공격 · 시큐어 코딩 <span class="page-ref">📖 기출문제집 p.384~385</span></h3>
     <ul>
-      <li><b>SQL Injection</b>: 입력값에 SQL 구문을 끼워넣어 DB를 조작</li>
-      <li><b>XSS(Cross Site Scripting)</b>: 악성 스크립트를 게시물에 심어 열람자의 브라우저에서 실행</li>
-      <li><b>버퍼 오버플로우</b>: 입력 <b>길이(data length)</b>를 검증하지 않아 메모리 버퍼 밖까지 덮어씀 (자료형(data type) 문제가 아님)</li>
-      <li>시큐어 코딩: <b>POST</b> 방식 사용(GET보다 보안성↑), 화이트리스트 방식 확장자 검증, 인자화된 질의문 사용</li>
+      <li><b>SQL Injection</b>: 입력값에 SQL 구문을 끼워넣어 DB를 조작 (예외 문자열 필터링 실패가 원인)</li>
+      <li><b>XSS(Cross Site Scripting)</b>: 악성 스크립트를 게시물에 심어 <b>열람자의 브라우저</b>에서 실행</li>
+      <li><b>버퍼 오버플로우</b>: 입력 <b>길이(data length)</b>를 검증하지 않아 메모리 버퍼 밖까지 덮어씀</li>
+      <li><b>포맷 스트링 공격</b>: <b>자료형(data type)</b>에 대한 불명확한 정의가 원인 (버퍼 오버플로우와 원인이 다름!)</li>
+      <li><b>Exploit</b>: 보안 취약점 자체를 이용해 제어 권한 획득·DoS를 노리는 공격의 총칭</li>
+      <li>시큐어 코딩: <b>GET보다 POST</b> 사용, 화이트리스트 방식 확장자 검증, 인자화된 질의문(parameterized query) 사용, 스크립트 문자열 필터링</li>
+      <li>버퍼 오버플로우 대응: <b>스택가드(stack guard), 스택쉴드(stack shield), ASLR(주소공간 임의추출)</b></li>
     </ul>
+    <div class="tip"><b>초고빈도 함정:</b> 버퍼 오버플로우 = <b>길이(length)</b> 문제 / 포맷 스트링 = <b>자료형(type)</b> 문제. 이 둘을 바꿔 놓은 선택지가 정답인 문제가 실제로 출제됐다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🧱</span>주요 개념 — 보안 시스템과 제도</h2>
 
-    <h3>방화벽·IDS·IPS 배치 순서</h3>
+    <h3>방화벽·IDS·IPS 배치 순서 <span class="page-ref">📖 기출문제집 p.389~390</span></h3>
     <figure class="diagram">
       <svg viewBox="0 0 700 160" role="img" aria-label="보안 장비 배치 순서: 외부 인터넷에서 방화벽을 먼저 거쳐 대량의 위험 트래픽을 걸러내고, 그 다음 IPS가 남은 트래픽을 정밀 분석해 내부망으로 전달한다">
         <defs>
@@ -228,30 +350,55 @@
     <table>
       <tr><th>구분</th><th>역할</th></tr>
       <tr><td>방화벽 (Firewall)</td><td>정해진 규칙으로 <b>패킷 필터링</b>, 1차 방어선</td></tr>
-      <tr><td>IDS (침입탐지시스템)</td><td>공격 <b>탐지·경보만</b> (오용탐지=알려진 패턴 매칭, 이상탐지=정상행위 이탈 감지)</td></tr>
-      <tr><td>IPS (침입방지시스템)</td><td>탐지에 더해 <b>실시간 차단</b>까지 수행</td></tr>
-      <tr><td>VPN</td><td>공중망에 <b>터널링+암호화</b>로 전용선 같은 효과, 데이터링크·인터넷 계층에서 동작</td></tr>
-      <tr><td>프록시 서버</td><td>클라이언트 대신 요청을 중계 + 캐시 역할(응답속도 향상)</td></tr>
+      <tr><td>IDS (침입탐지시스템)</td><td>공격 <b>탐지·경보만</b> (오용탐지=알려진 패턴 매칭, 이상탐지=정상행위 이탈 감지). 설치 위치에 따라 <b>호스트 기반 / 네트워크 기반</b>으로 구분</td></tr>
+      <tr><td>IPS (침입방지시스템)</td><td>탐지에 더해 <b>실시간 차단</b>까지 수행. <b>방화벽 뒤</b>에 설치</td></tr>
+      <tr><td>VPN</td><td>공중망에 <b>터널링+암호화</b>로 전용선 같은 효과. 방화벽·라우터에 내장 가능</td></tr>
+      <tr><td>프록시 서버</td><td>클라이언트 대신 요청을 중계 + 캐시 역할(응답속도 향상, 대역폭 절약)</td></tr>
+      <tr><td>SSO (Single Sign On)</td><td>한 번 인증하면 여러 시스템에 <b>추가 인증 없이</b> 접근</td></tr>
+      <tr><td>DRM</td><td>콘텐츠·<b>문서 보안</b>에 초점을 둔 권한 통제 기술</td></tr>
     </table>
-    <div class="tip"><b>디지털 포렌식 5대 원칙:</b> 정당성(적법한 절차)·재현(같은 결과 재현 가능)·신속성(휘발성 정보 신속 확보)·연계보관성(획득→이송→분석→보관→제출 과정 추적 가능)·무결성(위변조 금지)</div>
+
+    <h3>디지털 포렌식 5대 원칙 <span class="page-ref">📖 기출문제집 p.391</span></h3>
+    <table>
+      <tr><th>원칙</th><th>의미</th></tr>
+      <tr><td>정당성의 원칙</td><td>모든 증거는 <b>적법한 절차</b>를 거쳐 획득해야 한다</td></tr>
+      <tr><td>재현의 원칙</td><td>같은 환경에서 <b>같은 결과</b>가 나오도록 재현 가능해야 한다</td></tr>
+      <tr><td>신속성의 원칙</td><td>휘발성 정보가 많으므로 <b>신속하게</b> 확보해야 한다</td></tr>
+      <tr><td><b>연계 보관성의 원칙</b></td><td>획득→<b>이송→분석→보관→법정제출</b> 전 과정이 명확하고 <b>추적 가능</b>해야 한다</td></tr>
+      <tr><td>무결성의 원칙</td><td>증거가 <b>위조·변조</b>되어서는 안 된다</td></tr>
+    </table>
+    <div class="tip"><b>연계 보관성 vs 무결성 구분:</b> "증거가 <b>바뀌지 않았다</b>"는 무결성, "증거가 <b>누구 손을 거쳐 어떻게 왔는지 추적된다</b>"는 연계 보관성이다. 문제에 "이송·보관·제출 과정"이 나오면 연계 보관성.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>대칭키=속도빠름·같은키 / 공개키=속도느림·다른키(RSA) — 뒤바꿔 내는 문제 많음</li>
-      <li>전자서명은 <b>자신의 개인키</b>로 서명, 암호화는 <b>상대의 공개키</b>로 — 키 사용 방향 반대</li>
-      <li>정보보안 3요소는 기밀성·무결성·가용성뿐 (안전성 등은 오답)</li>
-      <li>스니핑=기밀성 공격, 변조=무결성 공격, DoS/DDoS=가용성 공격 매칭</li>
-      <li>웜=자기복제만, 바이러스=파일감염, 트로이목마=위장, 랜섬웨어=암호화 후 금전요구</li>
-      <li>피싱(클릭 유도) vs 파밍(DNS변조로 정상주소 입력해도 낚임) 구분</li>
-      <li>IPS는 방화벽 <b>뒤에</b> 설치, 버퍼오버플로우는 <b>길이(length)</b> 문제(자료형 아님)</li>
+      <li><b>키 방향</b>: 비밀 보내기=받는 사람 공개키로 암호화→받는 사람 개인키로 복호화 / 전자서명=보내는 사람 개인키로 서명→보내는 사람 공개키로 검증</li>
+      <li>키 개수: 대칭키 <b>n(n−1)/2개</b>(사용자 늘면 폭증) vs 공개키 <b>2n개</b></li>
+      <li>DES·AES·SEED·ARIA·LEA=대칭키, RSA·DSA·Diffie-Hellman=공개키, <b>SSL은 암호화 알고리즘이 아니라 보안 프로토콜</b></li>
       <li>국내개발 대칭키 알고리즘: <b>ARIA·SEED·LEA·HIGHT</b></li>
+      <li>해시=일방향·고정길이·위변조 탐지용 (정보를 숨기는 용도 아님)</li>
+      <li>정보보안 3요소는 기밀성·무결성·가용성뿐 (안전성 등은 오답)</li>
+      <li>스니핑=기밀성, MITM·변조=무결성, DoS/DDoS=가용성 공격 매칭</li>
+      <li>웜=자기복제만, 바이러스=파일감염, 트로이목마=위장(복제X), 랜섬웨어=암호화 후 금전요구</li>
+      <li>피싱(클릭 유도) vs 파밍(DNS변조로 정상주소 입력해도 낚임) 구분</li>
+      <li>Session Hijacking·ARP Redirect는 <b>DoS 공격이 아님</b></li>
+      <li>IPS는 방화벽 <b>뒤에</b> 설치 / 버퍼오버플로우=<b>길이</b>, 포맷스트링=<b>자료형</b></li>
+      <li>인증 3요소: 지식기반(아는 것)·소지기반(가진 것)·생체기반(신체) — 정의 바꿔치기 주의</li>
+      <li>디지털 포렌식에서 "이송·보관·제출 과정 추적" = <b>연계 보관성의 원칙</b></li>
     </ul>
   </section>
 
   <section class="block">
     <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>암호화 (기밀성)</th><th>전자서명 (인증·부인방지)</th></tr>
+      <tr><td>쓰는 키의 주인</td><td><b>받는 사람</b></td><td><b>보내는 사람</b></td></tr>
+      <tr><td>보낼 때</td><td>받는 사람의 <b>공개키</b>로 암호화</td><td>보내는 사람의 <b>개인키</b>로 서명</td></tr>
+      <tr><td>받을 때</td><td>받는 사람의 <b>개인키</b>로 복호화</td><td>보내는 사람의 <b>공개키</b>로 검증</td></tr>
+      <tr><td>목적</td><td>내용을 숨김</td><td>작성자를 증명 (내용은 공개)</td></tr>
+    </table>
     <table>
       <tr><th>구분</th><th>피싱 (Phishing)</th><th>파밍 (Pharming)</th></tr>
       <tr><td>속이는 방법</td><td>가짜 사이트로 <b>유인</b>(이메일 링크 클릭)</td><td>DNS 자체를 <b>변조</b></td></tr>
@@ -260,25 +407,415 @@
     <table>
       <tr><th>구분</th><th>IDS</th><th>IPS</th></tr>
       <tr><td>기능</td><td>탐지·경보만</td><td>탐지 + 실시간 <b>차단</b></td></tr>
+      <tr><td>설치 위치</td><td>호스트 기반 / 네트워크 기반</td><td>방화벽 <b>뒤</b></td></tr>
     </table>
     <table>
-      <tr><th>구분</th><th>웜 (Worm)</th><th>바이러스 (Virus)</th></tr>
-      <tr><td>자기복제</td><td>O</td><td>O</td></tr>
-      <tr><td>파일 감염</td><td>X (네트워크로 스스로 전파)</td><td>O (숙주 파일 필요)</td></tr>
+      <tr><th>구분</th><th>웜 (Worm)</th><th>바이러스 (Virus)</th><th>트로이 목마</th></tr>
+      <tr><td>자기복제</td><td>O</td><td>O</td><td><b>X</b></td></tr>
+      <tr><td>파일 감염</td><td>X (네트워크로 스스로 전파)</td><td>O (숙주 파일 필요)</td><td>X (정상 프로그램으로 위장)</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2012 지방직 · 기출문제집 p.370~371</span></div>
+      <p class="q-body">다음의 조건을 모두 만족하는 암호화 기법은?</p>
+      <div class="tip" style="margin:8px 0;">• 디피(Diffie)와 헬만(Hellman)에 의해 제안되었다.<br>• RSA는 이 기법의 대표적인 암호화 알고리즘이다.<br>• 두 개의 분리된 키를 사용하는 비대칭적 암호화 기법이다.</div>
+      <ol class="choices">
+        <li>공개키 암호화</li>
+        <li>스니핑 (Sniffing)</li>
+        <li>비밀키 암호화</li>
+        <li>DES (Data Encryption Standard)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 공개키 암호화</p>
+        <div class="explain">
+          <p>조건 세 개가 모두 공개키(비대칭키) 암호화를 가리킨다.</p>
+          <ol class="steps">
+            <li>"디피와 헬만이 제안" → 공개키 암호 개념의 창시자</li>
+            <li>"RSA가 대표 알고리즘" → RSA는 공개키 방식</li>
+            <li>"두 개의 분리된 키 = 비대칭" → 공개키/개인키 쌍</li>
+          </ol>
+          <p><b>오답 정리:</b> ②스니핑은 암호화 기법이 아니라 <b>공격 기법</b>이다. ③비밀키 암호화=대칭키로 키가 하나다. ④DES는 대표적인 <b>대칭키</b> 알고리즘.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2010 국가직 · 기출문제집 p.371</span></div>
+      <p class="q-body">공개키 암호화 방식에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>공개키 암호화 방식은 암호화, 복호화에 서로 다른 키를 사용한다.</li>
+        <li>공개키 암호화 방식은 비밀키(또는 대칭키) 암호화 방식에 비해 암호화 속도가 빠르다.</li>
+        <li>공개키 암호화 방식은 알고리즘과 공개키를 알아도 개인키를 알아내는 것이 매우 어렵다.</li>
+        <li>대표적인 공개키 암호화 방식의 알고리즘으로 RSA 방식이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (공개키가 대칭키보다 빠르다 → 반대)</p>
+        <div class="explain">
+          <p>공개키 방식은 큰 수의 거듭제곱·소인수분해 난이도에 기반한 <b>수학 연산</b>이라 계산이 무겁다. 대칭키(AES 등)는 단순 치환·뒤섞기의 반복이라 훨씬 <b>빠르다</b>.</p>
+          <p>그래서 실무에서는 HTTPS처럼 <b>공개키로 대칭키를 안전하게 전달 → 실제 데이터는 대칭키로 암호화</b>하는 하이브리드 방식을 쓴다.</p>
+          <p><b>나머지 선지 확인:</b> ①비대칭이므로 맞다. ③공개키를 알아도 개인키를 유추할 수 없어야 공개해도 안전하다 — 공개키 암호의 대전제라 맞다. ④RSA는 공개키 대표 알고리즘이라 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3 ★</span><span class="q-src">2017 국가직 · 기출문제집 p.374</span></div>
+      <p class="q-body">공개키 암호화 방법을 사용하여 <b>철수가 영희에게</b> 메시지를 보내는 것에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>공개키는 누구에게나 공개된다.</li>
+        <li>공개키의 위조 방지를 위해 인증기관은 인증서를 발급한다.</li>
+        <li>철수는 자신의 공개키를 사용하여 평문을 암호화한다.</li>
+        <li>영희는 자신의 개인키를 사용하여 암호문을 복호화한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (철수 자신의 공개키가 아니라 <b>영희의 공개키</b>로 암호화)</p>
+        <div class="explain">
+          <p>이 단원 최대 빈출 유형이다. 판단 기준은 하나 — <b>목적이 "비밀 전달"이면 등장하는 키는 전부 받는 사람(영희)의 것</b>이다.</p>
+          <ol class="steps">
+            <li>철수가 영희에게 <b>비밀</b> 메시지를 보낸다 → 목적은 <b>기밀성</b></li>
+            <li>영희만 열 수 있어야 하므로, 영희의 <b>개인키로만</b> 열리는 자물쇠를 채워야 한다</li>
+            <li>그 자물쇠가 바로 <b>영희의 공개키</b> → 철수는 영희의 공개키로 암호화</li>
+            <li>영희는 <b>자신의 개인키</b>로 복호화 (④는 옳은 설명)</li>
+          </ol>
+          <p><b>왜 ③이 틀렸나:</b> 철수가 자기 공개키로 암호화하면, 그것은 <b>철수의 개인키로만</b> 열린다 — 정작 영희는 열 수가 없다. 만약 철수가 자기 <b>개인키</b>로 암호화했다면 그건 암호화가 아니라 <b>전자서명</b>이 된다(누구나 철수 공개키로 열 수 있으므로 비밀이 아님).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4 ★</span><span class="q-src">2014 계리직 · 기출문제집 p.373</span></div>
+      <p class="q-body">공개키 기반 구조(PKI)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>인증기관은 공개키 인증서의 발급을 담당한다.</li>
+        <li>공개키 기반 구조는 부인방지 서비스 제공이 가능하다.</li>
+        <li>공개키로 암호화 한 데이터는 암호화에 사용된 공개키로 해독한다.</li>
+        <li>공개키 기반 구조는 공개키 알고리즘을 통한 암호화와 전자서명을 제공하는 복합적인 보안 시스템 환경이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (공개키로 암호화한 것은 <b>짝이 되는 개인키</b>로 해독)</p>
+        <div class="explain">
+          <p>③은 비대칭 암호의 정의 자체를 부정하는 서술이다. <b>같은 키로 잠그고 열 수 있다면 그건 대칭키</b>다.</p>
+          <ol class="steps">
+            <li>공개키와 개인키는 <b>한 쌍(pair)</b>으로 함께 생성된다</li>
+            <li>공개키로 잠근 것 → <b>같이 생성된 개인키</b>로만 열린다</li>
+            <li>만약 공개키로 열 수 있다면, 공개키는 누구나 갖고 있으므로 <b>아무나 열람 가능</b> = 암호화의 의미가 없다</li>
+          </ol>
+          <p><b>나머지 선지 확인:</b> ①CA(인증기관)의 핵심 업무가 인증서 발급이라 맞다. ②PKI는 무결성·전자서명·부인방지를 제공하므로 맞다. ④PKI의 정의 그대로다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2018 계리직 · 기출문제집 p.372~373</span></div>
+      <p class="q-body">암호 방식에 대한 설명으로 <b>옳은 것을 모두</b> 고른 것은?</p>
+      <div class="tip" style="margin:8px 0;">ㄱ. 대칭키 암호 방식은 암호화 키와 복호화 키가 동일하다.<br>ㄴ. 공개키 암호 방식은 사용자 수가 증가하면 관리해야 할 키의 수가 증가하여 키 변화의 빈도가 높다.<br>ㄷ. 대칭키 암호 방식은 공개키 암호 방식에 비하여 암호화 속도가 빠르다.<br>ㄹ. 공개키 암호 방식은 송신자와 수신자가 서로 같은 키를 사용하여 통신을 수행한다.</div>
+      <ol class="choices">
+        <li>ㄱ, ㄴ</li>
+        <li>ㄱ, ㄷ</li>
+        <li>ㄴ, ㄷ</li>
+        <li>ㄴ, ㄹ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② ㄱ, ㄷ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ 맞음</b> — 대칭키의 정의가 "암복호화 키가 같다"이다</li>
+            <li><b>ㄴ 틀림</b> — 사용자 수가 늘 때 키가 폭증하는 쪽은 <b>대칭키</b>다. 대칭키는 n(n−1)/2개, 공개키는 <b>2n개</b>로 오히려 적다</li>
+            <li><b>ㄷ 맞음</b> — 대칭키가 공개키보다 빠르다</li>
+            <li><b>ㄹ 틀림</b> — 같은 키를 쓰는 것은 대칭키다. 공개키는 송·수신자가 <b>서로 다른 키</b>를 쓴다</li>
+          </ol>
+          <p><b>정리:</b> ㄴ과 ㄹ은 모두 <b>대칭키의 특징을 공개키라고 바꿔 쓴</b> 전형적인 오답 패턴이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2023 계리직 · 기출문제집 p.375</span></div>
+      <p class="q-body">〈보기〉는 대칭형 암호알고리즘이다. 이 중 <b>국내에서 개발된</b> 암호알고리즘을 모두 고른 것은?</p>
+      <div class="tip" style="margin:8px 0;">ㄱ. AES &nbsp; ㄴ. ARIA &nbsp; ㄷ. IDEA &nbsp; ㄹ. LEA &nbsp; ㅁ. RC5 &nbsp; ㅂ. SEED</div>
+      <ol class="choices">
+        <li>ㄱ, ㄴ, ㄷ</li>
+        <li>ㄱ, ㄷ, ㅁ</li>
+        <li>ㄴ, ㄹ, ㅂ</li>
+        <li>ㄹ, ㅁ, ㅂ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ ㄴ(ARIA), ㄹ(LEA), ㅂ(SEED)</p>
+        <div class="explain">
+          <p>국내 개발 암호 알고리즘은 <b>ARIA, SEED, LEA, HIGHT</b> 네 가지를 묶어서 외우면 된다.</p>
+          <ul>
+            <li><b>SEED</b> — 한국정보보호진흥원(KISA) 개발, 128/256비트 블록 암호</li>
+            <li><b>ARIA</b> — 국가보안기술연구소 등이 개발한 국가 표준</li>
+            <li><b>LEA</b> — 경량 환경(IoT 등)을 위한 국산 경량 블록 암호</li>
+            <li><b>HIGHT</b> — RFID·센서 등 초경량 환경용 국산 알고리즘</li>
+          </ul>
+          <p><b>국외 알고리즘:</b> AES(미국 표준), DES(미국), IDEA(스위스), RC5(미국 RSA사) — 이름만 봐서는 구분이 안 되니 <b>국산 4개만 외우고 나머지는 전부 국외</b>로 처리하는 것이 빠르다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2010 지방직 · 기출문제집 p.375</span></div>
+      <p class="q-body">보안을 위해 사용되는 <b>암호화 알고리즘이 아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>DES</li>
+        <li>RSA</li>
+        <li>SEED</li>
+        <li>SSL</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ SSL</p>
+        <div class="explain">
+          <p><b>SSL(Secure Socket Layer)</b>은 암호화 <b>알고리즘</b>이 아니라, 웹 통신을 안전하게 하기 위한 <b>보안 프로토콜</b>이다. 넷스케이프가 개발했고 전자상거래의 개인정보·카드정보 보호에 쓰인다. 내부적으로는 RSA·AES 같은 <b>알고리즘들을 가져다 쓰는 상위 규약</b>이라고 이해하면 된다.</p>
+          <p><b>나머지:</b> DES(대칭키), SEED(대칭키, 국산), RSA(공개키) 모두 실제 암호화 알고리즘이다.</p>
+          <p><b>비슷한 함정:</b> IPSec, TLS, HTTPS도 같은 이유로 "알고리즘이 아닌 것"의 정답 후보다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2025 소방경채 · 기출문제집 p.375~376</span></div>
+      <p class="q-body">해시 함수의 특징에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>양방향성을 가지고 있다.</li>
+        <li>평문의 길이에 따라 해시값의 길이도 달라진다.</li>
+        <li>평문의 내용이 조금만 달라져도 해시값이 달라진다.</li>
+        <li>해시는 정보 위변조를 막기 위해 사용되는 암호와 달리 정보를 숨기기 위해 사용된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>①은 틀림</b> — 해시는 <b>일방향성</b>이다. 해시값에서 원문을 되돌릴 수 없다</li>
+            <li><b>②는 틀림</b> — 평문 길이가 가변이어도 해시값 길이는 <b>항상 고정</b>이다 (SHA-256이면 무조건 256비트)</li>
+            <li><b>③은 맞음</b> — 눈사태 효과. 한 글자만 바뀌어도 해시값이 통째로 달라진다</li>
+            <li><b>④는 틀림</b> — 역할이 뒤바뀌었다. <b>정보를 숨기는 것이 암호화, 위변조를 막는 것이 해시</b>다</li>
+          </ol>
+          <p><b>암기:</b> 암호화는 "다시 열어봐야 하니까" 양방향, 해시는 "대조만 하면 되니까" 일방향.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2025 계리직 · 기출문제집 p.376~377</span></div>
+      <p class="q-body">정보보호의 3요소인 기밀성, 무결성, 가용성에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>스니핑(sniffing)은 가용성에 대한 공격이다.</li>
+        <li>DoS 또는 DDoS 공격은 기밀성에 대한 공격이다.</li>
+        <li>기밀성은 허가받은 사용자 또는 객체만이 정보의 내용을 수정할 수 있다는 의미이다.</li>
+        <li>두 시스템 간의 데이터를 중간에 변조하는 중간자 공격(MITM)은 무결성에 대한 공격이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>"공격 동사"로 판단하면 전부 즉시 걸러진다 — <b>훔쳐보면 기밀성, 고치면 무결성, 막으면 가용성</b>.</p>
+          <ol class="steps">
+            <li><b>①</b> 스니핑은 몰래 <b>엿보는</b> 것 → 가용성이 아니라 <b>기밀성</b> 공격</li>
+            <li><b>②</b> DoS/DDoS는 서비스를 <b>못 쓰게</b> 만드는 것 → 기밀성이 아니라 <b>가용성</b> 공격</li>
+            <li><b>③</b> 기밀성은 "수정"이 아니라 "<b>읽기(접근)</b>"를 제한하는 것 — 수정 제한은 <b>무결성</b>의 정의</li>
+            <li><b>④</b> MITM은 중간에서 데이터를 <b>변조</b> → <b>무결성</b> 공격 (정답)</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2013 국가직 · 기출문제집 p.377~378</span></div>
+      <p class="q-body">악성코드에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>파일 감염 바이러스는 대부분 메모리에 상주하며 프로그램 파일을 감염시킨다.</li>
+        <li>웜(worm)은 자신의 명령어를 다른 프로그램 파일의 일부분에 복사하여 컴퓨터를 오동작하게 하는 종속형 악성코드이다.</li>
+        <li>트로이 목마는 겉으로 보기에 정상적인 프로그램인 것 같으나 악성코드를 숨겨두어 시스템을 공격한다.</li>
+        <li>매크로 바이러스는 내부 프로그래밍 언어를 사용하여 데이터 파일을 감염시킨다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (웜이 아니라 <b>바이러스</b>의 설명)</p>
+        <div class="explain">
+          <p>②의 "다른 프로그램 파일의 일부분에 자신을 복사하는 <b>종속형</b>"은 <b>바이러스</b>의 정의다. 웜은 숙주가 필요 없는 <b>독립형</b>이다.</p>
+          <ol class="steps">
+            <li>웜과 바이러스 둘 다 <b>자기복제</b>는 한다 — 여기까지는 같다</li>
+            <li>차이는 <b>다른 파일을 감염시키느냐</b>: 바이러스는 O, 웜은 X</li>
+            <li>웜은 파일에 기생하지 않고 <b>네트워크를 타고 스스로</b> 퍼진다</li>
+          </ol>
+          <p><b>나머지:</b> ①파일 감염 바이러스의 정상 설명, ③트로이 목마=위장이 핵심, ④매크로 바이러스는 문서 등 <b>데이터 파일</b>을 감염시킨다는 점이 특징이라 모두 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2019 계리직 · 기출문제집 p.378~379</span></div>
+      <p class="q-body">(가), (나)에서 설명하는 악성 프로그램의 용어를 바르게 짝지은 것은?</p>
+      <div class="tip" style="margin:8px 0;">(가) 사용자 컴퓨터의 데이터를 암호화시켜 파일을 사용할 수 없도록 한 후 암호화를 풀어주는 대가로 금전을 요구하는 악성 프로그램<br>(나) 'OOO초대장' 등의 내용을 담은 <b>문자 메시지</b> 내에 링크된 인터넷 주소를 클릭하면 악성코드가 설치되어 정보를 빼가거나 소액결제를 진행하는 악성 프로그램</div>
+      <ol class="choices">
+        <li>스파이웨어 / 트로이목마</li>
+        <li>랜섬웨어 / 파밍(Pharming)</li>
+        <li>스파이웨어 / 피싱(Phishing)</li>
+        <li>랜섬웨어 / 스미싱(Smishing)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 랜섬웨어 / 스미싱</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>(가) "<b>암호화</b>해서 못 쓰게 만들고 <b>금전 요구</b>" → 몸값(ransom) + 소프트웨어 = <b>랜섬웨어</b></li>
+            <li>(나) "<b>문자 메시지(SMS)</b> 링크 클릭 → 악성코드 설치·소액결제" → SMS + phishing = <b>스미싱</b></li>
+          </ol>
+          <p><b>함정:</b> ②의 <b>파밍</b>은 DNS를 변조해 정상 주소를 입력해도 가짜 사이트로 보내는 공격이라 "문자 메시지"와 무관하다. ③의 <b>피싱</b>은 주로 이메일·웹 링크를 쓰며, <b>문자</b>를 쓰면 스미싱으로 따로 구분한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2014 계리직 · 기출문제집 p.381</span></div>
+      <p class="q-body"><b>서비스 거부 공격(DoS)에 해당하는 것</b>을 〈보기〉에서 고른 것은?</p>
+      <div class="tip" style="margin:8px 0;">ㄱ. Ping of Death 공격 &nbsp; ㄴ. SYN Flooding 공격<br>ㄷ. Session Hijacking 공격 &nbsp; ㄹ. ARP Redirect 공격</div>
+      <ol class="choices">
+        <li>ㄱ, ㄴ</li>
+        <li>ㄴ, ㄷ</li>
+        <li>ㄷ, ㄹ</li>
+        <li>ㄱ, ㄹ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① ㄱ, ㄴ</p>
+        <div class="explain">
+          <p>판단 기준: <b>목적이 "가용성 저하"(서비스를 못 하게 만들기)인가?</b></p>
+          <ol class="steps">
+            <li><b>ㄱ Ping of Death</b> — 처리 불가능한 크기의 ICMP를 보내 재조립에 자원 고갈 → <b>DoS O</b></li>
+            <li><b>ㄴ SYN Flooding</b> — 가짜 접속 요청으로 접속 대기열을 고갈 → <b>DoS O</b></li>
+            <li><b>ㄷ Session Hijacking</b> — 인증된 세션을 <b>가로채 접속</b>하는 것이 목적 → 가용성 공격이 아님 (인증 우회)</li>
+            <li><b>ㄹ ARP Redirect</b> — 스푸핑으로 <b>스니핑을 가능하게</b> 하는 공격 → 기밀성 공격에 가까움</li>
+          </ol>
+          <p><b>정리:</b> "가로채기(하이재킹)"와 "엿듣기(스니핑 유도)"는 DoS가 아니다. DoS는 오직 <b>마비시키기</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 13</span><span class="q-src">2025 계리직 · 기출문제집 p.385</span></div>
+      <p class="q-body">버퍼 오버플로우(buffer overflow) 공격에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>버퍼 오버플로우 공격은 데이터 유형(data type)에 대한 불명확한 정의로 인한 것이다.</li>
+        <li>공격 대응방안은 스택가드(stack guard), 스택쉴드(stack shield), 주소공간 임의추출(ASLR) 등이 있다.</li>
+        <li>스택 버퍼 오버플로우 공격은 SetUID가 설정된 루트 권한 프로그램을 공격대상으로 할 수 있다.</li>
+        <li>힙(heap) 오버플로우 공격에서 힙에 요청되는 메모리는 연결리스트 같은 동적 데이터 구조를 위해 사용된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (데이터 유형이 아니라 <b>데이터 길이(data length)</b> 문제)</p>
+        <div class="explain">
+          <p>버퍼 오버플로우는 <b>"들어올 데이터의 길이를 확인하지 않아서"</b> 준비한 버퍼 밖까지 데이터가 흘러넘치는 공격이다. 넘친 부분이 복귀 주소를 덮어쓰면 공격자가 원하는 코드로 점프시킬 수 있다.</p>
+          <ol class="steps">
+            <li>버퍼 오버플로우 = <b>길이(length)</b> 검증 실패</li>
+            <li>포맷 스트링 공격 = <b>자료형(type)</b> 정의 불명확</li>
+            <li>이 둘을 바꿔 놓은 것이 ①번 선지다</li>
+          </ol>
+          <p><b>대응기법 암기:</b> 스택가드(카나리값으로 덮어쓰기 탐지), 스택쉴드(복귀주소 별도 보관), ASLR(메모리 주소를 매번 랜덤 배치).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 14</span><span class="q-src">2025 소방경채 · 기출문제집 p.389~390</span></div>
+      <p class="q-body">시스템에서 사용하는 보안 기법에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>침입 방지 시스템은 방화벽 앞에 설치하여 효율적으로 패킷을 걸러주도록 한다.</li>
+        <li>DRM(Digital Right Management)은 문서 보안에 초점을 둔 기술이다.</li>
+        <li>SSO(Single Sign On)는 한 시스템의 인증으로 여러 시스템에 인증이 가능하다.</li>
+        <li>침입 탐지 시스템은 설치 위치에 따라 호스트 기반과 네트워크 기반으로 구분된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (IPS는 방화벽 <b>뒤에</b> 설치)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>방화벽이 <b>먼저</b> 규칙 기반으로 불필요·위험 트래픽을 대량으로 걸러낸다 (값싼 필터링)</li>
+            <li>IPS는 <b>그 뒤에서</b> 살아남은 트래픽만 정밀 분석해 실시간 차단한다 (비싼 분석)</li>
+            <li>만약 IPS를 앞에 두면 <b>모든 외부 트래픽</b>을 IPS가 직접 처리해야 해 부하가 폭증한다</li>
+          </ol>
+          <p><b>비유:</b> 공항에서 <b>1차 게이트(방화벽)</b>가 명단에 없는 사람을 돌려보내고, <b>정밀 검색대(IPS)</b>는 통과한 사람만 자세히 본다. 정밀 검색대를 입구에 두면 줄이 끝없이 밀린다.</p>
+          <p><b>나머지 선지:</b> ②DRM은 문서·콘텐츠 권한 통제 기술로 맞다. ③SSO의 정의 그대로다. ④IDS는 호스트 기반(HIDS)/네트워크 기반(NIDS)으로 나뉘므로 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 15</span><span class="q-src">2023 소방경채 · 기출문제집 p.391</span></div>
+      <p class="q-body">다음에서 설명하는 <b>디지털 포렌식의 기본 원칙</b>으로 옳은 것은?</p>
+      <div class="tip" style="margin:8px 0;">증거를 획득한 뒤에는 이송, 분석, 보관, 법정 제출이라는 일련의 과정이 명확해야 하며 이러한 과정을 추적할 수 있어야 한다.</div>
+      <ol class="choices">
+        <li>재현의 원칙</li>
+        <li>정당성의 원칙</li>
+        <li>무결성의 원칙</li>
+        <li>연계 보관성의 원칙</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 연계 보관성의 원칙</p>
+        <div class="explain">
+          <p>핵심 단어는 "<b>이송·분석·보관·제출 과정을 추적</b>"이다. 증거가 <b>누구 손을 거쳐 어떻게 흘러왔는지</b>의 사슬(chain of custody)을 보장하는 것이 연계 보관성이다.</p>
+          <ul>
+            <li><b>정당성</b> — 적법한 절차로 획득했는가 (획득 <b>방법</b>의 문제)</li>
+            <li><b>재현</b> — 같은 환경에서 같은 결과가 나오는가 (<b>실험</b>의 문제)</li>
+            <li><b>신속성</b> — 휘발성 정보를 빨리 확보했는가 (<b>시간</b>의 문제)</li>
+            <li><b>연계 보관성</b> — 이동·보관 <b>경로</b>가 추적되는가 (<b>사슬</b>의 문제) ← 정답</li>
+            <li><b>무결성</b> — 증거가 위·변조되지 않았는가 (<b>내용</b>의 문제)</li>
+          </ul>
+          <p><b>무결성과 혼동 주의:</b> "안 바뀌었다"는 무결성, "<b>어떻게 왔는지 추적된다</b>"는 연계 보관성.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 16</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">사용자 <b>10명</b>이 서로 비밀 통신을 하려고 한다. (가) 대칭키 방식과 (나) 공개키 방식에서 각각 필요한 키의 총 개수는?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: (가) 45개, (나) 20개</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>대칭키</b>: 두 사람이 한 쌍이 될 때마다 <b>전용 비밀키 1개</b>가 필요하다 → 10명 중 2명을 뽑는 조합 = n(n−1)/2</li>
+            <li>10 × 9 ÷ 2 = <b>45개</b></li>
+            <li><b>공개키</b>: 사람마다 (공개키 1개 + 개인키 1개) = 2개씩만 있으면 된다 → 2n</li>
+            <li>2 × 10 = <b>20개</b></li>
+          </ol>
+          <p><b>왜 중요한가:</b> 사용자가 100명이면 대칭키는 4,950개, 공개키는 200개다. <b>사용자가 늘수록 대칭키의 키 관리 부담이 제곱으로 폭증</b>한다는 점이 공개키 방식의 결정적 장점이며, 시험에서 "키 변화 빈도가 높은 쪽"을 묻는 근거가 된다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">대칭키</span><span class="chip">공개키</span><span class="chip">RSA</span><span class="chip">DES</span>
-      <span class="chip">AES</span><span class="chip">SEED</span><span class="chip">PKI</span><span class="chip">전자서명</span>
-      <span class="chip">해시함수</span><span class="chip">기밀성</span><span class="chip">무결성</span><span class="chip">가용성</span>
-      <span class="chip">바이러스</span><span class="chip">웜</span><span class="chip">트로이목마</span><span class="chip">랜섬웨어</span>
-      <span class="chip">스니핑</span><span class="chip">스푸핑</span><span class="chip">피싱</span><span class="chip">파밍</span>
-      <span class="chip">스미싱</span><span class="chip">DDoS</span><span class="chip">SYN플로딩</span><span class="chip">방화벽</span>
-      <span class="chip">IDS</span><span class="chip">IPS</span><span class="chip">VPN</span><span class="chip">SQL Injection</span>
-      <span class="chip">XSS</span><span class="chip">버퍼오버플로우</span><span class="chip">디지털포렌식</span>
+      <span class="chip">AES</span><span class="chip">SEED</span><span class="chip">ARIA</span><span class="chip">LEA</span>
+      <span class="chip">디피-헬만</span><span class="chip">PKI</span><span class="chip">인증기관(CA)</span><span class="chip">전자서명</span>
+      <span class="chip">부인방지</span><span class="chip">해시함수</span><span class="chip">일방향성</span><span class="chip">기밀성</span>
+      <span class="chip">무결성</span><span class="chip">가용성</span><span class="chip">지식기반인증</span><span class="chip">소지기반인증</span>
+      <span class="chip">생체인증</span><span class="chip">바이러스</span><span class="chip">웜</span><span class="chip">트로이목마</span>
+      <span class="chip">랜섬웨어</span><span class="chip">매크로바이러스</span><span class="chip">스니핑</span><span class="chip">스푸핑</span>
+      <span class="chip">피싱</span><span class="chip">파밍</span><span class="chip">스미싱</span><span class="chip">세션하이재킹</span>
+      <span class="chip">DDoS</span><span class="chip">SYN플로딩</span><span class="chip">Ping of Death</span><span class="chip">Land공격</span>
+      <span class="chip">Smurf</span><span class="chip">방화벽</span><span class="chip">IDS</span><span class="chip">IPS</span>
+      <span class="chip">VPN</span><span class="chip">SSO</span><span class="chip">SQL Injection</span><span class="chip">XSS</span>
+      <span class="chip">버퍼오버플로우</span><span class="chip">포맷스트링</span><span class="chip">ASLR</span><span class="chip">디지털포렌식</span>
+      <span class="chip">연계보관성</span>
     </div>
   </section>
 

@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>선로는 생각보다 자주 틀린다</h4>
+      <p>전선이나 전파로 0과 1을 보내면, 전기 잡음·간섭 때문에 <b>보낸 1이 0으로 뒤집혀 도착하는 일</b>이 실제로 일어난다. 문제는 받는 쪽이 그걸 알 방법이 없다는 것이다 — 도착한 비트열만 봐서는 "원래 이랬던 건지, 중간에 망가진 건지" 구분이 안 된다.</p>
+      <p>그래서 데이터링크 계층은 <b>일부러 군더더기 정보(중복 정보)를 덧붙여</b> 보낸다. 패리티 비트 1개, CRC의 나머지값, 해밍코드의 패리티 비트 여러 개가 전부 그 군더더기다. 받는 쪽은 "덧붙인 규칙이 여전히 맞는지"를 검사해서 오류를 알아낸다. <b>덧붙이는 정보가 많을수록 더 정밀하게 잡아내지만 그만큼 전송 효율이 떨어진다</b> — 검출만 할지(패리티·CRC), 위치까지 찾아 고칠지(해밍코드)가 이 트레이드오프의 선택이다.</p>
+      <p>오류를 발견한 뒤에는 두 갈래다. <b>다시 보내달라고 요청</b>하거나(ARQ), <b>받은 쪽이 알아서 고치거나</b>(FEC). 그리고 재전송을 하려면 "어디까지 잘 받았는지" 주고받아야 하는데, 그 관리 도구가 <b>슬라이딩 윈도우</b>다. 이 단원의 모든 내용이 결국 "틀릴 수 있다 → 어떻게 알아채고 → 어떻게 복구할까"라는 한 줄기 이야기다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — 오류 검출·정정</h2>
 
     <h3>오류 검출/정정 기법 한눈에 <span class="page-ref">📖 기출문제집 p.351~355</span></h3>
@@ -28,55 +38,155 @@
       <tr><td>패리티 비트</td><td>비동기 전송</td><td>1의 개수를 홀수/짝수로 맞춰 오류 감지</td><td>❌ 검출만</td></tr>
       <tr><td>블록합 검사</td><td>문자지향 동기 전송</td><td>2차원(수평+수직) 패리티</td><td>❌ 검출만</td></tr>
       <tr><td>CRC (순환중복검사)</td><td>비트지향 동기 전송</td><td>다항식 나눗셈(모듈로-2)의 나머지를 FCS로 첨부</td><td>❌ 검출만 (집단오류에 강함)</td></tr>
+      <tr><td>체크섬(Checksum)</td><td>상위 계층(TCP/IP 등)</td><td>데이터를 더한 뒤 <b>1의 보수</b>를 붙여 보냄</td><td>❌ 검출만</td></tr>
       <tr><td><b>해밍코드</b></td><td>-</td><td>패리티 비트를 여러 개(2ⁿ 위치) 심어 오류 위치를 직접 계산</td><td>✅ <b>1비트 자동 정정</b></td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "단일 패리티 비트는 짝수 개 비트 오류도 항상 잡아낸다" → ❌ 틀림. 짝수 개(2개, 4개...) 비트가 동시에 틀리면 1의 개수 홀짝이 원래대로 돌아와서 <b>못 잡는다</b>. 홀수 개 오류만 검출 가능.</div>
+    <div class="tip"><b>함정 주의:</b> <b>BCD 부호</b>는 오류 검출 방식이 아니라 <b>문자를 표현하는 코드 체계</b>다. "오류 검출 방식이 아닌 것" 문제의 단골 정답.</div>
 
-    <h3>패리티 비트 계산 예제 <span class="page-ref">📖 기출문제집 p.352</span></h3>
-    <p><b>홀수 패리티</b>를 쓰는 시스템에서, 데이터+패리티비트 <b>1의 개수가 항상 홀수</b>여야 정상이다.</p>
+    <h3>패리티 비트 — 가장 단순한 검출</h3>
+    <p>데이터에 비트 <b>딱 1개</b>를 덧붙여, 전체(데이터+패리티)의 <b>1의 개수</b>가 항상 짝수(짝수 패리티) 또는 홀수(홀수 패리티)가 되도록 맞춘다. 받는 쪽은 1의 개수만 세보면 된다.</p>
+
+    <div class="deep">
+      <h4>왜 짝수 개 오류는 못 잡는가 — 패리티의 결정적 한계</h4>
+      <p>비트 <b>1개</b>가 뒤집히면 1의 개수가 하나 늘거나 줄어 <b>홀짝이 반드시 바뀐다</b> → 검출 성공.</p>
+      <p>그런데 비트 <b>2개</b>가 동시에 뒤집히면? 하나는 늘고 하나는 줄거나(±0), 둘 다 늘거나(+2), 둘 다 줄어(−2) — <b>어느 경우든 홀짝이 원래대로 돌아온다</b> → 검출 실패. 4개, 6개도 마찬가지다.</p>
+      <p>그래서 정확한 표현은 <b>"단일 패리티는 홀수 개의 비트 오류만 검출할 수 있다"</b>이다. 시험에서 이 문장의 홀수·짝수를 뒤바꿔 놓는 함정이 자주 나온다.</p>
+    </div>
+
+    <p><b>예제. 짝수 패리티를 쓰는 시스템에서 어느 데이터에 오류가 있는가?</b> (데이터 5개 중 3개는 정상, 2개에 오류)</p>
+    <table>
+      <tr><th>이름</th><th>데이터 비트열</th><th>패리티 비트</th><th>전체 1의 개수</th><th>판정</th></tr>
+      <tr><td>A</td><td>01001101</td><td>1</td><td>4 + 1 = <b>5 (홀수)</b></td><td><b>오류</b></td></tr>
+      <tr><td>B</td><td>01110110</td><td>1</td><td>5 + 1 = 6 (짝수)</td><td>정상</td></tr>
+      <tr><td>C</td><td>10111000</td><td>0</td><td>4 + 0 = 4 (짝수)</td><td>정상</td></tr>
+      <tr><td>D</td><td>11110001</td><td>0</td><td>5 + 0 = <b>5 (홀수)</b></td><td><b>오류</b></td></tr>
+      <tr><td>E</td><td>10101010</td><td>0</td><td>4 + 0 = 4 (짝수)</td><td>정상</td></tr>
+    </table>
     <ol class="steps">
-      <li>①011010111 → 1의 개수 세기: 0,1,1,0,1,0,1,1,1 = <b>6개 (짝수)</b></li>
-      <li>홀수 패리티 규칙 위반 → <b>이 데이터에서 오류 발생</b></li>
-      <li>나머지 선택지는 1의 개수를 세보면 모두 홀수 → 정상</li>
+      <li>각 행의 <b>데이터 비트열 + 패리티 비트</b>를 합쳐 1의 개수를 센다</li>
+      <li>정상인 것이 3개(B, C, E)이고 전부 <b>짝수</b> → 이 시스템은 <b>짝수 패리티</b>를 쓴다고 판명</li>
+      <li>규칙을 어긴(홀수인) A와 D가 오류 발생 데이터 → <b>정답: A, D</b></li>
     </ol>
+    <div class="tip"><b>요령:</b> 문제에 "짝수 패리티"라고 안 알려줘도 괜찮다. <b>다수파(정상인 쪽)가 규칙</b>이다. 5개 중 3개가 짝수면 짝수 패리티, 소수파가 오류다.</div>
 
-    <h3>해밍코드로 오류 위치 찾기 (실전 예제) <span class="page-ref">📖 기출문제집 p.354</span></h3>
-    <p>짝수 패리티 7비트 데이터가 수신되었고, 그중 값이 <b>1</b>인 위치(인덱스)는 3, 4, 5, 6, 7번이라고 하자.</p>
-    <ol class="steps">
-      <li>1인 위치의 인덱스를 모두 3비트 이진수로 변환: 3=011, 4=100, 5=101, 6=110, 7=111</li>
-      <li>이 이진수들을 <b>비트 단위 XOR</b>(짝수 패리티이므로)로 전부 더한다</li>
-      <li>XOR 결과 = <b>011</b> (10진수로 3)</li>
-      <li>결과값 3은 "3번째 비트에서 오류가 발생했다"는 뜻 → 3번 비트를 1→0으로 반전</li>
-      <li>이렇게 정정된 데이터가 최종 정답</li>
-    </ol>
-    <div class="analogy"><b>원리:</b> 해밍코드는 오류가 없으면 XOR 결과가 0000...이 나오도록 패리티를 미리 심어둔다. 결과가 0이 아니면 그 값 자체가 "몇 번째 비트가 틀렸는지" 알려주는 좌표가 된다 — 그래서 위치까지 알아내 자동으로 고칠 수 있다.</div>
-
-    <h3>CRC (순환중복검사)</h3>
+    <h3>CRC (순환중복검사) — 실무에서 가장 많이 쓰는 검출법 <span class="page-ref">📖 기출문제집 p.356</span></h3>
     <ul>
       <li>송신측: 데이터 끝에 n개의 0을 붙이고, 미리 정한 <b>제수(n+1비트)</b>로 모듈로-2 나눗셈 → 나머지(n비트)를 <b>FCS(프레임 검사 순서)</b>로 원본 데이터 뒤에 붙여 전송</li>
       <li>수신측: 받은 전체(데이터+FCS)를 같은 제수로 나눠서 나머지가 <b>0이면 정상, 0이 아니면 오류</b></li>
-      <li>다항식 코드를 사용해 <b>집단(burst) 오류</b> 검출에 특히 강함</li>
+      <li>다항식 코드를 사용해 <b>집단(burst) 오류</b> 검출에 특히 강함 — 그래서 이더넷·Wi-Fi 등 대부분의 프로토콜이 채택</li>
     </ul>
+
+    <div class="deep">
+      <h4>모듈로-2 나눗셈이란</h4>
+      <p>겁먹을 것 없다. <b>일반 나눗셈과 똑같은데 뺄셈 대신 XOR을 쓰는 것</b>뿐이다. 자리올림·자리내림이 없어서 계산이 훨씬 쉽다.</p>
+      <ul>
+        <li>0 XOR 0 = 0, 1 XOR 1 = 0, 0 XOR 1 = 1, 1 XOR 0 = 1</li>
+        <li>맨 앞자리가 1이면 제수로 XOR, 0이면 그냥 다음 비트를 내린다</li>
+      </ul>
+    </div>
+
+    <p><b>계산 예제. 데이터 <code>1101</code>, 제수 <code>1011</code>(4비트)일 때 전송할 프레임은?</b></p>
+    <ol class="steps">
+      <li>제수가 4비트(n+1=4) → <b>n=3</b>이므로 데이터 뒤에 <b>0을 3개</b> 붙인다 → <code>1101000</code></li>
+      <li>모듈로-2 나눗셈 수행 (아래 표)</li>
+      <li>나머지 <b>001</b>이 FCS가 된다</li>
+      <li>전송 프레임 = 원본 데이터 + FCS = <code>1101</code> + <code>001</code> = <b><code>1101001</code></b></li>
+    </ol>
+    <table>
+      <tr><th>단계</th><th>현재 값</th><th>연산</th><th>결과</th></tr>
+      <tr><td>1</td><td><code>1101</code>000</td><td>XOR <code>1011</code></td><td><code>0110</code> → 다음 비트 내림 → <code>1100</code></td></tr>
+      <tr><td>2</td><td><code>1100</code></td><td>XOR <code>1011</code></td><td><code>0111</code> → 다음 비트 내림 → <code>1110</code></td></tr>
+      <tr><td>3</td><td><code>1110</code></td><td>XOR <code>1011</code></td><td><code>0101</code> → 다음 비트 내림 → <code>1010</code></td></tr>
+      <tr><td>4</td><td><code>1010</code></td><td>XOR <code>1011</code></td><td><code>0001</code> → 더 내릴 비트 없음 → <b>나머지 001</b></td></tr>
+    </table>
+    <div class="tip"><b>검산:</b> 수신측이 <code>1101001</code>을 같은 제수 <code>1011</code>로 나누면 → 1101⊕1011=0110→1100, 1100⊕1011=0111→1110, 1110⊕1011=0101→1011, 1011⊕1011=<b>0000</b>. 나머지가 0이므로 <b>오류 없음</b>으로 판정된다. 계산이 맞았는지 이렇게 확인할 수 있다.</div>
+
+    <h3>해밍코드 — 위치까지 찾아내 스스로 고친다 <span class="page-ref">📖 기출문제집 p.354~355</span></h3>
+    <p>패리티 1개로는 "틀렸다"까지만 안다. 해밍코드는 <b>패리티 비트를 여러 개, 그것도 2의 거듭제곱 위치(1, 2, 4, 8...)에 심어서</b> 어느 자리가 틀렸는지 좌표까지 알아낸다. 그래서 재전송 없이 <b>수신측이 혼자 고칠 수 있다</b>(FEC 방식).</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="해밍코드 7비트 구조: 1, 2, 4번 위치에 패리티 비트가 들어가고 3, 5, 6, 7번 위치에 데이터 비트가 들어가며 각 패리티 비트가 담당하는 위치가 표시된 다이어그램">
+        <text x="10" y="20" font-size="13" font-weight="700">해밍코드(7비트)의 자리 배치 — 2의 거듭제곱 자리가 패리티</text>
+
+        <g font-size="12" text-anchor="middle">
+          <rect x="30" y="35" width="80" height="38" fill="currentColor" opacity="0.13" stroke="currentColor" stroke-width="1.8"/>
+          <text x="70" y="59" font-weight="700">P1</text>
+          <rect x="110" y="35" width="80" height="38" fill="currentColor" opacity="0.13" stroke="currentColor" stroke-width="1.8"/>
+          <text x="150" y="59" font-weight="700">P2</text>
+          <rect x="190" y="35" width="80" height="38" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="230" y="59">D1</text>
+          <rect x="270" y="35" width="80" height="38" fill="currentColor" opacity="0.13" stroke="currentColor" stroke-width="1.8"/>
+          <text x="310" y="59" font-weight="700">P4</text>
+          <rect x="350" y="35" width="80" height="38" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="390" y="59">D2</text>
+          <rect x="430" y="35" width="80" height="38" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="470" y="59">D3</text>
+          <rect x="510" y="35" width="80" height="38" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="550" y="59">D4</text>
+        </g>
+        <g font-size="11" text-anchor="middle" opacity="0.8">
+          <text x="70" y="88">1번</text><text x="150" y="88">2번</text><text x="230" y="88">3번</text>
+          <text x="310" y="88">4번</text><text x="390" y="88">5번</text><text x="470" y="88">6번</text><text x="550" y="88">7번</text>
+        </g>
+        <text x="600" y="59" font-size="11" opacity="0.8">← 진한 칸 = 패리티</text>
+
+        <text x="10" y="120" font-size="12.5" font-weight="700">각 패리티가 감시하는 자리 (자기 번호 비트가 켜진 위치들)</text>
+        <g font-size="11.5">
+          <text x="20" y="145">P1 (001) → 1, 3, 5, 7번 감시</text>
+          <text x="250" y="145">2진수 끝자리가 1인 위치들</text>
+          <text x="20" y="168">P2 (010) → 2, 3, 6, 7번 감시</text>
+          <text x="250" y="168">2진수 가운데자리가 1인 위치들</text>
+          <text x="20" y="191">P4 (100) → 4, 5, 6, 7번 감시</text>
+          <text x="250" y="191">2진수 앞자리가 1인 위치들</text>
+        </g>
+
+        <text x="10" y="225" font-size="12">오류 위치 찾기: <tspan font-weight="700">값이 1인 자리들의 번호를 전부 XOR</tspan> → 그 결과가 곧 틀린 자리 번호 (0이면 오류 없음)</text>
+        <text x="10" y="243" font-size="11" opacity="0.78">※ 이 성질 덕분에 "몇 번째가 틀렸는지"가 계산 한 번으로 바로 나온다 — 해밍코드의 핵심 아이디어</text>
+      </svg>
+      <figcaption>해밍코드는 패리티를 1·2·4번(2의 거듭제곱) 자리에 배치해, 각 패리티가 서로 다른 조합의 자리를 감시하게 만든다. 그 결과 오류 위치가 2진수 좌표로 튀어나온다.</figcaption>
+    </figure>
+
+    <p><b>실전 예제. 짝수 패리티 해밍코드로 <code>0011111</code>을 수신했다. 오류를 찾아 정정하면?</b></p>
+    <ol class="steps">
+      <li>값이 <b>1</b>인 자리의 번호를 모두 찾는다 → 3, 4, 5, 6, 7번</li>
+      <li>각 번호를 3비트 2진수로 변환: 3=<code>011</code>, 4=<code>100</code>, 5=<code>101</code>, 6=<code>110</code>, 7=<code>111</code></li>
+      <li>전부 비트 단위로 XOR: <code>011</code>⊕<code>100</code>=<code>111</code> → ⊕<code>101</code>=<code>010</code> → ⊕<code>110</code>=<code>100</code> → ⊕<code>111</code>=<b><code>011</code></b></li>
+      <li><code>011</code> = 10진수 <b>3</b> → <b>3번 자리가 틀렸다</b>는 뜻</li>
+      <li>3번 자리를 반전(1 → 0): <code>00<b>1</b>1111</code> → <b><code>0001111</code></b></li>
+    </ol>
+    <div class="analogy"><b>원리 직관:</b> 오류가 없으면 XOR 결과가 반드시 <b>0</b>이 나오도록 패리티를 미리 심어둔 것이다. 그래서 결과가 0이 아니면 <b>그 값 자체가 "몇 번째 비트가 틀렸는지" 알려주는 좌표</b>가 된다. 마치 범인이 자기 주소를 남기고 가는 셈이다.</div>
+    <div class="tip"><b>한계:</b> 해밍코드는 <b>1비트 오류만</b> 정정할 수 있다. 2비트가 동시에 틀리면 엉뚱한 위치를 "고쳐서" 오히려 데이터를 더 망가뜨린다. 또 패리티 비트를 여러 개 붙이므로 <b>전송 효율이 낮고 계산량이 많다</b>.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔁</span>주요 개념 — ARQ (자동 재전송 요청)</h2>
 
+    <p>오류를 <b>발견한 다음</b> 어떻게 복구할 것인가. 크게 두 갈래다.</p>
+    <table>
+      <tr><th>구분</th><th>ARQ (후진 오류 수정, BEC)</th><th>FEC (전진 오류 수정)</th></tr>
+      <tr><td>복구 주체</td><td><b>송신측</b>이 다시 보냄</td><td><b>수신측</b>이 직접 고침</td></tr>
+      <tr><td>필요한 것</td><td>역방향 채널(NAK 전달), 재전송 대기</td><td>많은 여분 비트(패리티)</td></tr>
+      <tr><td>대표 기법</td><td>정지-대기 / Go-Back-N / 선택적 재전송</td><td><b>해밍코드</b></td></tr>
+      <tr><td>적합한 상황</td><td>재전송이 쉬운 유선망</td><td>재전송이 비싼 위성·방송·실시간</td></tr>
+    </table>
+
     <h3>ARQ 방식 비교 <span class="page-ref">📖 기출문제집 p.357~358</span></h3>
     <table>
-      <tr><th>방식</th><th>동작</th><th>전송 효율</th></tr>
-      <tr><td>정지-대기(Stop-and-Wait)</td><td>프레임 1개 보내고 ACK 올 때까지 무조건 대기</td><td>가장 낮음 (반이중처럼 동작)</td></tr>
-      <tr><td>Go-Back-N</td><td>여러 프레임 연속 전송, 오류 프레임부터 <b>그 뒤 전부 재전송</b></td><td>중간</td></tr>
-      <tr><td>선택적 재전송(Selective-Repeat)</td><td>오류난 <b>그 프레임만</b> 재전송</td><td>가장 높음</td></tr>
+      <tr><th>방식</th><th>동작</th><th>수신측 버퍼</th><th>전송 효율</th></tr>
+      <tr><td>정지-대기(Stop-and-Wait)</td><td>프레임 1개 보내고 ACK 올 때까지 무조건 대기</td><td>불필요</td><td>가장 낮음</td></tr>
+      <tr><td>Go-Back-N</td><td>여러 프레임 연속 전송, 오류 프레임부터 <b>그 뒤 전부 재전송</b></td><td>불필요(순서대로만 받음)</td><td>중간</td></tr>
+      <tr><td>선택적 재전송(Selective-Repeat)</td><td>오류난 <b>그 프레임만</b> 재전송</td><td>필요(순서 재조합용)</td><td>가장 높음</td></tr>
     </table>
-    <div class="tip"><b>전송 효율 순서 (매년 출제):</b> 선택적 재전송 &gt; Go-Back-N &gt; 정지-대기</div>
+    <div class="tip"><b>전송 효율 순서 (매년 출제):</b> 선택적 재전송 &gt; Go-Back-N &gt; 정지-대기<br>
+    <b>이유:</b> 정지-대기는 1개 보내고 멈추니 회선이 계속 놀고(반이중처럼 동작), Go-Back-N은 연속 전송은 하지만 <b>멀쩡한 프레임까지 다시 보내는 낭비</b>가 있다. 선택적 재전송은 그 낭비까지 없앴다 — 대신 수신측이 순서를 맞춰 저장할 <b>버퍼와 복잡한 구현</b>이 필요하다.</div>
 
     <h3>Go-Back-N 재전송 개수 계산 <span class="page-ref">📖 기출문제집 p.357</span></h3>
+    <p><b>계산 방법은 딱 한 줄이다:</b> 재전송 개수 = <b>(마지막으로 보낸 번호) − (오류 난 번호) + 1</b>. 오류 난 것부터 끝까지 전부 다시 보내기 때문이다.</p>
     <p><b>예제: 6번 프레임까지 전송했는데 4번 프레임에서 오류 발견 → 재전송 개수는?</b></p>
     <ol class="steps">
       <li>Go-Back-N 규칙: 오류난 프레임부터 <b>이미 보낸 나머지 전부</b>를 다시 보낸다</li>
       <li>오류 지점: 4번. 이미 전송된 마지막: 6번</li>
-      <li>재전송 대상: 4번, 5번, 6번 → <b>총 3개</b></li>
+      <li>재전송 대상: 4번, 5번, 6번 → 6 − 4 + 1 = <b>총 3개</b></li>
     </ol>
     <figure class="diagram">
       <svg viewBox="0 0 700 220" role="img" aria-label="Go-Back-N ARQ 재전송 예시: 4번 프레임에서 오류가 발생하면 4,5,6번 프레임을 모두 재전송한다">
@@ -100,6 +210,7 @@
           <rect x="410" y="150" width="90" height="34" fill="none" stroke="currentColor" stroke-width="2"/><text x="455" y="172">5</text>
           <rect x="510" y="150" width="90" height="34" fill="none" stroke="currentColor" stroke-width="2"/><text x="555" y="172">6</text>
         </g>
+        <text x="10" y="205" font-size="11.5" opacity="0.85">※ 5·6번은 멀쩡히 도착했는데도 다시 보낸다 — 이 낭비가 Go-Back-N의 단점이고, 선택적 재전송이 해결하는 지점이다.</text>
       </svg>
       <figcaption>Go-Back-N ARQ — 오류가 난 프레임(4번)부터 이미 보낸 모든 프레임(4,5,6번)을 다시 전송한다. 선택적 재전송이었다면 4번만 다시 보내면 됐을 것이다.</figcaption>
     </figure>
@@ -107,7 +218,12 @@
 
   <section class="block">
     <h2><span class="emoji">🪟</span>주요 개념 — 흐름제어: 슬라이딩 윈도우</h2>
-    <p><b>계산/이해 방법:</b> 윈도우는 "응답 없이 한 번에 보낼 수 있는 프레임 개수"의 한도다. 송신측은 <b>보낼 때마다 줄고 ACK 받으면 늘고</b>, 수신측은 <b>정반대</b>(받을 때마다 늘고, ACK 보내면 줄어든다)로 움직인다는 게 핵심 함정.</p>
+    <div class="deep">
+      <h4>흐름제어는 왜 필요한가</h4>
+      <p>송신측이 빠르고 수신측이 느리면, 수신측 버퍼가 넘쳐서 <b>도착한 데이터가 그냥 버려진다</b>. 오류가 없었는데도 데이터를 잃는 것이다. 이를 막으려고 "받는 쪽이 감당할 만큼만 보내라"고 속도를 조절하는 것이 <b>흐름제어</b>다.</p>
+      <p>가장 단순한 방법은 1개 보내고 응답 기다리기(정지-대기)지만 너무 느리다. 그래서 <b>"응답 없이도 미리 N개까지는 보내도 좋다"</b>고 한도를 정한 것이 슬라이딩 윈도우다. 그 한도가 <b>윈도우 크기</b>이고, 응답이 올 때마다 창문이 오른쪽으로 미끄러지듯(sliding) 이동하며 새 프레임을 보낼 여유가 생긴다.</p>
+    </div>
+    <p><b>계산/이해 방법:</b> 윈도우는 "응답 없이 한 번에 보낼 수 있는 프레임 개수"의 한도다. 송신측은 <b>보낼 때마다 줄고 ACK 받으면 늘고</b>, 수신측은 <b>받을 때마다 줄고 ACK를 보내면 는다</b>. 방향을 뒤집어 놓는 것이 이 단원 최대의 함정이다.</p>
     <figure class="diagram">
       <svg viewBox="0 0 700 260" role="img" aria-label="슬라이딩 윈도우 흐름제어: 송신측 윈도우는 프레임을 보낼 때마다 줄고 ACK를 받으면 늘어나며, 수신측 윈도우는 그 반대로 움직인다">
         <text x="10" y="20" font-size="13" font-weight="700">송신측 윈도우 (윈도우 크기 4)</text>
@@ -117,7 +233,7 @@
           <rect x="130" y="30" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor"/><text x="160" y="50">3</text>
           <rect x="190" y="30" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor"/><text x="220" y="50">4</text>
         </g>
-        <text x="270" y="50" font-size="12">← 프레임 전송 시 <b>1칸씩 감소</b></text>
+        <text x="270" y="50" font-size="12">← 프레임 전송 시 1칸씩 감소</text>
 
         <line x1="10" y1="80" x2="690" y2="80" stroke="currentColor" stroke-width="1" opacity="0.4"/>
 
@@ -128,7 +244,7 @@
           <rect x="130" y="115" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor"/><text x="160" y="135">3</text>
           <rect x="190" y="115" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor"/><text x="220" y="135">4</text>
         </g>
-        <text x="270" y="135" font-size="12">→ 남은 윈도우 <b>2칸</b>만 더 보낼 수 있음</text>
+        <text x="270" y="135" font-size="12">→ 남은 윈도우 2칸만 더 보낼 수 있음</text>
 
         <text x="10" y="175" font-size="13" font-weight="700">ACK(1번) 수신 후</text>
         <g font-size="11" text-anchor="middle">
@@ -136,20 +252,24 @@
           <rect x="190" y="185" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor"/><text x="220" y="205">4</text>
           <rect x="250" y="185" width="60" height="30" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-dasharray="3,2"/><text x="280" y="205">5</text>
         </g>
-        <text x="330" y="205" font-size="12">→ ACK 받은 만큼 <b>윈도우가 다시 늘어남</b> (5번 전송 가능해짐)</text>
+        <text x="330" y="205" font-size="12">→ ACK 받은 만큼 윈도우가 다시 늘어남 (5번 전송 가능)</text>
+        <text x="10" y="245" font-size="11.5" opacity="0.85">※ 창문(윈도우)이 오른쪽으로 "미끄러진다"고 해서 슬라이딩 윈도우다.</text>
       </svg>
       <figcaption>송신측 윈도우: 보낼 때마다 줄고, 응답(ACK)이 오면 그만큼 다시 늘어난다. 수신측 윈도우는 반대로 "받을 때마다 줄고, ACK를 보내면 늘어난다."</figcaption>
     </figure>
-    <div class="tip"><b>함정 주의:</b> 시험에 "수신측 윈도우는 프레임을 수신할 때마다 하나씩 <b>늘어나고</b>..."처럼 송신/수신 방향을 뒤바꾼 오답이 자주 나온다. <b>"보내는 쪽은 줄고, 받는 쪽도 받으면 줄고 응답하면 는다"</b>로 암기.</div>
+    <div class="tip"><b>함정 주의:</b> 시험에 "수신측 윈도우는 프레임을 수신할 때마다 하나씩 <b>늘어나고</b>..."처럼 방향을 뒤바꾼 오답이 자주 나온다. <b>"수신측은 받으면 줄고(자리가 차니까), 응답 보내면 는다(자리를 비웠으니까)"</b>로 이해하면 헷갈리지 않는다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>해밍코드만 <b>오류 정정</b> 가능, 패리티·CRC·블록합은 <b>검출만</b> 가능</li>
-      <li>단일 패리티는 <b>홀수 개</b> 비트 오류만 검출 가능 (짝수 개는 놓침)</li>
-      <li>CRC는 다항식(모듈로-2) 나눗셈, <b>집단 오류</b> 검출에 강함</li>
-      <li>Go-Back-N: 오류 프레임부터 <b>전부</b> 재전송 / 선택적 재전송: <b>그 프레임만</b> 재전송</li>
+      <li>해밍코드만 <b>오류 정정</b> 가능, 패리티·CRC·블록합·체크섬은 <b>검출만</b> 가능</li>
+      <li>BCD는 오류 검출 방식이 <b>아니다</b> (문자 코드 체계) — "검출 방식이 아닌 것" 단골 정답</li>
+      <li>단일 패리티는 <b>홀수 개</b> 비트 오류만 검출 가능 (짝수 개는 상쇄되어 놓침)</li>
+      <li>CRC는 다항식(모듈로-2 = XOR) 나눗셈, 나머지를 FCS로 첨부, <b>집단 오류</b>에 강함</li>
+      <li>해밍코드 오류 위치 = <b>1인 자리 번호들을 전부 XOR</b>한 값</li>
+      <li>ARQ = 송신측 재전송(후진), FEC = 수신측 자체 정정(전진, 해밍코드)</li>
+      <li>Go-Back-N 재전송 개수 = <b>마지막 번호 − 오류 번호 + 1</b></li>
       <li>전송 효율: 선택적 재전송 &gt; Go-Back-N &gt; 정지-대기</li>
       <li>슬라이딩 윈도우 송신측/수신측 증감 방향 뒤바꾸기 함정 주의</li>
     </ul>
@@ -162,29 +282,255 @@
       <tr><td>재전송 범위</td><td>오류 프레임 + 이후 전부</td><td>오류난 프레임만</td></tr>
       <tr><td>효율</td><td>중간</td><td>높음</td></tr>
       <tr><td>수신측 버퍼</td><td>불필요(순서대로만 받음)</td><td>필요(순서 재조합)</td></tr>
+      <tr><td>구현 복잡도</td><td>단순</td><td>복잡</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>ARQ (후진 에러 수정)</th><th>FEC (전진 에러 수정)</th></tr>
       <tr><td>주체</td><td>재전송 요청 (송신측 재전송)</td><td>수신측이 직접 정정 (해밍코드)</td></tr>
       <tr><td>필요 정보량</td><td>적음</td><td>많음(여분 패리티 비트)</td></tr>
+      <tr><td>지연</td><td>재전송 왕복 시간만큼 지연</td><td>즉시 복구(지연 없음)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>패리티</th><th>CRC</th><th>해밍코드</th></tr>
+      <tr><td>덧붙이는 양</td><td>1비트</td><td>n비트(FCS)</td><td>여러 비트(2ⁿ 자리마다)</td></tr>
+      <tr><td>검출 능력</td><td>홀수 개 오류</td><td>집단 오류까지 강력</td><td>1비트 검출 + 정정</td></tr>
+      <tr><td>정정</td><td>불가</td><td>불가</td><td><b>가능(1비트)</b></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2014 국가직 · 기출문제집 p.351</span></div>
+      <p class="q-body">데이터 전송 중에 발생하는 에러를 검출하는 방식으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>패리티(parity) 검사 방식</li>
+        <li>검사합(checksum) 방식</li>
+        <li>CRC 방식</li>
+        <li>BCD 부호 방식</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ BCD 부호 방식</p>
+        <div class="explain">
+          <p><b>BCD(Binary Coded Decimal)</b>는 숫자·문자를 2진수로 표현하기 위한 <b>코드 체계</b>이지 오류 검출 기법이 아니다. 존(zone) 2비트 + 디지트(digit) 4비트로 64개 문자를 표현한다.</p>
+          <ol class="steps">
+            <li>오류 <b>검출</b>: 패리티 검사, 블록합 검사, CRC, 체크섬</li>
+            <li>오류 <b>검출 + 정정</b>: 해밍코드</li>
+            <li>코드 체계(검출과 무관): BCD, ASCII, EBCDIC, 유니코드</li>
+          </ol>
+          <p><b>요령:</b> 선택지에 <b>"~부호", "~코드"</b>처럼 문자 표현 방식 이름이 섞여 있으면 그게 정답일 확률이 높다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2009 국가직 · 기출문제집 p.353</span></div>
+      <p class="q-body">1비트 패리티 비트로 전송 에러를 검출한다. 1바이트 데이터 A~E 다섯 개를 전송했고 <b>그중 두 개에서 1비트 에러</b>가 발생했다. 에러가 발생한 두 데이터는?</p>
+      <table>
+        <tr><th>이름</th><th>데이터 비트열</th><th>패리티 비트</th></tr>
+        <tr><td>A</td><td>01001101</td><td>1</td></tr>
+        <tr><td>B</td><td>01110110</td><td>1</td></tr>
+        <tr><td>C</td><td>10111000</td><td>0</td></tr>
+        <tr><td>D</td><td>11110001</td><td>0</td></tr>
+        <tr><td>E</td><td>10101010</td><td>0</td></tr>
+      </table>
+      <ol class="choices">
+        <li>A, D</li>
+        <li>B, C</li>
+        <li>B, E</li>
+        <li>C, E</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① A, D</p>
+        <div class="explain">
+          <p>문제가 홀수 패리티인지 짝수 패리티인지 알려주지 않는다. 하지만 <b>정상인 3개가 따르는 규칙이 곧 그 시스템의 규칙</b>이다.</p>
+          <ol class="steps">
+            <li>데이터 + 패리티를 합쳐 1의 개수를 센다:<br>A = 4+1 = <b>5(홀)</b> · B = 5+1 = 6(짝) · C = 4+0 = 4(짝) · D = 5+0 = <b>5(홀)</b> · E = 4+0 = 4(짝)</li>
+            <li>짝수인 것이 B, C, E <b>3개</b> → 이 시스템은 <b>짝수 패리티</b></li>
+            <li>규칙을 어긴 홀수짜리 <b>A와 D</b>가 에러 발생 데이터</li>
+          </ol>
+          <p><b>함정:</b> 1의 개수를 셀 때 <b>패리티 비트까지 포함</b>해야 한다. 데이터 비트만 세면 홀짝이 반대로 나와 정답이 뒤집힌다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2015 지방직 · 기출문제집 p.355~356</span></div>
+      <p class="q-body">네트워크의 전송 데이터 오류 검출에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>체크섬(checksum)은 1의 보수 방법을 사용한다.</li>
+        <li>순환중복검사(CRC)는 모듈로-2 연산을 주로 사용한다.</li>
+        <li>전송할 데이터에 대한 중복 정보를 활용하여 오류를 검출한다.</li>
+        <li>단일 패리티 비트를 사용하는 패리티 검사는 홀수 개의 비트에 오류가 발생하면 오류를 발견할 수 없다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (홀수·짝수가 뒤바뀐 서술)</p>
+        <div class="explain">
+          <p>올바른 서술은 <b>"단일 패리티 검사는 홀수 개 오류는 발견할 수 있고, 짝수 개 오류는 발견할 수 없다"</b>이다.</p>
+          <ol class="steps">
+            <li>비트 <b>1개</b>(홀수) 뒤집힘 → 1의 개수 홀짝이 바뀜 → <b>검출 성공</b></li>
+            <li>비트 <b>2개</b>(짝수) 뒤집힘 → 홀짝이 원상복구 → <b>검출 실패</b></li>
+            <li>따라서 ④는 홀수와 짝수를 정확히 반대로 서술한 오답</li>
+          </ol>
+          <p>①②③은 모두 맞는 설명이다. 체크섬은 합을 구해 <b>1의 보수</b>를 취해 붙이고, CRC는 <b>모듈로-2(XOR) 나눗셈</b>을 쓰며, 모든 오류 검출은 <b>중복 정보(redundancy)</b>를 덧붙인다는 공통 원리를 가진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2020 지방직 · 기출문제집 p.357</span></div>
+      <p class="q-body">다음에서 설명하는 네트워크 데이터 오류 검출 방법은?</p>
+      <div class="deep" style="margin:8px 0;">
+        <p><b>송신측</b>: 첫 비트가 1인 n+1비트의 제수를 정하고, 데이터 끝에 n비트의 0을 추가한 후 모듈로-2 연산을 한다. 그러면 n비트 나머지가 나오는데 이것이 중복 정보가 된다.</p>
+        <p><b>수신측</b>: 전송받은 정보를 동일한 n+1비트 제수로 모듈로-2 연산 한다. 나머지가 0이면 오류 없음, 0이 아니면 오류로 간주한다.</p>
+      </div>
+      <ol class="choices">
+        <li>수직 중복 검사(VRC)</li>
+        <li>세로 중복 검사(LRC)</li>
+        <li>순환 중복 검사(CRC)</li>
+        <li>체크섬(Checksum)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 순환 중복 검사(CRC)</p>
+        <div class="explain">
+          <p>지문의 키워드 세 개가 전부 CRC를 가리킨다.</p>
+          <ol class="steps">
+            <li><b>"n+1비트 제수"</b> = 생성 다항식(generator polynomial) → CRC의 핵심 장치</li>
+            <li><b>"데이터 뒤에 0을 n개 붙이고 모듈로-2 연산"</b> = CRC의 FCS 생성 절차</li>
+            <li><b>"나머지가 0이면 정상"</b> = CRC의 수신측 검증 방식</li>
+          </ol>
+          <p><b>구분 정리:</b> VRC는 문자마다 세로로 붙이는 단순 패리티, LRC는 블록 단위 가로 패리티(둘을 합치면 블록합 검사), 체크섬은 <b>덧셈 후 1의 보수</b>를 쓴다. "나눗셈/다항식/모듈로-2"가 나오면 무조건 <b>CRC</b>.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2009 지방직 · 기출문제집 p.354</span></div>
+      <p class="q-body">짝수 패리티를 갖는 7비트 데이터 <code>0011111</code>이 수신되었다. <b>해밍코드</b>를 이용해 전송 중 발생한 오류를 찾아 바르게 정정한 것은?</p>
+      <ol class="choices">
+        <li>0011100</li>
+        <li>0011011</li>
+        <li>0001111</li>
+        <li>0010111</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 0001111</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>왼쪽부터 1~7번 인덱스를 매기고, 값이 <b>1인 자리</b>를 고른다 → <b>3, 4, 5, 6, 7번</b></li>
+            <li>각 번호를 3비트 2진수로: 3=<code>011</code>, 4=<code>100</code>, 5=<code>101</code>, 6=<code>110</code>, 7=<code>111</code></li>
+            <li>전부 XOR:<br><code>011</code> ⊕ <code>100</code> = <code>111</code><br><code>111</code> ⊕ <code>101</code> = <code>010</code><br><code>010</code> ⊕ <code>110</code> = <code>100</code><br><code>100</code> ⊕ <code>111</code> = <b><code>011</code></b></li>
+            <li><code>011</code> = <b>3</b> → 3번 비트에서 오류 발생</li>
+            <li>3번 비트를 1 → 0으로 반전: <code>00<b>1</b>1111</code> → <b><code>0001111</code></b></li>
+          </ol>
+          <p><b>검산:</b> 정정 후 1인 자리는 4,5,6,7번 → <code>100</code>⊕<code>101</code>=<code>001</code>, ⊕<code>110</code>=<code>111</code>, ⊕<code>111</code>=<b><code>000</code></b>. XOR 결과가 0이 나오므로 오류 없음 ✅ 이렇게 검산하면 실수를 잡을 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2019 국가직 · 기출문제집 p.358</span></div>
+      <p class="q-body">Go-Back-N 프로토콜에서 <b>6번째 프레임까지 전송한 후 4번째 프레임에서 오류</b>가 있음을 알았을 때, 재전송 대상이 되는 프레임의 개수는?</p>
+      <ol class="choices">
+        <li>1개</li>
+        <li>2개</li>
+        <li>3개</li>
+        <li>6개</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 3개</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>Go-Back-N은 <b>오류 난 프레임부터 그 뒤 전부</b>를 재전송한다</li>
+            <li>오류 번호 4, 마지막 전송 번호 6</li>
+            <li>재전송 대상 = 4, 5, 6번 → 6 − 4 + 1 = <b>3개</b></li>
+          </ol>
+          <p><b>함정:</b> ①(1개)은 <b>선택적 재전송</b>이었다면 맞는 답이다. 문제에 어떤 ARQ인지 반드시 확인할 것. ④(6개)는 처음부터 전부 다시 보낸다고 착각한 경우인데, Go-Back-N은 <b>이미 ACK된 1~3번은 다시 보내지 않는다</b>.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2016 지방직 · 기출문제집 p.358</span></div>
+      <p class="q-body">데이터 링크 계층 오류제어 기법들을 <b>프레임 전송 효율이 좋은 것부터 나쁜 순</b>으로 바르게 나열한 것은? (구현 복잡도·비용은 무시)</p>
+      <div class="deep" style="margin:8px 0;">
+        <p>ㄱ. 정지 후 대기(stop-and-wait) ARQ &nbsp;·&nbsp; ㄴ. N 복귀(go-back-N) ARQ &nbsp;·&nbsp; ㄷ. 선택적 반복(selective-repeat) ARQ</p>
+      </div>
+      <ol class="choices">
+        <li>ㄱ → ㄴ → ㄷ</li>
+        <li>ㄴ → ㄷ → ㄱ</li>
+        <li>ㄷ → ㄱ → ㄴ</li>
+        <li>ㄷ → ㄴ → ㄱ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ ㄷ → ㄴ → ㄱ (선택적 반복 &gt; N 복귀 &gt; 정지 후 대기)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>정지 후 대기(ㄱ)</b>: 1개 보내고 응답을 기다리는 동안 회선이 논다 → 반이중처럼 동작하므로 <b>효율 최하</b></li>
+            <li><b>N 복귀(ㄴ)</b>: 연속 전송은 하지만 오류 시 <b>멀쩡한 프레임까지 재전송</b>하는 낭비 → 중간</li>
+            <li><b>선택적 반복(ㄷ)</b>: 연속 전송 + <b>오류난 것만</b> 재전송 → 낭비가 가장 적음 → <b>효율 최고</b></li>
+          </ol>
+          <p><b>주의:</b> "효율이 높다 = 좋기만 하다"가 아니다. 선택적 반복은 수신측에 <b>재조합 버퍼</b>가 필요하고 구현이 복잡하다. 문제에서 "구현 복잡도는 무시한다"고 단서를 단 이유가 이것이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2008 국가직 · 기출문제집 p.359</span></div>
+      <p class="q-body">슬라이딩 윈도우 기법에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>흐름제어와 에러제어를 위한 기법으로 윈도우 크기만큼의 데이터 프레임을 연속적으로 전송할 수 있다.</li>
+        <li>윈도우 크기를 지정하여 응답 없이 전송할 수 있는 데이터 프레임의 최대 개수를 제한할 수 있다.</li>
+        <li>송신측 윈도우는 데이터 프레임을 전송할 때마다 하나씩 줄어들고 응답을 받을 때마다 하나씩 늘어난다.</li>
+        <li>수신측 윈도우는 데이터 프레임을 수신할 때마다 하나씩 늘어나고 응답을 전송할 때마다 하나씩 줄어든다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (수신측의 증감 방향이 반대)</p>
+        <div class="explain">
+          <p>올바른 서술은 <b>"수신측 윈도우는 프레임을 수신할 때마다 하나씩 줄어들고, 응답(ACK)을 전송할 때마다 하나씩 늘어난다"</b>이다.</p>
+          <ol class="steps">
+            <li>수신측 윈도우 = <b>"앞으로 더 받을 수 있는 여유 자리"</b></li>
+            <li>프레임이 도착하면 자리가 <b>차므로 줄어든다</b></li>
+            <li>처리 후 ACK를 보내면 그 자리가 <b>비워져 다시 늘어난다</b></li>
+          </ol>
+          <p><b>암기법:</b> 송신측이든 수신측이든 <b>"일이 들어오면 줄고, 처리해서 내보내면 는다"</b>로 같은 논리다. 송신은 "보내는 것"이 일이고, 수신은 "받는 것"이 일이라고 생각하면 방향이 헷갈리지 않는다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">패리티비트</span>
+      <span class="chip">홀수/짝수 패리티</span>
       <span class="chip">블록합검사</span>
+      <span class="chip">VRC/LRC</span>
       <span class="chip">CRC</span>
-      <span class="chip">해밍코드</span>
+      <span class="chip">모듈로-2</span>
+      <span class="chip">생성다항식</span>
       <span class="chip">FCS</span>
+      <span class="chip">체크섬</span>
+      <span class="chip">해밍코드</span>
+      <span class="chip">버스트오류</span>
       <span class="chip">ARQ</span>
       <span class="chip">FEC</span>
       <span class="chip">정지대기</span>
       <span class="chip">Go-Back-N</span>
       <span class="chip">선택적재전송</span>
       <span class="chip">슬라이딩윈도우</span>
-      <span class="chip">NAK</span>
+      <span class="chip">윈도우 크기</span>
+      <span class="chip">ACK/NAK</span>
     </div>
   </section>
 

@@ -11,13 +11,23 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">08. 프로그래밍언어</a> / 프로그래밍 언어의 특징</div>
   <h1 class="page-title">프로그래밍 언어의 특징</h1>
-  <p class="page-subtitle">고급/저급언어, 번역 프로그램, 컴파일 단계, 객체지향 패러다임 · PART 07. 프로그래밍언어론</p>
+  <p class="page-subtitle">고급/저급언어, 번역 프로그램, 컴파일 단계, 매개변수 전달, 객체지향 패러다임 · PART 07. 프로그래밍언어론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p>컴퓨터는 <b>기계어(0과 1)</b>만 이해한다. 사람이 쓰기 편한 <b>고급언어</b>를 기계어로 바꿔주는 게 번역 프로그램(컴파일러/인터프리터)이다.</p>
-    <p>객체지향 언어의 4대 특성은 <b>캡슐화·상속·다형성·추상화</b>다.</p>
+    <p>실행까지 가는 길은 <b>번역(컴파일) → 링킹 → 로딩</b> 순서다. 객체지향 언어의 4대 특성은 <b>캡슐화·상속·다형성·추상화</b>다.</p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"사람의 글"과 "기계의 전기신호" 사이의 번역 문제</h4>
+      <p>CPU가 실제로 이해하는 건 <code>10110000 01100001</code> 같은 <b>기계어 비트열</b>뿐이다. 그런데 사람이 이걸 직접 쓸 수는 없다. 그래서 사람이 읽을 수 있는 <b>고급언어</b>로 쓰고, 이걸 기계어로 바꿔주는 프로그램을 따로 두는 것이다. 이 단원의 거의 모든 내용은 결국 <b>"누가, 언제, 어떤 단위로 번역하는가"</b>라는 한 가지 질문의 변주다.</p>
+      <p>번역 시점에 따라 성격이 완전히 갈린다. <b>컴파일러</b>는 "전부 미리 번역해두고 나중에 실행" — 번역 결과물(목적 프로그램)이 파일로 남으니 저장 공간이 더 들지만, 한 번 만들어두면 실행은 빠르다. <b>인터프리터</b>는 "필요할 때 한 줄씩 그때그때 번역" — 결과물을 안 남기니 가볍지만, 같은 줄을 반복 실행하면 매번 다시 번역해야 해서 느리다. <b>이 트레이드오프 하나가 시험에 가장 많이 나온다.</b></p>
+      <p>그리고 번역만으로는 실행이 안 된다. 여러 조각으로 나눠 짠 코드와 라이브러리를 하나로 <b>합치고(링킹)</b>, 그걸 메모리에 <b>올려야(로딩)</b> 비로소 돌아간다. 순서를 묻는 문제가 단골이니 <b>번역 → 링킹 → 로딩</b>은 통째로 외워두면 된다.</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
@@ -29,7 +39,7 @@
       <tr><td>이해하기 쉬운 대상</td><td>컴퓨터(하드웨어)</td><td>사람</td></tr>
       <tr><td>이식성</td><td>낮음 (하드웨어 종속적)</td><td>높음</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 자바·코볼·포트란은 전부 <b>고급언어</b>다. "저급언어를 고르시오" 문제에서 어셈블리어만 저급언어로 분류된다.</div>
+    <div class="tip"><b>함정 주의:</b> 자바·코볼·포트란은 전부 <b>고급언어</b>다. "저급언어를 고르시오" 문제에서 어셈블리어만 저급언어로 분류된다. 또 <b>어셈블리어도 번역이 필요하다</b>(어셈블러가 담당) — "어셈블리어는 번역 없이 바로 실행된다"는 틀린 설명이다.</div>
 
     <h3>언어 번역 프로그램 — 누가 기계어로 바꿔주나 <span class="page-ref">📖 기출문제집 p.676~678</span></h3>
     <table>
@@ -39,6 +49,7 @@
       <tr><td><b>인터프리터</b></td><td>고급언어 → 즉시 실행</td><td><b>문장(줄) 단위</b>로 번역하며 바로 실행</td></tr>
       <tr><td>프리프로세서(전처리기)</td><td>컴파일 <b>전</b> 원시 프로그램을 가공</td><td>매크로 치환, include 처리 등</td></tr>
     </table>
+    <div class="tip"><b>함정 주의:</b> 워드프로세서는 <b>번역 프로그램이 아니다</b>(문서 편집용 응용 소프트웨어). "언어 번역 프로그램에 해당하지 않는 것" 문제의 단골 정답.</div>
 
     <p>컴파일러는 "번역 후 실행"이라 목적 프로그램을 <b>저장할 공간이 더 필요</b>하지만, 한 번 번역해두면 반복 실행이 빠르다. 인터프리터는 저장 공간은 적게 들지만 <b>실행할 때마다 매번 다시 해석</b>하므로 반복문이 많은 프로그램에서는 느리다.</p>
     <figure class="diagram">
@@ -76,6 +87,56 @@
         <text x="540" y="280" font-size="10.5" text-anchor="middle" opacity="0.75">목적 프로그램을 만들지 않음 (매번 재해석)</text>
       </svg>
       <figcaption>컴파일러는 "전체 번역 → 실행"이 한 번에 끝나고 결과물(목적 프로그램)이 남는다. 인터프리터는 목적 프로그램을 만들지 않고 한 줄씩 번역·실행을 반복하므로, 반복문이 많으면 그만큼 같은 줄을 여러 번 다시 해석하게 되어 느리다.</figcaption>
+    </figure>
+
+    <div class="deep">
+      <h4>Java는 컴파일러인가 인터프리터인가 — 정답은 "둘 다"(하이브리드)</h4>
+      <p>시험에 자주 나오는 함정이다. Java는 <code>javac</code>로 소스를 <b>바이트코드(.class)</b>까지 <b>컴파일</b>한 다음, 그 바이트코드를 <b>JVM이 인터프리터 방식으로 해석·실행</b>한다. 즉 <b>중간코드 생성까지는 컴파일 기법, 실행은 해석 기법</b>이다.</p>
+      <p>그래서 "Java 컴파일러는 인터프리터인가?"라고 물으면 <b>아니다</b>(컴파일러는 컴파일러다). 반대로 "JVM은 인터프리터인가?"라고 물으면 <b>그렇다</b>. 같은 언어를 두고 묻는 대상이 달라지니 문장을 끝까지 읽어야 한다.</p>
+    </div>
+
+    <h3>실행까지 가는 전체 경로 — 번역 → 링킹 → 로딩 <span class="page-ref">📖 기출문제집 p.676, p.680</span></h3>
+    <p>컴파일이 끝났다고 바로 실행되는 게 아니다. 내가 짠 코드 조각들과 이미 만들어진 라이브러리(예: <code>printf</code>)를 <b>하나로 이어 붙이고(링킹)</b>, 완성된 실행 파일을 <b>주기억장치에 올려야(로딩)</b> CPU가 실행할 수 있다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 175" role="img" aria-label="원시 프로그램이 컴파일러로 목적 프로그램이 되고, 링커가 라이브러리와 합쳐 실행 프로그램을 만들고, 로더가 주기억장치에 적재해 실행되는 순서도">
+        <defs>
+          <marker id="pl3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="10" y="45" width="110" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="70" font-size="11.5" text-anchor="middle">원시 프로그램</text>
+        <text x="65" y="86" font-size="10" text-anchor="middle" opacity="0.7">(source)</text>
+
+        <line x1="120" y1="72" x2="172" y2="72" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl3)"/>
+        <text x="146" y="63" font-size="10.5" text-anchor="middle" font-weight="700">컴파일러</text>
+        <text x="146" y="92" font-size="10" text-anchor="middle" opacity="0.7">번역</text>
+
+        <rect x="175" y="45" width="110" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="230" y="70" font-size="11.5" text-anchor="middle">목적 프로그램</text>
+        <text x="230" y="86" font-size="10" text-anchor="middle" opacity="0.7">(object, .obj)</text>
+
+        <line x1="285" y1="72" x2="342" y2="72" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl3)"/>
+        <text x="313" y="63" font-size="10.5" text-anchor="middle" font-weight="700">링커</text>
+        <text x="313" y="92" font-size="10" text-anchor="middle" opacity="0.7">링킹</text>
+
+        <rect x="345" y="45" width="120" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="405" y="70" font-size="11.5" text-anchor="middle">실행 프로그램</text>
+        <text x="405" y="86" font-size="10" text-anchor="middle" opacity="0.7">(load module)</text>
+
+        <line x1="465" y1="72" x2="522" y2="72" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl3)"/>
+        <text x="493" y="63" font-size="10.5" text-anchor="middle" font-weight="700">로더</text>
+        <text x="493" y="92" font-size="10" text-anchor="middle" opacity="0.7">로딩</text>
+
+        <rect x="525" y="45" width="130" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="590" y="70" font-size="11.5" text-anchor="middle">주기억장치 적재</text>
+        <text x="590" y="86" font-size="10" text-anchor="middle" opacity="0.7">(메모리에 올림)</text>
+
+        <line x1="655" y1="72" x2="695" y2="72" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl3)"/>
+        <text x="715" y="76" font-size="12" text-anchor="middle" font-weight="700">실행</text>
+
+        <text x="20" y="130" font-size="12">라이브러리(printf 등 이미 만들어진 코드)는 <tspan font-weight="700">링커</tspan>가 이 시점에 합쳐 넣는다.</text>
+        <text x="20" y="152" font-size="12">암기: <tspan font-weight="700">"번역 → 링킹 → 로딩"</tspan> — "번역하고, 이어 붙이고, 올린다". 링킹과 로딩 순서를 뒤집은 선택지가 자주 나온다.</text>
+      </svg>
+      <figcaption>소스 파일 하나가 실제로 돌아가기까지의 전체 경로. 컴파일러(번역) → 링커(조각 합치기) → 로더(메모리 적재) 순서이며, 이 순서를 바꿔 묻는 문제가 반복 출제된다.</figcaption>
     </figure>
 
     <h3>고급 언어의 컴파일 7단계 <span class="page-ref">📖 기출문제집 p.677</span></h3>
@@ -120,6 +181,78 @@
       </svg>
       <figcaption>어휘분석(토큰 분리) → 구문분석(문법 검사) → 의미분석(의미 오류 검사) → 중간코드생성 → 코드최적화(불필요한 코드 제거) → 목적코드생성 → 링킹(라이브러리 연결) 순서로 진행된다.</figcaption>
     </figure>
+    <div class="deep">
+      <h4>앞의 세 단계가 하는 일 — 문장 하나로 이해하기</h4>
+      <p><code>int a = b + 1;</code> 이라는 한 줄을 컴파일러가 어떻게 뜯어보는지 따라가 보자.</p>
+      <ul>
+        <li><b>어휘분석</b>: 글자를 의미 있는 최소 단위(<b>토큰</b>)로 쪼갠다 → <code>int</code> / <code>a</code> / <code>=</code> / <code>b</code> / <code>+</code> / <code>1</code> / <code>;</code></li>
+        <li><b>구문분석</b>: 이 토큰 배열이 <b>문법에 맞는 문장인지</b> 검사하고 구조(트리)를 만든다. <code>int a = = b;</code> 처럼 문법이 깨지면 여기서 잡힌다.</li>
+        <li><b>의미분석</b>: 문법은 맞아도 <b>말이 되는지</b>를 본다. <code>b</code>가 선언되지 않았거나, 문자열을 정수에 넣으려 하면 여기서 잡힌다.</li>
+      </ul>
+      <p><b>암기 포인트:</b> 문법 오류는 구문분석, 타입 오류는 의미분석. 순서는 <b>"단어 → 문장 → 뜻"</b> (어휘 → 구문 → 의미)으로 기억하면 순서를 뒤집은 선택지에 안 걸린다.</p>
+    </div>
+
+    <h3>매개변수 전달 방식 — 값 호출 vs 참조 호출 <span class="page-ref">📖 기출문제집 p.758</span></h3>
+    <p>함수를 부를 때 인자를 <b>"복사해서" 넘기느냐(Call by Value)</b>, <b>"원본 주소를" 넘기느냐(Call by Reference)</b>의 차이다. 이 차이가 곧 <b>함수 안에서 값을 바꿨을 때 호출한 쪽에 반영되는가</b>를 결정한다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="값에 의한 호출은 값을 복사해 넘기므로 함수에서 바꿔도 원본이 그대로이고, 참조에 의한 호출은 주소를 넘기므로 함수에서 바꾸면 원본도 바뀐다">
+        <defs>
+          <marker id="pl4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="170" y="20" font-size="13" text-anchor="middle" font-weight="700">값에 의한 호출 (Call by Value)</text>
+        <rect x="20" y="40" width="130" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="85" y="62" font-size="11.5" text-anchor="middle">main의 x</text>
+        <text x="85" y="84" font-size="16" text-anchor="middle" font-weight="700">10</text>
+        <line x1="150" y1="70" x2="215" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl4)"/>
+        <text x="182" y="62" font-size="10.5" text-anchor="middle">값 복사</text>
+        <rect x="215" y="40" width="130" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="280" y="62" font-size="11.5" text-anchor="middle">함수의 a (사본)</text>
+        <text x="280" y="84" font-size="16" text-anchor="middle" font-weight="700">10 → 99</text>
+        <text x="85" y="122" font-size="12" text-anchor="middle">x는 여전히 <tspan font-weight="700">10</tspan></text>
+        <text x="280" y="122" font-size="12" text-anchor="middle">사본만 99가 됨</text>
+        <text x="20" y="148" font-size="11.5">→ 함수 안에서 아무리 바꿔도 <tspan font-weight="700">원본에 반영되지 않는다</tspan>. 대신 데이터가 크면 복사 비용이 든다.</text>
+
+        <line x1="20" y1="165" x2="680" y2="165" stroke="currentColor" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+
+        <text x="170" y="192" font-size="13" text-anchor="middle" font-weight="700">참조에 의한 호출 (Call by Reference)</text>
+        <rect x="20" y="212" width="130" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="85" y="234" font-size="11.5" text-anchor="middle">main의 x (주소 1000)</text>
+        <text x="85" y="256" font-size="16" text-anchor="middle" font-weight="700">10 → 99</text>
+        <line x1="150" y1="242" x2="215" y2="242" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl4)"/>
+        <text x="182" y="234" font-size="10.5" text-anchor="middle">주소 전달</text>
+        <rect x="215" y="212" width="130" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="280" y="234" font-size="11.5" text-anchor="middle">함수의 포인터</text>
+        <text x="280" y="256" font-size="13" text-anchor="middle">1000번지를 가리킴</text>
+        <line x1="280" y1="272" x2="150" y2="272" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#pl4)"/>
+        <text x="215" y="288" font-size="10.5" text-anchor="middle">같은 메모리를 직접 수정</text>
+        <text x="380" y="242" font-size="11.5">→ 함수가 원본 메모리를 직접 건드리므로</text>
+        <text x="380" y="262" font-size="11.5" font-weight="700">호출한 쪽의 값도 같이 바뀐다.</text>
+        <text x="380" y="282" font-size="11.5">데이터가 클 때 복사를 안 해 효율적.</text>
+      </svg>
+      <figcaption>값 호출은 사본을 넘기므로 원본이 안전하지만 복사 비용이 들고, 참조 호출은 주소를 넘기므로 원본이 바뀌는 대신 큰 데이터를 효율적으로 전달한다.</figcaption>
+    </figure>
+    <div class="tip"><b>C언어의 결정적 함정:</b> <code>int score[3]</code> 같은 <b>배열 이름은 그 자체가 시작 주소</b>다. 그래서 <code>get_average(score, 3)</code>처럼 배열을 넘기면 겉보기와 달리 <b>참조에 의한 호출(call by reference)</b>로 처리된다. "배열을 넘겼으니 값 호출"이라고 쓴 선택지는 틀린 설명이다.</div>
+
+    <h3>정적 타이핑 vs 동적 타이핑</h3>
+    <table>
+      <tr><th>구분</th><th>정적 타이핑 (Static)</th><th>동적 타이핑 (Dynamic)</th></tr>
+      <tr><td>타입 결정 시점</td><td><b>컴파일 시점</b> (미리 선언)</td><td><b>실행 시점</b> (값을 넣는 순간)</td></tr>
+      <tr><td>변수 선언</td><td><code>int a = 10;</code> 처럼 타입 명시</td><td><code>a = 10</code> 처럼 타입 없이</td></tr>
+      <tr><td>대표 언어</td><td>C, C++, Java, Kotlin</td><td><b>Python</b>, JavaScript, Ruby</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "Python은 정적 타이핑을 지원하는 컴파일러 방식 언어" → ❌ 완전히 반대다. Python은 <b>동적 타이핑 + 인터프리터</b> 방식이다. 이 문장은 거의 매년 오답 선택지로 등장한다.</div>
+
+    <h3>자주 나오는 언어별 특징 정리</h3>
+    <table>
+      <tr><th>언어</th><th>꼭 기억할 특징</th></tr>
+      <tr><td><b>C</b></td><td>절차적, 컴파일러 방식, 포인터 지원</td></tr>
+      <tr><td><b>C++</b></td><td>객체지향, <b>다중 상속 가능</b>, 오버로딩·다형성·예외처리 지원, 동적 바인딩</td></tr>
+      <tr><td><b>Java</b></td><td>객체지향, JVM 기반 하이브리드, <b>다중 상속·포인터·구조체 미지원</b>, 가비지 컬렉션</td></tr>
+      <tr><td><b>C#</b></td><td>마이크로소프트 <b>.NET 프레임워크</b> 기반 객체지향 언어</td></tr>
+      <tr><td><b>Python</b></td><td>인터프리터, <b>동적 타이핑</b>, 객체지향 지원, 대화식</td></tr>
+      <tr><td><b>Kotlin</b></td><td>JVM에서 동작, 자바와 상호운용, <b>정적 타입</b> — "게임 전용 언어"가 아님(함정)</td></tr>
+      <tr><td><b>LISP</b></td><td><b>함수형</b> 언어 — 객체지향 언어를 고르는 문제에서 정답 아님</td></tr>
+    </table>
 
     <h3>프로그래밍 패러다임 분류</h3>
     <table>
@@ -138,7 +271,7 @@
       <tr><td><b>다형성</b> (Polymorphism)</td><td>같은 이름의 메소드가 상황에 따라 <b>다르게 동작</b> (오버로딩·오버라이딩으로 구현)</td></tr>
       <tr><td><b>추상화</b> (Abstraction)</td><td>공통 특징만 뽑아 <b>추상 클래스/인터페이스</b>로 표현, 추상 클래스는 직접 객체 생성 불가</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "상속이란 여러 클래스를 조합해 새 클래스를 만드는 것" → ❌ 틀림. 상속은 <b>기존 클래스 하나(또는 그 계층)의 속성을 물려받는 것</b>이다. Java 클래스 자체 재사용(다중 상속)과 헷갈리지 말 것 — 자세한 오버로딩/오버라이딩 예제는 <a href="JAVA기초와객체지향.html">JAVA 기초와 객체지향</a> 문서 참고.</div>
+    <div class="tip"><b>함정 주의:</b> "상속이란 여러 클래스를 조합해 새 클래스를 만드는 것" → ❌ 틀림. 상속은 <b>기존 클래스 하나(또는 그 계층)의 속성을 물려받는 것</b>이다. 또 "객체는 재사용 가능하지만 클래스는 불가능" → ❌ <b>클래스야말로 재사용을 위한 틀</b>이다. 자세한 오버로딩/오버라이딩 예제는 <a href="JAVA기초와객체지향.html">JAVA 기초와 객체지향</a> 문서 참고.</div>
 
     <h3>웹 스크립트 언어 — 서버 측 vs 클라이언트 측 <span class="page-ref">📖 기출문제집 p.674</span></h3>
     <table>
@@ -146,7 +279,7 @@
       <tr><td><b>서버 측 스크립트</b></td><td>웹 서버에서 실행 후 결과(HTML)만 전송</td><td>ASP, JSP, PHP, CGI</td></tr>
       <tr><td><b>클라이언트 측 스크립트</b></td><td>사용자의 웹 브라우저에서 실행</td><td>JavaScript, VBScript</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "CGI 프로그램은 클라이언트에서 실행된다" → ❌ 틀림. CGI·ASP·JSP·PHP는 모두 <b>서버 측</b>에서 실행된다.</div>
+    <div class="tip"><b>함정 주의:</b> "CGI 프로그램은 클라이언트에서 실행된다" → ❌ 틀림. CGI·ASP·JSP·PHP는 모두 <b>서버 측</b>에서 실행된다. 암기법: <b>"자바스크립트만 브라우저, 나머지 알파벳 3글자(ASP/JSP/PHP/CGI)는 서버"</b>.</div>
   </section>
 
   <section class="block">
@@ -155,7 +288,11 @@
       <li>고급언어(자바·코볼·포트란 등) vs 저급언어(기계어·어셈블리어) 구분</li>
       <li>컴파일러(파일 단위, 목적 프로그램 생성) vs 인터프리터(문장 단위, 목적 프로그램 미생성) 차이</li>
       <li>반복문이 많으면 <b>컴파일러 방식이 더 효율적</b> (인터프리터는 매번 재해석)</li>
+      <li>큰 기억장소를 요구하는 쪽은 <b>컴파일러</b> (목적 프로그램을 저장해야 하므로) — 인터프리터라고 쓰면 오답</li>
+      <li>실행까지의 순서: <b>번역 → 링킹 → 로딩</b> (링킹·로딩 순서 바꾼 선택지 주의)</li>
       <li>컴파일 7단계 순서: 어휘분석→구문분석→의미분석→중간코드생성→코드최적화→목적코드생성→링킹</li>
+      <li>Java는 <b>컴파일+인터프리터 하이브리드</b>, Python은 <b>동적 타이핑+인터프리터</b></li>
+      <li>C에서 <b>배열을 인자로 넘기면 call by reference</b>로 처리된다</li>
       <li>객체지향 4대 특성(캡슐화·상속·다형성·추상화) 정의 구분</li>
       <li>서버 측 스크립트(ASP/JSP/PHP/CGI) vs 클라이언트 측 스크립트(JavaScript) 구분</li>
     </ul>
@@ -169,8 +306,243 @@
       <tr><td>목적 프로그램</td><td>생성함</td><td>생성 안 함</td></tr>
       <tr><td>필요 저장공간</td><td>더 큼</td><td>더 작음</td></tr>
       <tr><td>반복 실행 속도</td><td>빠름(재사용)</td><td>느림(매번 재해석)</td></tr>
-      <tr><td>대표 언어</td><td>C, C++</td><td>Python(기본), 초기 BASIC</td></tr>
+      <tr><td>오류 발견 시점</td><td>컴파일 시 한꺼번에</td><td>실행하다 그 줄에서</td></tr>
+      <tr><td>대표 언어</td><td>C, C++, PASCAL</td><td>Python, JavaScript, Basic, LISP</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>링커 (Linker)</th><th>로더 (Loader)</th></tr>
+      <tr><td>하는 일</td><td>목적 모듈들 + 라이브러리를 <b>하나로 합침</b></td><td>실행 모듈을 <b>주기억장치에 올림</b></td></tr>
+      <tr><td>결과물</td><td>실행 가능한 로드 모듈</td><td>메모리에 적재된 실행 상태</td></tr>
+      <tr><td>순서</td><td>먼저</td><td>나중</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2019 지방직 · 기출문제집 p.673</span></div>
+      <p class="q-body">저급언어에 해당하는 프로그래밍 언어는?</p>
+      <ol class="choices">
+        <li>어셈블리어 (Assembly Language)</li>
+        <li>자바 (Java)</li>
+        <li>코볼 (COBOL)</li>
+        <li>포트란 (Fortran)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 어셈블리어</p>
+        <div class="explain">
+          <p>저급언어는 <b>기계어와 어셈블리어</b> 둘뿐이다. 나머지는 전부 고급언어라고 보면 된다.</p>
+          <p>자바·코볼·포트란은 모두 사람이 읽을 수 있는 문장 형태의 <b>고급언어</b>다. "오래된 언어(코볼·포트란)니까 저급언어 아닐까?"라고 생각하기 쉬운데, <b>오래됐는지 여부와 고급/저급은 아무 관계가 없다.</b> 기준은 오직 "사람 기준이냐 하드웨어 기준이냐"이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2015 국가직 · 기출문제집 p.673</span></div>
+      <p class="q-body">객체지향 기법을 지원하지 않는 프로그래밍 언어는?</p>
+      <ol class="choices">
+        <li>LISP</li>
+        <li>Java</li>
+        <li>Python</li>
+        <li>C#</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① LISP</p>
+        <div class="explain">
+          <p>LISP은 대표적인 <b>함수형(functional) 언어</b>다. 나머지 Java·Python·C#은 모두 객체지향을 지원한다.</p>
+          <p><b>대표 객체지향 언어 목록:</b> Simula 67, Smalltalk, C++, C#, Java, Objective-C, Python, Perl, Visual Basic.NET 등. 반대로 <b>함수형은 LISP·Haskell</b>, <b>논리형은 Prolog</b>로 묶어서 외우면 이 유형은 끝난다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2016 계리직 · 기출문제집 p.674</span></div>
+      <p class="q-body">프로그래밍 언어에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>Objective-C, Java, C#은 객체지향 언어이다.</li>
+        <li>Python은 정적 타이핑을 지원하는 컴파일러 방식의 언어이다.</li>
+        <li>ASP, JSP, PHP는 서버 측에서 실행되는 스크립트 언어이다.</li>
+        <li>XML은 전자문서를 표현하는 확장가능한 표준 마크업 언어이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (Python은 동적 타이핑 + 인터프리터 방식이다)</p>
+        <div class="explain">
+          <p>②번은 <b>두 군데나 틀렸다</b>. Python은 ⑴ 정적 타이핑이 아니라 <b>동적 타이핑</b>(값을 넣는 순간 타입 결정), ⑵ 컴파일러가 아니라 <b>인터프리터</b> 방식이다.</p>
+          <p>이 문장은 거의 매년 형태만 바꿔 출제되는 <b>1순위 오답 선택지</b>다. "Python + 정적 + 컴파일"이 한 문장에 있으면 무조건 틀렸다고 보면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2020 지방직 · 기출문제집 p.674</span></div>
+      <p class="q-body">소프트웨어 개발 언어에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>C#은 마이크로소프트 닷넷 프레임워크를 지원하는 객체지향 언어이다.</li>
+        <li>Python은 인터프리터 방식의 객체지향 언어로서 실행시점에 데이터 타입을 결정하는 동적 타이핑 기능을 갖는다.</li>
+        <li>Kotlin은 그래픽 요소를 강화한 게임 개발 전용 언어이다.</li>
+        <li>Java는 컴파일된 프로그램이 JVM상에서 인터프리터 방식으로 실행되는 플랫폼 독립적 프로그래밍 언어이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (Kotlin은 게임 전용 언어가 아니다)</p>
+        <div class="explain">
+          <p>Kotlin은 안드로이드 스튜디오 개발사인 JetBrains가 2011년 공개한 언어로, <b>JVM 위에서 동작하며 자바와 상호운용</b>이 가능하다. <b>정적 타입</b> 언어이고 함수형·객체지향을 모두 지원하는 오픈소스다. "게임 개발 전용"이라는 설명은 완전히 지어낸 말이다.</p>
+          <p>참고로 ②·④번은 앞 문제와 달리 <b>맞는 설명</b>이다. 같은 Python·Java 설명이라도 문장에 따라 정답이 갈리므로, 키워드(동적/정적, 인터프리터/컴파일러)를 하나하나 대조해야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2025 국가직 · 기출문제집 p.676</span></div>
+      <p class="q-body">언어 번역 프로그램에 해당하지 <b>않는</b> 것은?</p>
+      <ol class="choices">
+        <li>어셈블러</li>
+        <li>컴파일러</li>
+        <li>인터프리터</li>
+        <li>워드프로세서</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 워드프로세서</p>
+        <div class="explain">
+          <p>워드프로세서는 <b>문서 편집용 응용 소프트웨어</b>일 뿐 번역과 무관하다.</p>
+          <ul>
+            <li>어셈블러: 어셈블리어 → 기계어</li>
+            <li>컴파일러: 고급언어 → 기계어 (<b>파일 단위</b>)</li>
+            <li>인터프리터: 고급언어 → 기계어 (<b>문장 단위</b>)</li>
+          </ul>
+          <p>번역 프로그램 3종 세트(어셈블러·컴파일러·인터프리터)를 묶어 외워두면, 여기에 없는 것이 답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2025 소방경채 · 기출문제집 p.676</span></div>
+      <p class="q-body">프로그래밍 언어에 대한 설명으로 옳은 것만을 &lt;보기&gt;에서 모두 고르면?</p>
+      <div class="deep" style="margin-top:8px;">
+        <p>ㄱ. C, JAVA, PASCAL은 컴파일러 언어이다.</p>
+        <p>ㄴ. 어셈블리어는 번역 과정 없이 직접 실행이 가능한 언어이다.</p>
+        <p>ㄷ. 소스 파일을 실행하기 위해서는 번역 - 로딩 - 링킹 순으로 처리해야 한다.</p>
+        <p>ㄹ. 고급언어는 사람이 이해하기 쉬운 언어이며 저급언어는 컴퓨터가 이해하기 쉬운 언어이다.</p>
+      </div>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ㄱ, ㄹ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ (O)</b> — C, JAVA, PASCAL은 컴파일 과정을 거치는 언어다. (JAVA는 바이트코드까지 컴파일하는 하이브리드지만, 컴파일러 언어로 분류한다)</li>
+            <li><b>ㄴ (X)</b> — 어셈블리어도 <b>어셈블러</b>로 기계어 번역이 필요하다. 번역 없이 직접 실행되는 건 오직 <b>기계어</b>뿐이다.</li>
+            <li><b>ㄷ (X)</b> — 순서가 뒤집혔다. 올바른 순서는 <b>번역 - 링킹 - 로딩</b>이다. (합쳐서 완성한 다음에 메모리에 올린다)</li>
+            <li><b>ㄹ (O)</b> — 고급/저급언어의 정의 그대로다.</li>
+          </ol>
+          <p><b>이 문제의 핵심은 ㄷ</b>이다. "로딩-링킹" vs "링킹-로딩"을 바꿔 놓는 함정이 반복 출제된다. <b>합친 뒤에 올린다</b>고 논리로 기억할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2011 PL · 기출문제집 p.677</span></div>
+      <p class="q-body">다음은 고급 언어의 컴파일 단계이다. ㉠~㉢에 들어갈 단계를 순서대로 나열한 것은?<br>
+      <code>원시프로그램 → ( ㉠ ) → ( ㉡ ) → ( ㉢ ) → 코드최적화 → 코드생성 → 링크</code></p>
+      <ol class="choices">
+        <li>어휘분석 - 의미분석 - 구문분석</li>
+        <li>어휘분석 - 구문분석 - 의미분석</li>
+        <li>구문분석 - 어휘분석 - 의미분석</li>
+        <li>구문분석 - 의미분석 - 어휘분석</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 어휘분석 → 구문분석 → 의미분석</p>
+        <div class="explain">
+          <p>컴파일러가 소스를 읽는 순서는 사람이 글을 읽는 순서와 똑같다 — <b>단어 → 문장 → 뜻</b>.</p>
+          <ol class="steps">
+            <li><b>어휘분석</b>: 소스를 <b>토큰</b> 단위로 쪼갠다 (단어 나누기)</li>
+            <li><b>구문분석</b>: 토큰 배열이 <b>문법</b>에 맞는지 검사하고 구조를 만든다 (문장 만들기)</li>
+            <li><b>의미분석</b>: 문법은 맞아도 <b>의미상 오류</b>(선언 안 된 변수, 타입 불일치 등)가 없는지 본다 (뜻 확인)</li>
+            <li>이후 중간코드 생성 → 코드최적화 → 목적코드 생성 → 링크</li>
+          </ol>
+          <p>단어를 나누기도 전에 문법을 볼 수는 없다 — 그래서 <b>어휘가 반드시 맨 앞</b>이라는 것만 알아도 ③·④는 바로 소거된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2017 지방직 · 기출문제집 p.678</span></div>
+      <p class="q-body">프로그램 구현 기법(컴파일러 / 인터프리터 / 하이브리드)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>하이브리드 기법에서는 인터프리터가 중간 언어로 번역된 프로그램을 해석하고 실행한다.</li>
+        <li>인터프리터를 이용한 기법에서는 고급 언어 프로그램을 명령문 단위로 하나씩 해석하여 바로 실행한다.</li>
+        <li>반복문이 많은 프로그램의 실행에서 컴파일러를 이용한 기법이 인터프리터를 이용한 기법보다 효율적이다.</li>
+        <li>인터프리터를 이용한 기법은 번역된 프로그램을 저장하기 위한 큰 기억 장소를 요구하는 단점이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (큰 기억장소를 요구하는 것은 컴파일러다)</p>
+        <div class="explain">
+          <p>인터프리터는 <b>목적 프로그램을 아예 만들지 않는다.</b> 저장할 결과물이 없으니 큰 기억장소도 필요 없다. 반대로 컴파일러는 번역 결과인 목적 프로그램을 파일로 남겨야 하므로 <b>더 큰 저장 공간</b>이 필요하다.</p>
+          <p>③번이 맞는 이유도 같은 원리다: 반복문은 같은 줄을 수백 번 실행하는데, 인터프리터는 <b>실행할 때마다 매번 다시 번역</b>하므로 손해가 누적된다. 컴파일러는 이미 번역해둔 기계어를 반복 실행할 뿐이라 빠르다.</p>
+          <p><b>한 줄 정리:</b> 인터프리터 = 가볍지만 느림(반복 시), 컴파일러 = 무겁지만 빠름.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2020 지방직 · 기출문제집 p.680</span></div>
+      <p class="q-body">인터프리터(Interpreter) 방식의 언어로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>JavaScript</li>
+        <li>C</li>
+        <li>Basic</li>
+        <li>LISP</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② C</p>
+        <div class="explain">
+          <p><b>C와 C++는 대표적인 컴파일러 방식</b> 언어다. 반면 JavaScript, JSP, HTML, 액션스크립트, SQL, Python, Ruby, Basic, LISP 등은 인터프리터 방식으로 분류된다.</p>
+          <p><b>암기 요령:</b> "실행 파일(.exe)이 만들어지면 컴파일러, 소스 그대로 돌리면 인터프리터." C는 컴파일하면 실행 파일이 나오지만, 파이썬 스크립트는 소스 파일 그대로 실행한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2022 국가직 · 기출문제집 p.758</span></div>
+      <p class="q-body">C 프로그램 코드가 다음과 같을 때, 매개변수 전달 방법에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+<pre><code>int get_average(int score[], int n) {
+    int i, sum = 0;
+    for (i = 0; i &lt; n; i++)
+        sum += score[i];
+    return sum / n;
+}
+void main(void) {
+    int score[3] = {1, 2, 5};
+    printf("%d\n", get_average(score, 3));
+}</code></pre>
+      <ol class="choices">
+        <li>전달할 데이터의 양이 많을 경우에는 참조에 의한 호출이 효율적이다.</li>
+        <li>값에 의한 호출로 전달된 데이터는 호출된 함수에서 값을 변경하더라도 함수 종료 후 상위 함수에 반영되지 않는다.</li>
+        <li>값에 의한 호출은 함수 호출 시 데이터 복사가 발생한다.</li>
+        <li>위 프로그램에서 get_average()를 호출하는 데 사용한 매개변수 score는 값에 의한 호출로 처리된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (score는 배열이므로 참조에 의한 호출로 처리된다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>C에서 <b>배열 이름은 그 배열의 시작 주소</b>를 의미한다. <code>score</code>는 곧 "첫 번째 원소가 있는 메모리 번지"다.</li>
+            <li>따라서 <code>get_average(score, 3)</code>은 배열 전체를 복사해 넘기는 게 아니라 <b>주소를 넘긴다</b> → <b>call by reference</b></li>
+            <li>반면 두 번째 인자 <code>3</code>은 그냥 값이므로 call by value다. <b>한 함수 호출 안에서 두 방식이 섞일 수 있다</b>는 점이 포인트.</li>
+            <li>판별법: <b>주소를 넘기면 참조 호출, 값을 넘기면 값 호출.</b></li>
+          </ol>
+          <p>①·②·③번은 모두 맞는 설명이다. 특히 ①번은 배열을 주소로 넘기는 이유 그 자체다 — 원소가 100만 개라면 전부 복사하는 비용이 엄청나기 때문이다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -181,12 +553,20 @@
       <span class="chip">어셈블러</span>
       <span class="chip">컴파일러</span>
       <span class="chip">인터프리터</span>
+      <span class="chip">하이브리드</span>
       <span class="chip">프리프로세서</span>
+      <span class="chip">링커</span>
+      <span class="chip">로더</span>
+      <span class="chip">번역-링킹-로딩</span>
       <span class="chip">어휘분석</span>
       <span class="chip">구문분석</span>
       <span class="chip">의미분석</span>
       <span class="chip">중간코드</span>
       <span class="chip">코드최적화</span>
+      <span class="chip">동적타이핑</span>
+      <span class="chip">정적타이핑</span>
+      <span class="chip">Call by Value</span>
+      <span class="chip">Call by Reference</span>
       <span class="chip">캡슐화</span>
       <span class="chip">상속</span>
       <span class="chip">다형성</span>
@@ -194,6 +574,8 @@
       <span class="chip">절차적언어</span>
       <span class="chip">객체지향언어</span>
       <span class="chip">함수형언어</span>
+      <span class="chip">Kotlin</span>
+      <span class="chip">LISP</span>
       <span class="chip">CGI</span>
       <span class="chip">ASP</span>
       <span class="chip">JSP</span>

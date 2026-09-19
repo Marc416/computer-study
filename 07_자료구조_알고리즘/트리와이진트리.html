@@ -20,17 +20,43 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>한 줄로 세우면 느리고, 나무 모양으로 쌓으면 빨라진다</h4>
+      <p>데이터 1,000개를 한 줄(배열·리스트)로 두고 찾으면 최악의 경우 1,000번을 봐야 한다. 그런데 같은 데이터를 <b>나무 모양</b>으로 쌓으면 어떨까? 한 단계 내려갈 때마다 후보가 <b>절반으로 줄어</b> 10번만에 찾을 수 있다(2¹⁰ = 1024). 이것이 트리를 배우는 이유다 — <b>계층 구조로 쌓으면 탐색 비용이 n에서 log n으로 떨어진다.</b></p>
+      <p>게다가 현실의 많은 데이터가 원래 계층적이다. 폴더 안의 폴더, 조직도, HTML 문서 구조, 가계도 모두 트리다. 데이터베이스 인덱스(B-트리), 파일 시스템, 컴파일러의 수식 해석(수식 트리) 전부 트리로 돌아간다.</p>
+      <p>시험에서 이 단원은 <b>계산 문제가 대부분</b>이다 — ① 노드 수와 간선 수·높이 <b>세기</b>, ② 전위·중위·후위 <b>순회 순서 적기</b>, ③ 주어진 값을 순서대로 넣어 <b>이진탐색트리 만들고 단말노드 세기</b>, ④ 힙 조건 판별. 전부 <b>직접 트리를 그려보면</b> 풀리고, 안 그리면 거의 틀린다. 문제 풀 때 반드시 손으로 그리는 습관을 들여라.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>트리 용어</h3>
+    <h3>트리 용어 <span class="page-ref">📖 기출문제집 p.468~469</span></h3>
     <table>
       <tr><th>용어</th><th>의미</th></tr>
-      <tr><td>루트 (Root)</td><td>트리의 맨 꼭대기 노드 (부모가 없음)</td></tr>
-      <tr><td>단말 노드 (Leaf)</td><td>자식이 없는 노드</td></tr>
+      <tr><td>루트 (Root)</td><td>트리의 맨 꼭대기 노드 (<b>부모가 없는 유일한 노드</b>)</td></tr>
+      <tr><td>단말 노드 (Leaf, 잎)</td><td>자식이 없는 노드</td></tr>
+      <tr><td>부모 / 자식 노드</td><td>바로 위 노드가 부모, 바로 아래 노드가 자식</td></tr>
+      <tr><td><b>형제 (Sibling) 노드</b></td><td><b>같은 부모를 가지는</b> 노드들 (자식 노드의 정의와 헷갈리는 함정!)</td></tr>
+      <tr><td><b>차수 (Degree)</b></td><td>한 노드의 <b>자식 수</b>. <b>트리의 차수</b> = 트리 안의 모든 노드 중 <b>가장 큰 차수</b></td></tr>
+      <tr><td>레벨 (Level)</td><td>트리 각 층의 번호 (보통 루트를 레벨 1 또는 0으로 둠 — 문제 조건 확인 필수)</td></tr>
+      <tr><td>높이 (Height)</td><td>트리의 최대 레벨 = 가장 깊은 곳까지의 층 수</td></tr>
       <tr><td>서브트리 (Subtree)</td><td>어떤 노드를 루트로 삼는 부분 트리</td></tr>
       <tr><td>이진트리 (Binary Tree)</td><td>모든 노드가 <b>자식을 최대 2개(왼쪽·오른쪽)</b>까지만 가질 수 있는 트리</td></tr>
     </table>
     <p><b>트리와 그래프의 차이:</b> 트리는 <b>사이클(순환)이 없는</b> 비선형 자료구조이고, 그래프는 사이클이 있을 수 있다. 트리도 그래프의 일종(사이클 없는 연결 그래프)이다.</p>
+
+    <div class="deep">
+      <h4>반드시 외워야 하는 세기 공식 3개</h4>
+      <ul>
+        <li><b>간선(edge) 수 = 노드 수 − 1.</b> 루트를 제외한 모든 노드가 <b>자기 위로 가는 간선을 정확히 하나씩</b> 갖기 때문이다. 노드 11개 → 간선 10개. (이보다 많으면 사이클이 생겨 트리가 아니다.)</li>
+        <li><b>n개 노드 이진트리의 최대 높이 = n.</b> 모든 노드를 한쪽으로만 쭉 늘어뜨리면(편향 트리) 사실상 연결리스트가 되어 높이가 n이 된다. <b>이때 탐색은 O(n)으로 최악</b>이 된다.</li>
+        <li><b>n개 노드 이진트리의 최소 높이 = ⌈log₂(n+1)⌉.</b> 각 층을 빈틈없이 꽉 채웠을 때(포화에 가까울 때) 가장 납작해진다. 레벨 k까지 꽉 채우면 노드가 2ᵏ−1개이므로 역으로 구한 것이며, <b>소수점이 나오면 올림</b>한다.</li>
+      </ul>
+      <p><b>왜 "+1"이 붙나:</b> 높이 h인 포화 이진트리의 노드 수는 1+2+4+…+2^(h−1) = 2ʰ−1이다. 여기서 n = 2ʰ−1을 h에 대해 풀면 h = log₂(n+1)이 된다.</p>
+      <p><b>예:</b> 노드 60개 → 최대 높이 <b>60</b>, 최소 높이 ⌈log₂61⌉ = ⌈5.93⌉ = <b>6</b> → 차이는 54.</p>
+    </div>
 
     <h3>이진트리 순회(Traversal) 3형제 <span class="page-ref">📖 기출문제집 p.470~476</span></h3>
     <p>아래의 학습용 예제 트리 하나로 세 가지 순회를 전부 손으로 따라가 본다.</p>
@@ -88,6 +114,45 @@
     <div class="analogy"><b>암기 비유:</b> 이름표(루트)를 <b>먼저</b> 부르면 전위, <b>가운데서</b> 부르면 중위, <b>맨 마지막</b>에 부르면 후위. 왼쪽부터 보는 건 셋 다 공통.</div>
     <div class="tip"><b>함정 주의:</b> "이진탐색트리를 중위 순회하면 오름차순 정렬 결과가 나온다"는 참(자주 출제). 순회 순서를 헷갈리면 절대 못 푸니, 위 3단계를 실전에서 매번 손으로 직접 그려서 확인할 것.</div>
 
+    <h3>이진탐색트리 (BST, Binary Search Tree) <span class="page-ref">📖 기출문제집 p.477~479</span></h3>
+    <p>이진트리에 <b>"왼쪽 자식 &lt; 부모 &lt; 오른쪽 자식"</b>이라는 규칙 하나를 추가한 것이다. 이 규칙 덕분에 값을 찾을 때 <b>한 번 비교할 때마다 한쪽 서브트리를 통째로 버릴 수 있어</b> 탐색이 빨라진다.</p>
+    <div class="deep">
+      <h4>BST 만드는 법 — 기계적으로 따라가기만 하면 된다</h4>
+      <ul>
+        <li><b>첫 번째로 입력된 값이 루트</b>가 된다.</li>
+        <li>그 다음 값부터는 <b>루트에서 출발</b>해, 현재 노드보다 <b>작으면 왼쪽, 크면 오른쪽</b>으로 내려간다.</li>
+        <li>내려가다 <b>빈자리(자식이 없는 곳)를 만나면 거기에 붙인다.</b></li>
+      </ul>
+      <p><b>중요한 성질 3가지</b></p>
+      <ul>
+        <li><b>중위 순회(inorder)하면 오름차순 정렬</b>이 된다 — 왼쪽(작은 것) → 루트 → 오른쪽(큰 것) 순서로 방문하기 때문. 시험 단골.</li>
+        <li><b>입력 순서에 따라 모양이 완전히 달라진다.</b> 이미 정렬된 값(1,2,3,4,5)을 순서대로 넣으면 <b>오른쪽으로만 뻗은 편향 트리</b>가 되어 높이가 최대(=n)가 되고 탐색이 O(n)으로 나빠진다.</li>
+        <li>탐색·삽입·삭제 모두 <b>평균 O(log n)</b>, <b>최악(편향) O(n)</b>.</li>
+      </ul>
+    </div>
+    <p><b>만들기 예제: 44, 36, 62, 3 을 순서대로 삽입</b></p>
+    <ol class="steps">
+      <li><b>44</b> — 첫 값이므로 루트가 된다</li>
+      <li><b>36</b> — 44보다 작다 → 루트의 <b>왼쪽 자식</b></li>
+      <li><b>62</b> — 44보다 크다 → 루트의 <b>오른쪽 자식</b></li>
+      <li><b>3</b> — 44보다 작아 왼쪽(36)으로, 36보다도 작으므로 → <b>36의 왼쪽 자식</b></li>
+    </ol>
+    <figure class="diagram">
+      <svg viewBox="0 0 400 210" role="img" aria-label="44를 루트로, 왼쪽에 36, 오른쪽에 62, 36의 왼쪽에 3이 붙은 이진탐색트리">
+        <line x1="200" y1="40" x2="120" y2="110" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="200" y1="40" x2="290" y2="110" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="120" y1="110" x2="60" y2="175" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="200" cy="40" r="23" fill="none" stroke="currentColor" stroke-width="2"/><text x="200" y="46" font-size="13" text-anchor="middle">44</text>
+        <circle cx="120" cy="110" r="23" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="120" y="116" font-size="13" text-anchor="middle">36</text>
+        <circle cx="290" cy="110" r="23" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="290" y="116" font-size="13" text-anchor="middle">62</text>
+        <circle cx="60" cy="175" r="23" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="60" y="181" font-size="13" text-anchor="middle">3</text>
+        <text x="200" y="14" font-size="11" text-anchor="middle" opacity="0.8">루트(첫 입력값)</text>
+        <text x="345" y="150" font-size="11" opacity="0.8">단말 노드: 3, 62</text>
+        <text x="345" y="168" font-size="11" opacity="0.8">중위순회: 3 → 36 → 44 → 62</text>
+      </svg>
+      <figcaption>이진탐색트리는 "작으면 왼쪽, 크면 오른쪽" 규칙만으로 만들어진다. 중위 순회하면 3, 36, 44, 62로 자동 오름차순 정렬된다.</figcaption>
+    </figure>
+
     <h3>힙 (Heap) <span class="page-ref">📖 기출문제집 p.480~482</span></h3>
     <p>힙은 <b>완전이진트리</b>이면서, "부모가 자식보다 크거나 같다(최대힙)" 또는 "부모가 자식보다 작거나 같다(최소힙)"는 조건을 만족하는 자료구조다. <b>정렬된 트리가 아니다</b> — 형제 노드끼리는 크기 비교가 안 된다, 오직 부모-자식 관계만 보장된다.</p>
     <figure class="diagram">
@@ -117,6 +182,11 @@
       <li>이진탐색트리(BST)를 중위 순회 → <b>오름차순 정렬</b> 결과 (힙과 헷갈리지 말 것)</li>
       <li>힙은 <b>완전이진트리 + 부모자식 대소관계</b>만 보장, 형제 간 순서는 무관</li>
       <li>트리 vs 그래프: 트리는 <b>사이클 없음</b>, 그래프는 사이클 가능</li>
+      <li><b>간선 수 = 노드 수 − 1</b> (루트만 부모가 없으므로)</li>
+      <li>n개 노드 이진트리의 <b>최대 높이 = n</b>(편향), <b>최소 높이 = ⌈log₂(n+1)⌉</b>(포화) — 두 값의 차를 묻는 계산 문제 빈출</li>
+      <li>BST는 <b>입력 순서</b>에 따라 모양이 달라진다 — 정렬된 값을 순서대로 넣으면 편향 트리(최악 O(n))</li>
+      <li>BST 단말 노드 개수 세기 문제는 <b>직접 그려야</b> 풀린다 (자식이 <b>양쪽 모두</b> 없어야 단말)</li>
+      <li>용어 바꿔치기 함정: <b>자식 노드 ↔ 형제 노드</b>, "<b>모든</b> 노드는 부모가 있다"(→ 루트 예외)</li>
     </ul>
   </section>
 
@@ -132,6 +202,186 @@
       <tr><td>보장하는 것</td><td>왼쪽&lt;부모&lt;오른쪽 (전체 정렬 순서)</td><td>부모≥자식(최대) 또는 부모≤자식(최소)만</td></tr>
       <tr><td>중위 순회 결과</td><td><b>정렬됨</b></td><td>정렬 안 됨</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요. 트리 문제는 <b>반드시 손으로 그려가며</b> 풀 것.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2021 지방직 · 기출문제집 p.469</span></div>
+      <p class="q-body">노드(node)가 <b>11개</b> 있는 트리의 간선(edge) 개수는?</p>
+      <ol class="choices">
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+        <li>13</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 10개</p>
+        <div class="explain">
+          <p><b>트리의 간선 수 = 노드 수 − 1</b> 이므로 11 − 1 = <b>10</b>.</p>
+          <p><b>왜 그런가:</b> 루트를 제외한 모든 노드는 <b>자기 부모와 연결되는 간선을 정확히 하나씩</b> 가진다. 노드 11개 중 루트 1개를 빼면 10개이므로 간선도 10개다.</p>
+          <p><b>거꾸로 생각하면:</b> 간선이 노드 수와 같아지는 순간(11개) <b>반드시 사이클이 생겨</b> 더 이상 트리가 아니게 된다. 이 성질은 그래프 단원의 신장트리(spanning tree)에서도 그대로 쓰이니 확실히 기억할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2022 계리직 · 기출문제집 p.470</span></div>
+      <p class="q-body">노드의 수가 <b>60개</b>인 이진 트리의 <b>최대 높이에서 최소 높이를 뺀 값</b>은? (단, 노드 1개짜리 트리의 높이는 1)</p>
+      <ol class="choices">
+        <li>53</li>
+        <li>54</li>
+        <li>55</li>
+        <li>56</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 54</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>최대 높이:</b> 모든 노드를 한 줄로 늘어뜨린 <b>편향 트리</b>일 때 → 높이 = 노드 수 = <b>60</b></li>
+            <li><b>최소 높이:</b> 각 층을 꽉 채웠을 때 → ⌈log₂(n+1)⌉ = ⌈log₂61⌉</li>
+            <li>2⁵ = 32, 2⁶ = 64 이므로 log₂61은 5와 6 사이(약 5.93) → <b>올림하여 6</b></li>
+            <li>60 − 6 = <b>54</b></li>
+          </ol>
+          <p><b>함정:</b> ①번 53은 최소 높이를 <b>7로</b> 잘못 구했거나(올림을 두 번 적용), 최대 높이를 59로 본 경우다. 공식에 <b>n+1</b>을 넣는 것과 <b>올림(⌈ ⌉)</b>을 잊지 말 것. 검산법: 높이 6인 포화 이진트리는 2⁶−1 = 63개까지 담을 수 있으므로 60개가 들어간다. 높이 5는 31개까지라 부족하다 → 최소 높이 6이 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2022 국회 · 기출문제집 p.468</span></div>
+      <p class="q-body">이진 트리에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>일반 트리와 다르게 공집합을 허용한다.</li>
+        <li>모든 노드에게 유일한 부모 노드가 존재한다.</li>
+        <li>각 노드는 최대 2개의 자식 노드를 갖는다.</li>
+        <li>n개의 노드를 가진 이진 트리는 n−1개의 간선을 갖는다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 모든 노드에게 유일한 부모 노드가 존재한다 (틀린 설명)</p>
+        <div class="explain">
+          <p><b>루트 노드에는 부모가 없다.</b> 정확한 표현은 "<b>루트를 제외한</b> 모든 노드는 유일한 부모를 갖는다"이다. "모든 노드"라고 단정한 순간 틀린 문장이 된다.</p>
+          <p>나머지는 옳다 — ① 이진트리는 <b>노드가 하나도 없는 공집합 트리도 인정</b>하지만 일반 트리는 최소 1개(루트)가 있어야 한다, ③ 이진트리의 정의 그 자체, ④ 트리의 기본 성질.</p>
+          <p><b>출제 패턴:</b> "모든 ~", "항상 ~", "반드시 ~" 같은 <b>전칭 표현이 나오면 예외(루트·단말노드)를 먼저 의심</b>하라. 트리 문제에서 예외는 거의 항상 루트 아니면 단말 노드다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2025 소방경채 · 기출문제집 p.469</span></div>
+      <p class="q-body">트리에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>1:n 관계의 비선형 자료구조이다.</li>
+        <li>자식 노드(Child node)는 같은 부모 노드를 가지는 노드를 의미한다.</li>
+        <li>부모 노드(Parent node)는 임의의 노드 바로 위에 있는 노드를 의미한다.</li>
+        <li>레벨(Level)은 트리 각 층의 번호를 의미한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 자식 노드는 같은 부모를 가지는 노드 (→ 이것은 <b>형제 노드</b>의 정의)</p>
+        <div class="explain">
+          <p>용어를 바꿔치기한 전형적인 함정이다.</p>
+          <ul>
+            <li><b>자식 노드:</b> 임의의 노드 <b>바로 아래</b>에 연결된 노드</li>
+            <li><b>형제(Sibling) 노드:</b> <b>같은 부모</b>를 가지는 노드들</li>
+          </ul>
+          <p>나머지는 옳다 — ① 부모 하나에 자식이 여럿 달리므로 <b>1:n 비선형</b>, ③ 부모 노드의 정의, ④ 레벨의 정의.</p>
+          <p><b>대비법:</b> 트리 용어 문제는 <b>자식 ↔ 형제</b>, <b>차수 ↔ 레벨</b>, <b>높이 ↔ 깊이</b>처럼 <b>짝지어 바꿔치기</b>하는 방식으로 나온다. 용어를 외울 때 항상 "헷갈리는 짝"과 함께 묶어서 외워라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2021 국회 · 기출문제집 p.478</span></div>
+      <p class="q-body">다음 데이터를 <b>순서대로</b> 입력하여 이진 탐색 트리를 만들었을 때, 이 트리의 <b>단말 노드(leaf)의 수</b>는?<br><code>12 16 7 28 60 31 23 5 35 25 2 10 15 6</code></p>
+      <ol class="choices">
+        <li>4개</li>
+        <li>5개</li>
+        <li>6개</li>
+        <li>7개</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 6개 (단말 노드: 2, 6, 10, 15, 25, 35)</p>
+        <div class="explain">
+          <p>차근차근 삽입하며 트리를 그려야 한다. 루트는 첫 값 <b>12</b>.</p>
+          <ol class="steps">
+            <li><b>16</b>(&gt;12) → 12의 오른쪽 / <b>7</b>(&lt;12) → 12의 왼쪽</li>
+            <li><b>28</b>(&gt;12,&gt;16) → 16의 오른쪽 / <b>60</b>(&gt;28) → 28의 오른쪽</li>
+            <li><b>31</b>(&gt;28, &lt;60) → 60의 왼쪽 / <b>23</b>(&gt;16, &lt;28) → 28의 왼쪽</li>
+            <li><b>5</b>(&lt;7) → 7의 왼쪽 / <b>35</b>(&gt;31) → 31의 오른쪽 / <b>25</b>(&gt;23) → 23의 오른쪽</li>
+            <li><b>2</b>(&lt;5) → 5의 왼쪽 / <b>10</b>(&gt;7, &lt;12) → 7의 오른쪽 / <b>15</b>(&gt;12, &lt;16) → 16의 왼쪽 / <b>6</b>(&gt;5, &lt;7) → 5의 오른쪽</li>
+          </ol>
+          <p>완성된 트리에서 <b>자식이 하나도 없는 노드</b>만 골라내면: <b>2, 6, 10, 15, 25, 35</b> → 총 <b>6개</b></p>
+          <table>
+            <tr><th>노드</th><th>왼쪽 자식</th><th>오른쪽 자식</th><th>단말?</th></tr>
+            <tr><td>12(루트)</td><td>7</td><td>16</td><td>–</td></tr>
+            <tr><td>7</td><td>5</td><td>10</td><td>–</td></tr>
+            <tr><td>5</td><td>2</td><td>6</td><td>–</td></tr>
+            <tr><td>2 / 6 / 10</td><td colspan="2">없음</td><td><b>○</b></td></tr>
+            <tr><td>16</td><td>15</td><td>28</td><td>–</td></tr>
+            <tr><td>15</td><td colspan="2">없음</td><td><b>○</b></td></tr>
+            <tr><td>28</td><td>23</td><td>60</td><td>–</td></tr>
+            <tr><td>23</td><td>없음</td><td>25</td><td>–</td></tr>
+            <tr><td>25</td><td colspan="2">없음</td><td><b>○</b></td></tr>
+            <tr><td>60</td><td>31</td><td>없음</td><td>–</td></tr>
+            <tr><td>31</td><td>없음</td><td>35</td><td>–</td></tr>
+            <tr><td>35</td><td colspan="2">없음</td><td><b>○</b></td></tr>
+          </table>
+          <p><b>함정:</b> 23이나 31처럼 <b>자식이 한쪽에만 있는 노드</b>를 단말로 잘못 세면 개수가 늘어난다. 단말 노드는 <b>양쪽 자식이 모두 없는</b> 노드다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2017 서울시 · 기출문제집 p.479</span></div>
+      <p class="q-body">빈 이진탐색트리에 <code>7, 5, 1, 8, 3, 6, 0, 2</code> 순서로 값을 삽입한 뒤 <b>중위 순회(Inorder Traversal)</b>했을 때 방문 순서는?</p>
+      <ol class="choices">
+        <li>0 1 2 3 5 6 7 8</li>
+        <li>0 2 3 1 6 5 8 7</li>
+        <li>7 5 1 0 3 2 6 8</li>
+        <li>8 6 2 3 0 1 5 7</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 0 1 2 3 5 6 7 8</p>
+        <div class="explain">
+          <p>트리를 그릴 필요조차 없는 문제다. <b>이진탐색트리를 중위 순회하면 항상 오름차순 정렬 결과가 나온다.</b> 주어진 값을 그냥 작은 순으로 나열하면 끝.</p>
+          <p><b>왜 그런가:</b> 중위 순회는 <b>왼쪽 → 루트 → 오른쪽</b> 순서로 방문한다. BST에서 왼쪽 서브트리는 전부 루트보다 작고, 오른쪽 서브트리는 전부 크므로, 이 순서로 방문하면 자동으로 작은 값부터 나온다.</p>
+          <p><b>오답 분석:</b> ③번(7 5 1 0 3 2 6 8)은 <b>전위 순회</b>(루트부터) 결과이고, ②번은 <b>후위 순회</b> 형태다. 문제에서 "Inorder"인지 "Preorder"인지 반드시 확인할 것 — 순회 종류만 바꿔서 같은 트리로 여러 해 출제된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2014 국회 · 기출문제집 p.481</span></div>
+      <p class="q-body"><b>최대 힙(max heap)</b>에 대하여 올바르게 설명한 것은?</p>
+      <ol class="choices">
+        <li>두 개의 자식 노드를 갖는 노드는 좌측 자식보다 크고 우측 자식보다는 작은 키 값이 저장된다.</li>
+        <li>힙을 중위 순회(in-order traversal)하면 정렬된 순서로 데이터를 얻을 수 있다.</li>
+        <li>완전 그래프(complete graph)에 해당된다.</li>
+        <li>루트 노드는 트리에 저장된 키 값 중 가장 큰 값을 갖는다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 루트 노드가 가장 큰 값을 갖는다</p>
+        <div class="explain">
+          <p>최대 힙은 <b>"부모 ≥ 자식"</b> 조건을 만족하는 <b>완전 이진트리</b>다. 이 조건이 모든 부모-자식 쌍에서 성립하므로, <b>맨 위 루트는 트리 전체에서 가장 큰 값</b>이 된다.</p>
+          <p><b>오답 분석 — 전부 다른 자료구조와 헷갈리게 만든 함정:</b></p>
+          <ul>
+            <li>① "좌측보다 크고 우측보다 작다"는 <b>이진탐색트리(BST)</b>의 설명이다. 힙은 <b>형제·좌우 간의 대소관계를 전혀 보장하지 않는다.</b></li>
+            <li>② 중위 순회로 정렬 결과가 나오는 것도 <b>BST</b>의 성질이다. 힙에서 정렬된 순서를 얻으려면 루트를 꺼내고 재정렬하는 <b>힙 정렬</b> 과정을 반복해야 한다.</li>
+            <li>③ 힙은 <b>완전 이진트리(complete binary tree)</b>이지 <b>완전 그래프(complete graph)</b>가 아니다. 용어가 비슷해 보이지만 완전 그래프는 모든 정점이 서로 연결된 그래프로 전혀 다른 개념이다.</li>
+          </ul>
+          <p><b>한 줄 정리:</b> BST는 <b>좌우</b> 순서를 보장하고, 힙은 <b>위아래</b> 순서만 보장한다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -154,6 +404,14 @@
       <span class="chip">완전이진트리</span>
       <span class="chip">이진탐색트리</span>
       <span class="chip">BST</span>
+      <span class="chip">차수</span>
+      <span class="chip">레벨</span>
+      <span class="chip">간선</span>
+      <span class="chip">형제노드</span>
+      <span class="chip">편향트리</span>
+      <span class="chip">최대높이</span>
+      <span class="chip">최소높이</span>
+      <span class="chip">힙정렬</span>
     </div>
   </section>
 

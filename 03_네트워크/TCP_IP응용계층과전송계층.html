@@ -11,33 +11,133 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / TCP/IP 응용계층과 전송계층</div>
   <h1 class="page-title">TCP/IP 응용계층과 전송계층</h1>
-  <p class="page-subtitle">TCP/IP 4계층 모델, 응용계층 프로토콜, TCP 3-way handshake, TCP vs UDP · PART 03. 데이터통신론</p>
+  <p class="page-subtitle">TCP/IP 4계층 모델, 응용계층 프로토콜, 포트번호, TCP 3-way handshake, TCP vs UDP, ARP·ICMP · PART 03. 데이터통신론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
-    <p>TCP/IP는 OSI 7계층을 실무용으로 <b>4계층(네트워크접속·인터넷·전송·응용)</b>으로 단순화한 것이다.</p>
+    <p>TCP/IP는 OSI 7계층을 실무용으로 <b>4계층(네트워크접속·인터넷·전송·응용)</b>으로 단순화한 것이다. <b>세션·표현 계층은 따로 없고</b> 응용 계층이 흡수했다.</p>
     <p><b>TCP</b> = 연결지향·신뢰성 (전화 통화처럼 먼저 연결하고 확인하며 주고받음), <b>UDP</b> = 비연결·빠름 (엽서처럼 그냥 보내고 끝).</p>
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>OSI는 "교과서", TCP/IP는 "실제로 돌아가는 인터넷"</h4>
+      <p>앞 단원의 OSI 7계층은 <b>이론적 참조 모델</b>이다. 정작 지금 여러분이 이 페이지를 보고 있는 인터넷은 OSI가 아니라 <b>TCP/IP</b>라는 다른 모델 위에서 돌아간다. OSI가 먼저 설계되었지만, 실제 구현은 더 단순하고 실용적인 TCP/IP가 먼저 널리 퍼져버렸기 때문이다.</p>
+      <p>그래서 시험은 <b>두 모델의 대응 관계</b>를 집요하게 묻는다. 핵심은 이것이다 — TCP/IP는 OSI의 <b>세션·표현·응용 3개를 "응용 계층" 하나로 뭉치고</b>, <b>물리·데이터링크 2개를 "네트워크 접속 계층" 하나로 뭉쳐서</b> 7개를 4개로 줄였다. "TCP/IP에 세션 계층이 있느냐"는 문제가 나오면 답은 항상 <b>없다</b>이다.</p>
+      <p>그리고 이 단원에서 진짜 중요한 건 <b>"어떤 프로토콜이 몇 계층인가"</b>다. HTTP·SMTP·FTP·Telnet·DNS는 응용, TCP·UDP는 전송, IP·ICMP·ARP는 인터넷 계층. 매년 <b>"나머지 셋과 다른 계층에 속하는 것"</b> 형태로 반복 출제되므로, 프로토콜 이름을 보면 계층이 반사적으로 나와야 한다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>TCP/IP 4계층 vs OSI 7계층 <span class="page-ref">📖 기출문제집 p.306~307</span></h3>
+    <h3>TCP/IP 4계층 vs OSI 7계층 <span class="page-ref">📖 기출문제집 p.305~307</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 400" role="img" aria-label="OSI 7계층과 TCP/IP 4계층의 대응 관계: OSI의 응용 표현 세션 세 계층이 TCP/IP 응용 계층 하나에, OSI 전송이 TCP/IP 전송에, OSI 네트워크가 인터넷 계층에, OSI 데이터링크와 물리 두 계층이 네트워크 접속 계층 하나에 대응한다">
+        <text x="140" y="20" font-size="13" text-anchor="middle" font-weight="700">OSI 7계층 (이론)</text>
+        <text x="450" y="20" font-size="13" text-anchor="middle" font-weight="700">TCP/IP 4계층 (실제)</text>
+
+        <rect x="40" y="35" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="60" font-size="12.5" text-anchor="middle">7. 응용</text>
+        <rect x="40" y="80" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="105" font-size="12.5" text-anchor="middle">6. 표현</text>
+        <rect x="40" y="125" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="150" font-size="12.5" text-anchor="middle">5. 세션</text>
+
+        <rect x="350" y="35" width="240" height="130" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="470" y="88" font-size="14" text-anchor="middle" font-weight="700">응용 계층</text>
+        <text x="470" y="110" font-size="10.5" text-anchor="middle" opacity="0.8">HTTP·FTP·Telnet·SMTP</text>
+        <text x="470" y="126" font-size="10.5" text-anchor="middle" opacity="0.8">POP3·IMAP·DNS·SNMP·DHCP</text>
+        <line x1="240" y1="100" x2="348" y2="100" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <rect x="40" y="180" width="200" height="45" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="208" font-size="12.5" text-anchor="middle">4. 전송</text>
+        <rect x="350" y="180" width="240" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="470" y="200" font-size="13.5" text-anchor="middle" font-weight="700">전송 계층</text>
+        <text x="470" y="217" font-size="10.5" text-anchor="middle" opacity="0.8">TCP · UDP</text>
+        <line x1="240" y1="202" x2="348" y2="202" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <rect x="40" y="240" width="200" height="45" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="268" font-size="12.5" text-anchor="middle">3. 네트워크</text>
+        <rect x="350" y="240" width="240" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="470" y="260" font-size="13.5" text-anchor="middle" font-weight="700">인터넷 계층</text>
+        <text x="470" y="277" font-size="10.5" text-anchor="middle" opacity="0.8">IP · ARP · RARP · ICMP · IGMP</text>
+        <line x1="240" y1="262" x2="348" y2="262" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <rect x="40" y="300" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="325" font-size="12.5" text-anchor="middle">2. 데이터링크</text>
+        <rect x="40" y="345" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="370" font-size="12.5" text-anchor="middle">1. 물리</text>
+        <rect x="350" y="300" width="240" height="85" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="470" y="332" font-size="13.5" text-anchor="middle" font-weight="700">네트워크 접속 계층</text>
+        <text x="470" y="352" font-size="10.5" text-anchor="middle" opacity="0.8">Ethernet · IEEE 802 · PPP</text>
+        <text x="470" y="368" font-size="10.5" text-anchor="middle" opacity="0.8">SLIP · HDLC · MAC/LLC</text>
+        <line x1="240" y1="342" x2="348" y2="342" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+      </svg>
+      <figcaption>OSI 7계층 ↔ TCP/IP 4계층 대응 — 위쪽 3개(응용·표현·세션)가 "응용 계층" 하나로, 아래쪽 2개(데이터링크·물리)가 "네트워크 접속 계층" 하나로 합쳐졌다. 가운데 전송·네트워크는 1:1 대응.</figcaption>
+    </figure>
     <table>
       <tr><th>TCP/IP 계층</th><th>대응하는 OSI 계층</th><th>대표 프로토콜</th></tr>
-      <tr><td>응용 계층</td><td>응용·표현·세션</td><td>HTTP, FTP, TELNET, SMTP, POP3, IMAP, DNS, SNMP</td></tr>
-      <tr><td>전송 계층</td><td>전송</td><td>TCP, UDP</td></tr>
+      <tr><td>응용 계층</td><td>응용·표현·세션</td><td>HTTP, FTP, TELNET, SMTP, POP3, IMAP, DNS, SNMP, DHCP</td></tr>
+      <tr><td>전송 계층</td><td>전송</td><td><b>TCP, UDP</b> (이 둘뿐!)</td></tr>
       <tr><td>인터넷 계층</td><td>네트워크</td><td>IP, ARP, RARP, ICMP, IGMP</td></tr>
-      <tr><td>네트워크 접속 계층</td><td>데이터링크·물리</td><td>Ethernet, IEEE 802, PPP, HDLC</td></tr>
+      <tr><td>네트워크 접속 계층</td><td>데이터링크·물리</td><td>Ethernet, IEEE 802, PPP, SLIP, HDLC</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "네트워크 접속 계층은 IP주소를 MAC주소로 바꾼다" → 이건 <b>인터넷 계층의 ARP</b>가 하는 일이다. TCP/IP의 "네트워크 계층/인터넷 계층" 이름이 헷갈리기 쉬우니, <b>TCP/IP에는 "세션 계층"이 없다</b>는 것도 자주 나오는 함정(OSI에만 있음).</div>
+    <div class="tip"><b>함정 3종 세트:</b> ① <b>TCP/IP에는 세션 계층이 없다</b>(OSI에만 있음) ② "전송 계층에서 <b>IP</b> 프로토콜을 이용해 전송한다" → ❌ 전송 계층은 TCP/UDP, IP는 인터넷 계층 ③ "전송 계층: TCP, UDP, <b>FTP, SMTP</b>" → ❌ FTP·SMTP는 응용 계층</div>
+
+    <h3>웹사이트 하나 여는 데 벌어지는 일 (전체 흐름) <span class="page-ref">📖 기출문제집 p.312</span></h3>
+    <p>지금까지 배운 프로토콜이 <b>실제로 어떤 순서로 협동하는지</b> 한 장면으로 보면 전체가 정리된다. 브라우저에 주소를 치고 엔터를 누른 순간 아래 일이 벌어진다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 330" role="img" aria-label="웹 접속 과정: 브라우저가 DNS 서버에 도메인을 질의해 IP 주소를 받고, 그 IP로 TCP 3-way handshake를 수행한 뒤 HTTP 요청을 보내고 응답으로 HTML을 받는다">
+        <defs>
+          <marker id="web-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="20" y="20" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="80" y="42" font-size="12.5" text-anchor="middle" font-weight="700">브라우저</text>
+        <text x="80" y="59" font-size="10.5" text-anchor="middle" opacity="0.75">(클라이언트)</text>
+
+        <rect x="290" y="20" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="50" font-size="12.5" text-anchor="middle">DNS 서버</text>
+
+        <rect x="560" y="20" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="620" y="50" font-size="12.5" text-anchor="middle">웹 서버</text>
+
+        <line x1="140" y1="35" x2="288" y2="35" stroke="currentColor" stroke-width="1.5" marker-end="url(#web-ar)"/>
+        <text x="214" y="28" font-size="11" text-anchor="middle">① 도메인 질의</text>
+        <line x1="288" y1="58" x2="140" y2="58" stroke="currentColor" stroke-width="1.5" marker-end="url(#web-ar)"/>
+        <text x="214" y="72" font-size="11" text-anchor="middle" font-weight="700">② IP 주소 응답</text>
+
+        <text x="350" y="100" font-size="11.5" text-anchor="middle" opacity="0.8">(DNS는 UDP 53번 포트 사용 — MAC 주소가 아니라 <tspan font-weight="700">IP 주소</tspan>를 돌려준다)</text>
+
+        <line x1="80" y1="125" x2="80" y2="310" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <line x1="620" y1="125" x2="620" y2="310" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+        <line x1="80" y1="140" x2="618" y2="148" stroke="currentColor" stroke-width="1.5" marker-end="url(#web-ar)"/>
+        <text x="350" y="136" font-size="11.5" text-anchor="middle">③ SYN</text>
+        <line x1="618" y1="165" x2="80" y2="173" stroke="currentColor" stroke-width="1.5" marker-end="url(#web-ar)"/>
+        <text x="350" y="182" font-size="11.5" text-anchor="middle">④ SYN + ACK</text>
+        <line x1="80" y1="195" x2="618" y2="203" stroke="currentColor" stroke-width="1.5" marker-end="url(#web-ar)"/>
+        <text x="350" y="191" font-size="11.5" text-anchor="middle">⑤ ACK &nbsp;— 여기까지가 TCP 3-way handshake</text>
+
+        <line x1="80" y1="235" x2="618" y2="243" stroke="currentColor" stroke-width="1.8" marker-end="url(#web-ar)"/>
+        <text x="350" y="231" font-size="12" text-anchor="middle" font-weight="700">⑥ HTTP 요청 (GET /index.html)</text>
+
+        <line x1="618" y1="270" x2="80" y2="278" stroke="currentColor" stroke-width="1.8" marker-end="url(#web-ar)"/>
+        <text x="350" y="288" font-size="12" text-anchor="middle" font-weight="700">⑦ HTTP 응답 (본문에 HTML)</text>
+
+        <text x="350" y="318" font-size="11" text-anchor="middle" opacity="0.8">⑧ 브라우저가 응답 본문의 HTML을 해석해 화면에 그림</text>
+      </svg>
+      <figcaption>웹 접속 한 번에 DNS(UDP) → TCP 연결(3-way handshake) → HTTP 요청·응답이 순서대로 일어난다. <b>HTTP 요청을 보내기 전에 반드시 TCP 연결이 먼저 성립</b>해야 한다는 점이 시험 포인트.</figcaption>
+    </figure>
 
     <h3>전자메일 프로토콜과 흐름 <span class="page-ref">📖 기출문제집 p.309~311</span></h3>
     <table>
       <tr><th>프로토콜</th><th>용도</th></tr>
-      <tr><td><b>SMTP</b></td><td>메일을 <b>보낼 때(송신)</b> 사용 — 내 컴퓨터→내 메일서버, 메일서버→상대 메일서버 구간 모두 SMTP</td></tr>
-      <tr><td><b>POP3</b></td><td>메일을 <b>받을 때</b> 사용. 서버의 메일을 <b>다운로드하고 서버에서는 삭제</b>(원본이 클라이언트로 이동)</td></tr>
-      <tr><td><b>IMAP</b></td><td>메일을 <b>받을 때</b> 사용. <b>복사본만</b> 전송하고 원본은 서버에 그대로 유지 (여러 기기에서 동기화 가능)</td></tr>
+      <tr><td><b>SMTP</b> (포트 25)</td><td>메일을 <b>보낼 때(송신)</b> 사용 — 내 컴퓨터→내 메일서버, 메일서버→상대 메일서버 구간 <b>모두</b> SMTP</td></tr>
+      <tr><td><b>POP3</b> (포트 110)</td><td>메일을 <b>받을 때</b> 사용. 서버의 메일을 <b>다운로드하고 서버에서는 삭제</b>(원본이 클라이언트로 이동)</td></tr>
+      <tr><td><b>IMAP</b> (포트 143)</td><td>메일을 <b>받을 때</b> 사용. <b>복사본만</b> 전송하고 원본은 서버에 그대로 유지 (여러 기기에서 동기화 가능)</td></tr>
+      <tr><td><b>MIME</b></td><td>프로토콜이 아니라 <b>SMTP의 확장 규격</b>. ASCII가 아닌 한글·이미지·음성·영상을 메일로 보낼 수 있게 해줌</td></tr>
     </table>
     <figure class="diagram">
       <svg viewBox="0 0 700 220" role="img" aria-label="전자메일 전달 과정: 발신자에서 발신 메일서버까지, 발신 메일서버에서 수신 메일서버까지는 SMTP를 사용하고 수신 메일서버에서 수신자까지는 POP3 또는 IMAP을 사용한다">
@@ -73,29 +173,71 @@
       </svg>
       <figcaption>전자메일은 보내는 쪽 구간이 전부 SMTP, 받는 사람이 서버에서 자기 메일함으로 꺼내오는 마지막 한 구간만 POP3/IMAP을 쓴다 — "메일 받을 때도 SMTP를 쓴다"는 표현이 자주 나오는 오답 함정이다.</figcaption>
     </figure>
+    <div class="deep">
+      <h4>POP3 vs IMAP — 왜 둘 다 존재하나</h4>
+      <p><b>POP3</b>는 인터넷이 느리고 비싸던 시절 방식이다. 서버에 접속해 메일을 <b>몽땅 내 컴퓨터로 내려받고 서버에서는 지운다.</b> 그래야 서버 저장공간을 아끼고, 오프라인에서도 메일을 읽을 수 있었다. 단점은 <b>회사 PC로 받은 메일을 집 노트북에서는 볼 수 없다</b>는 것.</p>
+      <p><b>IMAP</b>은 그 문제를 해결했다. 원본은 <b>서버에 그대로 두고 복사본만</b> 보여준다. 그래서 폰·노트북·회사PC 어디서 열어도 <b>항상 같은 상태</b>로 동기화된다. 요즘 쓰는 Gmail·네이버메일 앱이 전부 IMAP 방식인 이유다.</p>
+      <p><b>한 줄 정리:</b> POP3 = 가져오고 지움(이사), IMAP = 두고 보여줌(열람).</p>
+    </div>
 
-    <h3>주요 응용계층 프로토콜과 포트 번호</h3>
+    <h3>주요 응용계층 프로토콜과 포트 번호 (암기 필수)</h3>
     <table>
-      <tr><th>프로토콜</th><th>포트</th><th>용도</th></tr>
-      <tr><td>HTTP</td><td>80</td><td>웹 페이지 전송</td></tr>
-      <tr><td>FTP</td><td>21(제어) / 20(데이터)</td><td>파일 전송</td></tr>
-      <tr><td>TELNET</td><td>23</td><td>원격 접속(내 컴퓨터에서 상대 컴퓨터를 원격 제어)</td></tr>
-      <tr><td>SMTP</td><td>25</td><td>메일 송신</td></tr>
-      <tr><td>DNS</td><td>53</td><td>도메인 이름 ↔ IP주소 변환</td></tr>
-      <tr><td>SNMP</td><td>161</td><td>망(네트워크 장비) 관리 — 일반 사용자용이 아님</td></tr>
+      <tr><th>프로토콜</th><th>포트</th><th>하위 전송계층</th><th>용도</th></tr>
+      <tr><td>HTTP</td><td>80</td><td>TCP</td><td>웹 페이지(하이퍼텍스트) 전송</td></tr>
+      <tr><td>HTTPS</td><td>443</td><td>TCP</td><td>SSL/TLS로 암호화된 웹 전송</td></tr>
+      <tr><td>FTP</td><td><b>21(제어) / 20(데이터)</b></td><td>TCP</td><td>파일 전송</td></tr>
+      <tr><td>TELNET</td><td>23</td><td>TCP</td><td>원격 접속(가상 터미널, 텍스트 기반 양방향)</td></tr>
+      <tr><td>SMTP</td><td>25</td><td>TCP</td><td>메일 송신</td></tr>
+      <tr><td>POP3 / IMAP</td><td>110 / 143</td><td>TCP</td><td>메일 수신</td></tr>
+      <tr><td>DNS</td><td>53</td><td><b>UDP</b></td><td>도메인 이름 ↔ IP주소 변환</td></tr>
+      <tr><td>SNMP</td><td>161</td><td>UDP</td><td>망(네트워크 장비) 관리 — 일반 사용자용이 아님</td></tr>
+      <tr><td>DHCP</td><td>67 / 68</td><td>UDP</td><td>IP 주소 자동(동적) 할당</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> FTP는 <b>제어 연결(명령어 주고받기)=21번, 데이터 연결(실제 파일 전송)=20번</b>이다. 숫자를 반대로 낸 오답이 자주 나온다. ICMP(오류보고)·RTP(음성/영상 스트리밍)는 이메일 프로토콜이 아니라는 것도 함정으로 자주 나옴.</div>
+    <div class="tip"><b>함정 주의:</b> ① FTP는 <b>제어=21, 데이터=20</b>이다 (반대로 낸 오답이 단골). ② <b>DNS는 UDP 기반</b>이라 "TCP 기반 프로토콜이 아닌 것"의 정답으로 자주 나온다. ③ ICMP(오류보고)·RTP(음성/영상 스트리밍)·VPN·FTP·SNMP는 <b>이메일 프로토콜이 아니다</b> — 이메일 3종은 SMTP/POP3/IMAP뿐.</div>
+
+    <h3>HTTP 메소드와 웹 관련 용어 <span class="page-ref">📖 기출문제집 p.312~313</span></h3>
+    <table>
+      <tr><th>메소드</th><th>특징</th></tr>
+      <tr><td><b>GET</b></td><td>서버에서 정보를 <b>가져올 때</b>. 데이터가 URL 뒤에 붙어 <b>노출</b>되고 길이 제한이 있음</td></tr>
+      <tr><td><b>POST</b></td><td>서버로 정보를 <b>보낼 때</b>(생성·수정). 데이터를 HTTP 메시지 <b>body에 담아</b> 보내므로 URL에 노출되지 않아 <b>최소한의 보안성</b>이 있고 <b>대용량 전송</b>에 유리</td></tr>
+      <tr><td>HEAD</td><td>본문 없이 헤더 정보만 요청</td></tr>
+    </table>
+    <table>
+      <tr><th>용어</th><th>정확한 의미</th></tr>
+      <tr><td><b>HTTP</b></td><td>웹 문서를 <b>전달하기 위한 통신 규약(프로토콜)</b></td></tr>
+      <tr><td><b>HTML</b></td><td>웹 문서를 <b>만드는 마크업 언어</b> (통신 규약이 아님 — 단골 함정)</td></tr>
+      <tr><td><b>URL</b></td><td>인터넷상에서 문서·파일의 <b>위치</b>를 나타내는 주소</td></tr>
+      <tr><td><b>SSL</b></td><td>안전한 웹 통신을 위한 <b>암호화</b> 기술</td></tr>
+      <tr><td><b>ASP</b></td><td>동적 맞춤형 웹페이지 구현을 위한 서버측 기술</td></tr>
+    </table>
+
+    <h3>DNS와 DHCP — 이름과 주소를 자동으로 처리하는 두 도우미 <span class="page-ref">📖 기출문제집 p.313</span></h3>
+    <table>
+      <tr><th>구분</th><th>DNS</th><th>DHCP</th></tr>
+      <tr><td>하는 일</td><td><b>도메인 이름 → IP 주소</b> 변환 (이름 해석)</td><td>네트워크의 각 노드에 <b>IP 주소를 자동 할당</b></td></tr>
+      <tr><td>비유</td><td>전화번호부 (이름으로 번호 찾기)</td><td>호텔 프런트 (오는 손님에게 방 번호 배정)</td></tr>
+      <tr><td>없으면</td><td>매번 IP 숫자를 외워서 입력해야 함</td><td>모든 기기에 IP를 손으로 설정해야 함</td></tr>
+      <tr><td>장점</td><td>사람이 기억하기 쉬운 이름 사용</td><td>관리 노력·설정 오류 감소, 기기를 옮겨도 재설정 불필요</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> ① "DNS는 IP 주소에 대한 <b>MAC 주소</b>를 알아낸다" → ❌ 그건 <b>ARP</b>. DNS는 도메인↔IP다. ② "DHCP는 라우터의 <b>포트 번호</b>를 설정한다" → ❌ IP 주소를 할당한다. ③ DHCP는 <b>자동뿐 아니라 수동 할당</b>도 가능하다.</div>
 
     <h3>TCP vs UDP <span class="page-ref">📖 기출문제집 p.317~319</span></h3>
     <table>
       <tr><th>구분</th><th>TCP</th><th>UDP</th></tr>
       <tr><td>연결 방식</td><td><b>연결 지향형</b> (3-way handshake로 먼저 연결)</td><td><b>비연결형</b> (그냥 보냄)</td></tr>
-      <tr><td>신뢰성</td><td>높음 — 순서보장·재전송·흐름제어</td><td>낮음 — 순서·도착 보장 안 함</td></tr>
-      <tr><td>속도</td><td>상대적으로 느림(확인 절차 때문)</td><td><b>빠름</b> (오버헤드 적음)</td></tr>
-      <tr><td>사용 예</td><td>웹(HTTP), 파일전송(FTP), 이메일(SMTP)</td><td>DNS, 스트리밍(RTP), 실시간 게임</td></tr>
-      <tr><td>흐름/혼잡제어</td><td>슬라이딩 윈도우, 혼잡제어 있음</td><td>없음</td></tr>
+      <tr><td>신뢰성</td><td>높음 — 순서보장·재전송·흐름제어</td><td>낮음 — 순서·도착 보장 안 함, <b>재전송 없음</b></td></tr>
+      <tr><td>속도·오버헤드</td><td>상대적으로 느림(확인 절차 때문), 헤더 큼</td><td><b>빠름</b>, 오버헤드 적음</td></tr>
+      <tr><td>전송 방식</td><td>1:1 <b>유니캐스트만</b> (브로드캐스팅 지원 X)</td><td>유니캐스트·브로드캐스트·멀티캐스트 가능</td></tr>
+      <tr><td>흐름/혼잡제어</td><td>슬라이딩 윈도우, <b>패킷 손실로 혼잡 정도를 측정</b>해 제어</td><td>없음</td></tr>
+      <tr><td>사용 예</td><td>웹(HTTP), 파일전송(FTP), 이메일(SMTP), 원격접속(Telnet)</td><td><b>DNS</b>, 스트리밍(RTP), 실시간 게임, SNMP</td></tr>
     </table>
     <div class="analogy"><b>비유:</b> TCP = 등기우편(받았는지 서명으로 확인, 안전하지만 느림) / UDP = 그냥 우편함에 던져넣는 전단지(빠르지만 도착 여부를 모름)</div>
+    <div class="deep">
+      <h4>왜 어떤 서비스는 일부러 신뢰성 없는 UDP를 쓰나</h4>
+      <p>언뜻 생각하면 TCP가 무조건 좋아 보인다. 그런데 <b>실시간 영상통화</b>를 생각해보자. 0.5초 전 화면 조각 하나가 깨져서 사라졌다. TCP라면 그걸 <b>다시 보내달라고 요청하고 기다린다.</b> 그 사이 대화는 계속 진행 중인데 말이다. 이미 지나간 0.5초짜리 화면을 복구해봐야 아무 쓸모가 없고, 오히려 <b>기다리느라 전체가 버벅인다.</b></p>
+      <p>그래서 이런 서비스는 <b>"조금 깨져도 좋으니 제때 도착하는 것"</b>이 훨씬 중요하다. UDP는 확인도 재전송도 하지 않으므로 지연이 최소다. DNS가 UDP를 쓰는 이유도 비슷하다 — 질의·응답이 <b>짧은 한 번</b>이라, 연결을 맺고 끊는 3-way handshake 비용이 정작 데이터보다 크기 때문이다. 응답이 안 오면 그냥 <b>한 번 더 물어보는 게</b> 더 싸다.</p>
+      <p><b>정리:</b> 정확성이 생명이면 TCP(파일·웹·메일), 속도가 생명이면 UDP(스트리밍·DNS·게임).</p>
+    </div>
 
     <h3>TCP의 3-way Handshake — 연결을 맺는 절차</h3>
     <p>TCP는 데이터를 보내기 전에 <b>"진짜 서로 통신할 준비가 됐는지"</b> 3번의 신호를 주고받아 확인한다.</p>
@@ -123,29 +265,69 @@
       </svg>
       <figcaption>3-way handshake — 이름 그대로 <b>3번</b>(SYN → SYN+ACK → ACK) 주고받아야 연결이 성립된다. 이 절차 때문에 UDP보다 느리지만, 서로 "준비됐다"는 걸 확인하고 시작하므로 신뢰성이 높다.</figcaption>
     </figure>
+    <div class="deep">
+      <h4>왜 하필 3번인가 (2번이면 안 되나?)</h4>
+      <p>연결이 성립하려면 <b>양쪽 모두</b> "내가 보낼 수 있다"와 "상대가 받을 수 있다"를 확인해야 한다.</p>
+      <ol class="steps">
+        <li><b>SYN</b>: 클라이언트 → 서버. "나 보낼게" (서버는 <b>클라이언트의 송신 능력</b>을 확인)</li>
+        <li><b>SYN+ACK</b>: 서버 → 클라이언트. "받았어(ACK) + 나도 보낼게(SYN)". 클라이언트는 이걸로 <b>자기 송신·서버 수신·서버 송신</b>까지 확인</li>
+        <li><b>ACK</b>: 클라이언트 → 서버. "네 것도 받았어". 이제야 서버가 <b>클라이언트의 수신 능력</b>을 확인</li>
+      </ol>
+      <p>2번에서 멈추면 <b>서버는 "클라이언트가 내 응답을 받았는지" 영영 모른다.</b> 그래서 최소 3번이 필요하고, 서버의 ACK와 SYN을 한 번에 묶어 보내기 때문에 4번이 아닌 3번으로 끝난다. (연결 <b>종료</b>는 각자 따로 끊어야 해서 <b>4-way</b>가 된다.)</p>
+    </div>
 
-    <h3>기타 인터넷 계층 프로토콜</h3>
+    <h3>기타 인터넷 계층 프로토콜 — ARP·RARP·ICMP <span class="page-ref">📖 기출문제집 p.321~323</span></h3>
     <table>
       <tr><th>프로토콜</th><th>역할</th></tr>
-      <tr><td>ARP (Address Resolution Protocol)</td><td>IP 주소 → <b>MAC(물리) 주소</b>로 변환</td></tr>
-      <tr><td>RARP</td><td>ARP의 반대 — MAC 주소 → IP 주소</td></tr>
-      <tr><td>ICMP</td><td>오류 보고, 상황 보고, 경로 제어정보 전달 (ping이 이걸 이용)</td></tr>
-      <tr><td>IGMP</td><td>멀티캐스트 그룹 관리</td></tr>
+      <tr><td><b>ARP</b> (Address Resolution Protocol)</td><td><b>IP 주소 → MAC(물리) 주소</b>로 변환. 요청은 <b>브로드캐스트</b>, 응답은 <b>유니캐스트</b>. 결과는 ARP 캐시 테이블에 저장해 효율↑</td></tr>
+      <tr><td><b>RARP</b></td><td>ARP의 반대 — <b>MAC 주소는 아는데 내 IP를 모를 때</b> 서버에 요청해서 IP를 받아옴</td></tr>
+      <tr><td><b>ICMP</b></td><td>IP의 비연결성을 보조 — <b>오류 보고, 상황 보고, 경로 제어정보 전달</b> (ping이 이걸 이용)</td></tr>
+      <tr><td><b>IGMP</b></td><td>멀티캐스트 그룹 관리</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "IP는 오류제어·흐름제어로 패킷 전달을 보장한다" → ❌ 틀림. <b>IP는 비연결형이고 신뢰성을 보장하지 않는다</b> — 재전송·오류복구는 상위의 TCP가 담당한다.</div>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 230" role="img" aria-label="ARP는 IP 주소를 MAC 주소로 변환하고 RARP는 반대로 MAC 주소로 IP 주소를 알아낸다는 양방향 비교 다이어그램">
+        <defs>
+          <marker id="arp-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="40" y="60" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="130" y="88" font-size="13" text-anchor="middle" font-weight="700">IP 주소 (논리)</text>
+        <text x="130" y="110" font-size="11.5" text-anchor="middle" opacity="0.8">192.168.0.10</text>
+
+        <rect x="440" y="60" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="530" y="88" font-size="13" text-anchor="middle" font-weight="700">MAC 주소 (물리)</text>
+        <text x="530" y="110" font-size="11.5" text-anchor="middle" opacity="0.8">00-1A-2B-3C-4D-5E</text>
+
+        <line x1="225" y1="80" x2="435" y2="80" stroke="currentColor" stroke-width="2" marker-end="url(#arp-ar)"/>
+        <text x="330" y="70" font-size="14" text-anchor="middle" font-weight="700">ARP</text>
+
+        <line x1="435" y1="115" x2="225" y2="115" stroke="currentColor" stroke-width="2" marker-end="url(#arp-ar)"/>
+        <text x="330" y="133" font-size="14" text-anchor="middle" font-weight="700">RARP</text>
+
+        <text x="330" y="170" font-size="11.5" text-anchor="middle" opacity="0.85">ARP: "이 IP 쓰는 사람 누구세요?" → 전체에 브로드캐스트 → 해당 호스트가 자기 MAC을 유니캐스트로 응답</text>
+        <text x="330" y="192" font-size="11.5" text-anchor="middle" opacity="0.85">RARP: "제 MAC은 이건데 제 IP가 뭔가요?" → 서버가 IP를 알려줌 (디스크 없는 단말 부팅 시 사용)</text>
+        <text x="330" y="216" font-size="11.5" text-anchor="middle" font-weight="700">암기: A(ddress)RP는 IP로 시작해서 MAC을 찾는다 / R(everse)ARP는 그 반대</text>
+      </svg>
+      <figcaption>ARP와 RARP는 정확히 반대 방향이다. 방향을 뒤집어 놓은 선지가 매년 출제되므로 화살표 방향을 그림으로 기억해두는 게 안전하다.</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> ① "IP는 오류제어·흐름제어로 패킷 전달을 <b>보장</b>한다" → ❌ <b>IP는 비연결형이고 신뢰성을 보장하지 않는다</b>. 재전송·오류복구는 상위의 TCP 담당. ② "IP가 라우팅 테이블을 <b>갱신</b>한다" → ❌ 갱신은 RIP·OSPF 같은 <b>라우팅 프로토콜</b>이 하고, IP는 그 테이블을 <b>이용</b>할 뿐이다. ③ "ARP는 MAC 주소에 대해 IP를 반환" → ❌ 그건 RARP.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>TCP/IP는 4계층: 응용/전송/인터넷/네트워크접속 — <b>세션 계층은 없음</b>(OSI에만 있음)</li>
-      <li>메일 송신은 <b>SMTP</b>, 수신은 <b>POP3(원본삭제) 또는 IMAP(원본유지)</b></li>
-      <li>FTP 포트: 제어=<b>21</b>, 데이터=<b>20</b> (반대로 낸 오답 주의)</li>
-      <li>TCP=연결지향·신뢰성·느림 / UDP=비연결·비신뢰·빠름 — 실시간 스트리밍/DNS는 UDP 사용</li>
-      <li>3-way handshake 순서: <b>SYN → SYN+ACK → ACK</b> (2단계가 아니라 3단계)</li>
-      <li>ARP는 IP→MAC, RARP는 MAC→IP (방향 헷갈리지 않기)</li>
-      <li>IP는 신뢰성 보장 안 함(비연결) — TCP만 재전송·순서보장 담당</li>
-      <li>IPv4=32비트, IPv6=128비트 (64비트로 착각하는 오답 자주 출제)</li>
+      <li>전송 계층 프로토콜은 <b>TCP·UDP 딱 둘</b>. FTP·SMTP·Telnet을 전송 계층에 넣으면 오답</li>
+      <li>메일 송신은 <b>SMTP</b>, 수신은 <b>POP3(원본삭제) 또는 IMAP(원본유지)</b>. MIME은 SMTP 확장 규격</li>
+      <li>FTP 포트: 제어=<b>21</b>, 데이터=<b>20</b> (반대로 낸 오답 주의), 능동/수동 전송 모드 존재</li>
+      <li><b>DNS는 UDP 기반</b> — "TCP 기반이 아닌 것" 문제의 단골 정답</li>
+      <li>TCP=연결지향·신뢰성·느림·유니캐스트만 / UDP=비연결·비신뢰·빠름·브로드캐스트 가능</li>
+      <li>3-way handshake 순서: <b>SYN → SYN+ACK → ACK</b> (연결 종료는 4-way)</li>
+      <li>ARP는 <b>IP→MAC</b>, RARP는 <b>MAC→IP</b> (방향 헷갈리지 않기)</li>
+      <li>ICMP = 오류보고·상황보고·경로제어정보 전달, <b>인터넷 계층</b>(응용 아님)</li>
+      <li>IP는 신뢰성 보장 안 함(비연결) — 재전송·순서보장은 TCP만</li>
+      <li>IPv4=<b>32비트</b>, IPv6=<b>128비트</b> (64비트로 착각하는 오답 자주 출제)</li>
+      <li>DNS는 도메인↔IP, DHCP는 IP 자동할당, ARP는 IP→MAC — 셋을 섞어놓는 문제 주의</li>
+      <li>HTML은 <b>언어</b>, HTTP는 <b>통신 규약</b> (바꿔치기 단골)</li>
     </ul>
   </section>
 
@@ -155,13 +337,316 @@
       <tr><th>구분</th><th>POP3</th><th>IMAP</th></tr>
       <tr><td>메일 원본</td><td>다운로드 후 서버에서 <b>삭제</b></td><td>서버에 <b>유지</b>, 복사본만 전송</td></tr>
       <tr><td>여러 기기 동기화</td><td>어려움 (한 기기로 이동)</td><td>쉬움 (서버 기준으로 항상 동일)</td></tr>
+      <tr><td>포트</td><td>110</td><td>143</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>TCP</th><th>UDP</th></tr>
       <tr><td>연결</td><td>연결지향(3-way handshake)</td><td>비연결</td></tr>
       <tr><td>순서·재전송</td><td>보장함</td><td>보장 안 함</td></tr>
-      <tr><td>대표 활용</td><td>웹, 메일, 파일전송</td><td>DNS, 스트리밍, 게임</td></tr>
+      <tr><td>브로드캐스트</td><td>불가(1:1만)</td><td>가능</td></tr>
+      <tr><td>대표 활용</td><td>웹, 메일, 파일전송, Telnet</td><td>DNS, 스트리밍, 게임, SNMP</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>DNS</th><th>ARP</th><th>DHCP</th></tr>
+      <tr><td>변환·할당</td><td>도메인 이름 → IP</td><td>IP → MAC</td><td>IP 주소를 자동 할당</td></tr>
+      <tr><td>계층</td><td>응용</td><td>인터넷</td><td>응용</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2011 지방직 · 기출문제집 p.305</span></div>
+      <p class="q-body">TCP/IP 프로토콜 계층 구조가 <b>아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>응용 계층(application layer)</li>
+        <li>전송 계층(transport layer)</li>
+        <li>네트워크/인터넷 계층(network/internet layer)</li>
+        <li>세션 계층(session layer)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 세션 계층</p>
+        <div class="explain">
+          <p>TCP/IP는 <b>4계층</b>: 응용 / 전송 / 인터넷(네트워크) / 네트워크 접속.</p>
+          <p><b>세션 계층과 표현 계층은 OSI 7계층에만</b> 있고, TCP/IP에서는 이 둘의 기능을 <b>응용 계층이 흡수</b>했다.</p>
+          <p><b>한 줄 암기:</b> "TCP/IP에 세션·표현 없다. 응용이 다 먹었다."</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2009 지방직 · 기출문제집 p.306</span></div>
+      <p class="q-body">TCP/IP의 계층구조에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>네트워크 접속 계층(Network Interface Layer)은 물리적 계층으로 IP 주소를 MAC 주소로 변환한다.</li>
+        <li>인터넷 계층(Internet Layer)에서는 데이터를 정의하고 라우팅(Routing) 업무를 담당한다.</li>
+        <li>전송 계층(Transport Layer)에서는 IP 프로토콜을 이용하여 데이터를 전송한다.</li>
+        <li>응용 계층(Application Layer)에서는 FTP, SMTP, Telnet 등과 같은 응용 프로그램을 제공한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (전송 계층은 <b>TCP</b>를 이용한다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>전송 계층의 프로토콜은 <b>TCP와 UDP</b>다</li>
+            <li><b>IP 프로토콜은 인터넷 계층</b>에서 데이터를 전송할 때 쓴다</li>
+            <li>따라서 "전송 계층에서 IP를 이용"은 계층을 한 칸 어긋나게 쓴 오답</li>
+          </ol>
+          <p><b>주의:</b> ①번은 표현이 어색해 보여도 정답이 아니다. IP↔MAC 변환은 엄밀히 ARP(인터넷 계층)의 일이지만, 이 문제에서 <b>명백히 틀린 것은 ③</b>이므로 "가장 틀린 것"을 고르는 눈이 필요하다. 계층-프로토콜 짝이 어긋난 선지를 우선 의심할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2013 국가직 · 기출문제집 p.306</span></div>
+      <p class="q-body">TCP/IP 프로토콜의 계층과 그 관련 요소의 연결이 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>데이터 링크 계층: IEEE 802, Ethernet, HDLC</li>
+        <li>네트워크 계층: IP, ICMP, IGMP, ARP</li>
+        <li>전송 계층: TCP, UDP, FTP, SMTP</li>
+        <li>응용 계층: POP3, DNS, HTTP, TELNET</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (FTP·SMTP는 <b>응용 계층</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>전송 계층에 속하는 것은 <b>TCP와 UDP 둘뿐</b>이다</li>
+            <li><b>FTP</b>(파일 전송)와 <b>SMTP</b>(메일 송신)는 사용자 서비스이므로 <b>응용 계층</b></li>
+            <li>나머지 ①②④는 모두 올바른 연결</li>
+          </ol>
+          <p><b>공략법:</b> 이 유형은 <b>전송 계층 선지부터 본다.</b> TCP·UDP 외에 다른 이름이 하나라도 섞여 있으면 그게 정답이다. 실제로 이 책 기출에서 "전송 계층 — TCP, TELNET"(2022 국회), "전송 계층 — ISDN"(2008 국가직)도 같은 방식으로 출제됐다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2023 지방직 · 기출문제집 p.307</span></div>
+      <p class="q-body">TCP/IP 프로토콜 계층 구조에서 다음 중 <b>나머지 셋과 다른 계층</b>에 속하는 프로토콜은?</p>
+      <ol class="choices">
+        <li>HTTP</li>
+        <li>SMTP</li>
+        <li>DNS</li>
+        <li>ICMP</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ ICMP</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>HTTP(웹), SMTP(메일 송신), DNS(이름 해석) → 모두 <b>응용 계층</b></li>
+            <li><b>ICMP</b>는 오류·상황 보고용으로 <b>인터넷 계층</b> (IP의 짝꿍)</li>
+          </ol>
+          <p><b>구분 요령:</b> 이름에 <b>"Internet Control"</b>이 들어간 ICMP, <b>"Internet Group"</b>이 들어간 IGMP, 그리고 IP·ARP·RARP는 전부 <b>인터넷 계층</b>이다. 반면 사람이 직접 쓰는 서비스(웹·메일·파일·원격접속·이름조회)는 전부 응용 계층.</p>
+          <p><b>같은 유형:</b> 2011 지방직에서도 HTTP/SMTP/IMAP 중 <b>ICMP</b>가 정답이었다. 거의 매년 ICMP가 "혼자 다른 계층"으로 등장한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2018 지방직 · 기출문제집 p.309</span></div>
+      <p class="q-body">전자메일의 송신 또는 수신을 목적으로 하는 응용 계층 프로토콜에 <b>해당하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>IMAP</li>
+        <li>POP3</li>
+        <li>SMTP</li>
+        <li>SNMP</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ SNMP</p>
+        <div class="explain">
+          <p>이메일 프로토콜은 <b>딱 3개</b>다: 송신 <b>SMTP</b>, 수신 <b>POP3 / IMAP</b>.</p>
+          <p><b>SNMP</b>(Simple Network Management Protocol)는 이름이 SMTP와 한 글자 차이라 헷갈리게 만든 함정이다. 실제 용도는 <b>네트워크 장비 관리</b>(망 관리)이고 <b>일반 사용자용 프로토콜이 아니다.</b></p>
+          <ul>
+            <li>S<b>M</b>TP = <b>M</b>ail (메일)</li>
+            <li>S<b>N</b>MP = <b>N</b>etwork management (망 관리)</li>
+          </ul>
+          <p><b>같은 유형의 다른 정답들:</b> VPN(2008 국가직), FTP(2024 지방직), RTP(2022 계리직) — 전부 "이메일 프로토콜이 아닌 것"으로 출제됐다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2018 교육청 · 기출문제집 p.310</span></div>
+      <p class="q-body">전자우편의 전달 과정에서 ㉠~㉢에 사용되는 프로토콜을 올바르게 짝지은 것은?<br>
+      ㉠ 발신자 단말기 → 발신측 메일서버 / ㉡ 발신측 메일서버 → 수신측 메일서버 / ㉢ 수신측 메일서버 → 수신자 단말기</p>
+      <ol class="choices">
+        <li>㉠ SMTP · ㉡ SMTP · ㉢ IMAP</li>
+        <li>㉠ SMTP · ㉡ IMAP · ㉢ POP3</li>
+        <li>㉠ POP3 · ㉡ SMTP · ㉢ IMAP</li>
+        <li>㉠ POP3 · ㉡ IMAP · ㉢ POP3</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① SMTP · SMTP · IMAP</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>㉠ 내 단말기에서 내 메일서버로 <b>보내는</b> 구간 → <b>SMTP</b></li>
+            <li>㉡ 메일서버끼리 <b>전달하는</b> 구간 → 역시 <b>SMTP</b></li>
+            <li>㉢ 수신자가 서버에서 <b>꺼내오는</b> 마지막 구간 → <b>POP3 또는 IMAP</b> (선지에서는 IMAP)</li>
+          </ol>
+          <p><b>핵심:</b> "보내는 방향은 끝까지 SMTP, <b>마지막 한 구간만</b> POP3/IMAP". 위 전자메일 흐름 다이어그램을 그대로 떠올리면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2021 국회 · 기출문제집 p.317</span></div>
+      <p class="q-body">파일 전송 프로토콜(FTP)에 대한 설명으로 <b>옳은 것만</b>을 모두 고르면?</p>
+      <div class="tip" style="margin:8px 0;">
+        ㄱ. 응용 계층 프로토콜이다.<br>
+        ㄴ. FTP에서 제어 연결은 20번 포트, 데이터 연결은 21번 포트를 사용한다.<br>
+        ㄷ. FTP 연결은 능동(Active) 전송 모드와 수동(Passive) 전송 모드로 구분한다.
+      </div>
+      <ol class="choices">
+        <li>ㄱ</li>
+        <li>ㄴ</li>
+        <li>ㄱ, ㄷ</li>
+        <li>ㄴ, ㄷ</li>
+        <li>ㄱ, ㄴ, ㄷ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ ㄱ, ㄷ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ 맞음</b>: FTP는 파일 전송을 위한 <b>응용 계층</b> 프로토콜</li>
+            <li><b>ㄴ 틀림</b>: 번호가 <b>반대</b>다. <b>제어 연결 = 21번, 데이터 연결 = 20번</b></li>
+            <li><b>ㄷ 맞음</b>: 서버의 20번 포트를 쓰는 <b>능동(Active)</b> 모드와, 클라이언트의 임의 포트를 데이터 포트로 쓰는 <b>수동(Passive)</b> 모드로 구분된다</li>
+          </ol>
+          <p><b>암기법:</b> <b>"제어가 먼저 연결되니 번호도 큰 21"</b>… 이 헷갈리면 이렇게 외우자 — <b>명령(제어)은 2·1, 데이터는 2·0</b>. 한 문제를 위해서라도 두 숫자 순서를 반드시 확정해둘 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2015 국회 · 기출문제집 p.317</span></div>
+      <p class="q-body">다음 중 TCP(Transmission Control Protocol)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>OSI 7계층 모델에서 트랜스포트(transport) 계층에 해당한다.</li>
+        <li>다수의 기기에 대한 브로드캐스팅(broadcasting)을 지원한다.</li>
+        <li>Connection-oriented 프로토콜이다.</li>
+        <li>패킷이 전송 도중 손상되거나 손실될 경우 재전송을 수행한다.</li>
+        <li>흐름 제어(flow control) 기능이 지원된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (TCP는 브로드캐스팅을 지원하지 않는다)</p>
+        <div class="explain">
+          <p>TCP는 <b>연결 지향형</b>이다. 연결을 맺으려면 <b>상대가 누구인지 특정</b>되어야 하고, 3-way handshake로 <b>1:1 연결</b>을 수립한다. 불특정 다수에게 뿌리는 브로드캐스트는 애초에 "연결"이라는 개념과 맞지 않는다.</p>
+          <ol class="steps">
+            <li>TCP = <b>유니캐스트(1:1) 전용</b></li>
+            <li>브로드캐스트·멀티캐스트가 필요하면 <b>UDP</b>를 쓴다</li>
+          </ol>
+          <p>나머지 선지는 전부 TCP의 정확한 특징이다: 전송 계층 소속, 연결지향, 손실 시 재전송, 흐름제어 지원. 여기에 <b>혼잡제어(패킷 손실로 혼잡 정도를 측정)</b>도 TCP 기능이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2017 지방직 · 기출문제집 p.319</span></div>
+      <p class="q-body">네트워크 프로토콜에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>TCP와 UDP는 전송 계층에 속하는 프로토콜로서 데이터 전송의 신뢰성을 보장한다.</li>
+        <li>IP는 네트워크 호스트의 주소 지정과 경로 설정을 담당하는 네트워크 계층 프로토콜이다.</li>
+        <li>SMTP는 전자메일 전송을 위한 응용 계층 프로토콜이다.</li>
+        <li>IPv4에서 예상되는 IP 주소의 고갈 문제 해결을 주요 목적으로 IPv6가 제안되었다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (UDP는 신뢰성을 보장하지 <b>않는다</b>)</p>
+        <div class="explain">
+          <p>선지 ①은 앞부분("TCP와 UDP는 전송 계층")은 맞지만 <b>뒷부분이 틀렸다.</b> 이렇게 <b>절반만 맞는 문장</b>이 가장 놓치기 쉬운 오답이다.</p>
+          <ol class="steps">
+            <li><b>TCP</b>: 순서 보장·재전송·흐름제어 → 신뢰성 O</li>
+            <li><b>UDP</b>: 비연결형, 재전송 없음 → 신뢰성 <b>X</b></li>
+            <li>"TCP<b>와</b> UDP<b>는</b> … 신뢰성을 보장한다"처럼 <b>둘을 묶어</b> 서술하면 거의 항상 오답</li>
+          </ol>
+          <p><b>읽기 요령:</b> 선지에 "A와 B는 모두 ~하다"가 보이면 <b>둘 중 하나만 반례여도 틀린 문장</b>이다. TCP/UDP, ARP/RARP처럼 성격이 반대인 짝이 함께 묶여 있으면 특히 의심할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2012 국가직 · 기출문제집 p.319</span></div>
+      <p class="q-body">TCP/IP 프로토콜에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>ARP(Address Resolution Protocol)는 IP주소를 물리주소로 변환해준다.</li>
+        <li>IP는 오류제어와 흐름제어를 통하여 패킷의 전달을 보장한다.</li>
+        <li>TCP는 패킷 손실을 이용하여 혼잡(congestion) 정도를 측정하여 제어하는 기능도 있다.</li>
+        <li>HTTP, FTP, SMTP와 같은 프로토콜은 전송 계층 위에서 동작한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (오류·흐름제어로 전달을 보장하는 것은 <b>TCP</b>)</p>
+        <div class="explain">
+          <p><b>IP의 정체</b>를 정확히 알아야 한다. IP는 <b>비연결형(connectionless)</b> 데이터그램 프로토콜로, 간단한 오류 검사만 할 뿐 <b>도착을 보장하지 않는다.</b> "최선을 다해 보내보지만 책임은 안 진다(best-effort)"가 IP의 성격이다.</p>
+          <ol class="steps">
+            <li>패킷이 사라져도 IP는 모른 척한다</li>
+            <li>그 손실을 발견하고 <b>재전송</b>시키는 것이 위층의 <b>TCP</b></li>
+            <li>그래서 둘을 합쳐 <b>TCP/IP</b>로 같이 쓰는 것이다 — IP가 길을 찾고, TCP가 책임진다</li>
+          </ol>
+          <p>나머지 선지는 모두 옳다. 특히 ③의 <b>혼잡제어</b>는 TCP의 중요한 기능이고, ④처럼 응용 계층 프로토콜들은 전송 계층(TCP) 위에서 동작한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2018 국회 · 기출문제집 p.312</span></div>
+      <p class="q-body">사용자가 WWW을 사용하여 임의의 사이트에 접속하는 과정의 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>사용자의 웹브라우저에서 DNS 서버로 DNS 질의 메시지를 보낸다.</li>
+        <li>DNS 간의 질의는 재귀형(recursive) 또는 반복형(iterative)으로 연계된다.</li>
+        <li>사용자의 웹브라우저는 DNS 서버로부터 사이트의 웹 서버 MAC 주소를 획득한다.</li>
+        <li>HTTP 요청 메시지를 보내기 전에 TCP 3-방향 핸드셰이크를 수행한다.</li>
+        <li>웹 서버가 보낸 HTTP 응답 메시지의 바디로부터 HTML을 추출하여 웹 페이지를 보여준다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (DNS 서버에서 얻는 것은 <b>IP 주소</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>DNS가 하는 일은 <b>도메인 이름 → IP 주소</b> 변환뿐이다</li>
+            <li><b>MAC 주소</b>를 알아내는 것은 같은 네트워크 안에서 동작하는 <b>ARP</b>의 일이다</li>
+            <li>애초에 DNS 서버는 멀리 떨어진 웹서버의 MAC 주소를 알 방법도 없다 (MAC은 같은 로컬 네트워크에서만 의미가 있음)</li>
+          </ol>
+          <p>나머지 선지는 위 "웹 접속 전체 흐름" 다이어그램과 정확히 일치한다: DNS 질의(①) → IP 획득 → <b>TCP 3-way handshake 먼저</b>(④) → HTTP 요청 → 응답 본문의 HTML 렌더링(⑤).</p>
+          <p><b>세트로 기억:</b> DNS=이름→IP / ARP=IP→MAC / DHCP=IP 자동할당. 셋을 섞어놓는 문제가 매년 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2014 국회 · 기출문제집 p.323</span></div>
+      <p class="q-body">TCP/IP 프로토콜에서 IP 호스트가 <b>자신의 물리 네트워크 주소(MAC)는 알지만 IP 주소를 모르는 경우</b>, 서버에게 IP 주소를 요청하기 위해 사용하는 프로토콜은?</p>
+      <ol class="choices">
+        <li>RARP</li>
+        <li>ICMP</li>
+        <li>ARP</li>
+        <li>IGMP</li>
+        <li>UDP</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① RARP</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>가진 것 = <b>MAC 주소</b>, 알고 싶은 것 = <b>IP 주소</b></li>
+            <li>방향이 <b>MAC → IP</b>이므로 ARP의 역방향, 즉 <b>R</b>everse ARP = <b>RARP</b></li>
+          </ol>
+          <p><b>방향 정리 (그림으로 외우기):</b></p>
+          <ul>
+            <li><b>ARP</b>: IP 알고 있음 → MAC 찾기 (같은 랜 안에서 실제로 프레임을 보내려면 MAC이 필요)</li>
+            <li><b>RARP</b>: MAC 알고 있음 → IP 찾기 (하드디스크 없는 단말이 부팅할 때 자기 IP를 모르는 상황)</li>
+          </ul>
+          <p><b>함정 선지 분석:</b> ICMP는 오류·상황 보고, IGMP는 멀티캐스트 그룹 관리, UDP는 전송 계층 프로토콜 — 모두 주소 변환과 무관하다. "ARP"(③)를 고르면 방향을 반대로 읽은 것이다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -175,19 +660,27 @@
       <span class="chip">SMTP</span>
       <span class="chip">POP3</span>
       <span class="chip">IMAP</span>
+      <span class="chip">MIME</span>
       <span class="chip">FTP</span>
       <span class="chip">TELNET</span>
       <span class="chip">DNS</span>
+      <span class="chip">DHCP</span>
       <span class="chip">SNMP</span>
+      <span class="chip">HTTP</span>
+      <span class="chip">HTML</span>
+      <span class="chip">GET/POST</span>
+      <span class="chip">포트번호</span>
       <span class="chip">TCP</span>
       <span class="chip">UDP</span>
       <span class="chip">3-way handshake</span>
       <span class="chip">SYN</span>
       <span class="chip">ACK</span>
+      <span class="chip">혼잡제어</span>
       <span class="chip">ARP</span>
       <span class="chip">RARP</span>
       <span class="chip">ICMP</span>
       <span class="chip">IGMP</span>
+      <span class="chip">IPv4/IPv6</span>
     </div>
   </section>
 

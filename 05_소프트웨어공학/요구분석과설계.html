@@ -10,23 +10,142 @@
 <div class="page">
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 요구분석과 설계</div>
-  <h1 class="page-title">요구분석과 설계 — 결합도·응집도</h1>
-  <p class="page-subtitle">모듈 독립성의 두 척도 · PART 06. 소프트웨어공학</p>
+  <h1 class="page-title">요구분석과 설계</h1>
+  <p class="page-subtitle">요구사항 명세 · 구조적 분석(DFD) · 결합도·응집도 · PART 06. 소프트웨어공학</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
+    <p>요구사항은 <b>기능적 요구</b>(무엇을 하는가)와 <b>비기능적 요구</b>(성능·보안·신뢰성 등)로 나뉜다.</p>
+    <p>구조적 분석의 3대 도구: <b>자료흐름도(DFD) · 자료사전 · 소단위 명세서</b></p>
     <p><b>결합도(모듈 사이의 관련성)는 낮을수록</b>, <b>응집도(모듈 내부의 관련성)는 높을수록</b> 좋은 설계다.</p>
-    <p>결합도·응집도는 모두 <b>모듈의 독립성</b>을 판단하는 척도이고, 시험은 거의 항상 "어느 쪽이 더 강하냐/약하냐 순서"를 묻는다.</p>
   </div>
 
   <section class="block">
-    <h2><span class="emoji">💡</span>주요 개념</h2>
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"잘 만든 프로그램"을 어떻게 객관적으로 판정할 것인가</h4>
+      <p>분석·설계 단계는 <b>코드를 한 줄도 쓰지 않는 단계</b>다. 그런데 소프트웨어공학에서 가장 비중 있게 다루는 이유는, <b>여기서 잘못 정한 것을 나중에 고치는 비용이 기하급수적으로 커지기 때문</b>이다. 요구분석에서 놓친 항목을 운영 단계에서 발견하면 수정 비용이 수십 배로 뛴다.</p>
+      <p>설계 단계의 핵심 질문은 <b>"프로그램을 어떻게 쪼갤 것인가(모듈화)"</b>다. 쪼개긴 쪼개야 하는데, 아무렇게나 쪼개면 오히려 더 나빠진다. 그래서 <b>"잘 쪼갰는지"를 재는 자(척도)</b>가 필요했고, 그게 결합도와 응집도다.</p>
+      <p>직관은 간단하다 — <b>한 덩어리 안은 서로 끈끈하게(응집도 ↑), 덩어리끼리는 최대한 남남처럼(결합도 ↓).</b> 그래야 한 모듈을 고쳐도 다른 모듈이 안 깨지고, 모듈 하나만 떼어내 재사용할 수도 있다. 시험은 이 두 척도의 <b>단계별 순서</b>를 집요하게 묻는다 — 사실상 암기 문제이므로 두 개의 암기 문장만 확실히 잡으면 된다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📋</span>주요 개념 — 요구분석</h2>
+
+    <h3>요구사항의 두 종류 <span class="page-ref">📖 기출문제집 p.629</span></h3>
+    <table>
+      <tr><th>구분</th><th>내용</th><th>예시</th></tr>
+      <tr><td><b>기능적 요구</b><br>(Functional)</td><td>시스템이 <b>무엇을 해야 하는가</b> — 정보처리 능력, 절차, 입·출력에 대한 요구</td><td>"회원가입 시 이메일 중복을 검사한다"</td></tr>
+      <tr><td><b>비기능적 요구</b><br>(Non-functional)</td><td>기능 자체와 직접 관련되지 않은 <b>품질·제약 조건</b></td><td>성능, 신뢰성, 가용성, 보안성, 안전성, 제약조건</td></tr>
+    </table>
+
+    <div class="deep">
+      <h4>좋은 요구사항의 조건</h4>
+      <ul>
+        <li>각 요구사항은 <b>명확하고, 구체적이고, 정확하며, 검증 가능</b>해야 한다</li>
+        <li>요구사항은 고품질 소프트웨어를 개발하고 <b>검증할 수 있는 기초</b>를 제공한다</li>
+        <li><b>"당연한 것"도 반드시 기술해야 한다</b> — 고객과 개발자가 서로 당연하다고 여기는 항목이 나중에 가장 크게 어긋난다</li>
+      </ul>
+      <p><b>자주 나오는 함정:</b> "고객과 개발자가 서로 당연한 것으로 인정하는 요구사항은 생략해도 무방하다" → <b>✗ 오답.</b> 암묵적 가정이야말로 분쟁의 씨앗이라 반드시 문서화해야 한다.</p>
+    </div>
+
+    <h3>요구분석 명세서(SRS)에 담기는 것 <span class="page-ref">📖 기출문제집 p.629</span></h3>
+    <ul>
+      <li>시스템에 영향을 주는 <b>제약 조건</b> (비기능적 요구)</li>
+      <li><b>사용자 인터페이스</b>에 대한 명세</li>
+      <li>시스템 <b>인수를 위한 테스트 기준</b> (인수 테스트에서 쓸 테스트 케이스)</li>
+      <li>❌ <b>자료 구조 명세는 포함하지 않는다</b> — 자료 구조는 <b>설계</b> 단계의 산출물이다</li>
+    </ul>
+    <div class="tip"><b>구분 기준:</b> SRS는 "<b>무엇을</b> 만들 것인가"를 적는 문서다. "<b>어떻게</b> 만들 것인가"(자료구조, 알고리즘, 모듈 분할)는 설계 단계로 넘어간다. 이 경계가 시험 포인트다.</div>
+
+    <h3>구조적 분석의 3대 도구와 작업 순서 <span class="page-ref">📖 기출문제집 p.629~630</span></h3>
+    <p>구조적 분석은 <b>"전체를 크게 그린 뒤 점점 잘게 쪼개 들어가는(하향식)"</b> 방식이다. 순서가 그대로 시험에 나온다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 740 300" role="img" aria-label="구조적 분석 작업 순서: 배경도에서 시작해 상위 자료흐름도, 하위 자료흐름도로 점점 상세해지고 자료사전과 소단위 명세서로 마무리되는 하향식 흐름">
+        <defs>
+          <marker id="sa1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <rect x="230" y="20" width="270" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="365" y="38" font-size="12.5" text-anchor="middle" font-weight="700">① 배경도 (Context Diagram)</text>
+        <text x="365" y="53" font-size="10.5" text-anchor="middle" opacity="0.75">시스템 전체를 원 하나로 + 외부 요소</text>
+        <line x1="365" y1="60" x2="365" y2="85" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+        <rect x="230" y="88" width="270" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="365" y="106" font-size="12.5" text-anchor="middle" font-weight="700">② 상위 자료흐름도 (DFD)</text>
+        <text x="365" y="121" font-size="10.5" text-anchor="middle" opacity="0.75">큰 기능 몇 개로 분할</text>
+        <line x1="365" y1="128" x2="365" y2="153" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+        <rect x="230" y="156" width="270" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="365" y="174" font-size="12.5" text-anchor="middle" font-weight="700">③ 하위 자료흐름도 (DFD)</text>
+        <text x="365" y="189" font-size="10.5" text-anchor="middle" opacity="0.75">더 잘게 분할 (최하위 = 원시 프로세스)</text>
+        <line x1="365" y1="196" x2="365" y2="221" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+        <rect x="150" y="224" width="200" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="250" y="242" font-size="12.5" text-anchor="middle" font-weight="700">④ 자료 사전</text>
+        <text x="250" y="256" font-size="10.5" text-anchor="middle" opacity="0.75">DFD의 자료를 설명</text>
+
+        <rect x="380" y="224" width="200" height="40" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="242" font-size="12.5" text-anchor="middle" font-weight="700">⑤ 소단위 명세서</text>
+        <text x="480" y="256" font-size="10.5" text-anchor="middle" opacity="0.75">최하위 프로세스를 설명</text>
+
+        <line x1="365" y1="210" x2="250" y2="220" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)"/>
+        <line x1="365" y1="210" x2="480" y2="220" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)"/>
+
+        <text x="20" y="40" font-size="11.5" font-weight="700">추상적</text>
+        <text x="20" y="58" font-size="11" opacity="0.75">(큰 그림)</text>
+        <line x1="45" y1="70" x2="45" y2="200" stroke="currentColor" stroke-width="1.5" marker-end="url(#sa1)" opacity="0.6"/>
+        <text x="20" y="220" font-size="11.5" font-weight="700">구체적</text>
+        <text x="20" y="238" font-size="11" opacity="0.75">(세부 사항)</text>
+
+        <text x="600" y="100" font-size="11.5" font-weight="700">암기</text>
+        <text x="600" y="122" font-size="11">배 → 상 → 하 → 사 → 소</text>
+        <text x="600" y="142" font-size="11" opacity="0.8">"배가 상하면 사소해진다"</text>
+      </svg>
+      <figcaption>구조적 분석의 작업 순서 — 배경도(전체 한 장) → 상위 DFD → 하위 DFD로 점점 잘게 쪼갠 뒤, 자료사전과 소단위 명세서로 세부를 채운다.</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>도구</th><th>역할</th></tr>
+      <tr><td><b>자료흐름도 (DFD)</b></td><td>가장 보편적인 시스템 모델링 도구. <b>기능 중심</b> 모델링에 적합. 구성요소 4가지: <b>프로세스, 자료 흐름, 자료 저장소, 자료 출처/도착지</b></td></tr>
+      <tr><td><b>자료 사전 (Data Dictionary)</b></td><td>DFD에 등장하는 <b>자료 흐름·자료 저장소의 의미</b>와 값·단위를 서술</td></tr>
+      <tr><td><b>소단위 명세서 (mini-spec)</b></td><td>DFD의 <b>최하위(원시) 프로세스</b>가 무슨 기능을 하는지 기술. <b>구조적 영어, 의사결정표, 전후 조건</b> 등으로 작성</td></tr>
+    </table>
+    <div class="tip">
+      <b>DFD 기호 함정 (2023 국가직 출제):</b><br>
+      • 프로세스(처리) = <b>원</b> ○ &nbsp;&nbsp;• 자료 저장소 = <b>옆면이 없는 사각형(평행선)</b> ▤<br>
+      "자료저장소를 원으로 표현한다"는 문장은 <b>오답</b> — 원은 프로세스다.<br>
+      자료사전 기호 중 <b>선택은 [ | ]</b>, ( )는 <b>생략(옵션)</b>을 뜻한다.
+    </div>
+
+    <h3>구조적 방법론 vs 객체지향 방법론의 도구 대응 <span class="page-ref">📖 기출문제집 p.631~632</span></h3>
+    <table>
+      <tr><th>단계</th><th>구조적 방법론</th><th>객체지향 방법론</th></tr>
+      <tr><td><b>분석</b></td><td><b>자료흐름도(DFD)</b>, 자료사전, 소단위 명세서</td><td><b>유스케이스 다이어그램</b></td></tr>
+      <tr><td><b>설계</b></td><td><b>구조도</b>, HIPO, NS-chart</td><td><b>시퀀스·상태·액티비티·클래스 다이어그램</b></td></tr>
+    </table>
+    <div class="analogy"><b>한 줄 정리:</b> 구조적 = <b>"자료가 어떻게 흐르나"</b>(DFD) / 객체지향 = <b>"누가 무엇을 하나"</b>(유스케이스) 로 세상을 본다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧩</span>주요 개념 — 설계 (모듈화)</h2>
 
     <h3>결합도와 응집도, 뭐가 다른가</h3>
     <div class="analogy">
       <b>비유:</b> 한 학교(프로그램)에 여러 반(모듈)이 있다고 하자.<br>
       <b>응집도</b> = "우리 반 학생들이 얼마나 한 목표로 똘똘 뭉쳐있나" → 높을수록 좋음(같은 반끼리는 긴밀하게)<br>
       <b>결합도</b> = "옆 반 일에 우리 반이 얼마나 간섭하나" → 낮을수록 좋음(반끼리는 독립적으로)
+    </div>
+    <div class="deep">
+      <h4>왜 "낮은 결합도 + 높은 응집도"가 좋은 설계인가</h4>
+      <p>둘 다 결국 <b>모듈의 독립성</b>을 재는 척도다. 독립적인 모듈이 좋은 이유는 세 가지다.</p>
+      <ul>
+        <li><b>수정 파급이 작다</b> — 결합도가 높으면 A를 고쳤을 때 B, C까지 줄줄이 깨진다</li>
+        <li><b>재사용이 쉽다</b> — 응집도가 높아 한 가지 일만 하는 모듈은 다른 프로젝트에 그대로 떼어 쓸 수 있다</li>
+        <li><b>테스트·이해가 쉽다</b> — 모듈 하나만 따로 떼어 검증할 수 있다</li>
+      </ul>
+      <p>반대로 최악인 <b>내용 결합</b>은 한 모듈이 다른 모듈 내부를 직접 뒤지는 것이라, 사실상 두 모듈이 <b>한 덩어리로 묶여버린</b> 상태다.</p>
     </div>
 
     <h3>결합도(Coupling) 스펙트럼 — 약할수록 좋음 <span class="page-ref">📖 기출문제집 p.634</span></h3>
@@ -91,18 +210,40 @@
       <figcaption>응집도는 오른쪽(기능적 응집)이 가장 이상적 — 모듈 하나가 딱 한 가지 일만 할 때 유지보수가 가장 쉽다.</figcaption>
     </figure>
 
+    <div class="deep">
+      <h4>헷갈리는 두 쌍 구별하기</h4>
+      <p><b>① 순차적 응집 vs 교환적(통신) 응집</b> — 둘 다 "자료를 공유"하지만 방향이 다르다.</p>
+      <ul>
+        <li><b>순차적</b>: 앞 요소의 <b>출력이 뒤 요소의 입력</b>이 된다 (A의 결과 → B가 받아 처리). <b>줄줄이 이어짐</b></li>
+        <li><b>교환적</b>: 요소들이 <b>같은 입력 자료를 쓰거나 같은 출력을 만든다</b> (A도 X를 쓰고 B도 X를 씀). <b>나란히 붙음</b></li>
+      </ul>
+      <p><b>② 자료 결합 vs 스탬프 결합</b> — 둘 다 파라미터 전달이지만 넘기는 양이 다르다.</p>
+      <ul>
+        <li><b>자료 결합</b>: 꼭 <b>필요한 값만</b> 넘김 (예: 나이 하나만) → 가장 약하고 좋은 결합</li>
+        <li><b>스탬프 결합</b>: <b>자료구조 통째로</b> 넘김 (예: 학생 레코드 전체를 넘겨놓고 나이만 씀) → 불필요한 노출</li>
+      </ul>
+    </div>
+
     <h3>모듈화 설계 원칙</h3>
     <ul>
       <li><b>상세설계로 갈수록 추상화 수준은 낮아진다</b> (상위설계=추상적, 하위설계=구체적 — "낮아진다"를 "높아진다"로 바꿔치기하는 게 자주 나오는 함정)</li>
       <li>설계는 <b>분석 단계에서 얻은 정보</b>를 반영해 반복적으로 진행되어야 하며, 분석 모델까지 추적 가능해야 한다</li>
+      <li>설계는 <b>계층적 조직</b>으로 제시되며 모듈적이어야 한다</li>
       <li>좋은 설계 = <b>결합도 낮게 + 응집도 높게</b> — 이 한 문장이 이 챕터 전체의 결론이다</li>
     </ul>
-    <div class="tip"><b>계산/판별 순서:</b> 문제에 결합도·응집도 종류가 여러 개 나오고 "약한 순 또는 강한 순으로 나열하라"고 하면, 위 스펙트럼 그림의 좌→우 순서 그대로 답하면 된다. 암기 문장("자스제공내", "우논시절교순기")만 외우면 계산이랄 것도 없다.</div>
+    <div class="tip"><b>판별 순서:</b> 문제에 결합도·응집도 종류가 여러 개 나오고 "약한 순 또는 강한 순으로 나열하라"고 하면, 위 스펙트럼 그림의 좌→우 순서 그대로 답하면 된다. 암기 문장("자스제공내", "우논시절교순기")만 외우면 계산이랄 것도 없다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
+      <li>요구사항 = <b>기능적</b> + <b>비기능적</b>(성능·신뢰성·가용성·보안성·안전성)</li>
+      <li>"당연한 요구사항은 생략해도 된다" → <b>오답</b>, 반드시 문서화</li>
+      <li>SRS에는 제약조건·UI 명세·인수테스트 기준이 들어가고, <b>자료구조 명세는 설계 단계</b>의 몫</li>
+      <li>구조적 분석 순서: <b>배경도 → 상위 DFD → 하위 DFD → 자료사전 → 소단위 명세서</b></li>
+      <li>DFD에서 <b>프로세스=원</b>, <b>자료저장소=평행선(옆면 없는 사각형)</b></li>
+      <li>소단위 명세서 작성 도구 = <b>구조적 영어, 의사결정표</b></li>
+      <li>구조적 분석=<b>DFD</b> / 객체지향 분석=<b>유스케이스</b> / 구조적 설계=<b>구조도</b> / 객체지향 설계=<b>시퀀스·클래스 등</b></li>
       <li>결합도는 <b>낮을수록</b>, 응집도는 <b>높을수록</b> 좋은 설계 — 반대로 서술하는 오답 함정 매우 잦음</li>
       <li>결합도 약한 순: <b>자료 &lt; 스탬프 &lt; 제어 &lt; 공통 &lt; 내용</b></li>
       <li>응집도 약한 순: <b>우연적 &lt; 논리적 &lt; 시간적 &lt; 절차적 &lt; 교환적 &lt; 순차적 &lt; 기능적</b></li>
@@ -124,11 +265,222 @@
       <tr><td>가장 좋은 것</td><td>자료 결합</td><td>기능적 응집</td></tr>
       <tr><td>가장 나쁜 것</td><td>내용 결합</td><td>우연적 응집</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>자료흐름도(DFD)</th><th>자료사전</th><th>소단위 명세서</th></tr>
+      <tr><td>무엇을 보여주나</td><td>자료가 <b>흐르는 경로</b></td><td>그 자료의 <b>의미·구성</b></td><td>최하위 프로세스의 <b>처리 내용</b></td></tr>
+      <tr><td>비유</td><td>지하철 노선도</td><td>역 이름 사전</td><td>각 역에서 하는 일 설명서</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2018 계리직 · 기출문제집 p.634</span></div>
+      <p class="q-body">결합도(Coupling)를 <b>약한 정도에서 강한 정도 순</b>으로 올바르게 나열한 것은?<br>㉠ 내용 결합도 &nbsp; ㉡ 제어 결합도 &nbsp; ㉢ 자료 결합도 &nbsp; ㉣ 공통 결합도</p>
+      <ol class="choices">
+        <li>㉢ → ㉡ → ㉣ → ㉠</li>
+        <li>㉢ → ㉣ → ㉡ → ㉠</li>
+        <li>㉣ → ㉢ → ㉡ → ㉠</li>
+        <li>㉠ → ㉡ → ㉣ → ㉢</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 자료(㉢) → 제어(㉡) → 공통(㉣) → 내용(㉠)</p>
+        <div class="explain">
+          <p>암기 문장 <b>"자스제공내"</b>(자료 &lt; 스탬프 &lt; 제어 &lt; 공통 &lt; 내용)에서 스탬프만 빼면 바로 답이 나온다.</p>
+          <ol class="steps">
+            <li>가장 약함 = <b>자료 결합(㉢)</b> — 필요한 값만 파라미터로 주고받음</li>
+            <li><b>제어 결합(㉡)</b> — flag 같은 제어값을 넘겨 상대 모듈의 동작을 좌우함</li>
+            <li><b>공통 결합(㉣)</b> — 여러 모듈이 전역 자료 영역을 함께 씀</li>
+            <li>가장 강함 = <b>내용 결합(㉠)</b> — 남의 모듈 내부를 직접 건드림</li>
+          </ol>
+          <p><b>이해 포인트:</b> 순서의 논리는 "<b>얼마나 깊이 남의 사정에 관여하는가</b>"다. 값만 받으면(자료) 남남이지만, 전역 변수를 공유하면(공통) 서로 눈치를 봐야 하고, 내부를 직접 참조하면(내용) 아예 한 몸이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2024 소방경채 · 기출문제집 p.635</span></div>
+      <p class="q-body">소프트웨어 모듈 간 응집 관계에서 빈칸에 들어갈 용어로 옳은 것은?<br><b>낮은 응집도</b> → 우연적 응집, ( ㉠ ), ( ㉡ ), ( ㉢ ), 교환적 응집 → <b>높은 응집도</b></p>
+      <ol class="choices">
+        <li>㉠ 논리적 응집, ㉡ 시간적 응집, ㉢ 절차적 응집</li>
+        <li>㉠ 논리적 응집, ㉡ 절차적 응집, ㉢ 시간적 응집</li>
+        <li>㉠ 절차적 응집, ㉡ 논리적 응집, ㉢ 시간적 응집</li>
+        <li>㉠ 절차적 응집, ㉡ 시간적 응집, ㉢ 논리적 응집</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 논리적 → 시간적 → 절차적</p>
+        <div class="explain">
+          <p>암기 문장 <b>"우논시절교순기"</b>를 그대로 대입하면 끝난다.</p>
+          <ol class="steps">
+            <li><b>우</b>연적 → <b>논</b>리적(㉠) → <b>시</b>간적(㉡) → <b>절</b>차적(㉢) → <b>교</b>환적 → <b>순</b>차적 → <b>기</b>능적</li>
+            <li>문제에서 앞은 우연적, 뒤는 교환적으로 고정돼 있으므로 사이에 들어갈 셋은 논리·시간·절차 순</li>
+          </ol>
+          <p><b>의미로도 확인:</b> 논리적(비슷해 보여서 묶음) → 시간적(같은 시점에 실행돼서 묶음) → 절차적(정해진 순서로 실행돼야 해서 묶음)으로, 뒤로 갈수록 <b>묶인 이유가 점점 더 본질적</b>이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2024 국가직 · 기출문제집 p.635</span></div>
+      <p class="q-body">다음 설명에 해당하는 모듈의 결합도는?<br><i>"한 모듈이 다른 모듈의 내부 기능 및 자료를 직접 참조하거나 사용하는 경우로, 한 모듈에서 다른 모듈의 내부로 제어가 이동하는 경우도 이에 해당한다."</i></p>
+      <ol class="choices">
+        <li>공통 결합도(common coupling)</li>
+        <li>내용 결합도(content coupling)</li>
+        <li>외부 결합도(external coupling)</li>
+        <li>자료 결합도(data coupling)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 내용 결합도</p>
+        <div class="explain">
+          <p>키워드는 <b>"다른 모듈의 <u>내부</u>를 직접 참조"</b>다. 이름 그대로 <b>내용(content)</b> 결합이다.</p>
+          <table>
+            <tr><th>결합도</th><th>구별 키워드</th></tr>
+            <tr><td>자료 결합</td><td>필요한 <b>값만</b> 파라미터로</td></tr>
+            <tr><td>공통 결합</td><td><b>공동 자료 영역(전역변수)</b>을 여럿이 공유</td></tr>
+            <tr><td><b>내용 결합</b></td><td>남의 모듈 <b>내부를 직접</b> 참조·수정, 제어가 내부로 점프</td></tr>
+          </table>
+          <p><b>함정:</b> ①번 공통 결합과 헷갈리기 쉽다. <b>"공유 영역을 통해"</b> 간접적으로 엮이면 공통, <b>"내부를 직접"</b> 건드리면 내용이다. 내용 결합은 가장 강한(나쁜) 결합도로, 설계 단계에서 반드시 피해야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2011 국가직 · 기출문제집 p.633</span></div>
+      <p class="q-body">모듈의 결합도(coupling)와 응집력(cohesion)에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>결합도란 모듈 간에 상호 의존하는 정도를 의미한다.</li>
+        <li>결합도는 높을수록 좋고 응집력은 낮을수록 좋다.</li>
+        <li>여러 모듈이 공동 자료 영역을 사용하는 경우 자료 결합(data coupling)이라 한다.</li>
+        <li>가장 이상적인 응집은 논리적 응집(logical cohesion)이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>나머지 셋은 전부 이 단원의 <b>대표 함정 3종 세트</b>다.</p>
+          <ol class="steps">
+            <li><b>② 방향 반전 함정</b> — 결합도는 <b>낮을수록</b>, 응집력은 <b>높을수록</b> 좋다. 정반대로 서술</li>
+            <li><b>③ 용어 바꿔치기</b> — 공동 자료 영역 사용은 <b>공통 결합</b>이다. 자료 결합은 필요한 값만 넘기는 가장 좋은 결합</li>
+            <li><b>④ 최상위 오답</b> — 가장 이상적인 응집은 <b>기능적 응집</b>이다. 논리적 응집은 오히려 <b>아래에서 두 번째</b>로 나쁜 수준</li>
+          </ol>
+          <p><b>풀이 요령:</b> 이 유형은 선택지 4개 중 3개가 위 함정 중 하나이므로, "낮은 결합·높은 응집 / 공통≠자료 / 최고는 기능적"만 체크하면 소거법으로 답이 남는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2011 서울시교육청 · 기출문제집 p.629~630</span></div>
+      <p class="q-body">다음 <b>구조적 분석</b> 작업의 순서로 올바른 것은?<br>㉠ 하위 자료 흐름도 &nbsp; ㉡ 소단위 명세서 &nbsp; ㉢ 상위 자료 흐름도 &nbsp; ㉣ 배경도 &nbsp; ㉤ 자료 사전</p>
+      <ol class="choices">
+        <li>㉠ → ㉢ → ㉣ → ㉤ → ㉡</li>
+        <li>㉣ → ㉢ → ㉠ → ㉤ → ㉡</li>
+        <li>㉢ → ㉣ → ㉠ → ㉡ → ㉤</li>
+        <li>㉤ → ㉣ → ㉠ → ㉢ → ㉡</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 배경도 → 상위 DFD → 하위 DFD → 자료사전 → 소단위 명세서</p>
+        <div class="explain">
+          <p>구조적 분석은 <b>하향식(top-down)</b>이다. 큰 그림부터 그리고 점점 쪼개 들어간다.</p>
+          <ol class="steps">
+            <li><b>배경도(㉣)</b> — 시스템 전체를 원 하나로 그리고 외부와의 관계만 표시. <b>가장 추상적</b></li>
+            <li><b>상위 자료흐름도(㉢)</b> — 그 원을 몇 개의 큰 기능으로 분할</li>
+            <li><b>하위 자료흐름도(㉠)</b> — 더 잘게 분할해 최하위(원시) 프로세스까지 내려감</li>
+            <li><b>자료 사전(㉤)</b> — DFD에 등장한 자료들의 의미를 정의</li>
+            <li><b>소단위 명세서(㉡)</b> — 최하위 프로세스가 실제로 무슨 일을 하는지 기술. <b>가장 구체적</b></li>
+          </ol>
+          <p><b>암기:</b> "배 → 상 → 하 → 사 → 소". 소단위 명세서는 <b>최하위 프로세스가 확정된 뒤에야</b> 쓸 수 있으므로 항상 마지막이라는 점을 기억하면 순서가 꼬이지 않는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2023 국가직 · 기출문제집 p.630</span></div>
+      <p class="q-body">구조적 개발 방법론에서 사용자 요구사항을 분석한 후 결과를 표현할 때 사용되는 도구에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>자료흐름도에서 자료저장소는 원으로 표현한다.</li>
+        <li>자료사전은 계획(ISP), 분석(BAA), 설계(BSD), 구축(SC)의 절차로 작성한다.</li>
+        <li>자료사전에서 사용하는 기호 중 ( )는 선택에 사용되는 기호이다.</li>
+        <li>소단위 명세서를 작성하는 도구에는 구조적언어, 의사결정표 등이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>① 기호 바꿔치기</b> — 자료저장소는 <b>옆면이 없는 사각형(평행선)</b>이고, <b>원은 프로세스(처리)</b>다</li>
+            <li><b>② 엉뚱한 방법론</b> — ISP/BAA/BSD/SC는 <b>정보공학 방법론</b>의 절차이지 자료사전 작성 절차가 아니다</li>
+            <li><b>③ 기호 오류</b> — 자료사전에서 <b>선택은 [ | ]</b>를 쓴다. ( )는 <b>생략(옵션)</b>을 뜻한다</li>
+            <li><b>④ 정답</b> — 소단위 명세서는 원시 프로세스의 처리 내용을 <b>구조적 영어, 의사결정표, 전후 조건</b> 등으로 기술한다</li>
+          </ol>
+          <p><b>같이 외울 DFD 4요소:</b> 프로세스(원), 자료 흐름(화살표), 자료 저장소(평행선), 자료 출처/도착지(사각형).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2014 계리직 · 기출문제집 p.631~632</span></div>
+      <p class="q-body">㉠~㉢에 들어갈 내용을 옳게 나열한 것은?<br>• 시스템 <b>분석</b>을 위하여 구조적 방법론에서는 ( ㉠ ) 다이어그램이, 객체지향 방법론에서는 ( ㉡ ) 다이어그램이 널리 사용된다.<br>• 시스템 <b>설계</b>를 위하여 구조적 방법론에서는 구조도가, 객체지향 방법론에서는 ( ㉢ ) 다이어그램이 널리 사용된다.</p>
+      <ol class="choices">
+        <li>㉠ 시퀀스, ㉡ 데이터흐름, ㉢ 유스케이스</li>
+        <li>㉠ 시퀀스, ㉡ 유스케이스, ㉢ 데이터흐름</li>
+        <li>㉠ 데이터흐름, ㉡ 시퀀스, ㉢ 유스케이스</li>
+        <li>㉠ 데이터흐름, ㉡ 유스케이스, ㉢ 시퀀스</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 데이터흐름 / 유스케이스 / 시퀀스</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>㉠ 구조적 분석</b> = <b>자료흐름도(DFD)</b> — 구조적 방법론은 "자료가 어떻게 흐르는가"로 시스템을 본다</li>
+            <li><b>㉡ 객체지향 분석</b> = <b>유스케이스</b> — "사용자가 시스템으로 무엇을 하는가"부터 찾아낸다</li>
+            <li><b>㉢ 객체지향 설계</b> = <b>시퀀스</b>(그 외 클래스·상태·액티비티 다이어그램) — 객체들이 메시지를 주고받는 순서를 설계</li>
+          </ol>
+          <p><b>풀이 요령:</b> ㉠에 "데이터흐름"이 들어간다는 것만 확신하면 ①·②가 즉시 탈락하고, ㉡이 분석 도구(유스케이스)여야 하므로 ④만 남는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">다음 두 모듈 설계 중 어느 쪽이 더 좋은 설계인가? 각각의 결합도 종류도 함께 답하시오.<br><b>(가)</b> 모듈 A가 전역 배열 <code>scores[]</code>를 직접 읽고, 모듈 B도 같은 전역 배열을 수정한다.<br><b>(나)</b> 모듈 A가 모듈 B를 호출하며 <code>B(avg)</code>처럼 계산에 필요한 평균값 하나만 인자로 넘긴다.</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: (나)가 더 좋은 설계. (가) = 공통 결합, (나) = 자료 결합</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>(가)</b>는 두 모듈이 <b>전역 자료 영역(공동 자료 영역)을 공유</b>한다 → <b>공통 결합</b></li>
+            <li><b>(나)</b>는 <b>꼭 필요한 값 하나만 파라미터로</b> 전달한다 → <b>자료 결합</b></li>
+            <li>"자스제공내" 순서상 자료 &lt; 공통이므로 <b>(나)의 결합도가 더 약하다 = 더 좋은 설계</b></li>
+          </ol>
+          <p><b>왜 (가)가 나쁜가:</b> 전역 배열을 누가 언제 바꿨는지 추적할 수 없어서, A의 동작이 B의 실행 순서에 따라 달라진다. 테스트할 때도 A만 떼어내 검증할 수 없다. 반면 (나)는 A에게 avg 값만 주면 항상 같은 결과가 나오므로 <b>단독 테스트와 재사용이 가능</b>하다.</p>
+          <p><b>한 단계 더:</b> 만약 (나)에서 평균값 하나만 쓰면서 <code>B(studentRecord)</code>처럼 <b>레코드 전체를 넘긴다면 스탬프 결합</b>이 되어 자료 결합보다 한 단계 나빠진다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
+      <span class="chip">기능적요구</span>
+      <span class="chip">비기능적요구</span>
+      <span class="chip">SRS</span>
+      <span class="chip">배경도</span>
+      <span class="chip">자료흐름도</span>
+      <span class="chip">DFD</span>
+      <span class="chip">자료사전</span>
+      <span class="chip">소단위명세서</span>
+      <span class="chip">구조적영어</span>
+      <span class="chip">의사결정표</span>
+      <span class="chip">구조도</span>
+      <span class="chip">HIPO</span>
+      <span class="chip">NS-chart</span>
       <span class="chip">결합도</span>
       <span class="chip">응집도</span>
       <span class="chip">자료결합</span>

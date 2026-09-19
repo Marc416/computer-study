@@ -20,9 +20,60 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"디스크는 느리다"가 아니라 "디스크는 <i>움직여야</i> 해서 느리다"</h4>
+      <p>메모리(RAM)는 전기 신호만 보내면 나노초 단위로 데이터가 나온다. 그런데 하드디스크는 <b>금속 팔(헤드)이 물리적으로 움직여서</b> 원하는 트랙까지 가야 한다. 이 이동에 걸리는 시간이 밀리초(ms) 단위 — RAM보다 <b>약 10만 배 느리다</b>. 그래서 디스크 성능에서 "데이터를 읽는 시간"은 거의 무시해도 되고, <b>"헤드가 얼마나 돌아다녔는가"가 사실상 전부</b>다.</p>
+      <p>여기서 운영체제가 개입할 여지가 생긴다. 여러 프로그램이 동시에 디스크를 요청하면 요청들이 큐에 쌓이는데, <b>이 요청들을 어떤 순서로 처리하느냐에 따라 헤드의 총 이동거리가 몇 배씩 차이난다.</b> 아래에서 보겠지만 같은 요청 집합인데도 FCFS는 430, LOOK은 190으로 <b>2배 이상</b> 벌어진다. 순서만 바꿨는데 디스크가 2배 빨라지는 셈이다.</p>
+      <p>뒷부분의 <b>디스크 할당 기법</b>은 한 단계 앞의 문제다 — "애초에 파일을 디스크 어디에 놓을 것인가". 파일 조각들을 흩어놓으면 읽을 때마다 헤드가 멀리 뛰어야 하고, 붙여놓으면 빠르지만 빈 공간을 찾기 어려워진다. 이 트레이드오프가 연속·연결·색인 할당의 차이를 만든다.</p>
+      <p><b>시험 출제 패턴은 딱 두 가지다:</b> ① 요청 큐를 주고 <b>처리 순서 또는 총 이동거리를 계산</b>시키기, ② 기법 이름과 설명을 <b>서로 바꿔치기한 선택지</b> 찾기. 계산은 규칙만 알면 기계적이고, 바꿔치기는 아래 비교표를 외우면 잡힌다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">💿</span>먼저 알아야 할 것 — 디스크의 물리적 구조</h2>
+    <p>디스크는 <b>접시(플래터)가 회전</b>하고 그 위를 <b>팔(암)에 달린 헤드가 안팎으로 이동</b>하는 구조다. 같은 반지름에 있는 원형 경로가 <b>트랙(track)</b>이고, 트랙을 부채꼴로 자른 것이 <b>섹터(sector)</b>다. 여러 장의 플래터에서 같은 번호 트랙들을 세로로 묶으면 <b>실린더(cylinder)</b>가 된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 260" role="img" aria-label="디스크 물리 구조도: 회전하는 플래터 위에 동심원 트랙들이 있고 헤드가 달린 암이 안팎으로 이동하며, 접근 시간은 탐색시간 회전지연시간 전송시간의 합이다">
+        <defs>
+          <marker id="dk1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <circle cx="130" cy="130" r="100" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="130" cy="130" r="76" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <circle cx="130" cy="130" r="52" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <circle cx="130" cy="130" r="28" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <circle cx="130" cy="130" r="8" fill="currentColor"/>
+        <line x1="130" y1="130" x2="130" y2="30" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <line x1="130" y1="130" x2="216" y2="80" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <text x="175" y="60" font-size="10.5" opacity="0.8">섹터</text>
+        <text x="130" y="118" font-size="10.5" text-anchor="middle" opacity="0.8">스핀들</text>
+        <text x="130" y="248" font-size="11" text-anchor="middle">플래터 (회전)</text>
+
+        <line x1="330" y1="60" x2="175" y2="105" stroke="currentColor" stroke-width="3"/>
+        <circle cx="330" cy="60" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="345" y="55" font-size="11">암(arm) 회전축</text>
+        <circle cx="175" cy="105" r="5" fill="currentColor"/>
+        <text x="182" y="100" font-size="11" font-weight="700">헤드</text>
+        <path d="M 200,140 A 60,60 0 0 1 160,180" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#dk1)" opacity="0.7"/>
+        <text x="208" y="170" font-size="10.5" opacity="0.8">헤드는 안팎으로만 이동</text>
+
+        <rect x="330" y="95" width="310" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="345" y="117" font-size="12.5" font-weight="700">접근 시간(Access Time) = ① + ② + ③</text>
+        <text x="345" y="142" font-size="11.5">① <tspan font-weight="700">탐색 시간(Seek Time)</tspan> — 헤드가 목표 트랙까지 이동</text>
+        <text x="358" y="158" font-size="10.5" opacity="0.8">→ 가장 오래 걸림. 스케줄링이 줄이려는 대상이 바로 이것</text>
+        <text x="345" y="180" font-size="11.5">② <tspan font-weight="700">회전 지연(Rotational Latency)</tspan> — 섹터가 헤드 밑에 올 때까지</text>
+        <text x="345" y="202" font-size="11.5">③ <tspan font-weight="700">전송 시간(Transfer Time)</tspan> — 실제 데이터를 읽고 쓰는 시간</text>
+        <text x="358" y="218" font-size="10.5" opacity="0.8">→ 가장 짧음</text>
+      </svg>
+      <figcaption>디스크 접근 시간의 3요소. 이 중 <b>탐색 시간이 압도적으로 크기 때문에</b>, 디스크 스케줄링은 오직 "헤드 이동거리 줄이기"에만 집중한다.</figcaption>
+    </figure>
+    <div class="tip"><b>왜 트랙 번호 차이가 곧 "이동거리"인가:</b> 트랙은 안에서 밖으로 번호가 매겨져 있고 간격이 일정하다. 그래서 트랙 50에서 트랙 80으로 가는 비용은 <b>|80 − 50| = 30</b>으로 계산한다. 시험의 모든 계산 문제가 이 뺄셈의 반복이다.</div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — 디스크 스케줄링</h2>
 
-    <h3>디스크 스케줄링 기법 비교</h3>
+    <h3>디스크 스케줄링 기법 비교 <span class="page-ref">📖 기출문제집 p.262~266</span></h3>
     <table>
       <tr><th>기법</th><th>동작 방식</th></tr>
       <tr><td>FCFS</td><td>요청 도착 순서대로 처리. 공평하지만 <b>성능은 가장 좋지 않음</b></td></tr>
@@ -31,10 +82,109 @@
       <tr><td>C-SCAN</td><td>SCAN처럼 이동하되 <b>한쪽 방향으로만 서비스</b>, 끝에 도달하면 서비스 없이 반대쪽 끝으로 되돌아가 다시 그 방향으로만 처리</td></tr>
       <tr><td>LOOK</td><td>SCAN과 비슷하지만 <b>맨 끝(0번/최대트랙)까지 가지 않고</b> 마지막 요청에서 방향 전환</td></tr>
       <tr><td>C-LOOK</td><td>C-SCAN처럼 한쪽으로만 서비스하되, <b>맨 끝까지 가지 않고</b> 마지막 요청에서 바로 반대쪽 시작점으로 복귀</td></tr>
+      <tr><td>N-Step-SCAN</td><td>SCAN의 변형. 스케줄링 <b>시작 시점의 큐만</b> 처리하고, 처리 중 새로 도착한 요청은 다음 회차 큐로 미룸 (기아 방지)</td></tr>
+      <tr><td>섹터 큐잉(Sector Queuing)</td><td>고정 헤드 장치용. 헤드 이동이 없으므로 <b>회전 지연시간</b>을 기준으로 스케줄링</td></tr>
     </table>
     <div class="analogy"><b>비유:</b> SCAN·LOOK은 "엘리베이터"처럼 양방향 왕복 운행, C-SCAN·C-LOOK은 "지하철 순환선"처럼 한 방향으로만 돌고 반대편으로 순간이동해 다시 그 방향으로만 돈다.</div>
 
-    <p><b>계산 방법:</b> 매 순간 <b>"지금 헤드 위치에서 남은 요청 중 가장 가까운 트랙이 어디인가"</b>만 반복해서 확인하면 된다. 방향은 상관없이 오직 거리만 비교한다.</p>
+    <div class="deep">
+      <h4>이름 4개를 구조로 외우는 법</h4>
+      <p>SCAN·C-SCAN·LOOK·C-LOOK은 <b>독립된 4개가 아니라 2×2 조합</b>이다. 두 개의 질문에 각각 예/아니오로 답하면 이름이 결정된다.</p>
+      <ul>
+        <li><b>질문 1 — "C"가 붙었나?</b> → 붙었으면 <b>한 방향으로만 서비스</b>(Circular, 순환선). 안 붙었으면 왕복하며 양방향 서비스.</li>
+        <li><b>질문 2 — "LOOK"인가 "SCAN"인가?</b> → LOOK은 <b>마지막 요청까지만</b> 가고 돌아선다("가보고(look) 요청 없으면 안 감"). SCAN은 <b>디스크 끝(0번/최대번호)까지</b> 무조건 간다.</li>
+      </ul>
+      <p>그래서 <b>C-LOOK = 한 방향 + 끝까지 안 감</b>이 되고, 네 기법 중 보통 <b>이동거리가 가장 짧은 축</b>에 속한다. 반대로 C-SCAN은 한 방향 규칙에 더해 양 끝까지 왕복하므로 손해가 크다.</p>
+    </div>
+
+    <h3>같은 요청 큐를 6가지 기법으로 처리해보기 <span class="page-ref">📖 기출문제집 p.263</span></h3>
+    <p>아래는 <b>모두 같은 조건</b>(헤드 위치 50, 요청 큐 80·20·100·30·70·130·40, 디스크 범위 0~150, 초기 이동 방향은 큰 번호 쪽)에서 여섯 기법이 각각 어떻게 움직이는지를 그린 것이다. 세로 방향이 시간(처리 순서), 가로 방향이 트랙 번호다. <b>선이 가로로 길게 튈수록 손해</b>다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 540" role="img" aria-label="같은 요청 큐에 대해 FCFS SSTF SCAN C-SCAN LOOK C-LOOK 여섯 가지 디스크 스케줄링의 헤드 이동 경로를 비교한 그래프. FCFS가 430으로 가장 길고 LOOK이 190으로 가장 짧다">
+        <g transform="translate(10,0)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">FCFS — 도착 순서 그대로</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 169,43 57,56 207,69 76,82 151,95 263,108 95,121" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <text x="113" y="145" font-size="10" text-anchor="middle" opacity="0.8">50에서 시작</text>
+          <text x="20" y="162" font-size="12">총 이동거리 <tspan font-weight="700">430</tspan> — 가장 나쁨</text>
+        </g>
+        <g transform="translate(370,0)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">SSTF — 매번 가장 가까운 곳</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 95,43 76,56 57,69 151,82 169,95 207,108 263,121" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <text x="104" y="145" font-size="10" text-anchor="middle" opacity="0.8">20→70 구간에서 크게 점프</text>
+          <text x="20" y="162" font-size="12">총 이동거리 <tspan font-weight="700">140</tspan></text>
+        </g>
+
+        <g transform="translate(10,180)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">SCAN — 끝까지 갔다가 왕복</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 151,43 169,56 207,69 263,82 300,95 95,108 76,121 57,134" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <circle cx="300" cy="95" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="270" y="110" font-size="10" text-anchor="end" opacity="0.8">끝(150) 찍고 방향 전환</text>
+          <text x="20" y="162" font-size="12">총 이동거리 <tspan font-weight="700">230</tspan></text>
+        </g>
+        <g transform="translate(370,180)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">C-SCAN — 한 방향 + 양 끝까지</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 151,43 169,56 207,69 263,82 300,95" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <polyline points="300,95 20,108" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <polyline points="20,108 57,121 76,134 95,147" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <text x="160" y="106" font-size="10" text-anchor="middle" opacity="0.8">점선 = 서비스 없이 복귀</text>
+          <text x="20" y="168" font-size="12">총 이동거리 <tspan font-weight="700">290</tspan></text>
+        </g>
+
+        <g transform="translate(10,360)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">LOOK — 마지막 요청에서 턴</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 151,43 169,56 207,69 263,82 95,95 76,108 57,121" fill="none" stroke="currentColor" stroke-width="2.2"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <circle cx="263" cy="82" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="263" y="72" font-size="10" text-anchor="middle" opacity="0.8">130에서 바로 턴</text>
+          <text x="20" y="150" font-size="12">총 이동거리 <tspan font-weight="700">190</tspan> — 가장 좋음</text>
+        </g>
+        <g transform="translate(370,360)">
+          <text x="20" y="14" font-size="12.5" font-weight="700">C-LOOK — 한 방향 + 요청까지만</text>
+          <line x1="20" y1="25" x2="300" y2="25" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+          <text x="20" y="20" font-size="9" opacity="0.6">0</text>
+          <text x="300" y="20" font-size="9" text-anchor="end" opacity="0.6">150</text>
+          <polyline points="113,30 151,43 169,56 207,69 263,82" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <polyline points="263,82 57,95" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <polyline points="57,95 76,108 95,121" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <circle cx="113" cy="30" r="3.5" fill="currentColor"/>
+          <text x="160" y="93" font-size="10" text-anchor="middle" opacity="0.8">끝까지 안 가고 20으로 복귀</text>
+          <text x="20" y="150" font-size="12">총 이동거리 <tspan font-weight="700">210</tspan></text>
+        </g>
+      </svg>
+      <figcaption>동일 조건(헤드 50, 큐 80·20·100·30·70·130·40, 디스크 0~150)에서 여섯 기법의 헤드 경로. <b>순서를 바꿨을 뿐인데 430 → 140까지 3배 차이</b>가 난다. 점선은 요청을 처리하지 않고 이동만 하는 구간이다.</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>기법</th><th>처리 순서</th><th>총 이동거리</th></tr>
+      <tr><td>FCFS</td><td>80→20→100→30→70→130→40</td><td><b>430</b></td></tr>
+      <tr><td>SSTF</td><td>40→30→20→70→80→100→130</td><td><b>140</b></td></tr>
+      <tr><td>SCAN</td><td>70→80→100→130→(150)→40→30→20</td><td><b>230</b></td></tr>
+      <tr><td>C-SCAN</td><td>70→80→100→130→(150)→(0)→20→30→40</td><td><b>290</b></td></tr>
+      <tr><td>LOOK</td><td>70→80→100→130→40→30→20</td><td><b>190</b></td></tr>
+      <tr><td>C-LOOK</td><td>70→80→100→130→20→30→40</td><td><b>210</b></td></tr>
+    </table>
+    <div class="tip"><b>주의:</b> 위 순위는 <b>이 요청 집합에서만</b> 그렇다. "SSTF가 항상 최적"이라거나 "LOOK이 항상 1등"이라는 문장은 오답이다. 다만 <b>"FCFS가 성능이 가장 좋다"는 항상 틀린 문장</b>이므로 이건 그대로 외워도 된다.</div>
+
+    <p><b>SSTF 계산 방법:</b> 매 순간 <b>"지금 헤드 위치에서 남은 요청 중 가장 가까운 트랙이 어디인가"</b>만 반복해서 확인하면 된다. 방향은 상관없이 오직 거리만 비교한다.</p>
     <div class="tip">
       <b>SSTF 계산 예제 (2022 국가직): 헤드 위치 50, 요청 큐 = 80,20,100,30,70,130,40</b> <span class="page-ref">📖 기출문제집 p.263</span>
       <ol class="steps">
@@ -84,10 +234,22 @@
       </svg>
       <figcaption>SSTF는 방향과 무관하게 매번 가장 가까운 트랙으로만 움직인다. 20에서 70으로 튀는 구간(+50)처럼 가끔 크게 점프하기도 한다는 점이 SCAN 계열과의 차이.</figcaption>
     </figure>
+
     <div class="tip">
-      <b>C-LOOK 계산 예제:</b> 헤드 위치 50, 이동방향 0→199, 큐 = 65,112,40,16,90,170,165,35,180<br>
-      진행 방향(50보다 큰 것 오름차순)부터 처리 후 맨 앞(작은 값)으로 순간이동: 50→65→90→112→165→170→180 → (맨 앞으로 복귀) →16→35→40<br>
-      총 이동 거리 = <b>318</b>
+      <b>C-LOOK 계산 예제 (2014 서울시): 헤드 50, 이동방향 0→199, 큐 = 65,112,40,16,90,170,165,35,180</b> <span class="page-ref">📖 기출문제집 p.265</span>
+      <ol class="steps">
+        <li>요청을 <b>정렬</b>한다: 16, 35, 40, 65, 90, 112, 165, 170, 180</li>
+        <li>방향이 증가 쪽이므로 <b>50보다 큰 것</b>을 오름차순으로 먼저: 65 → 90 → 112 → 165 → 170 → <b>180</b></li>
+        <li>여기까지 거리: (180 − 50) = <b>130</b> &nbsp;<span style="opacity:0.75">(중간에 되돌아가지 않고 쭉 올라가므로 끝점−시작점으로 한 번에 계산해도 된다)</span></li>
+        <li>C-LOOK이므로 199까지 가지 <b>않고</b>, 남은 요청 중 <b>가장 작은 16</b>으로 곧장 복귀: 180 → 16 = <b>164</b></li>
+        <li>다시 증가 방향으로: 16 → 35 → 40, 거리 = (40 − 16) = <b>24</b></li>
+        <li>총 이동거리 = 130 + 164 + 24 = <b>318</b></li>
+      </ol>
+    </div>
+    <div class="deep">
+      <h4>계산을 빠르게 하는 요령</h4>
+      <p>SCAN 계열(SCAN·C-SCAN·LOOK·C-LOOK)은 <b>한 방향으로 쭉 가는 구간 안에서는 개별 거리를 더할 필요가 없다.</b> 그 구간의 <b>끝 − 시작</b>만 계산하면 된다. 위 예제에서 50→65→90→112→165→170→180을 하나씩 더하면 15+25+22+53+5+10인데, 그냥 180−50=130으로 끝난다.</p>
+      <p>그래서 SCAN 계열 문제는 <b>"방향 전환점이 몇 개인가"</b>만 파악하면 뺄셈 2~3번으로 답이 나온다. 반면 <b>SSTF와 FCFS는 반드시 한 칸씩</b> 더해야 한다 — 방향이 제멋대로 바뀌기 때문이다.</p>
     </div>
     <div class="tip"><b>함정 주의:</b> "N-Step-SCAN이 한 방향으로 움직이는 요구만 처리" 같은 설명은 사실 <b>C-SCAN</b>의 특징을 잘못 붙인 오답 패턴이다. 기법 이름과 설명을 서로 바꿔치기한 선택지에 주의.</div>
   </section>
@@ -95,8 +257,97 @@
   <section class="block">
     <h2><span class="emoji">🗄️</span>주요 개념 — 디스크 할당 기법</h2>
 
-    <h3>데이터 단위 계층</h3>
+    <h3>데이터 단위 계층 <span class="page-ref">📖 기출문제집 p.267</span></h3>
     <p><b>필드 &lt; 레코드 &lt; 파일 &lt; 데이터베이스</b> (필드의 집합=레코드, 레코드의 집합=파일, 파일의 집합=데이터베이스)</p>
+    <div class="analogy"><b>비유:</b> 학생부에서 "이름" 칸 하나가 <b>필드</b>, 학생 한 명의 줄 전체가 <b>레코드</b>, 반 전체 명단이 <b>파일</b>, 학교 전체 명단 모음이 <b>데이터베이스</b>다.</div>
+
+    <h3>세 가지 할당 방식이 디스크에 실제로 그려지는 모습 <span class="page-ref">📖 기출문제집 p.267~268</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 680 430" role="img" aria-label="연속 할당은 파일 블록이 연달아 배치되고, 연결 할당은 블록이 흩어진 채 포인터로 이어지며, 색인 할당은 색인 블록이 흩어진 블록들의 주소를 모아 관리한다">
+        <defs>
+          <marker id="al1" markerWidth="7" markerHeight="7" refX="5.5" refY="2.5" orient="auto"><polygon points="0,0 6,2.5 0,5" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="10" y="18" font-size="13" font-weight="700">① 연속 할당 (Contiguous) — 붙여서 저장</text>
+        <g font-size="9.5" text-anchor="middle">
+          <rect x="20" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="35" y="47" opacity="0.5">0</text>
+          <rect x="52" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="67" y="47" opacity="0.5">1</text>
+          <rect x="84" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="99" y="47" opacity="0.5">2</text>
+          <rect x="116" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="131" y="47" opacity="0.5">3</text>
+          <rect x="148" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="163" y="47" opacity="0.5">4</text>
+          <rect x="180" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="195" y="47" opacity="0.5">5</text>
+          <rect x="212" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="227" y="47" font-weight="700">6</text>
+          <rect x="244" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="259" y="47" font-weight="700">7</text>
+          <rect x="276" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="291" y="47" font-weight="700">8</text>
+          <rect x="308" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="323" y="47" font-weight="700">9</text>
+          <rect x="340" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="355" y="47" font-weight="700">10</text>
+          <rect x="372" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="387" y="47" opacity="0.5">11</text>
+          <rect x="404" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="419" y="47" opacity="0.5">12</text>
+          <rect x="436" y="30" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="451" y="47" opacity="0.5">13</text>
+        </g>
+        <rect x="490" y="26" width="180" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="580" y="41" font-size="10.5" text-anchor="middle">디렉터리가 기억하는 것</text>
+        <text x="580" y="55" font-size="10.5" text-anchor="middle" font-weight="700">시작=6, 길이=5</text>
+        <text x="20" y="76" font-size="11" opacity="0.85">✔ 헤드가 한 번만 이동하면 끝 → 가장 빠름 &nbsp;&nbsp; ✘ 빈 연속 공간 찾기 어려움 → <tspan font-weight="700">외부 단편화</tspan>, 주기적 압축 필요</text>
+
+        <text x="10" y="120" font-size="13" font-weight="700">② 연결 할당 (Linked) — 흩어놓고 포인터로 잇기</text>
+        <g font-size="9.5" text-anchor="middle">
+          <rect x="20" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="35" y="149" opacity="0.5">0</text>
+          <rect x="52" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="67" y="149" opacity="0.5">1</text>
+          <rect x="84" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="99" y="149" font-weight="700">2</text>
+          <rect x="116" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="131" y="149" opacity="0.5">3</text>
+          <rect x="148" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="163" y="149" opacity="0.5">4</text>
+          <rect x="180" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="195" y="149" opacity="0.5">5</text>
+          <rect x="212" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="227" y="149" font-weight="700">6</text>
+          <rect x="244" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="259" y="149" opacity="0.5">7</text>
+          <rect x="276" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="291" y="149" opacity="0.5">8</text>
+          <rect x="308" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="323" y="149" font-weight="700">9</text>
+          <rect x="340" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="355" y="149" opacity="0.5">10</text>
+          <rect x="372" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="387" y="149" opacity="0.5">11</text>
+          <rect x="404" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="419" y="149" font-weight="700">12</text>
+          <rect x="436" y="132" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="451" y="149" opacity="0.5">13</text>
+        </g>
+        <path d="M 99,158 Q 163,190 227,158" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#al1)"/>
+        <path d="M 227,158 Q 275,190 323,158" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#al1)"/>
+        <path d="M 323,158 Q 371,190 419,158" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#al1)"/>
+        <rect x="490" y="128" width="180" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="580" y="143" font-size="10.5" text-anchor="middle">디렉터리가 기억하는 것</text>
+        <text x="580" y="157" font-size="10.5" text-anchor="middle" font-weight="700">첫 블록=2, 마지막=12</text>
+        <text x="20" y="200" font-size="11" opacity="0.85">✔ 단편화 없음, 파일 크기 자유롭게 증가 &nbsp;&nbsp; ✘ 5번째 블록을 보려면 앞의 4개를 다 거쳐야 함 → <tspan font-weight="700">직접 접근 불가</tspan></text>
+
+        <text x="10" y="248" font-size="13" font-weight="700">③ 색인 할당 (Indexed) — 주소 목록을 따로 보관</text>
+        <g font-size="9.5" text-anchor="middle">
+          <rect x="20" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="35" y="277" opacity="0.5">0</text>
+          <rect x="52" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="67" y="277" opacity="0.5">1</text>
+          <rect x="84" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="99" y="277" font-weight="700">2</text>
+          <rect x="116" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="131" y="277" opacity="0.5">3</text>
+          <rect x="148" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="163" y="277" opacity="0.5">4</text>
+          <rect x="180" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="3"/><text x="195" y="277" font-weight="700">5</text>
+          <rect x="212" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="227" y="277" opacity="0.5">6</text>
+          <rect x="244" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="259" y="277" opacity="0.5">7</text>
+          <rect x="276" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="291" y="277" opacity="0.5">8</text>
+          <rect x="308" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="323" y="277" font-weight="700">9</text>
+          <rect x="340" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="355" y="277" opacity="0.5">10</text>
+          <rect x="372" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="387" y="277" opacity="0.5">11</text>
+          <rect x="404" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="419" y="277" font-weight="700">12</text>
+          <rect x="436" y="260" width="30" height="26" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/><text x="451" y="277" opacity="0.5">13</text>
+        </g>
+        <text x="195" y="253" font-size="10" text-anchor="middle" font-weight="700">색인 블록</text>
+        <rect x="120" y="305" width="150" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="195" y="322" font-size="10.5" text-anchor="middle" font-weight="700">5번 블록 내용</text>
+        <text x="195" y="339" font-size="10.5" text-anchor="middle">1번째 → 2</text>
+        <text x="195" y="354" font-size="10.5" text-anchor="middle">2번째 → 9</text>
+        <text x="195" y="369" font-size="10.5" text-anchor="middle">3번째 → 12</text>
+        <line x1="195" y1="286" x2="195" y2="303" stroke="currentColor" stroke-width="1.3" marker-end="url(#al1)"/>
+        <path d="M 270,330 Q 300,300 323,288" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#al1)" opacity="0.8"/>
+        <path d="M 270,350 Q 350,320 419,288" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#al1)" opacity="0.8"/>
+        <rect x="490" y="256" width="180" height="36" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="580" y="271" font-size="10.5" text-anchor="middle">디렉터리가 기억하는 것</text>
+        <text x="580" y="285" font-size="10.5" text-anchor="middle" font-weight="700">색인 블록 주소 = 5</text>
+        <text x="20" y="400" font-size="11" opacity="0.85">✔ 단편화 없고 <tspan font-weight="700">직접 접근 가능</tspan>(색인만 보면 3번째 블록이 12번인 걸 즉시 앎) &nbsp;&nbsp; ✘ 색인 블록용 공간이 추가로 필요</text>
+      </svg>
+      <figcaption>같은 파일(블록 3~5개)을 세 방식으로 저장했을 때의 디스크 배치. 굵은 테두리가 이 파일이 차지한 블록이다. <b>디렉터리가 무엇을 기억하는지</b>가 세 방식을 가르는 핵심이다.</figcaption>
+    </figure>
 
     <h3>연속·연결·색인 할당 비교</h3>
     <table>
@@ -106,9 +357,10 @@
       <tr><td>단편화</td><td><b>외부 단편화 발생</b> → 주기적 압축 필요</td><td>외부 단편화 <b>없음</b></td><td>외부 단편화 없음</td></tr>
       <tr><td>직접 접근</td><td>가능</td><td><b>불가능</b> (순차 접근만)</td><td>가능</td></tr>
       <tr><td>추가 공간</td><td>불필요</td><td>포인터 저장 공간 필요</td><td>색인 블록 저장 공간 필요</td></tr>
+      <tr><td>파일 크기 변경</td><td>어려움 (뒤에 공간 없으면 통째로 이사)</td><td>쉬움 (블록 하나 붙이면 끝)</td><td>쉬움 (색인에 주소 추가)</td></tr>
       <tr><td>디렉터리 정보</td><td>시작주소 + 길이(또는 끝주소)</td><td>첫 블록과 마지막 블록 포인터</td><td>색인 블록 주소</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "연속 할당은 디스크 공간 사용 효율이 높다" → 오답. 검색은 빠르지만 <b>단편화 때문에 공간 효율은 오히려 낮다.</b> "블록 할당 방식은 단편화 해결을 위해 압축이 필요하다" → 압축이 필요한 건 <b>연속 할당</b>이다.</div>
+    <div class="tip"><b>함정 주의:</b> "연속 할당은 디스크 공간 사용 효율이 높다" → 오답. 검색은 빠르지만 <b>단편화 때문에 공간 효율은 오히려 낮다.</b> "블록 할당 방식은 단편화 해결을 위해 압축이 필요하다" → 압축이 필요한 건 <b>연속 할당</b>이다. 또 "불연속 할당(연결·색인)이 빠른 검색을 제공한다" → 오답, 불연속 할당은 검색이 <b>느리다.</b></div>
   </section>
 
   <section class="block">
@@ -116,10 +368,14 @@
     <ul class="point-list">
       <li>SSTF·C-SCAN·C-LOOK 등 주어진 요청 큐로 <b>헤드 이동 순서·총 이동거리 계산</b> 문제 매년 출제</li>
       <li>SCAN vs C-SCAN vs LOOK vs C-LOOK <b>이름과 설명 짝짓기</b> 문제 (설명을 서로 바꿔서 오답 유도)</li>
-      <li>FCFS는 공평하지만 <b>성능이 가장 좋은 기법은 아니다</b></li>
+      <li><b>"FCFS가 가장 성능이 좋다"는 항상 오답</b> — 공평할 뿐 성능은 나쁘다</li>
+      <li>C-SCAN·SCAN은 <b>디스크 끝(0·최대트랙)까지</b> 가고, C-LOOK·LOOK은 <b>마지막 요청까지만</b> 간다</li>
+      <li>문제에 최대 트랙 번호가 <b>안 적혀 있으면</b> 끝까지 가는 것으로 계산할 수 없으므로 <b>LOOK 계열로 처리</b>한다</li>
+      <li>SSTF는 가까운 요청만 처리하므로 멀리 있는 요청이 밀리는 <b>기아(starvation)</b> 발생 가능</li>
       <li>연속 할당 = 빠른 검색 + 외부 단편화 + 압축 필요 / 연결 할당 = 직접접근 불가 + 단편화 없음</li>
-      <li>색인 할당은 색인(인덱스) 블록이 파일을 구성하는 블록 주소를 관리</li>
+      <li>색인 할당은 <b>색인(인덱스) 블록</b>이 파일 구성 블록 주소를 관리 (디렉터리가 아님 — 자주 나오는 함정)</li>
       <li>자료 단위 크기 순서: 필드 &lt; 레코드 &lt; 파일 &lt; 데이터베이스</li>
+      <li>접근 시간 = <b>탐색 시간 + 회전 지연 + 전송 시간</b>, 이 중 탐색 시간이 가장 큼</li>
     </ul>
   </section>
 
@@ -129,11 +385,272 @@
       <tr><th>구분</th><th>SCAN</th><th>C-SCAN</th></tr>
       <tr><td>방향</td><td>양방향 왕복</td><td>한쪽 방향으로만 서비스</td></tr>
       <tr><td>끝에서</td><td>방향을 바꿔 되돌아오며 처리</td><td>서비스 없이 반대쪽 끝으로 이동 후 같은 방향 재처리</td></tr>
+      <tr><td>공평성</td><td>양 끝 트랙이 상대적으로 불리</td><td>모든 트랙의 대기시간이 균일해짐</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>SCAN·C-SCAN</th><th>LOOK·C-LOOK</th></tr>
       <tr><td>이동 범위</td><td>디스크 <b>맨 끝(0, 최대트랙)까지</b> 이동</td><td>마지막 <b>요청이 있는 지점까지만</b> 이동 (불필요한 이동 없음)</td></tr>
+      <tr><td>이름 유래</td><td>훑는다(scan) — 무조건 끝까지</td><td>본다(look) — 앞에 요청 있나 보고 없으면 안 감</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>SSTF</th><th>SCAN 계열</th></tr>
+      <tr><td>선택 기준</td><td>거리만 (방향 무시)</td><td>진행 방향 우선</td></tr>
+      <tr><td>기아 현상</td><td><b>발생 가능</b></td><td>없음 (언젠가 반드시 지나감)</td></tr>
+      <tr><td>계산 방법</td><td>한 칸씩 전부 더해야 함</td><td>방향 전환점 사이는 뺄셈 한 번으로</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요. 계산 문제는 <b>반드시 손으로 써가며</b> 풀어야 실전에서 빨라집니다.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2018 지방직 · 기출문제집 p.262</span></div>
+      <p class="q-body">다음에서 설명하는 디스크 스케줄링은?<br><span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">디스크 헤드가 한쪽 방향으로 트랙의 끝까지 이동하면서 만나는 요청을 모두 처리한다. 트랙의 끝에 도달하면 반대 방향으로 이동하면서 만나는 요청을 모두 처리한다. 이러한 방식으로 헤드가 디스크 양쪽을 계속 왕복하면서 남은 요청을 처리한다.</span></p>
+      <ol class="choices">
+        <li>라운드 로빈(RR) 스케줄링</li>
+        <li>스캔(SCAN) 스케줄링</li>
+        <li>최소 탐색 시간 우선(SSTF) 스케줄링</li>
+        <li>선입 선처리(FCFS) 스케줄링</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 스캔(SCAN) 스케줄링</p>
+        <div class="explain">
+          <p>지문에서 두 가지 단서를 잡으면 끝난다.</p>
+          <ol class="steps">
+            <li><b>"트랙의 끝까지 이동"</b> → 끝까지 가는 건 SCAN 계열(LOOK 계열은 마지막 요청에서 턴)</li>
+            <li><b>"반대 방향으로 이동하면서 만나는 요청을 모두 처리 · 양쪽을 계속 왕복"</b> → 돌아오면서도 서비스하므로 <b>양방향</b> = C가 안 붙은 SCAN</li>
+          </ol>
+          <p><b>함정:</b> ①번 라운드 로빈은 <b>CPU 스케줄링</b> 기법이지 디스크 스케줄링이 아니다. 선택지에 CPU 스케줄링 이름을 섞어 놓는 것이 전형적인 패턴이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2012 국회 · 기출문제집 p.263</span></div>
+      <p class="q-body">SSTF(Shortest Seek Time First) 스케줄링 알고리즘을 사용할 경우, 아래 요구 큐에 있는 트랙의 이동을 올바르게 표현한 것은?<br><span style="display:block;margin-top:6px;font-size:13.5px;">요구 큐: 20, 47, 169, 13, 83, 67, 52 &nbsp;/&nbsp; head 시작 위치: 72</span></p>
+      <ol class="choices">
+        <li>169, 13, 20, 47, 52, 83, 67</li>
+        <li>13, 20, 47, 52, 67, 83, 169</li>
+        <li>169, 83, 67, 52, 47, 20, 13</li>
+        <li>67, 52, 47, 20, 13, 83, 169</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 67, 52, 47, 20, 13, 83, 169</p>
+        <div class="explain">
+          <p>SSTF는 <b>방향 무시하고 매번 현재 위치에서 제일 가까운 트랙</b>을 고른다. 한 칸씩 따라가자.</p>
+          <ol class="steps">
+            <li>현재 <b>72</b> → 후보와의 거리: 67은 5, 83은 11, 52는 20, 47은 25 … → 가장 가까운 <b>67</b></li>
+            <li>현재 <b>67</b> → 52는 15, 83은 16, 47은 20 … → <b>52</b> (83과 1 차이라 실수하기 쉬운 지점)</li>
+            <li>현재 <b>52</b> → 47은 5, 83은 31 … → <b>47</b></li>
+            <li>현재 <b>47</b> → 20은 27, 13은 34, 83은 36 … → <b>20</b></li>
+            <li>현재 <b>20</b> → 13은 7, 83은 63 … → <b>13</b></li>
+            <li>현재 <b>13</b> → 남은 건 83(70), 169(156) → <b>83</b> → 마지막 <b>169</b></li>
+          </ol>
+          <p><b>함정:</b> ②번은 그냥 <b>오름차순 정렬</b>한 것이고 ③번은 내림차순이다. SSTF는 정렬이 아니라 <b>현재 위치 기준</b>이라는 걸 놓치면 이런 선택지에 낚인다. 2단계에서 52(15) vs 83(16)을 대충 보면 ⑤번류 오답으로 빠진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2022 국가직 · 기출문제집 p.263</span></div>
+      <p class="q-body">디스크 큐에 다음과 같이 I/O 요청이 들어와 있다. <b>최소탐색시간 우선(SSTF)</b> 스케줄링 적용 시 발생하는 <b>총 헤드 이동 거리</b>는? (단, 추가 I/O 요청은 없으며 디스크 헤드는 0부터 150까지 이동 가능하고, 현재 위치는 50이다)<br><span style="display:block;margin-top:6px;font-size:13.5px;">큐: 80, 20, 100, 30, 70, 130, 40</span></p>
+      <ol class="choices">
+        <li>100</li>
+        <li>140</li>
+        <li>180</li>
+        <li>430</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 140</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>50 → <b>40</b> (10) → <b>30</b> (10) → <b>20</b> (10) &nbsp;<span style="opacity:0.75">아래쪽이 촘촘하므로 먼저 훑는다</span></li>
+            <li>20에서 남은 요청은 70·80·100·130뿐 → 가장 가까운 <b>70</b> (50) &nbsp;<span style="opacity:0.75">여기서 한 번 크게 점프</span></li>
+            <li>70 → <b>80</b> (10) → <b>100</b> (20) → <b>130</b> (30)</li>
+            <li>합계 = 10+10+10+50+10+20+30 = <b>140</b></li>
+          </ol>
+          <p><b>함정:</b> ④번 430은 <b>FCFS</b>(도착 순서대로)로 계산했을 때의 값이다. 문제가 어떤 기법을 묻는지 먼저 확인하는 습관이 필요하다. ①번 100은 시작(50)과 끝(130)의 단순 차이+α 같은 함정값이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2010 국가직 · 기출문제집 p.264</span></div>
+      <p class="q-body">트랙 번호가 0부터 199인 200개 트랙 디스크에서 <b>C-SCAN</b>으로 아래 대기 큐를 처리할 때, 처리되는 트랙의 순서는? (현재 헤드는 트랙 35에서 트랙 47로 이동해 왔다고 가정)<br><span style="display:block;margin-top:6px;font-size:13.5px;">작업 대기 큐: 139, 22, 175, 86, 13, 158 &nbsp;/&nbsp; 헤드 시작 위치: 47</span></p>
+      <ol class="choices">
+        <li>47 → 86 → 139 → 158 → 175 → 22 → 13</li>
+        <li>47 → 86 → 139 → 158 → 175 → 199 → 0 → 13 → 22</li>
+        <li>47 → 22 → 13 → 86 → 139 → 158 → 175</li>
+        <li>47 → 86 → 139 → 158 → 175 → 199 → 22 → 13</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 47 → 86 → 139 → 158 → 175 → 199 → 0 → 13 → 22</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>방향 파악:</b> "35에서 47로 이동해 왔다" → 번호가 <b>증가하는 방향</b>으로 진행 중</li>
+            <li>증가 방향의 요청을 오름차순 처리: <b>86 → 139 → 158 → 175</b></li>
+            <li>C-SCAN이므로 <b>디스크 끝 199까지</b> 간다 (LOOK이 아니므로 175에서 멈추지 않음)</li>
+            <li>끝에 닿으면 <b>서비스 없이 반대쪽 끝 0으로</b> 점프</li>
+            <li>다시 같은(증가) 방향으로: <b>13 → 22</b></li>
+          </ol>
+          <p><b>선택지가 곧 기법 사전이다.</b> 이 문제의 오답들은 각각 다른 기법의 정답이다:<br>
+          ① = <b>LOOK</b>(끝까지 안 가고 175에서 턴, 양방향) · ③ = <b>SSTF</b>(가까운 22·13 먼저) · ④ = <b>SCAN</b>(199까지 간 뒤 되돌아오며 22→13 감소 순서)<br>
+          특히 ②와 ④의 차이는 <b>"0을 찍고 오름차순(13→22)이냐, 되돌아오며 내림차순(22→13)이냐"</b>다. C가 붙으면 항상 <b>같은 방향</b>이므로 13→22가 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2014 서울시 · 기출문제집 p.265</span></div>
+      <p class="q-body"><b>C-LOOK</b> 스케줄링 알고리즘에 의한 헤드의 <b>총 이동거리</b>는? (현재 헤드 위치 50, 헤드 이동방향은 0에서 199 방향)<br><span style="display:block;margin-top:6px;font-size:13.5px;">요청 대기열: 65, 112, 40, 16, 90, 170, 165, 35, 180</span></p>
+      <ol class="choices">
+        <li>388</li>
+        <li>318</li>
+        <li>362</li>
+        <li>347</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 318</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>요청 정렬: 16, 35, 40, <b>|50|</b>, 65, 90, 112, 165, 170, 180</li>
+            <li>증가 방향 먼저: 50 → 65 → 90 → 112 → 165 → 170 → 180. 쭉 올라가므로 <b>180 − 50 = 130</b></li>
+            <li>C-LOOK은 199까지 가지 않고 <b>남은 요청 중 최솟값 16으로 바로 복귀</b>: 180 − 16 = <b>164</b></li>
+            <li>다시 증가 방향: 16 → 35 → 40 → <b>40 − 16 = 24</b></li>
+            <li>총합 = 130 + 164 + 24 = <b>318</b></li>
+          </ol>
+          <p><b>함정:</b> ①번 388은 <b>C-SCAN</b>으로 계산한 값에 가깝다 — 199와 0을 찍고 오면 (199−50) + (199−0) + 40 식으로 커진다. "LOOK이면 끝을 찍지 않는다"를 놓치면 이쪽으로 빠진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2017 국가직 · 기출문제집 p.265</span></div>
+      <p class="q-body">디스크 헤드의 위치가 <b>55</b>이고 <b>0의 방향</b>으로 이동할 때, <b>C-SCAN</b> 기법으로 디스크 대기 큐 25, 30, 47, 50, 63, 75, 100을 처리한다면 <b>제일 마지막에 서비스 받는 트랙</b>은?</p>
+      <ol class="choices">
+        <li>50</li>
+        <li>63</li>
+        <li>75</li>
+        <li>100</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 63</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>방향이 <b>감소(0 쪽)</b>이므로 55보다 작은 것부터 내림차순: <b>50 → 47 → 30 → 25</b></li>
+            <li>가장 작은 쪽 끝에 도달하면 <b>반대쪽 끝으로 점프</b>한 뒤 다시 감소 방향으로 처리</li>
+            <li>남은 요청 중 <b>가장 큰 100부터</b> 내림차순: <b>100 → 75 → 63</b></li>
+            <li>따라서 마지막은 <b>63</b></li>
+          </ol>
+          <p><b>핵심 감각:</b> C가 붙은 기법은 "항상 같은 방향으로만 서비스"하므로, <b>복귀 후에도 방향이 같다.</b> 감소 방향이면 복귀 후에도 큰 값 → 작은 값 순이다. 그래서 마지막에 서비스되는 것은 <b>진행 방향 기준 가장 끝에 있는 요청</b>(여기서는 남은 것 중 가장 작은 63)이 된다.</p>
+          <p><b>함정:</b> ④번 100을 고르기 쉽다 — "복귀해서 100으로 갔으니 100이 마지막"이라고 착각하는 것. 100은 <b>복귀 직후 첫 번째</b>로 처리된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2011 국가직 · 기출문제집 p.266</span></div>
+      <p class="q-body">운영체제의 디스크 스케줄링에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>FCFS 스케줄링은 공평성이 유지되며 스케줄링 방법 중 가장 성능이 좋은 기법이다.</li>
+        <li>SSTF 스케줄링은 현재 헤드 위치에서 가장 가까운 요청을 우선적으로 처리하는 기법이다.</li>
+        <li>C-SCAN 스케줄링은 양쪽 방향으로 요청을 처리하는 SCAN과 달리 한쪽 방향으로 헤드를 이동해 갈 때만 요청을 처리하는 기법이다.</li>
+        <li>섹터 큐잉(sector queuing)은 고정 헤드 장치에 사용되는 기법으로 디스크 회전 지연 시간을 고려한 기법이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (FCFS가 가장 성능이 좋다는 설명이 틀림)</p>
+        <div class="explain">
+          <p>FCFS는 <b>공평성만</b> 보장한다. 요청이 디스크 양 끝을 번갈아 가리키면 헤드가 계속 왕복하게 되어 <b>이동거리가 폭증</b>한다 — 앞의 비교 그래프에서 FCFS가 430으로 최악이었던 이유다.</p>
+          <ol class="steps">
+            <li>②는 SSTF의 정확한 정의 → 맞음</li>
+            <li>③은 C-SCAN의 정확한 정의(한 방향으로만 서비스) → 맞음</li>
+            <li>④ 섹터 큐잉은 <b>헤드가 고정된 장치</b>(트랙마다 헤드가 따로 있는 구조)에서 쓰는 기법이라 탐색 시간이 없고, 대신 <b>회전 지연</b>을 기준으로 정렬한다 → 맞음</li>
+          </ol>
+          <p><b>암기 포인트:</b> "FCFS = 공평하지만 느리다"는 CPU 스케줄링에서도 디스크 스케줄링에서도 똑같이 성립한다. <b>공평함과 성능은 다른 축</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2013 서울시 · 기출문제집 p.268</span></div>
+      <p class="q-body">보조기억장치의 공간할당 방식에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>연결 할당 방식은 파일을 검색하는데 많은 시간이 소요된다.</li>
+        <li>연속 할당 방식은 파일을 연속하여 저장하므로 디스크 공간 사용의 효율성이 높아진다.</li>
+        <li>색인 할당 방식은 각 파일을 구성하는 디스크 섹터 주소를 디렉터리가 관리한다.</li>
+        <li>블록 할당 방식은 단편화 문제를 해결하기 위해 압축을 요구한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 연결 할당 방식은 파일 검색에 많은 시간이 소요된다</p>
+        <div class="explain">
+          <p>연결 할당은 블록이 디스크 전체에 흩어져 있고 포인터를 하나씩 따라가야 하므로, <b>N번째 블록을 읽으려면 앞의 N−1개를 모두 거쳐야 한다.</b> 당연히 느리다.</p>
+          <ol class="steps">
+            <li>② <b>오답</b> — 연속 할당은 <b>검색은</b> 빠르지만, 외부 단편화 때문에 <b>공간 효율은 낮다.</b> "빠르다"와 "공간 효율이 좋다"를 섞어놓은 함정</li>
+            <li>③ <b>오답</b> — 색인 할당에서 블록 주소를 관리하는 건 디렉터리가 아니라 <b>색인 블록</b>이다. 디렉터리는 "색인 블록이 몇 번인지"만 안다</li>
+            <li>④ <b>오답</b> — 압축이 필요한 건 <b>연속 할당</b>이다. 블록(불연속) 할당은 애초에 외부 단편화가 없어서 압축할 이유가 없다</li>
+          </ol>
+          <p><b>정리:</b> 이 유형은 "누가 무엇을 관리하는가"와 "어떤 방식에 단편화가 생기는가" 두 축만 정확하면 전부 잡힌다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2011 지방직 · 기출문제집 p.268</span></div>
+      <p class="q-body">디스크 할당(disk allocation)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>연속영역(contiguous portion)은 할당 방법에 따라 고정크기와 가변크기로 구분된다.</li>
+        <li>블록의 할당방법에는 연속할당, 인덱스 할당 등이 있다.</li>
+        <li>블록의 연속할당 방법에서는 단편화(fragmentation) 문제가 발생하지 않는다.</li>
+        <li>새로 포맷한 초기 상태의 하드 디스크에는 단편화가 없다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (연속할당에 단편화가 없다는 설명이 틀림)</p>
+        <div class="explain">
+          <p>연속 할당의 <b>최대 약점이 바로 외부 단편화</b>다. 파일이 생성·삭제를 반복하면 디스크 곳곳에 작은 빈칸들이 생기는데, <b>전체 빈 공간을 합치면 충분한데도 "연속된" 공간이 없어서</b> 새 파일을 못 넣는 상황이 벌어진다.</p>
+          <ol class="steps">
+            <li>그래서 연속 할당은 <b>주기적인 압축(compaction)</b>으로 파일들을 한쪽으로 몰아 빈칸을 합쳐줘야 한다</li>
+            <li>④번은 맞는 설명이다 — 갓 포맷한 디스크는 전체가 하나의 연속된 빈 공간이므로 단편화가 있을 수 없다</li>
+          </ol>
+          <p><b>연결 지식:</b> 이 "외부 단편화 → 압축" 구조는 <a href="기억장치관리정책.html">기억장치 관리정책</a>의 메모리 가변분할과 완전히 동일한 문제다. 디스크냐 메모리냐만 다를 뿐 원리가 같으니 함께 묶어 외우면 좋다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">헤드 위치 <b>100</b>, 요청 큐 <b>30, 60, 120, 180</b>, 디스크 범위 0~199, 초기 방향은 <b>증가(199 쪽)</b>일 때 <b>SCAN</b>과 <b>LOOK</b>의 총 이동거리를 각각 구하고, 두 값의 차이가 왜 생기는지 설명하시오.</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: SCAN = 268, LOOK = 230, 차이 38</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>SCAN:</b> 증가 방향으로 120 → 180 → <b>끝인 199까지</b> 감 → 방향 전환 → 60 → 30<br>거리 = (199 − 100) + (199 − 30) = 99 + 169 = <b>268</b></li>
+            <li><b>LOOK:</b> 증가 방향으로 120 → <b>180(마지막 요청)에서 바로 턴</b> → 60 → 30<br>거리 = (180 − 100) + (180 − 30) = 80 + 150 = <b>230</b></li>
+            <li>차이 = 268 − 230 = <b>38</b></li>
+          </ol>
+          <p><b>왜 38인가:</b> SCAN은 180에서 199까지 갔다가 다시 180으로 돌아오는 <b>왕복 19+19 = 38</b>만큼을 "요청도 없는 구간"에 낭비한다. LOOK은 그걸 안 한다. <b>LOOK이 SCAN보다 손해 볼 일이 없는 이유</b>가 바로 이 구조다 — 최선의 경우 같고, 보통은 더 짧다.</p>
+          <p><b>확장 — 네 기법을 같은 조건으로 모두 계산해보면:</b></p>
+          <table>
+            <tr><th>기법</th><th>경로</th><th>계산</th><th>거리</th></tr>
+            <tr><td>LOOK</td><td>120→180→(턴)→60→30</td><td>(180−100) + (180−30)</td><td><b>230</b></td></tr>
+            <tr><td>C-LOOK</td><td>120→180→(복귀)→30→60</td><td>(180−100) + (180−30) + (60−30)</td><td><b>260</b></td></tr>
+            <tr><td>SCAN</td><td>120→180→199→(턴)→60→30</td><td>(199−100) + (199−30)</td><td><b>268</b></td></tr>
+            <tr><td>C-SCAN</td><td>120→180→199→(복귀)→0→30→60</td><td>(199−100) + (199−0) + (60−0)</td><td><b>358</b></td></tr>
+          </table>
+          <p><b>C 계열에서 흔한 실수:</b> 복귀한 뒤에도 <b>같은 방향으로 다시 훑어 올라간다</b>는 것을 빼먹으면 안 된다. C-LOOK은 30에 도착해서 끝나는 게 아니라 <b>30 → 60</b>까지 처리하므로 마지막 30이 더 붙고, C-SCAN도 0에서 멈추는 게 아니라 <b>0 → 60</b>까지 올라가므로 60이 더 붙는다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -145,11 +662,18 @@
       <span class="chip">C-SCAN</span>
       <span class="chip">LOOK</span>
       <span class="chip">C-LOOK</span>
+      <span class="chip">N-Step-SCAN</span>
+      <span class="chip">섹터 큐잉</span>
       <span class="chip">헤드이동거리</span>
+      <span class="chip">탐색시간</span>
+      <span class="chip">회전지연</span>
+      <span class="chip">기아현상</span>
       <span class="chip">연속할당</span>
       <span class="chip">연결할당</span>
       <span class="chip">색인할당</span>
+      <span class="chip">색인블록</span>
       <span class="chip">외부단편화</span>
+      <span class="chip">압축(compaction)</span>
       <span class="chip">직접접근</span>
       <span class="chip">필드</span>
       <span class="chip">레코드</span>

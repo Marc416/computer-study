@@ -20,26 +20,46 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"프로그램"과 "프로세스"는 왜 다른 말인가</h4>
+      <p>하드디스크에 저장된 <code>game.exe</code>는 그냥 <b>파일</b>이다. 아무 일도 하지 않는다. 이걸 더블클릭하면 OS가 메모리로 올리고, CPU 시간을 배정하고, 열린 파일 목록과 현재 실행 위치를 관리하기 시작한다. <b>이렇게 "살아 움직이는 상태"가 된 것이 프로세스</b>다. 같은 <code>game.exe</code>를 세 번 실행하면 프로세스는 3개가 된다 — 프로그램은 하나인데 프로세스는 셋이다.</p>
+      <p>그런데 CPU는 하나뿐이니 프로세스 100개가 진짜로 동시에 달릴 수는 없다. OS는 <b>아주 빠르게 번갈아 가며</b> 실행시켜 동시에 도는 것처럼 보이게 한다. 이때 "지금 실행 중", "CPU를 기다리는 중", "디스크 읽기를 기다리는 중" 같은 <b>상태</b>를 구분해서 관리해야 하고, 프로세스를 바꿀 때마다 진행 상황을 어딘가에 저장해 둬야 한다. 그 저장소가 <b>PCB</b>, 저장하고 바꿔치는 작업이 <b>문맥 교환</b>이다.</p>
+      <p><b>스레드</b>는 여기서 한 단계 더 나아간다. 크롬에서 탭 하나가 동영상을 재생하는 동안 다른 탭에서 스크롤이 되려면 실행 흐름이 여러 개여야 하는데, 그때마다 프로세스를 새로 만들면 메모리를 통째로 복사해야 해서 너무 무겁다. 그래서 <b>"메모리는 같이 쓰고 실행 흐름만 여러 개"</b>로 만든 것이 스레드다. 이 단원 문제의 절반은 <b>"무엇을 공유하고 무엇을 따로 갖는가"</b>를 묻는다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — 프로세스</h2>
 
-    <h3>프로세스 상태 전이 <span class="page-ref">📖 기출문제집 p.189</span></h3>
+    <h3>프로세스 상태 전이 <span class="page-ref">📖 기출문제집 p.189~190</span></h3>
     <table>
       <tr><th>상태</th><th>설명</th></tr>
-      <tr><td>생성 (New)</td><td>작업이 커널에 등록되어 PCB가 만들어짐</td></tr>
-      <tr><td>준비 (Ready)</td><td>모든 자원을 할당받고 <b>CPU 할당만 기다리는</b> 상태</td></tr>
+      <tr><td>생성 (New)</td><td>사용자가 요청한 작업이 <b>커널에 등록</b>되어 커널 공간에 PCB가 만들어진 상태</td></tr>
+      <tr><td>준비 (Ready)</td><td>기억장치 등 <b>필요한 자원을 모두 할당받고</b>, 오직 <b>CPU(프로세서) 할당만 기다리는</b> 상태. 준비 큐(ready queue)에 들어가 있다</td></tr>
       <tr><td>실행 (Running)</td><td>CPU를 할당받아 실제로 처리되는 상태</td></tr>
-      <tr><td>대기/블록 (Waiting/Blocked)</td><td>입출력 등 <b>이벤트가 일어나기를 기다리는</b> 상태</td></tr>
-      <tr><td>종료 (Terminated)</td><td>수행이 끝난 상태</td></tr>
+      <tr><td>대기/블록 (Waiting/Blocked)</td><td>입출력 완료·신호 수신 등 <b>어떤 사건(event)이 일어나기를 기다리는</b> 상태</td></tr>
+      <tr><td>종료 (Terminated)</td><td>프로세스의 수행이 끝난 상태</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "준비 상태는 입출력 완료 같은 사건을 기다리는 상태"는 틀렸다 — 그건 <b>대기 상태</b>다. 준비 상태는 오직 <b>CPU 할당</b>을 기다린다.</div>
 
-    <h3>상태 전이 용어</h3>
+    <div class="deep">
+      <h4>"준비"와 "대기"를 헷갈리면 이 단원 절반을 틀린다</h4>
+      <p>둘 다 "뭔가를 기다린다"라서 헷갈리지만, <b>기다리는 대상이 완전히 다르다.</b></p>
+      <ul>
+        <li><b>준비(Ready)</b> = <b>CPU만</b> 기다린다. 다른 건 다 준비됐다. CPU만 주면 <b>당장</b> 달릴 수 있다.</li>
+        <li><b>대기(Blocked)</b> = <b>CPU 말고 다른 것</b>(디스크 읽기 완료, 키보드 입력 등)을 기다린다. 지금 CPU를 줘도 <b>할 일이 없다</b>.</li>
+      </ul>
+      <p>그래서 스케줄러는 <b>준비 큐만 쳐다본다</b>. 대기 상태 프로세스는 아예 스케줄링 대상에서 제외된다 — CPU를 줘봤자 디스크를 기다리며 놀 테니까.</p>
+      <p>여기서 <b>매년 나오는 함정</b>이 파생된다: "대기 중이던 입출력이 완료되면 <b>바로 실행</b> 상태가 된다"? → <b>틀림.</b> 입출력이 끝나면 "이제 CPU만 있으면 됨" 상태가 된 것이니 <b>준비 상태로</b> 가서 줄을 서야 한다. 그 뒤 스케줄러가 뽑아줘야(Dispatch) 실행된다.</p>
+    </div>
+
+    <h3>상태 전이 용어 4가지</h3>
     <table>
       <tr><th>용어</th><th>전이 방향</th><th>의미</th></tr>
-      <tr><td>Dispatch</td><td>준비 → 실행</td><td>스케줄러가 CPU를 할당</td></tr>
-      <tr><td>Block (Time-out 아님)</td><td>실행 → 대기</td><td>입출력 요청 등으로 CPU 반납</td></tr>
+      <tr><td>Dispatch</td><td>준비 → 실행</td><td>스케줄러가 준비 큐에서 하나를 골라 CPU를 할당</td></tr>
+      <tr><td>Block</td><td>실행 → 대기</td><td>지정된 시간 이전에 <b>입출력 요청</b> 등으로 스스로 CPU를 반납</td></tr>
       <tr><td>Wake-up</td><td>대기 → 준비</td><td>기다리던 입출력·이벤트가 완료됨 (바로 실행 상태로 가는 것 아님!)</td></tr>
-      <tr><td>Time-out</td><td>실행 → 준비</td><td>할당된 시간(타임 슬라이스)을 다 씀</td></tr>
+      <tr><td>Time-out</td><td>실행 → 준비</td><td>할당된 시간(타임 슬라이스)을 다 씀, 또는 우선순위 높은 프로세스에 선점당함</td></tr>
     </table>
     <figure class="diagram">
       <svg viewBox="0 0 700 270" role="img" aria-label="프로세스 상태 전이도: 생성에서 준비, 실행, 대기를 거쳐 종료까지 각 화살표에 전이 조건이 표시되어 있다">
@@ -77,23 +97,51 @@
       </svg>
       <figcaption>프로세스는 생성→준비→실행을 거쳐 종료되며, 실행 중 입출력을 요청하면(Block) 대기 상태로 빠졌다가 이벤트 완료 시(Wake-up) <b>실행이 아니라 준비 상태로</b> 돌아온다 — 이후 스케줄러가 다시 Dispatch해야 실행된다.</figcaption>
     </figure>
-    <div class="tip"><b>함정 주의:</b> 대기 상태의 프로세스가 입출력을 완료하면 <b>준비 상태</b>로 갔다가 스케줄링을 거쳐 실행 상태가 된다 — "바로 실행 상태로 전이"는 틀린 설명이다.</div>
+    <div class="tip"><b>화살표 방향 암기:</b> <b>실행으로 들어가는 화살표는 Dispatch 하나뿐</b>이다. 어떤 경로로 왔든 CPU를 받으려면 반드시 준비 상태를 거쳐 스케줄러의 선택을 받아야 한다. "대기 → 실행" 화살표는 상태 전이도에 <b>존재하지 않는다.</b></div>
 
-    <h3>문맥 교환 (Context Switching)</h3>
+    <h3>프로세스 생성 4단계 <span class="page-ref">📖 기출문제집 p.191</span></h3>
+    <p>한 프로세스는 실행 중에 <b>시스템 호출</b>로 새 프로세스를 만들 수 있다. 만든 쪽이 부모, 만들어진 쪽이 자식이다. 생성 절차는 순서를 묻는 문제로 자주 나온다.</p>
+    <ol class="steps">
+      <li><b>프로세스 식별자(PID) 할당</b> — 먼저 "이름"부터 정한다</li>
+      <li><b>주소 공간과 PCB 할당</b> — 살 집(메모리 영역)과 신상명세서(PCB) 자리를 확보</li>
+      <li><b>PCB 초기화</b> — 신상명세서에 초기값을 채워 넣는다</li>
+      <li><b>스케줄링 큐(준비 리스트)에 연결</b> — 준비 상태가 되어 줄을 선다</li>
+    </ol>
+    <div class="analogy"><b>순서 암기:</b> "<b>이름 짓고 → 집 마련하고 → 서류 작성하고 → 줄 선다</b>". 준비 큐 연결이 <b>항상 마지막</b>이라는 것만 확실히 잡아도 선택지 대부분이 걸러진다.</div>
+
+    <h3>문맥 교환 (Context Switching) <span class="page-ref">📖 기출문제집 p.193~195</span></h3>
     <ul>
       <li>CPU를 다른 프로세스로 넘길 때, <b>이전 프로세스의 상태(레지스터 등)를 저장</b>하고 <b>새 프로세스의 상태를 적재</b>하는 작업</li>
       <li>이 과정 자체는 유용한 작업을 하지 않으므로 <b>시스템 오버헤드</b>가 된다</li>
       <li><b>같은 프로세스 안의 스레드 간 문맥교환</b>이 <b>서로 다른 프로세스 간 문맥교환</b>보다 비용이 <b>더 작다</b> (주소공간을 안 바꿔도 되므로)</li>
     </ul>
+    <div class="deep">
+      <h4>왜 오버헤드인가 — 이사 비용으로 생각하기</h4>
+      <p>문맥 교환은 <b>책상 정리와 같다.</b> A의 작업을 멈추고 B에게 책상을 내주려면, A가 펼쳐둔 자료(레지스터, PC, 스택 포인터)를 전부 상자에 담아 치우고(저장), B의 상자를 꺼내 다시 펼쳐야(적재) 한다. <b>이 정리 시간 동안에는 A도 B도 아무 일을 하지 못한다.</b> 그래서 순수한 낭비, 즉 오버헤드다.</p>
+      <p>스레드 간 교환이 더 싼 이유도 같은 비유로 설명된다. 스레드는 <b>같은 책상(주소 공간·코드·데이터)을 쓰기 때문에</b> 책상을 통째로 비울 필요가 없다. 자기 노트(스택)와 펜 위치(레지스터·PC)만 바꾸면 된다.</p>
+      <p><b>시험 포인트:</b> "문맥 교환이 <b>반드시</b> 발생하는 경우"를 묻는 문제가 있다. 답은 <b>라운드 로빈에서 시간 할당량(time quantum)이 만료된 경우</b>다 — 준비 큐가 비어 있지 않은 이상 그 프로세스는 무조건 내려오고 다른 프로세스가 올라간다. 반면 시스템 호출이나 인터럽트는 처리 후 <b>같은 프로세스가 계속 실행될 수도</b> 있어 "반드시"가 아니다.</p>
+    </div>
 
-    <h3>PCB (Process Control Block)</h3>
-    <p>프로세스 관리의 핵심 데이터 구조로, 커널이 프로세스 실행·스케줄링을 위해 참조·갱신한다.</p>
-    <ul>
-      <li>프로세스 식별자(PID), 부모프로세스 식별자(PPID)</li>
-      <li>프로세스 상태, 프로세스 컨텍스트(PC·SP·범용 레지스터)</li>
-      <li>스케줄링 정보(우선순위, CPU 사용시간)</li>
-      <li>메모리 관리 정보(페이지 테이블 주소 등), 오픈 파일 테이블, 종료 코드</li>
-    </ul>
+    <h3>PCB (Process Control Block) <span class="page-ref">📖 기출문제집 p.195</span></h3>
+    <p>프로세스 관리의 핵심 데이터 구조로, 커널이 프로세스 실행·스케줄링·메모리 관리·파일 입출력 등 여러 상황에서 참조·갱신한다. 한마디로 <b>프로세스의 신상명세서</b>다.</p>
+    <table>
+      <tr><th>PCB에 들어가는 것 (O)</th><th>PCB에 없는 것 (X)</th></tr>
+      <tr>
+        <td>
+          프로세스 식별자(PID), 부모 식별자(PPID)<br>
+          프로세스 상태<br>
+          프로세스 컨텍스트(PC, SP, 범용 레지스터)<br>
+          스케줄링 정보(우선순위, 사용한 CPU 시간)<br>
+          메모리 관리 정보(페이지 테이블 주소 등)<br>
+          오픈 파일 테이블, 종료 코드<br>
+          프로세스 간 통신 정보, 회계 정보, 소유자 이름
+        </td>
+        <td>
+          <b>인터럽트 정보</b> (2022 국가직 정답)<br>
+          <span style="opacity:0.75">— 인터럽트는 하드웨어·커널이 처리하는 사건이지<br>개별 프로세스의 신상정보가 아니다</span>
+        </td>
+      </tr>
+    </table>
 
     <h3>좀비 프로세스 vs 고아 프로세스</h3>
     <table>
@@ -105,31 +153,76 @@
 
   <section class="block">
     <h2><span class="emoji">🗂️</span>주요 개념 — 프로세스 메모리 영역</h2>
+    <p>프로세스가 메모리를 할당받으면 <b>용도에 따라 4개 구역</b>으로 나뉜다. 어느 변수가 어디에 저장되는지를 뒤섞어 묻는 문제가 <b>매년</b> 나오므로, 아래 그림의 위치를 통째로 외우는 편이 빠르다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 330" role="img" aria-label="프로세스 메모리 4영역 구조: 낮은 주소부터 코드, 데이터, 힙이 있고 힙은 위로 증가하며 높은 주소에서 스택이 아래로 증가한다">
+        <defs>
+          <marker id="mm1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="90" y="24" font-size="11.5" text-anchor="middle" opacity="0.8">낮은 주소</text>
+        <text x="90" y="310" font-size="11.5" text-anchor="middle" opacity="0.8">높은 주소</text>
+        <line x1="90" y1="32" x2="90" y2="296" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+
+        <rect x="130" y="34" width="300" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="280" y="56" font-size="13" text-anchor="middle" font-weight="700">코드 (Code / Text)</text>
+        <text x="280" y="74" font-size="11.5" text-anchor="middle" opacity="0.8">CPU가 실행할 명령어 (읽기 전용)</text>
+
+        <rect x="130" y="92" width="300" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="280" y="114" font-size="13" text-anchor="middle" font-weight="700">데이터 (Data)</text>
+        <text x="280" y="132" font-size="11.5" text-anchor="middle" opacity="0.8">전역변수 · 정적(static) 변수 — 실행 전 초기화</text>
+
+        <rect x="130" y="150" width="300" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="280" y="172" font-size="13" text-anchor="middle" font-weight="700">힙 (Heap)</text>
+        <text x="280" y="190" font-size="11.5" text-anchor="middle" opacity="0.8">동적 할당 (malloc / new) — 프로그래머가 관리</text>
+        <line x1="445" y1="196" x2="445" y2="158" stroke="currentColor" stroke-width="1.5" marker-end="url(#mm1)"/>
+        <text x="452" y="180" font-size="11">주소 커지는 방향으로 증가</text>
+
+        <rect x="130" y="238" width="300" height="58" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="280" y="260" font-size="13" text-anchor="middle" font-weight="700">스택 (Stack)</text>
+        <text x="280" y="278" font-size="11.5" text-anchor="middle" opacity="0.8">지역변수 · 매개변수 · 복귀주소 · 레지스터 내용</text>
+        <line x1="445" y1="244" x2="445" y2="286" stroke="currentColor" stroke-width="1.5" marker-end="url(#mm1)"/>
+        <text x="452" y="268" font-size="11">반대 방향으로 증가</text>
+
+        <text x="280" y="222" font-size="11.5" text-anchor="middle" opacity="0.7">(빈 공간 — 힙과 스택이 서로를 향해 자란다)</text>
+      </svg>
+      <figcaption>프로세스 메모리 4영역 — 코드·데이터는 크기가 고정이고, 힙과 스택은 실행 중 크기가 변하므로 <b>양쪽 끝에서 서로를 향해</b> 자라도록 배치한다. 둘이 만나면 스택 오버플로우다.</figcaption>
+    </figure>
     <table>
-      <tr><th>영역</th><th>저장 내용</th></tr>
-      <tr><td>코드(Text)</td><td>실행할 명령어 (CPU가 실행)</td></tr>
-      <tr><td>데이터(Data)</td><td><b>전역변수, 정적(static) 변수</b> — 실행 전 초기화됨</td></tr>
-      <tr><td>스택(Stack)</td><td><b>지역변수, 매개변수, 함수 복귀 주소, CPU 레지스터 내용</b> — LIFO 구조, 함수 호출마다 생성</td></tr>
-      <tr><td>힙(Heap)</td><td><b>동적으로 할당</b>되는 메모리 (malloc/new 등)</td></tr>
+      <tr><th>영역</th><th>저장 내용</th><th>대표 예시</th></tr>
+      <tr><td>코드(Text)</td><td>실행할 명령어 (CPU가 실행)</td><td>컴파일된 함수 본체</td></tr>
+      <tr><td>데이터(Data)</td><td><b>전역변수, 정적(static) 변수</b> — 실행 전 초기화됨</td><td><code>int count = 0;</code> (함수 밖)</td></tr>
+      <tr><td>스택(Stack)</td><td><b>지역변수, 매개변수, 함수 복귀 주소, CPU 레지스터 내용</b> — LIFO 구조, 함수 호출마다 생성</td><td><code>int a = 10;</code> (함수 안)</td></tr>
+      <tr><td>힙(Heap)</td><td><b>동적으로 할당</b>되는 메모리, 주소가 커지는 방향으로 증가</td><td><code>malloc()</code>, <code>new</code></td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 전역변수 = 데이터 영역 (스택 아님). 지역변수·매개변수·복귀주소 = 스택 영역 (데이터 아님). 동적 할당 = 힙 (스택 아님). 시험에서 이 4가지를 뒤섞어서 출제한다.</div>
+    <div class="tip"><b>함정 주의 (매년 출제):</b> 전역변수 = <b>데이터</b> 영역 (스택 아님). 지역변수·매개변수·복귀주소 = <b>스택</b> 영역 (데이터 아님). 동적 할당 = <b>힙</b> (스택 아님). 이 세 쌍을 서로 바꿔치기한 선택지가 반복해서 나온다.</div>
+    <div class="analogy"><b>한 줄 암기:</b> "<b>전역은 데이터, 지역은 스택, 동적은 힙, 명령어는 코드</b>" — 네 글자씩 리듬으로 외우면 시험장에서 바로 떠오른다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🧵</span>주요 개념 — 스레드와 멀티스레딩</h2>
 
-    <h3>스레드란?</h3>
+    <h3>스레드란? <span class="page-ref">📖 기출문제집 p.196</span></h3>
     <ul>
       <li>프로세스에서 <b>실행(제어)의 개념만 분리</b>한 단위 → "경량 프로세스(Light-Weight Process)"</li>
       <li>같은 프로세스 내 스레드는 <b>코드·데이터·힙·파일 등을 공유</b>하지만, <b>스택과 레지스터(PC 포함)는 스레드마다 독립</b></li>
-      <li>하나의 스레드는 <b>하나의 프로세스에만</b> 속할 수 있다 (여러 프로세스에 걸칠 수 없음)</li>
+      <li>하나의 프로세스는 <b>여러 스레드</b>를 가질 수 있지만, 하나의 스레드가 <b>여러 프로세스에 속할 수는 없다</b></li>
     </ul>
+    <div class="tip"><b>방향 함정:</b> "하나의 스레드 내에 여러 프로세스가 존재할 수 있다"(2014 서울시), "하나의 스레드는 여러 프로세스에 포함될 수 있다"(2019 국가직) — <b>둘 다 오답</b>이다. 포함 관계는 언제나 <b>프로세스 ⊃ 스레드</b> 한 방향뿐이다.</div>
 
     <h3>스레드 간 공유 여부 <span class="page-ref">📖 기출문제집 p.197</span></h3>
     <table>
       <tr><th>공유 O</th><th>공유 X (스레드별 독립)</th></tr>
       <tr><td>코드, 전역변수(데이터 영역), 힙, 파일, 프로세스 자원 전체</td><td>레지스터, 프로그램 카운터(PC), 스택</td></tr>
     </table>
+    <div class="deep">
+      <h4>왜 하필 스택과 PC만 따로인가</h4>
+      <p>스레드는 <b>"서로 다른 곳을 실행하는 흐름"</b>이다. 그러려면 최소 두 가지가 각자 있어야 한다.</p>
+      <ul>
+        <li><b>PC(프로그램 카운터)</b>: "나는 지금 코드 몇 번째 줄을 실행 중인가". 이게 공유되면 두 스레드가 같은 줄을 실행하게 되어 흐름이 하나로 합쳐져 버린다.</li>
+        <li><b>스택</b>: 함수 호출 기록과 지역변수. 공유하면 스레드 A가 호출한 함수의 지역변수를 스레드 B가 덮어써 값이 뒤섞인다.</li>
+      </ul>
+      <p>반대로 <b>코드·전역변수·힙은 공유해야 이득</b>이다. 같은 프로그램이니 코드는 한 벌이면 충분하고, 데이터를 공유해야 스레드끼리 값을 빠르게 주고받을 수 있다. <b>"각자 어디를 실행 중인지"에 관한 것만 따로, 나머지는 전부 공유"</b>가 원칙이다.</p>
+    </div>
     <figure class="diagram">
       <svg viewBox="0 0 640 340" role="img" aria-label="프로세스 내 스레드 메모리 구조: 코드, 데이터, 힙은 모든 스레드가 공유하고 스택과 레지스터만 스레드마다 독립적으로 갖는다">
         <rect x="20" y="20" width="600" height="300" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -169,28 +262,36 @@
       <li>멀티프로세서 환경에서 스레드별로 다른 프로세서에서 병렬 수행 가능</li>
       <li>스레드 간 통신은 <b>커널 개입이 필요 없어</b> 프로세스 간 통신(IPC)보다 효율적</li>
     </ul>
-    <div class="tip"><b>함정 주의:</b> "한 스레드에 문제가 생겨도 전체 프로세스에 영향 없다"는 틀렸다 — 스레드들은 같은 프로세스 자원을 공유하므로 <b>하나가 잘못되면 프로세스 전체에 영향</b>을 줄 수 있다.</div>
+    <div class="tip"><b>함정 주의:</b> "한 스레드에 문제가 생겨도 전체 프로세스에 영향 없다"는 틀렸다 — 스레드들은 같은 프로세스 자원을 공유하므로 <b>하나가 잘못되면 프로세스 전체에 영향</b>을 줄 수 있다. 이것이 멀티스레딩의 <b>대표적 단점</b>이다(안정성 ↓).</div>
 
     <h3>스레드와 교착상태</h3>
-    <p>교착상태는 프로세스 단위 자원 할당에서 발생하므로, <b>서로 다른 프로세스에 속한 스레드 간에도 교착상태가 발생할 수 있다</b> ("발생하지 않는다"는 틀린 설명).</p>
+    <p>교착상태는 프로세스 단위 자원 할당에서 발생하므로, <b>서로 다른 프로세스에 속한 스레드 간에도 교착상태가 발생할 수 있다</b> ("발생하지 않는다"는 틀린 설명). 자세한 내용은 <a href="임계영역과교착상태.html">임계영역과 교착상태</a> 문서 참고.</p>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>준비 상태 = CPU 대기, 대기 상태 = 이벤트(입출력) 대기 — 절대 헷갈리면 안 됨</li>
-      <li>Block/Wake-up/Dispatch/Time-out 4가지 상태 전이 용어 구분</li>
-      <li>문맥교환은 오버헤드 — 같은 프로세스 내 스레드 간이 더 저렴</li>
-      <li>PCB에 <b>포함되지 않는 것</b> 찾기 유형 (인터럽트 자체 정보는 PCB 항목이 아님)</li>
+      <li>준비 상태 = <b>CPU</b> 대기, 대기 상태 = <b>이벤트(입출력)</b> 대기 — 절대 헷갈리면 안 됨</li>
+      <li>대기 → <b>준비</b> → 실행 순서. "대기에서 바로 실행"은 항상 오답</li>
+      <li>Block / Wake-up / Dispatch / Time-out 4가지 상태 전이 용어 구분</li>
+      <li>프로세스 생성 순서: 식별자 → 주소공간·PCB 할당 → PCB 초기화 → <b>준비 큐 연결(마지막)</b></li>
+      <li>문맥교환은 오버헤드 — 같은 프로세스 내 스레드 간이 더 저렴, RR의 <b>시간 할당량 만료 시 반드시 발생</b></li>
+      <li>PCB에 <b>포함되지 않는 것</b> = <b>인터럽트 정보</b></li>
       <li>좀비 = 종료됐지만 회수 안 됨 / 고아 = 부모가 먼저 죽음</li>
-      <li>메모리 4영역(코드/데이터/스택/힙)에 무엇이 저장되는지 뒤섞어 묻는 문제 매년 출제</li>
-      <li>스레드 공유 자원(코드·데이터·힙) vs 비공유 자원(스택·레지스터·PC) 구분</li>
-      <li>다른 프로세스의 스레드 간에도 교착상태 발생 가능</li>
+      <li>메모리 4영역: 전역=데이터, 지역·매개변수·복귀주소=스택, 동적=힙, 명령어=코드</li>
+      <li>스레드 공유(코드·데이터·힙) vs 비공유(스택·레지스터·PC) 구분</li>
+      <li>프로세스 ⊃ 스레드 — 반대 방향 서술은 무조건 오답</li>
     </ul>
   </section>
 
   <section class="block">
     <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>준비(Ready)</th><th>대기(Blocked)</th></tr>
+      <tr><td>기다리는 대상</td><td><b>CPU</b></td><td><b>입출력·이벤트</b></td></tr>
+      <tr><td>CPU를 주면?</td><td>즉시 실행 가능</td><td>줘도 할 일 없음</td></tr>
+      <tr><td>스케줄링 대상</td><td>O (준비 큐에서 선택됨)</td><td>X (제외됨)</td></tr>
+    </table>
     <table>
       <tr><th>구분</th><th>프로세스</th><th>스레드</th></tr>
       <tr><td>정의</td><td>실행 중인 프로그램</td><td>프로세스 내 실행 흐름 단위</td></tr>
@@ -198,6 +299,7 @@
       <tr><td>독립 요소</td><td>-</td><td>스택, 레지스터, PC</td></tr>
       <tr><td>생성 비용</td><td>큼</td><td>작음 (경량)</td></tr>
       <tr><td>통신</td><td>IPC 필요 (커널 개입)</td><td>공유 메모리로 직접 통신 가능</td></tr>
+      <tr><td>하나가 죽으면</td><td>다른 프로세스는 무사</td><td><b>프로세스 전체에 영향</b></td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>좀비 프로세스</th><th>고아 프로세스</th></tr>
@@ -207,17 +309,284 @@
   </section>
 
   <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2021 지방직 · 기출문제집 p.189~190</span></div>
+      <p class="q-body">프로세스(process)에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>실행 중인 프로그램이다.</li>
+        <li>프로그램 코드 외에도 현재의 활동 상태를 갖는다.</li>
+        <li>준비(ready) 상태는 입출력 완료 또는 신호의 수신 같은 사건(event)이 일어나기를 기다리는 상태이다.</li>
+        <li>호출한 함수의 반환 주소, 매개변수 등을 저장하기 위해 스택을 사용한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>③에서 서술한 "입출력 완료나 신호 수신 같은 <b>사건을 기다리는</b> 상태"는 <b>대기(waiting/blocked)</b> 상태의 정의다</li>
+            <li><b>준비(ready)</b> 상태는 다른 자원은 다 받았고 오직 <b>CPU 할당만</b> 기다리는 상태</li>
+            <li>①·②·④는 모두 맞는 설명이다 (특히 ④: 복귀주소·매개변수는 스택에 저장)</li>
+          </ol>
+          <p><b>함정:</b> 두 상태를 <b>서로 바꿔 서술</b>하는 것이 이 단원의 1번 단골 함정이다. "사건·이벤트·입출력"이라는 단어가 나오면 <b>대기</b>, "CPU·프로세서"가 나오면 <b>준비</b>로 즉시 매칭하자.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2010 지방직 · 기출문제집 p.190~191</span></div>
+      <p class="q-body">프로세스 상태(process state)에 대한 설명으로 <b>옳은 것</b>은?</p>
+      <ol class="choices">
+        <li>종료상태(terminated)는 프로세스가 기억장치를 비롯한 모든 필요한 자원을 할당받은 상태에서 프로세서의 할당을 기다리고 있는 상태이다.</li>
+        <li>대기상태(waiting/blocked)는 프로세스가 원하는 자원을 할당받지 못해서 기다리고 있는 상태이다.</li>
+        <li>실행상태(running)는 사용자가 요청한 작업이 커널에 등록되어 커널 공간에 PCB 등이 만들어진 상태이다.</li>
+        <li>준비상태(ready)는 프로세스의 수행이 끝난 상태이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>이 문제는 <b>네 상태의 정의를 통째로 섞어 놓은</b> 유형이다. 각 선택지가 실제로는 어느 상태의 설명인지 되짚어보면 답이 보인다.</p>
+          <ol class="steps">
+            <li>① "자원 다 받고 프로세서 할당을 기다림" → 사실은 <b>준비(ready)</b> 상태의 정의</li>
+            <li>② "원하는 자원을 할당받지 못해 기다림" → <b>대기(blocked)</b> 상태가 맞다 <b>(정답)</b></li>
+            <li>③ "커널에 등록되어 PCB가 만들어진 상태" → <b>생성(new)</b> 상태의 정의</li>
+            <li>④ "수행이 끝난 상태" → <b>종료(terminated)</b> 상태의 정의</li>
+          </ol>
+          <p><b>풀이 요령:</b> 이런 "정의 뒤섞기" 문제는 선택지마다 <b>"이건 원래 무슨 상태 설명이지?"</b>를 적어가며 풀면 실수가 없다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2017 하반기 국가직 · 기출문제집 p.191</span></div>
+      <p class="q-body">운영체제가 프로세스(process)를 생성하는 과정을 <b>순서대로</b> 바르게 나열한 것은?</p>
+      <ul>
+        <li>ㄱ. 새로운 프로세스를 위한 프로세스 식별자를 할당한다.</li>
+        <li>ㄴ. 새로운 프로세스를 스케줄링 큐의 준비 또는 준비/보류 리스트에 연결한다.</li>
+        <li>ㄷ. 새로운 프로세스를 위한 주소 공간과 프로세스 제어블록(PCB)을 할당한다.</li>
+        <li>ㄹ. 새로운 프로세스의 프로세스 제어블록을 초기화한다.</li>
+      </ul>
+      <ol class="choices">
+        <li>ㄱ → ㄴ → ㄷ → ㄹ</li>
+        <li>ㄱ → ㄷ → ㄹ → ㄴ</li>
+        <li>ㄷ → ㄹ → ㄱ → ㄴ</li>
+        <li>ㄷ → ㄹ → ㄴ → ㄱ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② ㄱ → ㄷ → ㄹ → ㄴ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ 식별자 할당</b> — 프로세스를 구분할 <b>이름(PID)</b>부터 정해야 이후 작업에서 그것을 지칭할 수 있다</li>
+            <li><b>ㄷ 주소공간·PCB 할당</b> — 프로세스가 쓸 메모리 영역과 정보를 담을 PCB <b>자리</b>를 확보</li>
+            <li><b>ㄹ PCB 초기화</b> — 확보한 PCB에 <b>초기값</b>을 채워 넣음 (자리가 있어야 채울 수 있으므로 ㄷ 다음)</li>
+            <li><b>ㄴ 준비 큐 연결</b> — 모든 준비가 끝났으니 준비 상태로 전이시켜 <b>줄을 세운다</b></li>
+          </ol>
+          <p><b>선택지 소거법:</b> 준비 큐 연결(ㄴ)은 논리적으로 <b>가장 마지막</b>일 수밖에 없다. ㄴ이 끝에 없는 ①·④를 바로 지우면 ②·③만 남고, 식별자(ㄱ)가 먼저라는 것만 알면 ②가 답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2018 국회직 · 기출문제집 p.192</span></div>
+      <p class="q-body">프로세스의 상태 변이에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>시간 할당량을 사용하는 우선순위 기반 스케줄링에서 실행 상태 프로세스의 시간 할당량이 소진되면, 커널에 의해 준비(ready) 상태로 전이된다.</li>
+        <li>실행 상태의 프로세스가 동기식 입출력 요청을 하면, 입출력이 완료될 때까지 CPU를 반납하고 대기 상태로 전이된다.</li>
+        <li>대기 상태의 프로세스가 요청하였던 입출력이 완료되면, 해당 프로세스는 CPU 연산이 가능해지므로 바로 실행 상태로 전이된다.</li>
+        <li>다중 처리기 시스템에서는 실행 상태의 프로세스가 여러 개 있을 수 있다.</li>
+        <li>대기 상태의 프로세스들은 CPU 할당을 위한 스케줄링에서 제외된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>입출력이 완료되면 프로세스는 <b>Wake-up</b> 되어 <b>준비(ready) 상태</b>로 간다</li>
+            <li>준비 큐에서 기다리다가 스케줄러가 선택(<b>Dispatch</b>)해줘야 비로소 실행 상태가 된다</li>
+            <li>따라서 "바로 실행 상태로 전이"라고 한 ③이 틀렸다</li>
+          </ol>
+          <p><b>왜 바로 못 가나:</b> CPU는 지금 <b>다른 프로세스가 쓰고 있을 수</b> 있다. 입출력이 끝났다고 해서 남이 쓰던 CPU를 빼앗을 권리가 생기는 게 아니므로, 줄(준비 큐)을 서는 것이 원칙이다.</p>
+          <p><b>참고:</b> ④도 맞는 설명이다 — CPU(처리기)가 여러 개면 실행 상태 프로세스도 그 수만큼 존재할 수 있다. 헷갈려서 ④를 고르지 않도록 주의.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2019 지방직 · 기출문제집 p.193</span></div>
+      <p class="q-body">프로세스 상태 전이에서 <b>준비(Ready) 상태로 전이되는 상황</b>만을 모두 고르면? (단, 동일한 우선순위의 프로세스가 준비 상태로 한 개 이상 대기하고 있다)</p>
+      <ul>
+        <li>ㄱ. 실행 상태에 있는 프로세스가 우선순위가 높은 프로세스에 의해 선점되었을 때</li>
+        <li>ㄴ. 블록된(Blocked) 상태에 있는 프로세스가 요청한 입출력 작업이 완료되었을 때</li>
+        <li>ㄷ. 실행 상태에 있는 프로세스가 작업을 마치지 못하고 시간 할당량을 다 썼을 때</li>
+      </ul>
+      <ol class="choices">
+        <li>ㄱ, ㄴ</li>
+        <li>ㄱ, ㄷ</li>
+        <li>ㄴ, ㄷ</li>
+        <li>ㄱ, ㄴ, ㄷ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ ㄱ, ㄴ, ㄷ 전부</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ</b> 우선순위 높은 프로세스에 <b>선점</b>당함 → 실행 → 준비 (<b>Preemption</b>) ✔</li>
+            <li><b>ㄴ</b> 입출력 완료 → 대기 → 준비 (<b>Wake-up</b>) ✔ — 실행이 아니라 준비로 간다는 것이 핵심</li>
+            <li><b>ㄷ</b> 시간 할당량 소진 → 실행 → 준비 (<b>Time Run-out</b>) ✔</li>
+            <li>세 경우 모두 준비 상태로 가므로 전부 정답</li>
+          </ol>
+          <p><b>정리:</b> 준비 상태로 들어오는 화살표는 <b>세 방향</b>이다 — 생성에서(admit), 실행에서(time-out·선점), 대기에서(wake-up). 반대로 <b>준비에서 나가는 화살표는 Dispatch 하나뿐</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2024 법원직 · 기출문제집 p.195</span></div>
+      <p class="q-body">다음에서 <b>문맥 교환(Context switch)이 반드시 발생하는 경우</b>는? (단, CPU 대기 큐(Ready queue)는 비어있지 않다고 가정한다)</p>
+      <ol class="choices">
+        <li>프로세서가 요청한 I/O가 완료되어 인터럽트가 발생한 경우</li>
+        <li>라운드 로빈(Round Robin) 방식으로 CPU 스케줄링을 하는 시스템에서 프로세스의 CPU 할당시간(Time quantum)이 만료되었음을 알려주는 인터럽트가 발생한 경우</li>
+        <li>프로세스가 시스템콜(System call)을 하는 경우</li>
+        <li>다중 쓰레드로 구성된 프로세스 내에서 쓰레드 중 하나가 I/O 요청을 하는 경우</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>핵심은 "<b>반드시</b>"라는 단어다. 각 경우에 <b>안 바뀔 수도 있는지</b>를 따져보면 된다.</p>
+          <ol class="steps">
+            <li>② 라운드 로빈에서 <b>시간 할당량이 끝나면</b> 그 프로세스는 규칙상 무조건 CPU를 내려놓고 준비 큐 뒤로 간다. 준비 큐가 비어있지 않으므로 <b>다른 프로세스가 반드시 올라온다</b> → 문맥 교환 확정 <b>(정답)</b></li>
+            <li>① I/O 완료 인터럽트는 <b>대기 중이던 다른 프로세스를 준비 상태로 깨울 뿐</b>, 현재 실행 중인 프로세스는 계속 실행될 수 있다 → 반드시는 아님</li>
+            <li>③ 시스템 호출은 커널 모드로 <b>모드 전환(mode switch)</b>이 일어날 뿐, 프로세스가 바뀌는 문맥 교환과는 다르다 → 반드시는 아님</li>
+            <li>④ 스레드 하나가 I/O를 요청해도 <b>같은 프로세스의 다른 스레드</b>가 계속 실행될 수 있다 → 반드시는 아님</li>
+          </ol>
+          <p><b>함정:</b> ③의 <b>모드 전환(mode switch)</b>과 <b>문맥 교환(context switch)</b>은 다른 개념이다. 모드 전환은 같은 프로세스가 사용자 모드↔커널 모드를 오가는 것이고, 문맥 교환은 <b>실행 주체가 다른 프로세스로 바뀌는 것</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2022 국가직 · 기출문제집 p.195</span></div>
+      <p class="q-body">운영체제에서 프로세스의 정보를 관리하는 <b>프로세스 제어블록(PCB)의 포함 요소로 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>프로세스 식별자</li>
+        <li>인터럽트 정보</li>
+        <li>프로세스의 우선순위</li>
+        <li>프로세스의 상태</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 인터럽트 정보</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>PCB는 <b>"이 프로세스에 관한" 정보</b>를 담는 자료구조다 — 식별자(①), 상태(④), 스케줄링 우선순위(③)는 전부 프로세스 개별 정보이므로 포함된다</li>
+            <li><b>인터럽트</b>는 하드웨어나 커널이 처리하는 <b>시스템 전체 차원의 사건</b>이지 특정 프로세스의 신상정보가 아니다 → PCB 항목이 아님</li>
+          </ol>
+          <p><b>판별 기준:</b> "이 프로세스<b>만의</b> 정보인가?"를 물어보면 된다. PID·상태·우선순위·PC값·페이지테이블 주소·열린 파일 목록은 전부 프로세스마다 다르지만, 인터럽트 처리 정보는 프로세스마다 다른 값이 아니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2019 국가직 · 기출문제집 p.196</span></div>
+      <p class="q-body">프로세스와 스레드(thread)에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>하나의 스레드는 여러 프로세스에 포함될 수 있다.</li>
+        <li>스레드는 프로세스에서 제어를 분리한 실행단위이다.</li>
+        <li>스레드는 같은 프로세스에 속한 다른 스레드와 코드를 공유한다.</li>
+        <li>스레드는 프로그램 카운터를 독립적으로 가진다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>포함 관계는 <b>프로세스 1개 ⊃ 스레드 여러 개</b> 한 방향뿐이다</li>
+            <li>스레드는 프로세스의 <b>주소 공간 안에서</b> 만들어진 실행 흐름이므로, 두 프로세스에 걸칠 수 없다</li>
+            <li>②③④는 모두 맞다: 스레드=제어(실행)만 분리한 단위(②), 코드는 공유(③), PC는 독립(④)</li>
+          </ol>
+          <p><b>함정:</b> ③과 ④가 서로 모순처럼 보여서 헷갈릴 수 있다. 하지만 <b>코드(무엇을 실행할 수 있는가)는 공유</b>하고 <b>PC(지금 어디를 실행 중인가)는 독립</b>이므로 둘 다 참이다. 같은 악보를 보면서 서로 다른 마디를 연주하는 것과 같다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2025 국가직 · 기출문제집 p.197~198</span></div>
+      <p class="q-body">프로세스 메모리 배치에 대한 설명으로 <b>옳은 것만을 모두 고르면?</b></p>
+      <ul>
+        <li>ㄱ. 전역 변수는 스택(stack) 영역에 할당된다.</li>
+        <li>ㄴ. 프로그램 코드는 텍스트(text) 영역에 적재된다.</li>
+        <li>ㄷ. 힙(heap) 영역은 프로세스 실행 중 동적으로 할당된 메모리이다.</li>
+        <li>ㄹ. 함수의 매개변수, 복귀 주소 및 지역변수는 데이터(data) 영역에 할당된다.</li>
+      </ul>
+      <ol class="choices">
+        <li>ㄱ, ㄴ</li>
+        <li>ㄱ, ㄹ</li>
+        <li>ㄴ, ㄷ</li>
+        <li>ㄷ, ㄹ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ ㄴ, ㄷ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ 틀림</b>: 전역 변수는 스택이 아니라 <b>데이터(data) 영역</b>에 할당된다</li>
+            <li><b>ㄴ 맞음</b>: 프로그램 코드(명령어)는 <b>텍스트(코드) 영역</b>에 적재된다</li>
+            <li><b>ㄷ 맞음</b>: 힙은 실행 중 <code>malloc</code>/<code>new</code>로 <b>동적 할당</b>되는 영역</li>
+            <li><b>ㄹ 틀림</b>: 매개변수·복귀주소·지역변수는 데이터가 아니라 <b>스택(stack) 영역</b>이다</li>
+          </ol>
+          <p><b>함정 구조:</b> ㄱ과 ㄹ은 <b>데이터와 스택을 정확히 맞바꿔</b> 놓은 전형적 오답이다. "전역=데이터, 지역=스택"만 확실하면 두 개가 동시에 걸러진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2022 계리직 · 기출문제집 p.198~199</span></div>
+      <p class="q-body">운영체제 상의 프로세스(process)에 관한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>프로세스의 영역 중 스택 영역은 동적 메모리 할당에 활용된다.</li>
+        <li>디스패치(dispatch)는 CPU 스케줄러가 준비 상태의 프로세스 중 하나를 골라 실행 상태로 바꾸는 작업을 말한다.</li>
+        <li>프로세스 제어 블록은 프로세스 식별자, 메모리 관련 정보, 프로세스가 사용했던 중간값을 포함한다.</li>
+        <li>문맥교환은 CPU를 점유하고 있는 프로세스를 CPU에서 내보내고 새로운 프로세스를 받아들이는 작업이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>동적 메모리 할당</b>에 쓰이는 영역은 스택이 아니라 <b>힙(heap)</b>이다</li>
+            <li>스택은 함수 호출과 관련된 <b>지역변수·매개변수·복귀주소</b>를 담으며, 함수가 끝나면 자동으로 정리된다(자동 할당)</li>
+            <li>②·③·④는 모두 맞는 설명 — 디스패치·PCB 구성요소·문맥교환의 정의가 정확하다</li>
+          </ol>
+          <p><b>구분 요령:</b> <b>자동으로</b> 생기고 사라지면 스택, 프로그래머가 <b>직접</b> 요청하고 해제하면 힙이다. "동적(dynamic)"이라는 단어가 보이면 거의 항상 힙을 가리킨다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">프로세스상태</span>
+      <span class="chip">생성상태</span>
       <span class="chip">준비상태</span>
+      <span class="chip">실행상태</span>
       <span class="chip">대기상태</span>
+      <span class="chip">종료상태</span>
       <span class="chip">Dispatch</span>
+      <span class="chip">Block</span>
       <span class="chip">Wake-up</span>
       <span class="chip">Time-out</span>
+      <span class="chip">준비큐</span>
       <span class="chip">문맥교환</span>
       <span class="chip">Context Switching</span>
+      <span class="chip">모드전환</span>
       <span class="chip">PCB</span>
+      <span class="chip">PID</span>
       <span class="chip">좀비프로세스</span>
       <span class="chip">고아프로세스</span>
       <span class="chip">코드영역</span>

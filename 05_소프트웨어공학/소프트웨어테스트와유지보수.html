@@ -11,16 +11,27 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 소프트웨어 테스트와 유지보수</div>
   <h1 class="page-title">소프트웨어 테스트와 유지보수</h1>
-  <p class="page-subtitle">화이트박스·블랙박스 테스트, V-모델, 유지보수 4종, 형상관리 · PART 06. 소프트웨어공학</p>
+  <p class="page-subtitle">화이트박스·블랙박스 · 순환복잡도 · 테스트 단계 · 유지보수 · 형상관리 · PART 06. 소프트웨어공학</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p><b>화이트박스</b> = 코드 내부(경로·로직)를 보고 테스트, <b>블랙박스</b> = 내부는 몰라도 입력·출력만 보고 테스트.</p>
-    <p>유지보수는 <b>수정·적응·완전(기능보강)·예방</b> 4종류로 나뉘며, 실무에서 가장 많은 비중을 차지하는 건 <b>완전(기능보강) 유지보수</b>다.</p>
+    <p>테스트 단계는 <b>단위 → 통합 → 시스템 → 인수</b> 순으로 점점 커진다.</p>
+    <p>유지보수는 <b>수정·적응·완전(기능보강)·예방</b> 4종류로 나뉘며, 실무 비중이 가장 큰 건 <b>완전(기능보강) 유지보수</b>다.</p>
   </div>
 
   <section class="block">
-    <h2><span class="emoji">💡</span>주요 개념 — 테스트 기법 <span class="page-ref">📖 기출문제집 p.655~656</span></h2>
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"테스트는 오류가 없음을 증명하는 게 아니라, 오류를 찾는 활동이다"</h4>
+      <p>소프트웨어를 완벽하게 테스트하는 것은 <b>수학적으로 불가능</b>하다. 조건문이 10개만 있어도 실행 경로가 수백~수천 가지로 갈라지고, 입력값이 정수 하나만 있어도 경우의 수가 40억 개가 넘는다. <b>전수 테스트는 못 한다.</b></p>
+      <p>그래서 테스트 공학의 목표는 <b>"적은 수의 테스트 케이스로 최대한 많은 오류를 잡는 것"</b>이 된다. 이 목표를 향한 두 가지 전략이 화이트박스와 블랙박스다. <b>화이트박스는 "코드의 모든 길을 한 번씩은 밟아보자"</b>는 접근이고(그래서 경로 개수를 세는 <b>순환복잡도</b>가 필요하다), <b>블랙박스는 "입력값을 비슷한 것끼리 묶어서 대표값만 넣어보자"</b>는 접근이다(그래서 <b>동등분할·경계값분석</b>이 나온다).</p>
+      <p>유지보수는 시험에서 작게 다뤄지지만 실무에서는 <b>전체 소프트웨어 비용의 절반 이상</b>을 차지한다. 그래서 "만들 때 잘 만들어야 한다"는 소프트웨어공학의 모든 주장(모듈화·낮은 결합도·문서화)은 결국 <b>유지보수 비용을 줄이기 위한 것</b>이다. 이 단원이 사실상 소프트웨어공학 전체의 결론인 셈이다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 테스트 기법 <span class="page-ref">📖 기출문제집 p.655~657</span></h2>
 
     <p>테스트 기법을 가르는 기준은 딱 하나다: <b>"코드 내부를 들여다보는가?"</b></p>
     <figure class="diagram">
@@ -50,11 +61,92 @@
 
     <table>
       <tr><th>구분</th><th>화이트박스 (White Box)</th><th>블랙박스 (Black Box)</th></tr>
+      <tr><td>다른 이름</td><td><b>구조적 테스트</b>, 글래스 박스</td><td><b>명세 기반 테스트</b>, 기능 테스트</td></tr>
       <tr><td>보는 것</td><td>내부 논리 구조·경로</td><td>기능 명세(입력→출력)</td></tr>
-      <tr><td>기법 예시</td><td>기초경로시험, 루프시험, 조건시험, 데이터흐름시험, <b>조건/문장 커버리지</b></td><td>동등분할, 경계값분석, 원인-효과 그래프, 비교시험</td></tr>
+      <tr><td>기법 예시</td><td>기초경로시험, 루프시험, 조건시험, 데이터흐름시험, 논리위주검사, <b>문장·분기·조건 커버리지</b></td><td>동등분할, 경계값분석, 원인-효과 그래프, 비교시험, 상태전이, 신택스 기법</td></tr>
       <tr><td>담당 시기</td><td>주로 <b>단위 테스트</b> 단계</td><td>주로 <b>인수 테스트</b> 단계</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "동등분할(equivalence partitioning)"·"경계값분석"·"원인-효과 그래프"는 블랙박스 기법이다. "기초경로시험(basis path test)"·"조건/문장 커버리지"는 화이트박스 기법 — 시험에서 두 그룹을 섞어 놓고 골라내라는 문제가 반복 출제된다.</div>
+    <div class="tip"><b>함정 주의:</b> "동등분할(equivalence partitioning)"·"경계값분석"·"원인-효과 그래프"는 블랙박스 기법이다. "기초경로시험(basis path test)"·"조건/문장 커버리지"는 화이트박스 기법 — 시험에서 두 그룹을 섞어 놓고 골라내라는 문제가 <b>매년</b> 반복 출제된다.</div>
+
+    <h3>화이트박스 — 커버리지 3종 구별</h3>
+    <table>
+      <tr><th>커버리지</th><th>무엇을 한 번씩 거치게 하나</th></tr>
+      <tr><td><b>문장 커버리지</b> (Statement)</td><td>프로그램의 <b>모든 문장</b>을 최소 한 번씩 실행</td></tr>
+      <tr><td><b>분기 커버리지</b> (Branch / 결정)</td><td>모든 조건문의 <b>참·거짓 두 분기</b>를 모두 실행</td></tr>
+      <tr><td><b>조건 커버리지</b> (Condition)</td><td>결정문 안의 <b>개별 조건식 각각</b>이 참·거짓을 모두 갖도록</td></tr>
+    </table>
+    <div class="deep">
+      <h4>분기 vs 조건, 예제로 구별하기</h4>
+      <p><code>if (A &gt; 0 &amp;&amp; B &gt; 0)</code> 라는 결정문이 있다고 하자. 여기서 <b>결정(분기)</b>은 전체 괄호의 참/거짓이고, <b>조건</b>은 <code>A&gt;0</code>과 <code>B&gt;0</code> 각각이다.</p>
+      <ul>
+        <li><b>분기 커버리지</b>: 전체가 참인 경우 한 번, 거짓인 경우 한 번만 통과하면 만족</li>
+        <li><b>조건 커버리지</b>: <code>A&gt;0</code>이 참인 경우·거짓인 경우, <code>B&gt;0</code>이 참인 경우·거짓인 경우가 <b>각각</b> 나와야 만족</li>
+      </ul>
+      <p>그래서 문제에 "<b>각 조건식</b>이 참·거짓을 한 번 이상 갖도록"이라는 표현이 나오면 답은 <b>조건 커버리지</b>다.</p>
+    </div>
+
+    <h3>순환복잡도(Cyclomatic Complexity) — 계산하는 법 <span class="page-ref">📖 기출문제집 p.660</span></h3>
+    <p>기초 경로 테스트(맥케이브의 basis path test)에서는 <b>"독립적인 실행 경로가 몇 개인가"</b>를 먼저 구한 뒤, 그 개수만큼 테스트 케이스를 만든다. 이 경로 개수가 <b>순환복잡도 V(G)</b>이며, 구하는 방법이 세 가지인데 <b>셋 다 결과가 같다.</b></p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 330" role="img" aria-label="제어흐름 그래프 예시와 순환복잡도를 구하는 세 가지 방법: 간선에서 노드를 빼고 2를 더하는 방법, 분기 수에 1을 더하는 방법, 영역 수를 세는 방법">
+        <defs>
+          <marker id="cc1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <circle cx="120" cy="40" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="120" y="45" font-size="12" text-anchor="middle">1</text>
+        <line x1="120" y1="58" x2="120" y2="92" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+
+        <circle cx="120" cy="110" r="18" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="120" y="115" font-size="12" text-anchor="middle">2</text>
+        <text x="145" y="108" font-size="10.5" opacity="0.8">분기(조건문)</text>
+
+        <line x1="106" y1="123" x2="62" y2="172" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+        <line x1="134" y1="123" x2="178" y2="172" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+
+        <circle cx="50" cy="190" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="50" y="195" font-size="12" text-anchor="middle">3</text>
+        <circle cx="190" cy="190" r="18" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="190" y="195" font-size="12" text-anchor="middle">4</text>
+        <text x="215" y="188" font-size="10.5" opacity="0.8">분기(조건문)</text>
+
+        <line x1="176" y1="203" x2="140" y2="242" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+        <line x1="204" y1="203" x2="240" y2="242" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+
+        <circle cx="128" cy="260" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="128" y="265" font-size="12" text-anchor="middle">5</text>
+        <circle cx="252" cy="260" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="252" y="265" font-size="12" text-anchor="middle">6</text>
+
+        <line x1="63" y1="203" x2="150" y2="292" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+        <line x1="128" y1="278" x2="155" y2="292" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+        <line x1="252" y1="278" x2="185" y2="295" stroke="currentColor" stroke-width="1.5" marker-end="url(#cc1)"/>
+
+        <circle cx="170" cy="305" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="170" y="310" font-size="12" text-anchor="middle">7</text>
+
+        <text x="350" y="40" font-size="13" font-weight="700">순환복잡도 V(G) 구하는 3가지 방법</text>
+
+        <text x="350" y="72" font-size="12" font-weight="700">① 간선·노드로 계산</text>
+        <text x="360" y="92" font-size="11.5">V(G) = E − N + 2</text>
+        <text x="360" y="110" font-size="11.5">= 간선 8 − 노드 7 + 2 = <tspan font-weight="700">3</tspan></text>
+
+        <text x="350" y="142" font-size="12" font-weight="700">② 분기(조건문) 수로 계산 ← 가장 빠름</text>
+        <text x="360" y="162" font-size="11.5">V(G) = 분기 수 + 1</text>
+        <text x="360" y="180" font-size="11.5">= 2(노드 2, 4) + 1 = <tspan font-weight="700">3</tspan></text>
+
+        <text x="350" y="212" font-size="12" font-weight="700">③ 영역(Region) 수로 계산</text>
+        <text x="360" y="232" font-size="11.5">그래프가 나눈 닫힌 영역 + 바깥 영역 1개</text>
+        <text x="360" y="250" font-size="11.5">= 2 + 1 = <tspan font-weight="700">3</tspan></text>
+
+        <text x="350" y="285" font-size="11.5" font-weight="700">세 방법의 결과는 항상 일치한다.</text>
+        <text x="350" y="305" font-size="11" opacity="0.8">→ 독립 경로가 3개이므로 테스트 케이스도 최소 3개 필요</text>
+      </svg>
+      <figcaption>순환복잡도는 "독립적인 실행 경로의 개수"이며, 간선·노드 공식, 분기 수 + 1, 영역 수 — 어느 방법으로 구해도 같은 값이 나온다. 실전에서는 <b>②번(조건문 개수 + 1)</b>이 가장 빠르다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>실전 팁:</b> 코드가 주어지면 <b><code>if</code>, <code>while</code>, <code>for</code>, <code>case</code> 같은 분기점의 개수를 세고 +1</b> 하면 끝이다. <code>&amp;&amp;</code>나 <code>||</code>로 조건이 여러 개 묶인 경우에는 <b>단순 조건 하나하나를 각각 1개</b>로 센다.
+    </div>
 
     <h3>테스트 단계와 V-모델</h3>
     <p>개발 단계와 테스트 단계는 서로 <b>짝을 이룬다</b>. 왼쪽에서 세운 계획을 오른쪽에서 그대로 검증한다고 생각하면 된다.</p>
@@ -89,6 +181,35 @@
       </svg>
       <figcaption>V-모델 — 왼쪽(분석·설계)에서 정한 내용을 오른쪽(테스트)에서 그 수준 그대로 검증한다. "요구사항이 명확했는가"는 인수테스트에서, "설계대로 조립됐는가"는 통합테스트에서 확인하는 식이다.</figcaption>
     </figure>
+
+    <table>
+      <tr><th>단계</th><th>대상</th><th>핵심</th></tr>
+      <tr><td><b>단위 테스트</b></td><td>개별 <b>모듈 하나</b></td><td><b>드라이버(driver)</b>와 <b>스텁(stub)</b>을 사용</td></tr>
+      <tr><td><b>통합 테스트</b></td><td>모듈들을 <b>합칠 때</b></td><td>모듈 간 <b>인터페이스</b> 오류를 찾음. 빅뱅·하향식·상향식·연쇄식 방식</td></tr>
+      <tr><td><b>시스템 테스트</b></td><td>통합된 <b>전체 시스템</b></td><td>복구·보안·<b>스트레스</b>·성능 테스트 등</td></tr>
+      <tr><td><b>인수 테스트</b></td><td>사용자 관점</td><td>사용자 요구사항 만족 여부. <b>알파</b>(개발자 사이트)·<b>베타</b>(고객 사이트) 테스트</td></tr>
+    </table>
+
+    <div class="deep">
+      <h4>통합 테스트의 4가지 방식 <span class="page-ref">📖 기출문제집 p.658~659</span></h4>
+      <ul>
+        <li><b>빅뱅(Big-bang)</b>: 모든 모듈을 <b>한꺼번에</b> 통합해 테스트</li>
+        <li><b>하향식(Top-down)</b>: 제어 구조상 <b>상위 모듈부터</b> 통합 → 하위 모듈 대신 <b>스텁(stub)</b> 필요</li>
+        <li><b>상향식(Bottom-up)</b>: 가장 <b>하부 모듈부터</b> 통합 → 상위 모듈 대신 <b>드라이버(driver)</b> 필요</li>
+        <li><b>연쇄식(Threads)</b>: 중요 기능을 담당하는 <b>최소 단위(스레드)</b>부터 통합 → <b>초기에 시스템 골격을 보여줄 수 있다</b>(장점)</li>
+      </ul>
+      <p><b>드라이버 vs 스텁:</b> <b>드라이버</b>는 하위 모듈을 <b>불러주는 가짜 상위</b> 모듈, <b>스텁</b>은 아직 없는 <b>하위 모듈 흉내</b>를 내는 가짜다. "상향식엔 드라이버, 하향식엔 스텁"으로 외운다.</p>
+      <p><b>함정:</b> "연쇄식 통합은 초기에 시스템 골격을 파악하기 어렵다" → ✗ 오히려 <b>초기에 골격을 보여주는 것이 연쇄식의 장점</b>이다.</p>
+      <p><b>함정:</b> "시스템 테스트는 넓이 우선/깊이 우선 방식을 사용한다" → ✗ 넓이·깊이 우선은 <b>통합 테스트</b>에서 모듈을 결합하는 순서 개념이다.</p>
+    </div>
+
+    <table>
+      <tr><th>특수 테스트</th><th>무엇을 확인하나</th></tr>
+      <tr><td><b>회귀(Regression) 테스트</b></td><td>한 모듈의 수정이 <b>다른 부분에 미친 영향</b>을 검사. 수정 모듈뿐 아니라 <b>관련 모듈까지</b> 재검사. 방식: Retest All / Selective / Priority</td></tr>
+      <tr><td><b>알파 테스트</b></td><td><b>개발자 사이트</b>에서 통제된 환경으로 수행</td></tr>
+      <tr><td><b>베타 테스트</b></td><td><b>고객 사이트</b>에서 실제 사용자가 수행 (출시 전 최종 피드백)</td></tr>
+      <tr><td><b>스트레스 테스트</b></td><td>비정상적으로 <b>과도한 분량·빈도</b>로 자원을 요청할 때의 영향</td></tr>
+    </table>
   </section>
 
   <section class="block">
@@ -97,10 +218,25 @@
       <tr><th>종류</th><th>언제 하는가</th></tr>
       <tr><td><b>수정(corrective)</b> 유지보수</td><td>인도 후 사용 중 <b>발견된 오류</b>를 잡을 때</td></tr>
       <tr><td><b>적응(adaptive)</b> 유지보수</td><td><b>환경(OS·하드웨어 등)이 바뀌어</b> 그에 맞게 수정할 때</td></tr>
-      <tr><td><b>완전(perfective)</b> 유지보수 <span style="opacity:.7">(기능보강)</span></td><td>새 기능 추가·기존 기능 개선·성능 향상을 원할 때 — <b>비중이 가장 큼</b></td></tr>
+      <tr><td><b>완전(perfective)</b> 유지보수 <span style="opacity:.7">(기능보강)</span></td><td><b>새 기능 추가</b>·기존 기능 개선·성능 향상을 원할 때 — <b>비중이 가장 큼</b></td></tr>
       <tr><td><b>예방(preventive)</b> 유지보수</td><td>문제가 터지기 전에 <b>미리 예측되는 오류</b>를 손볼 때</td></tr>
     </table>
-    <div class="analogy"><b>암기팁:</b> "고쳐서(수정) - 맞추고(적응) - 더 좋게(완전) - 미리(예방)" 순서로 이야기를 만들면 헷갈리지 않는다.</div>
+    <div class="analogy"><b>암기팁:</b> "고쳐서(수정) - 맞추고(적응) - 더 좋게(완전) - 미리(예방)" 순서로 이야기를 만들면 헷갈리지 않는다. 특히 <b>"새 기능 추가 = 완전(perfective)"</b>이 가장 자주 나온다.</div>
+
+    <div class="deep">
+      <h4>리먼(Lehman)의 소프트웨어 진화의 법칙 <span class="page-ref">📖 기출문제집 p.664~665</span></h4>
+      <table>
+        <tr><th>법칙</th><th>내용</th></tr>
+        <tr><td><b>지속적 변경</b>의 법칙</td><td>시스템 요구는 항상 변하므로 소프트웨어도 계속 <b>진화</b>해야 한다 → 유지보수성이 중요</td></tr>
+        <tr><td><b>복잡도 증가</b>(엔트로피)의 법칙</td><td>변경이 계속되면 <b>구조가 나빠지고 점점 복잡</b>해진다 → 재구조화·리엔지니어링 필요</td></tr>
+        <tr><td><b>자기 통제</b>의 법칙</td><td>시스템 진화 과정은 <b>피드백을 통한 자기 통제</b> 과정이다</td></tr>
+        <tr><td><b>안정성 유지</b>의 법칙</td><td>유지보수 프로세스는 소멸까지 <b>일정한 평균 작업량</b>을 보인다</td></tr>
+        <tr><td><b>친근성 유지</b>의 법칙</td><td>시스템의 <b>평균 성장률이 일정</b>하다</td></tr>
+        <tr><td><b>품질 저하</b>의 법칙</td><td>운영환경 변화에 적응하지 못하면 <b>품질은 떨어진다</b></td></tr>
+        <tr><td><b>피드백 시스템</b>의 법칙</td><td>진화는 여러 관련자의 피드백으로 구성되며, <b>다른 모든 법칙의 근원</b></td></tr>
+      </table>
+      <p><b>구별 포인트:</b> "요구가 변하니 계속 진화해야 한다" → <b>지속적 변경</b> / "고칠수록 구조가 나빠진다" → <b>복잡도 증가</b> / "길게 보면 일정한 추세를 보인다" → <b>자기 통제</b>.</p>
+    </div>
 
     <h3>소프트웨어 재사용 vs 재공학</h3>
     <ul>
@@ -108,6 +244,12 @@
       <li><b>재공학(Reengineering)</b>: 기존 소프트웨어의 취약한 부분을 단계적으로 개선해 품질을 끌어올림</li>
       <li><b>역공학(Reverse Engineering)</b>: 소스코드를 분석해 더 <b>추상화된 설계 명세를 역으로 복구</b>하는 것</li>
     </ul>
+
+    <h3>가용성(Availability) 계산 <span class="page-ref">📖 기출문제집 p.663~664</span></h3>
+    <div class="tip">
+      <b>MTTF</b>(Mean Time To Failure) = 평균 <b>가동</b>시간 &nbsp;|&nbsp; <b>MTTR</b>(Mean Time To Repair) = 평균 <b>수리</b>시간<br>
+      <b>가용성 = MTTF ÷ (MTTF + MTTR) × 100(%)</b> &nbsp;— 전체 시간 중 "쓸 수 있었던 시간"의 비율
+    </div>
 
     <h3>형상 관리 (Configuration Management)</h3>
     <p>여러 사람이 코드를 동시에 고칠 때 "무엇이 언제 왜 바뀌었는지"를 체계적으로 관리하는 것. Git·SVN·CVS가 대표적인 형상관리 도구다.</p>
@@ -120,6 +262,23 @@
       <tr><td>Update</td><td>저장소의 최신 버전을 내 로컬로 <b>동기화</b></td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> 형상관리 항목(SCI)에는 <b>원시코드(소스코드)도 포함된다</b> — "원시코드는 형상관리 대상이 아니다"는 틀린 지문으로 자주 나온다. 분석서·설계서·프로그램·사용자지침서 모두 형상관리 대상.</div>
+
+    <h3>품질 표준과 CMMI <span class="page-ref">📖 기출문제집 p.661</span></h3>
+    <table>
+      <tr><th>표준</th><th>대상</th></tr>
+      <tr><td><b>ISO/IEC 12207</b></td><td><b>프로세스</b> 품질 — 소프트웨어 생명주기 프로세스(생성~폐기). 기본·지원·조직 생명주기로 구분</td></tr>
+      <tr><td>ISO/IEC 9126, 25010</td><td><b>제품</b> 품질 특성</td></tr>
+      <tr><td>ISO/IEC 14598</td><td>제품 품질 <b>평가</b></td></tr>
+      <tr><td>CMMI, SPICE(ISO 15504)</td><td>프로세스 <b>성숙도</b> 모델</td></tr>
+    </table>
+    <table>
+      <tr><th>CMMI 레벨</th><th>상태</th></tr>
+      <tr><td>1 (초기)</td><td>기본적 프로세스만 존재</td></tr>
+      <tr><td>2 (관리)</td><td>방침에 따라 계획·실행되는 프로세스</td></tr>
+      <tr><td><b>3 (정의)</b></td><td><b>조직 표준 프로세스는 존재하나, 정량적 측정은 안 됨</b></td></tr>
+      <tr><td>4 (정량적 관리)</td><td>프로세스·품질이 <b>정량적으로 측정·예측</b> 가능</td></tr>
+      <tr><td>5 (최적화)</td><td>정량 정보로 프로세스 <b>개선·최적화</b>까지 수행</td></tr>
+    </table>
   </section>
 
   <section class="block">
@@ -138,11 +297,19 @@
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>동등분할·경계값분석·원인효과그래프 = <b>블랙박스</b> / 기초경로시험·커버리지 계열 = <b>화이트박스</b></li>
-      <li>V-모델: 요구분석↔인수테스트, 시스템설계↔시스템테스트, 상세설계↔통합테스트 짝 맞추기</li>
-      <li>유지보수 4종 중 실무 비중이 가장 큰 것은 <b>완전(기능보강) 유지보수</b></li>
+      <li>동등분할·경계값분석·원인효과그래프·비교검사 = <b>블랙박스</b> / 기초경로시험·루프검사·논리위주검사·커버리지 계열 = <b>화이트박스</b></li>
+      <li>화이트박스의 다른 이름 = <b>구조적 테스트, 글래스박스</b> / 블랙박스 = <b>명세 기반 테스트</b></li>
+      <li>"결정문 내 <b>각 조건식</b>이 참·거짓을 갖도록" → <b>조건 커버리지</b></li>
+      <li>순환복잡도 <b>V(G) = 간선 − 노드 + 2 = 분기 수 + 1 = 영역 수</b> (세 방법 결과 일치)</li>
+      <li>테스트 단계: <b>단위 → 통합 → 시스템 → 인수</b>, 단위 테스트엔 <b>드라이버·스텁</b> 사용</li>
+      <li>통합 방식: 빅뱅 / 하향식(스텁) / 상향식(드라이버) / 연쇄식(<b>초기 골격 파악 가능</b>)</li>
+      <li><b>알파</b>=개발자 사이트, <b>베타</b>=고객 사이트, <b>회귀</b>=수정이 다른 부분에 준 영향 검사</li>
+      <li>경계값 분석: 유효범위 1~99라면 <b>0, 1, 99, 100</b>이 테스트 대상 — 중간값(70 등)은 부적합</li>
+      <li>유지보수 4종 중 "<b>새 기능 추가</b>" = <b>완전(perfective)</b> 유지보수</li>
+      <li>가용성 = <b>MTTF ÷ (MTTF + MTTR)</b></li>
       <li>원시코드도 <b>형상관리 대상</b>이라는 점 (제외된다는 지문은 오답)</li>
       <li>Check-in(=Commit, 반영) vs Check-out(받아옴) 방향 헷갈리지 않기</li>
+      <li><b>ISO/IEC 12207 = 프로세스</b> 품질 표준, CMMI <b>3단계(정의)</b> = 표준 프로세스는 있으나 정량 측정 불가</li>
       <li>ERP·CRM·SCM·EAI·BPR·KMS 정의 매칭 문제</li>
     </ul>
   </section>
@@ -157,6 +324,249 @@
       <tr><th>구분</th><th>Check-out</th><th>Check-in (Commit)</th></tr>
       <tr><td>방향</td><td>저장소 → 내 로컬 (받아옴)</td><td>내 로컬 → 저장소 (반영함)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>드라이버 (Driver)</th><th>스텁 (Stub)</th></tr>
+      <tr><td>무엇을 대신하나</td><td>아직 없는 <b>상위</b> 모듈</td><td>아직 없는 <b>하위</b> 모듈</td></tr>
+      <tr><td>어느 통합 방식에서</td><td><b>상향식</b>(Bottom-up)</td><td><b>하향식</b>(Top-down)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>알파 테스트</th><th>베타 테스트</th></tr>
+      <tr><td>장소</td><td>개발자 사이트(통제된 환경)</td><td>고객 사이트(실사용 환경)</td></tr>
+      <tr><td>수행자</td><td>사용자가 개발자 앞에서</td><td>사용자가 자유롭게</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2024 지방직 · 기출문제집 p.655</span></div>
+      <p class="q-body"><b>블랙박스 테스트</b> 기법에 해당하는 것은?</p>
+      <ol class="choices">
+        <li>조건 커버리지(condition coverage)</li>
+        <li>기본 경로 테스트(basis path test)</li>
+        <li>문장 커버리지(statement coverage)</li>
+        <li>동등 분할(equivalence partitioning)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 동등 분할</p>
+        <div class="explain">
+          <p><b>"커버리지"와 "경로"라는 단어가 보이면 무조건 화이트박스</b>다. 코드 내부의 문장·분기·경로를 얼마나 덮었는지 세는 개념이기 때문이다.</p>
+          <ol class="steps">
+            <li>①③ 커버리지 계열 → 코드 내부를 봐야 계산 가능 → <b>화이트박스</b></li>
+            <li>② 기본(기초) 경로 테스트 → 제어흐름 그래프의 경로를 따짐 → <b>화이트박스</b></li>
+            <li>④ 동등 분할 → 입력값을 비슷한 그룹으로 나눠 대표값만 테스트 → 내부를 몰라도 가능 → <b>블랙박스</b></li>
+          </ol>
+          <p><b>블랙박스 4대 기법 암기:</b> 동등분할, 경계값분석, 원인-효과 그래프, 비교검사 (+ 상태전이, 신택스).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2018 국가직 · 기출문제집 p.656</span></div>
+      <p class="q-body">결정 명령문 내의 <b>각 조건식이 참, 거짓을 한 번 이상</b> 갖도록 조합하여 테스트 케이스를 설계하는 방법은?</p>
+      <ol class="choices">
+        <li>문장 검증 기준(Statement Coverage)</li>
+        <li>조건 검증 기준(Condition Coverage)</li>
+        <li>분기 검증 기준(Branch Coverage)</li>
+        <li>다중 조건 검증 기준(Multiple Condition Coverage)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 조건 검증 기준(Condition Coverage)</p>
+        <div class="explain">
+          <p>핵심 단어는 <b>"각 조건식"</b>이다. 전체 결정문이 아니라 <b>개별 조건 하나하나</b>를 따지고 있다.</p>
+          <table>
+            <tr><th>기준</th><th>무엇을 보나</th><th>예: <code>if (A&gt;0 &amp;&amp; B&gt;0)</code></th></tr>
+            <tr><td>문장</td><td>모든 <b>문장</b>을 한 번씩 실행</td><td>if 안쪽 코드가 한 번 실행되면 충족</td></tr>
+            <tr><td>분기</td><td>결정문의 <b>참/거짓 두 분기</b></td><td>괄호 전체가 참인 경우·거짓인 경우</td></tr>
+            <tr><td><b>조건</b></td><td><b>개별 조건식 각각</b>의 참/거짓</td><td>A&gt;0의 T/F, B&gt;0의 T/F를 각각 확보</td></tr>
+          </table>
+          <p><b>함정:</b> ③ 분기 커버리지와 헷갈리기 쉽다. <b>"결정문 전체"를 보면 분기, "안에 있는 조건 각각"을 보면 조건</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2007 국가직 7급 · 기출문제집 p.657</span></div>
+      <p class="q-body">입력값의 <b>유효 범위가 1~99</b>인 프로그램을 <b>경계값 분석</b>으로 테스트하려 한다. 가장 <b>적합하지 않은</b> 테스트케이스는?</p>
+      <ol class="choices">
+        <li>1</li>
+        <li>70</li>
+        <li>99</li>
+        <li>100</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 70</p>
+        <div class="explain">
+          <p>경계값 분석은 <b>"오류는 범위의 한가운데가 아니라 경계에서 터진다"</b>는 경험에 기반한 기법이다. <code>&lt;</code>를 <code>&lt;=</code>로 잘못 쓰는 실수가 딱 경계에서 드러나기 때문이다.</p>
+          <ol class="steps">
+            <li>유효 범위 1~99의 경계는 <b>1</b>과 <b>99</b> → 이 값들로 정상 동작(true)을 확인</li>
+            <li>경계 바로 <b>바깥</b>인 <b>0</b>과 <b>100</b> → 거부(false)되는지 확인</li>
+            <li>따라서 의미 있는 테스트값은 <b>0, 1, 99, 100</b></li>
+            <li><b>70은 범위 한가운데의 평범한 값</b> → 경계값 분석 관점에서는 얻을 정보가 가장 적다</li>
+          </ol>
+          <p><b>주의:</b> 70이 "틀린 테스트"라는 뜻은 아니다. 70은 <b>동등 분할</b> 기법에서는 유효 클래스의 대표값으로 적절하다. 문제가 <b>어떤 기법을 지정했는지</b>를 보고 답해야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2016 국가직 · 기출문제집 p.658</span></div>
+      <p class="q-body">소프트웨어 테스트에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>단위 테스트는 개별적인 모듈에 대한 테스트이며 테스트 드라이버와 테스트 스텁을 사용할 수 있다.</li>
+        <li>통합 테스트는 모듈을 통합하는 방식에 따라 빅뱅 기법, 하향식 기법, 상향식 기법을 사용한다.</li>
+        <li>시스템 테스트는 모듈들이 통합된 후 넓이 우선 방식 또는 깊이 우선 방식을 사용하여 테스트한다.</li>
+        <li>인수 테스트는 인수 전에 사용자의 요구 사항이 만족되었는지 테스트한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p><b>넓이 우선/깊이 우선</b>은 <b>통합 테스트</b>에서 트리 구조의 모듈을 <b>어떤 순서로 결합할지</b>를 가리키는 말이다. 시스템 테스트와는 무관하다.</p>
+          <ol class="steps">
+            <li><b>시스템 테스트</b>가 실제로 하는 일: 모든 모듈이 하나의 시스템으로 동작할 때 <b>복구·보안·스트레스·성능</b> 테스트를 수행</li>
+            <li><b>통합 테스트</b>가 하는 일: 모듈 간 <b>인터페이스와 결합</b>을 검사하며, 결합 순서에 따라 깊이/너비 우선으로 나뉨</li>
+          </ol>
+          <p><b>나머지 선택지 확인:</b> ① 단위 테스트의 드라이버·스텁 ✓, ② 통합 방식 3종(+연쇄식) ✓, ④ 인수 테스트의 정의 ✓ — 모두 옳다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2021 국회 · 기출문제집 p.659~660</span></div>
+      <p class="q-body">한 모듈의 수정이 다른 부분에 영향을 끼칠 수도 있다고 보아, <b>수정한 모듈뿐 아니라 관련된 모듈까지</b> 문제가 없는지 검사하는 테스트는?</p>
+      <ol class="choices">
+        <li>회귀 테스트(Regression Test)</li>
+        <li>인수 테스트(Acceptance Test)</li>
+        <li>통합 테스트(Integration Test)</li>
+        <li>단위 테스트(Unit Test)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 회귀 테스트</p>
+        <div class="explain">
+          <p><b>회귀(regression)</b>는 "되돌아간다"는 뜻으로, <b>고친 것 때문에 멀쩡하던 기능이 예전 상태(고장)로 되돌아가지 않았는지</b> 확인하는 테스트다.</p>
+          <ol class="steps">
+            <li>버그를 고침 → 그 부분이 고쳐졌는지 확인(확정 테스트, confirmation test)</li>
+            <li>그런데 그 수정이 <b>다른 모듈을 망가뜨렸을 수도</b> 있다</li>
+            <li>그래서 관련 모듈까지 <b>다시 한 번 테스트</b>하는 것이 회귀 테스트</li>
+          </ol>
+          <p><b>회귀 테스트 3가지 방식:</b> <b>Retest All</b>(전부 재수행) / <b>Selective</b>(영향 범위 위주) / <b>Priority</b>(핵심 기능 위주). "모듈 회귀 테스트와 증분적 회귀 테스트로 나뉜다"는 서술은 <b>오답</b>이다.</p>
+          <p><b>특징:</b> 이미 만들어 둔 테스트 케이스를 재실행하므로 <b>자동화 도구</b>를 쓰기에 가장 적합한 테스트다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2016 계리직 · 기출문제집 p.660</span></div>
+      <p class="q-body">소프트웨어 테스트에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>베타(beta) 테스트는 고객 사이트에서 사용자에 의해서 수행된다.</li>
+        <li>회귀(regression) 테스트는 한 모듈의 수정이 다른 부분에 미치는 영향을 검사한다.</li>
+        <li>화이트 박스(white box) 테스트는 모듈의 내부 구현보다는 입력과 출력에 의해 기능을 검사한다.</li>
+        <li>스트레스(stress) 테스트는 비정상적으로 과도한 분량 또는 빈도로 자원을 요청할 때의 영향을 검사한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ — 그것은 <b>블랙박스</b> 테스트의 설명이다</p>
+        <div class="explain">
+          <p>③은 <b>화이트박스와 블랙박스의 정의를 통째로 맞바꾼</b> 전형적인 함정이다.</p>
+          <ol class="steps">
+            <li><b>화이트박스</b>: 모듈 <b>안의 작동</b>을 자세히 관찰, 논리적 구조를 체계적으로 점검</li>
+            <li><b>블랙박스</b>: 내부 구현은 보지 않고 <b>입력과 출력</b>으로 기능을 검사 ← ③이 설명한 것</li>
+          </ol>
+          <p><b>나머지 확인:</b> ① 베타=고객 사이트 ✓ (알파=개발자 사이트), ② 회귀 테스트 정의 ✓, ④ 스트레스 테스트 정의 ✓</p>
+          <p><b>이 유형의 공략법:</b> 선택지에 "화이트박스"가 나오면 <b>"내부·구조·경로·논리"</b>라는 단어가 함께 있는지 확인하라. "입력과 출력", "기능", "명세"가 붙어 있으면 그 선택지는 틀린 것이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">기출문제집 p.663~664 (가용성 계산)</span></div>
+      <p class="q-body">어떤 시스템의 <b>가동시간</b>이 각각 8, 7, 9이고 <b>고장시간</b>이 각각 1, 2, 3일 때, 이 시스템의 <b>가용성(availability)</b>은?</p>
+      <ol class="choices">
+        <li>80%</li>
+        <li>400%</li>
+        <li>25%</li>
+        <li>75%</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 80%</p>
+        <div class="explain">
+          <p>가용성은 <b>"전체 시간 중 시스템을 쓸 수 있었던 시간의 비율"</b>이다. 평균값부터 구하고 비율을 계산하면 된다.</p>
+          <ol class="steps">
+            <li><b>MTTF</b>(평균 가동시간) = (8 + 7 + 9) ÷ 3 = <b>8</b></li>
+            <li><b>MTTR</b>(평균 수리시간) = (1 + 2 + 3) ÷ 3 = <b>2</b></li>
+            <li>전체 사이클 = MTTF + MTTR = 8 + 2 = <b>10</b></li>
+            <li>가용성 = 8 ÷ 10 × 100 = <b>80%</b></li>
+          </ol>
+          <p><b>함정:</b> ② 400%는 <b>MTTF ÷ MTTR</b>(8÷2=4)로 잘못 계산한 값이다. 분모는 반드시 <b>가동 + 고장(전체 시간)</b>이어야 한다. ③ 25%는 분자·분모를 뒤집어 MTTR÷(MTTF+MTTR)로 계산한 경우다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2025 계리직 · 기출문제집 p.665</span></div>
+      <p class="q-body">개발된 소프트웨어에 <b>새로운 기능을 추가</b>하는 유지보수는?</p>
+      <ol class="choices">
+        <li>수정(corrective) 유지보수</li>
+        <li>예방(preventive) 유지보수</li>
+        <li>완전(perfective) 유지보수</li>
+        <li>적응(adaptive) 유지보수</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 완전(perfective) 유지보수</p>
+        <div class="explain">
+          <p>영어 단어의 뜻으로 접근하면 헷갈리지 않는다.</p>
+          <table>
+            <tr><th>유지보수</th><th>영어 뜻</th><th>언제</th></tr>
+            <tr><td>수정 (corrective)</td><td>바로잡다</td><td><b>오류</b>를 발견해 고칠 때</td></tr>
+            <tr><td>적응 (adaptive)</td><td>적응하다</td><td><b>환경</b>(OS·HW)이 바뀌었을 때</td></tr>
+            <tr><td><b>완전 (perfective)</b></td><td><b>완벽하게 만들다</b></td><td><b>새 기능 추가</b>·성능 개선 ← 정답</td></tr>
+            <tr><td>예방 (preventive)</td><td>예방하다</td><td>문제 나기 <b>전에 미리</b></td></tr>
+          </table>
+          <p><b>함정:</b> "새 기능 추가"를 ①수정으로 고르는 실수가 흔하다. <b>수정은 "있던 것이 잘못돼서" 고치는 것</b>이고, <b>완전은 "잘 돌아가지만 더 좋게"</b> 만드는 것이다. 참고로 실무 유지보수 비용 중 <b>완전 유지보수의 비중이 가장 크다</b>.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">개념 확인 · 응용 (순환복잡도)</span></div>
+      <p class="q-body">다음 의사코드의 <b>순환복잡도 V(G)</b>를 구하고, 필요한 최소 테스트 케이스 수를 답하시오.</p>
+      <pre style="background:var(--code-bg);padding:10px;border-radius:8px;font-size:12.5px;overflow-x:auto;">input(score)
+if (score &gt;= 90)
+    grade = "A"
+else if (score &gt;= 80)
+    grade = "B"
+else
+    grade = "C"
+if (grade == "A")
+    print("우수")
+print(grade)</pre>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: V(G) = 4, 최소 테스트 케이스 4개</p>
+        <div class="explain">
+          <p>가장 빠른 방법인 <b>"분기(조건문) 수 + 1"</b>로 푼다.</p>
+          <ol class="steps">
+            <li>조건문을 센다: <code>if (score&gt;=90)</code> → 1개</li>
+            <li><code>else if (score&gt;=80)</code> → 2개 (else if도 독립된 판단이므로 센다)</li>
+            <li><code>if (grade=="A")</code> → 3개</li>
+            <li>V(G) = 분기 3 + 1 = <b>4</b></li>
+            <li>독립 경로가 4개이므로 테스트 케이스도 <b>최소 4개</b> 필요</li>
+          </ol>
+          <p><b>실제 경로 4가지로 검증:</b> ①score=95(A, "우수" 출력) ②score=85(B) ③score=70(C) ④A가 아닌 경우 마지막 if를 건너뛰는 경로 — ②③이 이를 포함한다. 테스트 데이터로는 <b>95, 85, 70</b>과 경계값을 조합하면 된다.</p>
+          <p><b>주의:</b> <code>else</code> 자체는 분기점으로 세지 않는다. 판단(조건식)이 있는 <code>if</code>, <code>else if</code>, <code>while</code>, <code>for</code>, <code>case</code>만 센다. 만약 <code>if (A &amp;&amp; B)</code>처럼 조건이 묶여 있으면 <b>단순 조건 각각을 1개씩</b> 센다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -164,23 +574,46 @@
     <div class="keywords">
       <span class="chip">화이트박스</span>
       <span class="chip">블랙박스</span>
+      <span class="chip">구조적테스트</span>
+      <span class="chip">명세기반테스트</span>
       <span class="chip">동등분할</span>
       <span class="chip">경계값분석</span>
+      <span class="chip">원인효과그래프</span>
       <span class="chip">기초경로시험</span>
+      <span class="chip">문장커버리지</span>
+      <span class="chip">분기커버리지</span>
+      <span class="chip">조건커버리지</span>
+      <span class="chip">순환복잡도</span>
+      <span class="chip">맥케이브</span>
       <span class="chip">V모델</span>
       <span class="chip">단위테스트</span>
       <span class="chip">통합테스트</span>
       <span class="chip">시스템테스트</span>
       <span class="chip">인수테스트</span>
+      <span class="chip">드라이버</span>
+      <span class="chip">스텁</span>
+      <span class="chip">하향식통합</span>
+      <span class="chip">상향식통합</span>
+      <span class="chip">연쇄식통합</span>
+      <span class="chip">회귀테스트</span>
+      <span class="chip">알파테스트</span>
+      <span class="chip">베타테스트</span>
+      <span class="chip">스트레스테스트</span>
       <span class="chip">수정유지보수</span>
       <span class="chip">적응유지보수</span>
       <span class="chip">완전유지보수</span>
       <span class="chip">예방유지보수</span>
+      <span class="chip">리먼의법칙</span>
+      <span class="chip">MTTF</span>
+      <span class="chip">MTTR</span>
+      <span class="chip">가용성</span>
       <span class="chip">재사용</span>
       <span class="chip">재공학</span>
       <span class="chip">역공학</span>
       <span class="chip">형상관리</span>
       <span class="chip">Commit</span>
+      <span class="chip">ISO12207</span>
+      <span class="chip">CMMI</span>
       <span class="chip">ERP</span>
       <span class="chip">CRM</span>
       <span class="chip">SCM</span>

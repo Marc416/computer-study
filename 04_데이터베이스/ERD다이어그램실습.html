@@ -11,17 +11,28 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">04. 데이터베이스</a> / ERD 다이어그램 실습</div>
   <h1 class="page-title">ERD 다이어그램 실습</h1>
-  <p class="page-subtitle">개체-관계 모델을 실제 도형으로 그리고 테이블로 변환하기 · PART 05. 데이터베이스론</p>
+  <p class="page-subtitle">ERD 표기법 · 관계형 스키마 변환 · 키(Key) 결정 · PART 05. 데이터베이스론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
-    <p>ERD는 <b>사각형(개체) · 마름모(관계) · 타원(속성)</b> 3가지 도형으로만 그린다. 변환 규칙은 <a href="ER다이어그램_관계형변환.md">ER다이어그램_관계형변환 문서</a>에 표로 정리되어 있으니, 이 문서는 <b>실제로 그림이 어떻게 생겼는지</b>에 집중한다.</p>
+    <p>ERD는 <b>사각형(개체) · 마름모(관계) · 타원(속성)</b> 3가지 도형이 기본. 도형 매칭 문제가 그대로 나온다.</p>
+    <p>변환 규칙의 핵심 두 줄: <b>1:N이면 1쪽의 키를 N쪽에 외래키로 넣고, M:N이면 반드시 별도 테이블을 만든다.</b></p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"머릿속 구상"을 "실제 테이블"로 옮기는 다리</h4>
+      <p>데이터베이스를 만들 때 바로 테이블부터 그리지 않는다. 먼저 <b>"이 업무에는 어떤 대상들이 있고 서로 무슨 관계인가"</b>를 그림으로 정리하는데, 그게 ERD(개체-관계 다이어그램)다. 이 단계를 <b>개념적 설계</b>라 부르고, 이걸 실제 테이블 구조로 바꾸는 단계를 <b>논리적 설계</b>라 한다.</p>
+      <p>왜 굳이 그림을 한 번 거치나? 테이블부터 만들면 <b>관계를 표현할 방법을 잘못 골라서</b> 나중에 데이터가 중복되거나 한 칸에 값을 여러 개 넣어야 하는 사태가 벌어지기 때문이다. ERD를 먼저 그리면 "이건 1:N이네, 그럼 외래키를 이쪽에 두면 되겠다"가 기계적으로 결정된다.</p>
+      <p>시험은 이 "기계적 결정"을 정확히 묻는다. 출제 형태는 딱 두 가지다 — <b>① 도형·표기법이 무엇을 뜻하는지</b>, <b>② ERD 그림을 주고 올바른 관계형 스키마(테이블 목록)를 고르게 하기</b>. ②번은 계리직에서 거의 매년 나오는데, <b>아래 변환 규칙 3줄</b>만 외우면 선택지를 하나씩 소거해 확실히 맞힐 수 있다.</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — ERD 표기법</h2>
 
-    <h3>3가지 기본 도형</h3>
+    <h3>3가지 기본 도형 <span class="page-ref">📖 기출문제집 p.541</span></h3>
     <figure class="diagram">
       <svg viewBox="0 0 640 160" role="img" aria-label="ERD 표기법: 개체는 사각형, 관계는 마름모, 속성은 타원, 기본키 속성은 밑줄 친 타원으로 그린다">
         <rect x="30" y="50" width="120" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -39,10 +50,54 @@
       <figcaption>ERD의 3요소 — 개체는 사각형, 관계는 마름모, 속성은 타원으로 그린다. 기본키(PK) 속성은 타원 안 글자에 밑줄을 긋는다.</figcaption>
     </figure>
 
-    <h3>실전 예제 1. 1:N 관계 — 공장이 판매처에 물건을 주문받는 구조 <span class="page-ref">📖 기출문제집 (계리직 기출) 참고</span></h3>
-    <p>공장(1) : 판매처(N) = <b>하나의 공장</b>이 <b>여러 판매처</b>로부터 주문을 받는 구조. <a href="ER다이어그램_관계형변환.md">기존 문서</a>의 예제를 그림으로 그리면 다음과 같다.</p>
+    <h3>타원의 변형 — 속성의 종류를 모양으로 구별한다</h3>
+    <p>속성은 전부 타원이지만, <b>선의 모양</b>으로 종류를 나눈다. 특히 <b>다중값 속성(이중선 타원)</b>은 "이 그림에서 다중값 속성을 찾아라" 형태로 출제된다.</p>
     <figure class="diagram">
-      <svg viewBox="0 0 640 260" role="img" aria-label="1대다 관계 ERD: 공장 개체와 판매처 개체가 주문 관계로 연결되고, 공장 쪽에 1, 판매처 쪽에 N이 표시된다">
+      <svg viewBox="0 0 700 180" role="img" aria-label="속성 표기 변형: 단일값 속성은 실선 타원, 기본키는 밑줄, 다중값 속성은 이중선 타원, 유도 속성은 점선 타원, 복합 속성은 하위 타원이 달린 형태">
+        <ellipse cx="90" cy="60" rx="70" ry="28" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="90" y="65" font-size="12" text-anchor="middle">구매날짜</text>
+        <text x="90" y="110" font-size="11.5" text-anchor="middle" font-weight="700">단일값 속성</text>
+        <text x="90" y="128" font-size="10.5" text-anchor="middle" opacity="0.75">실선 타원 1개</text>
+
+        <ellipse cx="255" cy="60" rx="70" ry="28" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="255" y="65" font-size="12" text-anchor="middle" text-decoration="underline">학번</text>
+        <text x="255" y="110" font-size="11.5" text-anchor="middle" font-weight="700">기본키 속성</text>
+        <text x="255" y="128" font-size="10.5" text-anchor="middle" opacity="0.75">글자에 밑줄</text>
+
+        <ellipse cx="425" cy="60" rx="72" ry="30" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <ellipse cx="425" cy="60" rx="63" ry="22" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="425" y="65" font-size="12" text-anchor="middle">전화번호</text>
+        <text x="425" y="110" font-size="11.5" text-anchor="middle" font-weight="700">다중값 속성</text>
+        <text x="425" y="128" font-size="10.5" text-anchor="middle" opacity="0.75">이중선 타원</text>
+        <text x="425" y="146" font-size="10.5" text-anchor="middle" opacity="0.75">(값이 여러 개일 수 있음)</text>
+
+        <ellipse cx="595" cy="60" rx="70" ry="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="6 4"/>
+        <text x="595" y="65" font-size="12" text-anchor="middle">나이</text>
+        <text x="595" y="110" font-size="11.5" text-anchor="middle" font-weight="700">유도 속성</text>
+        <text x="595" y="128" font-size="10.5" text-anchor="middle" opacity="0.75">점선 타원</text>
+        <text x="595" y="146" font-size="10.5" text-anchor="middle" opacity="0.75">(생년월일에서 계산)</text>
+      </svg>
+      <figcaption>속성 표기 변형 — 다중값 속성만 <b>이중선</b>, 유도(계산) 속성은 <b>점선</b>으로 그린다. 나머지는 실선 타원이고, 기본키는 글자에 밑줄을 긋는다.</figcaption>
+    </figure>
+    <div class="tip"><b>기출 함정(2021 지방직):</b> ER 다이어그램을 주고 "다중값 속성을 가지고 있다"는 선택지를 넣는데, 실제 그림의 속성이 전부 <b>실선 타원(단일값)</b>이면 그 선택지가 오답이다. 그림 문제에서는 <b>선이 한 겹인지 두 겹인지</b>부터 확인해라.</div>
+
+    <h3>변환 규칙 3줄 — 이것만 알면 변환 문제는 끝</h3>
+    <div class="deep">
+      <h4>ERD → 관계형 스키마</h4>
+      <ol class="steps">
+        <li><b>개체(사각형)</b> → 각각 <b>하나의 테이블</b>이 된다</li>
+        <li><b>1:N 관계</b> → 별도 테이블을 만들지 않고, <b>1쪽의 기본키를 N쪽 테이블에 외래키로 추가</b>한다. 관계에 딸린 속성도 <b>N쪽에 함께</b> 넣는다</li>
+        <li><b>M:N 관계</b> → 양쪽 어디에도 담을 수 없으므로 <b>반드시 별도 테이블</b>을 만들고, 양쪽 기본키를 모두 외래키로 가져와 <b>복합 기본키</b>로 삼는다. 관계 속성도 이 테이블에 넣는다</li>
+      </ol>
+      <p><b>왜 1:N은 N쪽인가?</b> 판매처 1곳은 공장 1곳에서만 주문하므로 판매처 레코드에 공장명 <b>한 개</b>만 적으면 끝난다. 반대로 공장 테이블에 판매처를 적으려면 공장 하나가 여러 판매처를 가지므로 <b>한 칸에 값 여러 개</b>가 들어가야 해서 원자성(1NF) 위반이 된다. <b>"여러 개를 가진 쪽이 아니라, 하나만 가진 쪽 정보를 상대에게 준다"</b>고 기억하면 방향을 헷갈리지 않는다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🏭</span>실전 예제 1 — 1:N 관계 변환 <span class="page-ref">📖 기출문제집 p.542</span></h2>
+    <p>공장(1) : 판매처(N) = <b>하나의 공장</b>이 <b>여러 판매처</b>로부터 주문을 받는 구조. 2022 계리직에 그대로 출제된 형태다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 260" role="img" aria-label="1대다 관계 ERD: 공장 개체와 판매처 개체가 주문 관계로 연결되고, 공장 쪽에 1, 판매처 쪽에 N이 표시되며 주문 관계에 수량 속성이 달려 있다">
         <rect x="40" y="90" width="130" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
         <text x="105" y="115" font-size="13" text-anchor="middle" font-weight="700">공장</text>
         <text x="105" y="135" font-size="10.5" text-anchor="middle" opacity="0.75">공장명(PK), 단가</text>
@@ -67,16 +122,24 @@
       </svg>
       <figcaption>1:N 관계에서 "수량"처럼 관계 자체에 딸린 속성이 있으면, 변환 시 이 속성은 <b>N쪽 테이블</b>(판매처)로 들어간다 — 관계 자체가 별도 테이블이 되지 않기 때문.</figcaption>
     </figure>
-    <p><b>테이블 변환 결과:</b></p>
+    <ol class="steps">
+      <li>개체가 2개(공장, 판매처)이므로 테이블도 <b>기본 2개</b></li>
+      <li>1:N이므로 관계 "주문"은 별도 테이블이 되지 <b>않는다</b> → 테이블 총 2개로 확정 (선택지에 테이블 3개짜리가 있으면 소거)</li>
+      <li>1쪽(공장)의 기본키 <b>공장명</b>을 N쪽(판매처)에 <b>외래키</b>로 추가</li>
+      <li>관계 속성 <b>수량</b>도 N쪽(판매처)에 추가</li>
+    </ol>
     <table>
       <tr><th>판매처 테이블</th><th>공장 테이블</th></tr>
       <tr><td><u>판매처번호</u>, 담당자, <b>공장명(FK)</b>, <b>수량</b></td><td><u>공장명</u>, 단가</td></tr>
     </table>
-    <div class="tip"><b>왜 N쪽에 다 몰아넣나?</b> 판매처 1곳은 공장 1곳으로부터만 주문하므로(N:1 방향), 판매처 레코드 하나에 공장명(FK) 하나만 적으면 관계가 표현된다. 반대로 공장 테이블에 판매처를 넣으려면 공장 하나가 여러 판매처를 가지므로 <b>한 칸에 여러 값</b>이 들어가야 해서 정규화 위반이 된다.</div>
+    <div class="tip"><b>선택지 소거 요령:</b> 이 유형은 ① 테이블이 <b>몇 개</b>인지, ② 외래키가 <b>어느 쪽에</b> 붙었는지 두 가지만 보면 대부분 답이 하나로 좁혀진다. 공장 테이블에 판매처번호가 들어간 선택지는 방향이 반대라 바로 오답이다.</div>
+  </section>
 
-    <h3>실전 예제 2. M:N 관계 — 학생과 과목의 수강 관계</h3>
+  <section class="block">
+    <h2><span class="emoji">🎓</span>실전 예제 2 — M:N 관계 변환 <span class="page-ref">📖 기출문제집 p.543</span></h2>
+    <p>학생과 과목은 서로 여러 개를 가질 수 있다(한 학생이 여러 과목, 한 과목에 여러 학생). 2023 계리직 출제 형태다.</p>
     <figure class="diagram">
-      <svg viewBox="0 0 700 260" role="img" aria-label="다대다 관계 ERD: 학생 개체와 과목 개체가 수강 관계로 연결되고 양쪽 다 M, N으로 표시되며 별도의 관계 테이블이 필요함을 보여준다">
+      <svg viewBox="0 0 700 260" role="img" aria-label="다대다 관계 ERD: 학생 개체와 과목 개체가 수강 관계로 연결되고 양쪽 다 M, N으로 표시되며 성적 속성이 관계에 달려 있다">
         <rect x="30" y="90" width="130" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
         <text x="95" y="115" font-size="13" text-anchor="middle" font-weight="700">학생</text>
         <text x="95" y="135" font-size="10.5" text-anchor="middle" opacity="0.75">학번(PK), 이름</text>
@@ -85,50 +148,354 @@
         <text x="205" y="112" font-size="12" font-weight="700">M</text>
 
         <polygon points="330,90 400,120 330,150 260,120" fill="none" stroke="currentColor" stroke-width="2"/>
-        <text x="330" y="124" font-size="12" text-anchor="middle">수강</text>
+        <text x="330" y="124" font-size="12" text-anchor="middle">등록</text>
 
         <line x1="400" y1="120" x2="490" y2="120" stroke="currentColor" stroke-width="1.5"/>
         <text x="450" y="112" font-size="12" font-weight="700">N</text>
 
         <rect x="490" y="90" width="130" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
         <text x="555" y="115" font-size="13" text-anchor="middle" font-weight="700">과목</text>
-        <text x="555" y="135" font-size="10.5" text-anchor="middle" opacity="0.75">과목코드(PK), 과목명</text>
+        <text x="555" y="135" font-size="10.5" text-anchor="middle" opacity="0.75">과목번호(PK), 과목명</text>
 
         <line x1="330" y1="150" x2="330" y2="195" stroke="currentColor" stroke-width="1.5"/>
         <ellipse cx="330" cy="220" rx="55" ry="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="330" y="225" font-size="12" text-anchor="middle">성적</text>
       </svg>
-      <figcaption>M:N 관계는 어느 한쪽 테이블에도 다 담을 수 없다 — 학생 하나가 여러 과목을, 과목 하나가 여러 학생을 가지므로 <b>양쪽 다 여러 값</b>이 필요해진다. 그래서 "수강"이라는 별도 테이블을 반드시 만든다.</figcaption>
+      <figcaption>M:N 관계는 어느 한쪽 테이블에도 다 담을 수 없다 — 학생 하나가 여러 과목을, 과목 하나가 여러 학생을 가지므로 <b>양쪽 다 여러 값</b>이 필요해진다. 그래서 "등록"이라는 별도 테이블을 반드시 만든다.</figcaption>
     </figure>
-    <p><b>테이블 변환 결과 (3개 테이블):</b></p>
+    <ol class="steps">
+      <li>개체 2개(학생, 과목) + M:N 관계 1개 → 테이블은 <b>총 3개</b></li>
+      <li>관계 테이블 "등록"에 <b>학생의 PK(학번)</b>와 <b>과목의 PK(과목번호)</b>를 둘 다 가져온다</li>
+      <li>이 둘을 합친 <b>{학번, 과목번호}가 복합 기본키</b>이자, 각각 학생·과목 테이블을 참조하는 외래키가 된다</li>
+      <li>관계 속성 <b>성적</b>도 등록 테이블에 추가</li>
+    </ol>
     <table>
-      <tr><th>학생</th><th>수강 (관계 테이블)</th><th>과목</th></tr>
-      <tr><td><u>학번</u>, 이름</td><td><u>학번(FK)</u>+<u>과목코드(FK)</u> = 복합PK, 성적</td><td><u>과목코드</u>, 과목명</td></tr>
+      <tr><th>학생</th><th>등록 (관계 테이블)</th><th>과목</th></tr>
+      <tr><td><u>학번</u>, 이름</td><td><u>학번(FK)</u> + <u>과목번호(FK)</u> = 복합PK, 성적</td><td><u>과목번호</u>, 과목명</td></tr>
     </table>
+    <div class="tip"><b>왜 둘 다 필요한가:</b> 등록 테이블에 학번만 있으면 "누가 등록했는지"는 알아도 "무슨 과목인지"를 모른다. 반대도 마찬가지다. <b>어떤 학생이 어떤 과목에 등록했는지를 정확히 표현하려면 두 키가 모두 있어야</b> 하고, 그래서 복합키가 된다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>주요 개념 — 키(Key)의 종류 <span class="page-ref">📖 기출문제집 p.545~547</span></h2>
+    <p>ERD를 테이블로 바꿀 때 "무엇을 기본키로 삼을지" 정해야 하므로, 키 개념이 함께 출제된다. 다섯 종류의 관계를 <b>포함 관계</b>로 그려두면 한 번에 정리된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 260" role="img" aria-label="키의 포함 관계: 슈퍼키 안에 후보키가 있고 후보키 중 하나가 기본키, 나머지가 대체키이며 외래키는 별개로 다른 릴레이션의 기본키를 참조한다">
+        <defs>
+          <marker id="ky1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="30" y="30" width="330" height="200" rx="12" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="195" y="52" font-size="13" text-anchor="middle" font-weight="700">슈퍼키 (Super Key)</text>
+        <text x="195" y="69" font-size="10.5" text-anchor="middle" opacity="0.8">유일성 O · 최소성 ✕</text>
+
+        <rect x="55" y="82" width="280" height="130" rx="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="195" y="103" font-size="13" text-anchor="middle" font-weight="700">후보키 (Candidate Key)</text>
+        <text x="195" y="120" font-size="10.5" text-anchor="middle" opacity="0.8">유일성 O · 최소성 O</text>
+
+        <rect x="75" y="132" width="110" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="130" y="157" font-size="12" text-anchor="middle" font-weight="700">기본키</text>
+        <text x="130" y="175" font-size="10" text-anchor="middle" opacity="0.8">대표로 선택된</text>
+        <text x="130" y="188" font-size="10" text-anchor="middle" opacity="0.8">단 하나</text>
+
+        <rect x="205" y="132" width="110" height="62" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="260" y="157" font-size="12" text-anchor="middle" font-weight="700">대체키</text>
+        <text x="260" y="175" font-size="10" text-anchor="middle" opacity="0.8">선택 안 된</text>
+        <text x="260" y="188" font-size="10" text-anchor="middle" opacity="0.8">나머지 후보키</text>
+
+        <rect x="420" y="95" width="180" height="80" rx="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="510" y="122" font-size="13" text-anchor="middle" font-weight="700">외래키 (Foreign Key)</text>
+        <text x="510" y="142" font-size="10.5" text-anchor="middle" opacity="0.8">다른 릴레이션의</text>
+        <text x="510" y="157" font-size="10.5" text-anchor="middle" opacity="0.8">기본키를 참조</text>
+        <line x1="416" y1="135" x2="190" y2="163" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ky1)"/>
+        <text x="300" y="228" font-size="11" text-anchor="middle" opacity="0.85">외래키는 "관계를 잇는 끈" — 포함 관계가 아니라 다른 테이블을 가리킨다</text>
+      </svg>
+      <figcaption>키의 포함 관계 — 슈퍼키 ⊃ 후보키 ⊃ {기본키 + 대체키}. 외래키만 성격이 달라서, 자기 테이블 안의 식별용이 아니라 <b>다른 테이블의 기본키를 가리키는</b> 역할을 한다.</figcaption>
+    </figure>
+    <table>
+      <tr><th>키</th><th>유일성</th><th>최소성</th><th>정의</th></tr>
+      <tr><td><b>슈퍼키</b></td><td>O</td><td><b>X</b></td><td>튜플을 유일하게 식별하지만, 불필요한 속성이 붙어 있어도 됨</td></tr>
+      <tr><td><b>후보키</b></td><td>O</td><td><b>O</b></td><td>유일하게 식별하면서 <b>속성을 하나라도 빼면 식별 불가</b>해지는 최소 집합</td></tr>
+      <tr><td><b>기본키</b></td><td>O</td><td>O</td><td>후보키 중 <b>대표로 선택된</b> 하나 (NULL 불가)</td></tr>
+      <tr><td><b>대체키</b></td><td>O</td><td>O</td><td>후보키 중 기본키로 <b>선택되지 않은 나머지</b></td></tr>
+      <tr><td><b>외래키</b></td><td colspan="2">-</td><td>다른(또는 자기) 릴레이션의 <b>기본키를 참조</b>하는 속성</td></tr>
+    </table>
+    <div class="deep">
+      <h4>유일성과 최소성, 말로 풀면</h4>
+      <p><b>유일성</b> = 그 값만 보면 행을 딱 하나로 집어낼 수 있다. <b>최소성</b> = 속성을 하나라도 빼면 그 능력이 사라진다(= 군더더기가 없다).</p>
+      <p>예를 들어 {학번}이 후보키라면, {학번, 이름}도 여전히 유일하게 식별은 된다 → <b>유일성 O</b>. 하지만 이름을 빼도 학번만으로 식별되므로 <b>최소성 X</b> → 이건 후보키가 아니라 <b>슈퍼키</b>다. "유일성은 만족하지만 최소성은 만족하지 못하는 키"라는 문제 문구가 나오면 <b>무조건 슈퍼키</b>다.</p>
+    </div>
+    <div class="tip"><b>차수 vs 카디널리티 (2024 법원직 함정):</b> 하나의 릴레이션에서 <b>속성(열)의 개수 = 차수(degree)</b>, <b>튜플(행)의 개수 = 카디널리티(cardinality)</b>다. 문제에서 "속성의 전체 개수를 카디널리티라 한다"고 하면 틀린 설명이다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>도형 매칭: 사각형=개체, 마름모=관계, 타원=속성 — 반대로 나오면 오답</li>
-      <li>기본키(PK) 속성은 타원 안 글자에 <b>밑줄</b>로 표시</li>
-      <li>1:N 관계의 속성은 <b>N쪽 테이블</b>에, M:N 관계는 <b>반드시 별도 테이블</b> 생성</li>
-      <li>M:N 관계 테이블의 기본키는 양쪽 FK를 합친 <b>복합키</b></li>
+      <li>도형 매칭: <b>사각형=개체, 마름모=관계, 타원=속성</b> — 서로 바꿔 놓으면 오답</li>
+      <li><b>다중값 속성 = 이중선 타원</b>, 유도 속성 = 점선 타원, 기본키 = 밑줄</li>
+      <li>1:N 변환 → 별도 테이블 <b>없음</b>, 1쪽 PK를 N쪽에 FK로 + 관계 속성도 N쪽에</li>
+      <li>M:N 변환 → <b>반드시 별도 테이블</b>, 양쪽 PK를 모아 <b>복합 기본키</b></li>
+      <li>유일성 O + 최소성 X = <b>슈퍼키</b> / 둘 다 O = <b>후보키</b></li>
+      <li>기본키로 안 뽑힌 후보키 = <b>대체키</b> (외래키가 아님 — 단골 함정)</li>
+      <li><b>차수=속성 개수, 카디널리티=튜플 개수</b></li>
+      <li>후보키 판정 문제는 <b>주어진 인스턴스(데이터)로 직접 중복 여부를 확인</b>해야 한다</li>
     </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>1:N 관계</th><th>M:N 관계</th></tr>
+      <tr><td>테이블 개수</td><td>개체 수 그대로 (관계는 테이블 X)</td><td>개체 수 + <b>1</b> (관계 테이블 추가)</td></tr>
+      <tr><td>외래키 위치</td><td><b>N쪽</b>에 1쪽의 PK</td><td>관계 테이블에 <b>양쪽 PK 모두</b></td></tr>
+      <tr><td>관계 속성 위치</td><td>N쪽 테이블</td><td>관계 테이블</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>슈퍼키</th><th>후보키</th><th>대체키</th></tr>
+      <tr><td>유일성</td><td>O</td><td>O</td><td>O</td></tr>
+      <tr><td>최소성</td><td><b>X (없어도 됨)</b></td><td>O</td><td>O</td></tr>
+      <tr><td>관계</td><td>가장 넓은 개념</td><td>슈퍼키 중 최소인 것</td><td>후보키 − 기본키</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2014 서울시 · 기출문제집 p.541</span></div>
+      <p class="q-body">개체 관계 모델(Entity-Relationship model)을 그래프 방식으로 표현한 E-R 다이어그램에서 <b>마름모 모양</b>으로 표현되는 것은?</p>
+      <ol class="choices">
+        <li>개체 타입(entity type)</li>
+        <li>관계 타입(relationship type)</li>
+        <li>속성(attribute)</li>
+        <li>키 속성(key attribute)</li>
+        <li>링크(link)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 관계 타입</p>
+        <div class="explain">
+          <p>도형 매칭은 암기 항목이다: <b>사각형=개체, 마름모=관계, 타원=속성, 선(링크)=연결</b>.</p>
+          <p><b>암기 팁:</b> 마름모는 두 사각형 <b>사이에 끼어</b> 둘을 이어주는 모양으로 그려진다. "가운데 껴 있는 도형 = 관계"로 그림의 위치와 함께 외우면 헷갈리지 않는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2022 계리직 · 기출문제집 p.542</span></div>
+      <p class="q-body">공장(1) : 판매처(N)의 <b>주문</b> 관계를 나타낸 E-R 다이어그램을 관계형 스키마로 올바르게 변환한 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">공장{공장명(PK), 단가}, 판매처{판매처번호(PK), 담당자}, 주문 관계에 "수량" 속성이 달림. 밑줄은 기본키.</span></p>
+      <ol class="choices">
+        <li>판매처(<u>판매처번호</u>, 담당자) / 공장(<u>공장명</u>, 단가, 판매처번호, 수량)</li>
+        <li>판매처(<u>판매처번호</u>, 담당자, 공장명, 수량) / 공장(<u>공장명</u>, 단가)</li>
+        <li>판매처(<u>판매처번호</u>, 담당자) / 주문(<u>판매처번호</u>, 수량) / 공장(<u>공장명</u>, 단가)</li>
+        <li>판매처(<u>판매처번호</u>, 담당자) / 주문(<u>공장명</u>, 수량) / 공장(<u>공장명</u>, 단가)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>1:N이므로 관계 테이블을 만들지 않는다</b> → 테이블 3개인 ③·④ 소거</li>
+            <li>남은 ①·② 중, 1쪽(공장)의 PK인 <b>공장명</b>이 N쪽(판매처)에 FK로 들어가야 한다 → ①은 반대 방향(공장에 판매처번호)이라 소거</li>
+            <li>관계 속성 <b>수량</b>도 N쪽인 판매처에 함께 들어간다 → ②가 정확히 이 형태</li>
+          </ol>
+          <p><b>왜 ①이 안 되나:</b> 공장 하나가 여러 판매처를 상대하므로, 공장 테이블에 판매처번호를 넣으려면 한 행에 판매처번호를 여러 개 적어야 한다. 이는 원자값 위반이다.</p>
+          <p><b>참고:</b> 굳이 주문을 별도 릴레이션으로 만든다면 판매처번호와 공장명을 <b>모두</b> 외래키로 포함하고 기본키는 판매처번호가 되어야 하는데, ③·④는 둘 중 하나만 있어서 어느 쪽이든 틀렸다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2023 계리직 · 기출문제집 p.543</span></div>
+      <p class="q-body">학생(M) : 과목(N)의 <b>등록</b> 관계(성적 속성 포함)를 나타낸 E-R 다이어그램을 관계형 스키마로 올바르게 변환한 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">학생{학번(PK), 이름}, 과목{과목번호(PK), 과목명}. 밑줄은 기본키.</span></p>
+      <ol class="choices">
+        <li>학생(<u>학번</u>, 이름) / 등록(성적) / 과목(<u>과목번호</u>, 과목명)</li>
+        <li>학생(<u>학번</u>, 이름) / 등록(<u>과목번호</u>, 성적) / 과목(<u>과목번호</u>, 과목명, 성적)</li>
+        <li>학생(<u>학번</u>, 이름) / 등록(<u>학번</u>, 성적) / 과목(<u>과목번호</u>, 과목명)</li>
+        <li>학생(<u>학번</u>, 이름) / 등록(<u>학번, 과목번호</u>, 성적) / 과목(<u>과목번호</u>, 과목명)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>M:N이므로 관계 테이블 "등록"이 <b>반드시</b> 필요하다 (네 선택지 모두 만들었으므로 여기선 소거 안 됨)</li>
+            <li>등록 테이블은 <b>학번과 과목번호를 둘 다</b> 가져야 "어떤 학생이 어떤 과목에 등록했는지"를 표현할 수 있다 → 학번만 있는 ③, 과목번호만 있는 ②, 아무 키도 없는 ① 전부 소거</li>
+            <li>{학번, 과목번호}가 <b>복합 기본키</b>이면서 각각 학생·과목에 대한 외래키 역할을 한다</li>
+            <li>관계 속성 <b>성적</b>은 등록 테이블에 들어간다 (②처럼 과목 테이블에 넣으면 안 됨 — 성적은 과목의 속성이 아니라 "학생이 그 과목에서 받은" 값이므로)</li>
+          </ol>
+          <p><b>핵심 판별:</b> M:N 문제는 <b>"관계 테이블에 양쪽 키가 모두 있는가"</b> 한 가지만 보면 대부분 즉시 답이 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2014 서울시 · 기출문제집 p.545</span></div>
+      <p class="q-body">데이터베이스 키(key)에 대한 다음 설명에 해당하는 키는?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;">릴레이션에 있는 모든 투플들을 유일하게 식별할 수 있는 애트리뷰트의 부분집합으로 <b>유일성과 최소성을 만족</b>함</span></p>
+      <ol class="choices">
+        <li>기본키(primary key)</li>
+        <li>후보키(candidate key)</li>
+        <li>대체키(alternate key)</li>
+        <li>슈퍼키(super key)</li>
+        <li>외래키(foreign key)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 후보키</p>
+        <div class="explain">
+          <p><b>"유일성 + 최소성"</b>이라는 문구가 곧 후보키의 정의다.</p>
+          <p><b>①번을 고르면 안 되는 이유:</b> 기본키도 유일성·최소성을 만족하지만, 기본키는 <b>"후보키 중에서 대표로 뽑힌 것"</b>이라는 선택 과정이 정의에 포함된다. 문제 지문에 "선택된"이라는 말이 없으면 답은 후보키다. 지문에 <b>"후보키 중에서 선택된"</b>이 있으면 기본키, <b>"선택되지 않은 나머지"</b>면 대체키다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2021 국회 · 기출문제집 p.546</span></div>
+      <p class="q-body">릴레이션을 구성하는 모든 튜플에 대해 <b>유일성은 만족하지만 최소성은 만족하지 못하는</b> 키로 옳은 것은?</p>
+      <ol class="choices">
+        <li>기본키(Primary Key)</li>
+        <li>대체키(Alternate Key)</li>
+        <li>복합키(Composite Key)</li>
+        <li>후보키(Candidate Key)</li>
+        <li>슈퍼키(Super Key)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ⑤ 슈퍼키</p>
+        <div class="explain">
+          <p>유일성만 만족하고 최소성은 만족하지 않는 키 = <b>슈퍼키</b>. 기본키·대체키·후보키는 전부 최소성까지 만족한다.</p>
+          <p><b>구체적 예:</b> 학생 테이블에서 {학번}이 후보키라면, {학번, 이름}, {학번, 주소}, {학번, 이름, 나이} … 이 모든 조합이 슈퍼키다. 학번만으로 이미 식별되니 나머지는 군더더기지만, 여전히 유일하게 식별은 되기 때문이다.</p>
+          <p><b>함정:</b> ③번 복합키는 "여러 속성을 묶어 만든 키"라는 <b>구성 방식</b>에 대한 말이지, 최소성 여부와는 무관한 개념이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2016 지방직 · 기출문제집 p.546</span></div>
+      <p class="q-body">속성 A, B, C로 정의된 릴레이션의 인스턴스가 아래와 같을 때, <b>후보키의 조건을 충족하는</b> 것은?</p>
+      <table>
+        <tr><th>A</th><th>B</th><th>C</th></tr>
+        <tr><td>1</td><td>12</td><td>7</td></tr>
+        <tr><td>20</td><td>12</td><td>7</td></tr>
+        <tr><td>1</td><td>12</td><td>3</td></tr>
+        <tr><td>1</td><td>1</td><td>4</td></tr>
+        <tr><td>1</td><td>2</td><td>6</td></tr>
+      </table>
+      <ol class="choices">
+        <li>(A)</li>
+        <li>(A, C)</li>
+        <li>(B, C)</li>
+        <li>(A, B, C)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (A, C)</p>
+        <div class="explain">
+          <p>후보키 = <b>유일성 O + 최소성 O</b>. 각 선택지의 값 조합을 실제로 나열해 중복이 있는지 확인하면 된다.</p>
+          <ol class="steps">
+            <li><b>(A)</b>: 1, 20, 1, 1, 1 → 1이 네 번 중복 → <b>유일성 ✕</b></li>
+            <li><b>(A, C)</b>: (1,7), (20,7), (1,3), (1,4), (1,6) → 전부 서로 다름 → <b>유일성 O</b>. A만·C만으로는 식별 불가하므로 <b>최소성도 O</b> → <b>후보키</b></li>
+            <li><b>(B, C)</b>: (12,7), (12,7), (12,3), (1,4), (2,6) → <b>1행과 2행이 완전히 같음</b> → 유일성 ✕</li>
+            <li><b>(A, B, C)</b>: 유일성은 만족하지만, 이미 (A,C)만으로 식별되므로 B가 군더더기 → <b>최소성 ✕ (슈퍼키)</b></li>
+          </ol>
+          <p><b>풀이 순서:</b> ① 후보 조합별로 값을 실제로 적어본다 → ② 같은 줄이 있으면 즉시 탈락 → ③ 살아남은 것 중 <b>속성을 하나 빼도 여전히 유일한지</b> 확인해 최소성을 검사한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2016 계리직 · 기출문제집 p.547</span></div>
+      <p class="q-body">직원 테이블 <code>직원(사번, 이름, 주민등록번호, 주소, 나이, 성별, 부서번호)</code>에서 키와 관련된 설명으로 <b>옳지 않은</b> 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">(단, 사번과 주민등록번호는 각각 유일한 값을 갖고, 부서번호는 부서 테이블을 참조하며, <b>나이가 같은 동명이인이 존재할 수 있다</b>.)</span></p>
+      <ol class="choices">
+        <li>부서번호는 외래키이다.</li>
+        <li>사번은 기본키가 될 수 있다.</li>
+        <li>(이름, 나이)는 후보키가 될 수 있다.</li>
+        <li>주민등록번호는 대체키가 될 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>문제 단서에 <b>"나이가 같은 동명이인이 존재할 수 있다"</b>가 명시돼 있다. 즉 (이름, 나이)가 같은 행이 둘 이상 나올 수 있으므로 <b>유일성이 깨진다</b> → 후보키가 될 수 없다.</p>
+          <ol class="steps">
+            <li>① 부서번호는 <b>부서 테이블의 기본키를 참조</b>한다고 했으므로 외래키 → 옳음</li>
+            <li>② 사번은 유일하다고 했으므로 기본키 후보 → 옳음</li>
+            <li>④ 주민등록번호도 유일하므로 후보키이고, 기본키로 사번을 뽑았다면 나머지 후보키인 주민등록번호는 <b>대체키</b> → 옳음</li>
+          </ol>
+          <p><b>출제 포인트:</b> 이런 문제는 <b>괄호 안 단서가 정답을 결정</b>한다. "동명이인이 있을 수 있다", "값이 중복될 수 있다" 같은 조건이 보이면 그것과 연결된 선택지가 정답일 확률이 매우 높다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2024 법원직 · 기출문제집 p.545</span></div>
+      <p class="q-body">릴레이션에 대한 설명 중 가장 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>하나의 릴레이션에서 속성의 전체 개수를 카디널리티라 한다.</li>
+        <li>릴레이션 스키마는 릴레이션의 이름과 포함된 모든 속성의 이름을 정의하는 논리적 구조를 의미한다.</li>
+        <li>릴레이션의 특성 중 튜플의 유일성과 속성의 무순서 특성도 존재한다.</li>
+        <li>릴레이션의 특성 중 속성의 원자성은 속성값으로 원자값만을 사용할 수 있다는 의미이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>속성(열)의 개수는 <b>차수(degree)</b>다. <b>카디널리티(cardinality)</b>는 튜플(행)의 개수를 뜻한다.</p>
+          <div class="tip" style="margin-top:8px;"><b>암기법:</b> <b>카</b>디널리티 = <b>가</b>로줄(행) 개수, <b>디</b>그리(차수) = <b>더</b> 세로줄(열) 개수. 또는 "카드(card)를 몇 장 쌓았나 = 행 수"로 외워도 된다.</div>
+          <p>나머지는 릴레이션의 기본 특성 그대로다 — 튜플은 모두 상이(유일성), 속성 간 순서 없음, 튜플 간 순서 없음, 속성값은 원자값(더 이상 분해 불가).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">"한 명의 교수는 여러 강의를 담당하고, 하나의 강의는 반드시 한 명의 교수만 담당한다"는 구조를 ERD로 그린 뒤 테이블로 변환하면 <b>테이블은 몇 개</b>가 되고, <b>외래키는 어느 테이블에</b> 들어가는가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 테이블 2개 / 외래키는 강의 테이블에 교수번호(PK) 추가</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>관계 판정: 교수 1명 → 강의 여러 개, 강의 1개 → 교수 1명 = <b>교수(1) : 강의(N)</b></li>
+            <li>1:N이므로 관계는 별도 테이블이 되지 않는다 → 개체 수 그대로 <b>테이블 2개</b>(교수, 강의)</li>
+            <li>1쪽(교수)의 기본키를 N쪽(강의)에 외래키로 넣는다 → 강의(<u>강의코드</u>, 강의명, <b>교수번호(FK)</b>)</li>
+          </ol>
+          <p><b>확인 논리:</b> 강의 한 행에 교수번호를 <b>하나만</b> 적으면 되는가? → 강의는 교수 1명만 담당하므로 하나면 충분하다 → 방향이 맞다. 반대로 교수 테이블에 강의코드를 넣으면 한 교수가 여러 강의를 하므로 값이 여러 개 필요해져 실패한다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>이어서 볼 문서</h2>
+    <p>변환 규칙의 표 정리는 <a href="ER다이어그램_관계형변환.md">ER다이어그램 관계형변환</a>, 릴레이션의 특성과 키의 상세 정의는 <a href="릴레이션_특성.md">릴레이션 특성</a>, 설계 단계 전체 흐름은 <a href="DB_설계절차.md">DB 설계절차</a> 문서를 참고.</p>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">ERD</span>
-      <span class="chip">개체</span>
-      <span class="chip">관계</span>
-      <span class="chip">속성</span>
-      <span class="chip">기본키</span>
+      <span class="chip">개체(Entity)</span>
+      <span class="chip">관계(Relationship)</span>
+      <span class="chip">속성(Attribute)</span>
+      <span class="chip">다중값 속성</span>
+      <span class="chip">유도 속성</span>
       <span class="chip">1:N</span>
       <span class="chip">M:N</span>
-      <span class="chip">복합키</span>
+      <span class="chip">관계형 스키마 변환</span>
+      <span class="chip">슈퍼키</span>
+      <span class="chip">후보키</span>
+      <span class="chip">기본키</span>
+      <span class="chip">대체키</span>
       <span class="chip">외래키(FK)</span>
+      <span class="chip">복합키</span>
+      <span class="chip">유일성</span>
+      <span class="chip">최소성</span>
+      <span class="chip">차수(degree)</span>
+      <span class="chip">카디널리티</span>
     </div>
   </section>
 

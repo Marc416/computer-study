@@ -3,69 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>데이터마이닝과 분산DB 보충 | 컴퓨터일반</title>
+<title>데이터마이닝과 분산 데이터베이스 | 컴퓨터일반</title>
 <link rel="stylesheet" href="../assets/css/study.css">
 </head>
 <body>
 <div class="page">
 
-  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">04. 데이터베이스</a> / 데이터마이닝과 분산DB 보충</div>
-  <h1 class="page-title">데이터마이닝과 분산DB 보충</h1>
-  <p class="page-subtitle">연관규칙 지지도·신뢰도 계산, 분산DB 단편화 투명성 · PART 05. 데이터베이스론</p>
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">04. 데이터베이스</a> / 데이터마이닝과 분산 데이터베이스</div>
+  <h1 class="page-title">데이터마이닝과 분산 데이터베이스</h1>
+  <p class="page-subtitle">연관규칙 지지도·신뢰도 계산 · 분산 투명성 5종 · 2단계 완료 규약 · PART 05. 데이터베이스론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
-    <p>데이터마이닝은 대량 데이터에서 <b>패턴을 찾아내는 것</b> — 그 중 "장바구니 분석(연관규칙)"의 지지도·신뢰도 계산이 최다빈출.</p>
-    <p>분산DB의 <b>단편화 투명성</b>은 기존 <a href="분산데이터베이스.md">분산 데이터베이스 문서</a>에 없던 내용이라 여기서 보충.</p>
+    <p>데이터마이닝 계산문제는 <b>"분모를 무엇으로 하느냐"</b> 하나로 갈린다 — 지지도는 <b>전체</b>, 신뢰도는 <b>조건절(A)</b>.</p>
+    <p>분산DB는 <b>투명성 5종</b>(위치·단편화·중복·장애·병행)의 정의 매칭이 전부. 특히 <b>장애 투명성 = 장애를 막는 게 아니라, 나도 계속 쓸 수 있게 하는 것</b>.</p>
   </div>
 
   <section class="block">
-    <h2><span class="emoji">💡</span>주요 개념 — 데이터마이닝</h2>
-
-    <h3>데이터마이닝 5대 규칙 <span class="page-ref">📖 기출문제집 p.603</span></h3>
-    <table>
-      <tr><th>규칙</th><th>하는 일</th></tr>
-      <tr><td><b>연관 규칙</b> (Association)</td><td>여러 트랜잭션에서 <b>동시에 발생하는</b> 항목들의 관계 발견 ("기저귀 사면 맥주도 산다")</td></tr>
-      <tr><td><b>연속성 규칙</b> (Sequence)</td><td>개인별 이력을 <b>시계열</b>로 분석해 향후 발생 가능성 예측</td></tr>
-      <tr><td><b>분류 규칙</b> (Classification)</td><td>이미 알려진 그룹의 특징에 맞춰 새 데이터를 <b>분류</b></td></tr>
-      <tr><td><b>군집 규칙</b> (Clustering)</td><td>유사한 데이터끼리 <b>그룹화</b> (정답 그룹이 미리 정해져 있지 않음)</td></tr>
-      <tr><td><b>특성화 규칙</b> (Characterization)</td><td>특정 클래스·그룹만의 <b>고유한 특징</b>을 도출</td></tr>
-    </table>
-    <div class="tip"><b>함정 주의:</b> "특성화 규칙이 시계열로 트랜잭션 발생 가능성을 예측한다" → ❌ 그건 <b>연속성 규칙(Sequence)</b>의 역할이다. 특성화 규칙은 예측이 아니라 "고유 특징 도출"이 핵심.</div>
-    <div class="analogy"><b>구별 팁:</b> 분류(Classification)는 "이미 정해진 그룹 중 어디에 속하나", 군집(Clustering)은 "정해진 그룹이 없는 상태에서 비슷한 것끼리 스스로 묶기" — 학교로 치면 분류는 "반 배정", 군집은 "쉬는 시간에 끼리끼리 모이기".</div>
-
-    <h3>지지도(Support)와 신뢰도(Confidence) 계산</h3>
-    <p><b>지지도</b> = 전체 트랜잭션 중 두 항목이 <b>같이</b> 나온 비율. <b>신뢰도</b> = 항목 A가 나온 트랜잭션 중에서 항목 B도 <b>같이</b> 나온 비율(조건부 확률).</p>
-    <div class="tip">
-      지지도(A,B) = (A와 B를 모두 포함한 트랜잭션 수) ÷ (전체 트랜잭션 수)<br>
-      신뢰도(A→B) = (A와 B를 모두 포함한 트랜잭션 수) ÷ (A를 포함한 트랜잭션 수)
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"쌓아둔 데이터"에서 돈이 되는 패턴을 캐낸다</h4>
+      <p>DB에 거래 기록이 수백만 건 쌓여도, 그 자체로는 그냥 로그일 뿐이다. 여기서 <b>"기저귀를 사는 사람은 맥주도 같이 산다"</b> 같은 규칙을 찾아내면 매대 배치를 바꿔 매출을 올릴 수 있다. 이렇게 <b>대량 데이터에서 숨은 패턴·규칙을 캐내는(mining) 작업</b>이 데이터마이닝이다.</p>
+      <p>시험에 나오는 건 딱 두 가지다 — <b>① 5대 규칙의 이름과 설명 매칭</b>, <b>② 지지도·신뢰도 계산</b>. ②번은 공식만 알면 20초 안에 풀리는 <b>확정 득점 문제</b>인데, 분모를 잘못 잡아 틀리는 사람이 대부분이다.</p>
+      <h4>데이터베이스가 여러 곳에 흩어져 있다면</h4>
+      <p>본사와 지점이 각자 DB를 갖고 있는데 사용자는 <b>하나의 DB처럼 쓰고 싶다.</b> 이를 가능하게 하는 것이 <b>분산 데이터베이스</b>이고, 핵심 목표는 "흩어져 있다는 사실을 사용자에게 숨기는 것" — 이게 바로 <b>투명성(transparency)</b>이다.</p>
+      <p>투명성은 다섯 종류인데 출제는 <b>정의를 한 줄씩 바꿔 놓고 틀린 것 찾기</b>가 거의 전부다. 특히 <b>장애 투명성</b>을 "장애가 일어나지 않게 예방하는 것"으로 바꾼 선택지가 단골 정답이니, 다섯 개 정의를 문장째로 익혀두면 된다.</p>
     </div>
-    <p><b>예제. 아래 5개 거래 기록에서 "기저귀 → 맥주" 규칙의 신뢰도는?</b> <span class="page-ref">📖 기출문제집 p.602</span></p>
-    <table>
-      <tr><th>거래번호</th><th>구매 품목</th></tr>
-      <tr><td>1</td><td>맥주, 땅콩, 기저귀</td></tr>
-      <tr><td>2</td><td>맥주, 커피, 기저귀</td></tr>
-      <tr><td>3</td><td>맥주, 기저귀, 계란</td></tr>
-      <tr><td>4</td><td>땅콩, 계란, 우유</td></tr>
-      <tr><td>5</td><td>땅콩, 커피, 기저귀, 우유</td></tr>
-    </table>
-    <ol class="steps">
-      <li>규칙이 "기저귀 → 맥주"이므로 분모는 <b>기저귀를 산 거래 수</b>를 센다</li>
-      <li>기저귀가 포함된 거래: 1, 2, 3, 5번 → 총 <b>4건</b></li>
-      <li>그 중 맥주도 같이 산 거래: 1, 2, 3번 → <b>3건</b> (5번은 기저귀만 있고 맥주 없음)</li>
-      <li>신뢰도 = 3 ÷ 4 = <b>0.75</b></li>
-    </ol>
-    <div class="tip"><b>함정 주의:</b> 분모를 "전체 거래 수(5)"로 착각하면 안 된다 — 신뢰도의 분모는 <b>조건절(기저귀)이 나온 거래 수</b>다. 전체 거래 수로 나누는 것은 <b>지지도</b> 계산법이다.</div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🌐</span>주요 개념 — 분산DB 단편화 투명성</h2>
-    <p><a href="분산데이터베이스.md">분산 데이터베이스 문서</a>에는 위치·중복·병행·장애 투명성이 정리되어 있다. 여기서는 그 목록에 없던 <b>단편화(분할) 투명성</b>을 보충한다.</p>
-    <h3>단편화(Fragmentation)의 3가지 방식 <span class="page-ref">📖 기출문제집 p.600</span></h3>
+    <h2><span class="emoji">⛏️</span>주요 개념 — 데이터마이닝</h2>
+
+    <h3>데이터마이닝 5대 규칙 <span class="page-ref">📖 기출문제집 p.603</span></h3>
+    <table>
+      <tr><th>규칙</th><th>교과서 정의 (시험 문구)</th><th>한 단어 요약</th></tr>
+      <tr><td><b>연관 규칙</b><br>(Association)</td><td>여러 개의 트랜잭션들 중에서 <b>동시에 발생하는</b> 트랜잭션의 연관관계를 발견</td><td>같이 산다</td></tr>
+      <tr><td><b>연속성 규칙</b><br>(Sequence)</td><td>개인별 트랜잭션 이력 데이터를 <b>시계열적으로</b> 분석하여 향후 발생 가능성을 <b>예측</b></td><td>다음에 산다</td></tr>
+      <tr><td><b>분류 규칙</b><br>(Classification)</td><td><b>이미 알려진</b> 특정 그룹의 특징을 부여하고 정의된 분류에 맞게 구분</td><td>정해진 칸에 넣기</td></tr>
+      <tr><td><b>군집 규칙</b><br>(Clustering)</td><td>상호 <b>유사한 특성</b>을 갖는 데이터들을 그룹화하여 패턴 분석</td><td>비슷한 것끼리</td></tr>
+      <tr><td><b>특성화 규칙</b><br>(Characterization)</td><td>특정 클래스나 그룹의 <b>고유한 특징을 도출</b></td><td>이 집단의 특징</td></tr>
+    </table>
+    <div class="tip"><b>최다 함정(2025 소방경채):</b> "특성화 규칙은 트랜잭션 이력을 <b>시계열로 분석해 향후 발생 가능성을 예측</b>한다" → ❌ 그건 <b>연속성 규칙(Sequence)</b>의 정의다. 특성화는 <b>예측이 아니라 "특징 도출"</b>이다. <b>"시계열·예측"이라는 단어가 보이면 무조건 연속성 규칙</b>으로 반응하면 된다.</div>
+    <div class="analogy"><b>분류 vs 군집 구별:</b> <b>분류</b>는 "이미 정해진 그룹 중 어디에 속하나"(정답표가 있음), <b>군집</b>은 "정해진 그룹 없이 비슷한 것끼리 스스로 묶기"(정답표가 없음). 학교로 치면 분류는 <b>반 배정</b>, 군집은 <b>쉬는 시간에 끼리끼리 모이기</b>.</div>
+
+    <h3>지지도·신뢰도 — 분모가 전부다</h3>
+    <p>연관 규칙 <b>A → B</b>("A를 사면 B도 산다")의 품질을 재는 두 지표다. 분자는 둘 다 같고 <b>분모만 다르다.</b></p>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 250" role="img" aria-label="지지도와 신뢰도의 분모 차이를 보여주는 다이어그램: 지지도는 전체 트랜잭션을 분모로 하고 신뢰도는 A를 포함한 트랜잭션만 분모로 한다">
+        <text x="165" y="24" font-size="13" text-anchor="middle" font-weight="700">지지도 (Support)</text>
+        <rect x="35" y="40" width="260" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="165" y="60" font-size="11.5" text-anchor="middle" font-weight="700">전체 트랜잭션 (분모)</text>
+        <ellipse cx="125" cy="115" rx="65" ry="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="100" y="105" font-size="11" text-anchor="middle">A</text>
+        <ellipse cx="205" cy="115" rx="65" ry="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="232" y="105" font-size="11" text-anchor="middle">B</text>
+        <text x="165" y="120" font-size="10.5" text-anchor="middle" font-weight="700">A∩B</text>
+        <text x="165" y="134" font-size="9.5" text-anchor="middle" opacity="0.8">(분자)</text>
+        <text x="165" y="182" font-size="11.5" text-anchor="middle">A와 B를 모두 산 건수</text>
+        <line x1="75" y1="190" x2="255" y2="190" stroke="currentColor" stroke-width="1.5"/>
+        <text x="165" y="208" font-size="11.5" text-anchor="middle" font-weight="700">전체 거래 건수</text>
+
+        <text x="495" y="24" font-size="13" text-anchor="middle" font-weight="700">신뢰도 (Confidence)</text>
+        <rect x="365" y="40" width="260" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <text x="495" y="60" font-size="11.5" text-anchor="middle" opacity="0.7">전체 트랜잭션 (분모 아님)</text>
+        <ellipse cx="455" cy="115" rx="65" ry="35" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="430" y="105" font-size="11" text-anchor="middle" font-weight="700">A</text>
+        <ellipse cx="535" cy="115" rx="65" ry="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="562" y="105" font-size="11" text-anchor="middle">B</text>
+        <text x="495" y="120" font-size="10.5" text-anchor="middle" font-weight="700">A∩B</text>
+        <text x="495" y="134" font-size="9.5" text-anchor="middle" opacity="0.8">(분자)</text>
+        <text x="495" y="182" font-size="11.5" text-anchor="middle">A와 B를 모두 산 건수</text>
+        <line x1="405" y1="190" x2="585" y2="190" stroke="currentColor" stroke-width="1.5"/>
+        <text x="495" y="208" font-size="11.5" text-anchor="middle" font-weight="700">A를 산 건수 (굵은 원)</text>
+        <text x="495" y="232" font-size="10.5" text-anchor="middle" opacity="0.85">→ 조건부 확률 P(B|A)</text>
+      </svg>
+      <figcaption>분자는 둘 다 "A와 B를 함께 산 건수"로 같다. <b>지지도는 전체를, 신뢰도는 A를 산 건수를 분모</b>로 삼는다는 것만 다르다 — 이 차이가 문제의 정답을 가른다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>지지도</b>(A, B) = (A와 B를 모두 포함한 트랜잭션 수) ÷ <b>(전체 트랜잭션 수)</b><br>
+      <b>신뢰도</b>(A → B) = (A와 B를 모두 포함한 트랜잭션 수) ÷ <b>(A를 포함한 트랜잭션 수)</b>
+    </div>
+    <div class="deep">
+      <h4>왜 두 지표가 다 필요한가</h4>
+      <p>신뢰도만 보면 함정에 빠진다. 전체 10,000건 중 A와 B가 함께 나온 게 딱 2건이고 A가 나온 것도 2건이라면 <b>신뢰도는 100%</b>지만, 이건 그냥 <b>우연히 두 번 겹친 것</b>일 뿐 규칙이라 할 수 없다. 이때 지지도는 2/10000 = 0.02%로 매우 낮게 나와 <b>"표본이 너무 적다"는 경고</b>를 준다.</p>
+      <p>그래서 실무에서는 <b>지지도로 먼저 거르고(충분히 자주 나오는가), 신뢰도로 규칙의 강도를 판단</b>한다. 시험에서는 이 둘을 각각 계산하게 하거나, 어느 쪽 분모인지 헷갈리게 하는 식으로 출제된다.</p>
+    </div>
+
+    <p><b>예제. 아래 5개 거래에서 "기저귀 → 맥주" 규칙의 지지도와 신뢰도는?</b> <span class="page-ref">📖 기출문제집 p.602</span></p>
+    <table>
+      <tr><th>거래번호</th><th>구매 품목</th><th>기저귀?</th><th>맥주?</th></tr>
+      <tr><td>1</td><td>맥주, 땅콩, 기저귀</td><td>O</td><td>O</td></tr>
+      <tr><td>2</td><td>맥주, 커피, 기저귀</td><td>O</td><td>O</td></tr>
+      <tr><td>3</td><td>맥주, 기저귀, 계란</td><td>O</td><td>O</td></tr>
+      <tr><td>4</td><td>땅콩, 계란, 우유</td><td>X</td><td>X</td></tr>
+      <tr><td>5</td><td>땅콩, 커피, 기저귀, 우유</td><td>O</td><td><b>X</b></td></tr>
+    </table>
+    <ol class="steps">
+      <li>표에 <b>"기저귀?" "맥주?" 열을 직접 추가해 O/X를 적는다</b> — 이 한 단계가 실수를 없앤다</li>
+      <li>둘 다 O인 거래 = 1, 2, 3번 → <b>3건</b> (이것이 공통 분자)</li>
+      <li>기저귀가 있는 거래 = 1, 2, 3, 5번 → <b>4건</b> / 전체 거래 = <b>5건</b></li>
+      <li><b>신뢰도</b>(기저귀→맥주) = 3 ÷ <b>4</b> = <b>0.75</b> (분모 = 기저귀 거래 수)</li>
+      <li><b>지지도</b>(기저귀, 맥주) = 3 ÷ <b>5</b> = <b>0.6</b> (분모 = 전체 거래 수)</li>
+    </ol>
+    <div class="tip"><b>함정:</b> 신뢰도를 구하라고 했는데 분모를 전체 거래 수(5)로 잡으면 0.6이 나온다. 선택지에 <b>0.6과 0.75가 나란히</b> 놓여 있는 이유가 바로 이것이다. <b>"A → B"에서 화살표 왼쪽(A)이 분모</b>라고 기억해라.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>주요 개념 — 분산 데이터베이스</h2>
+
+    <h3>분산 DB란 <span class="page-ref">📖 기출문제집 p.600</span></h3>
+    <p>네트워크로 연결된 여러 사이트에 <b>데이터베이스 자체가 분산</b>되어 있고, DBMS도 각 사이트에서 운영된다. 사용자는 다른 사이트의 데이터에도 접근할 수 있으며, <b>분산되지 않은 하나의 DB처럼 보이게 만드는 것</b>이 목표다.</p>
+    <table>
+      <tr><th>장점</th><th>단점</th></tr>
+      <tr><td>데이터를 분산해 <b>트랜잭션 처리 성능 향상</b></td><td>설계와 관리가 <b>복잡</b>하고 비용이 큼</td></tr>
+      <tr><td>데이터를 <b>중복 저장</b>해 가용성·신뢰성 향상</td><td>여러 사이트에 걸친 <b>무결성 유지가 어려움</b></td></tr>
+      <tr><td>지역 사이트별 <b>자율성</b>과 점진적 확장 용이</td><td>네트워크 장애 시 <b>응답 지연</b> 가능</td></tr>
+    </table>
+    <div class="tip"><b>함정(2012 지방직):</b> "지역 사이트에 있는 <b>모든 DBMS가 동일해야</b> 한다" → ❌ 틀림. 서로 다른 DBMS를 써도 <b>ODBC</b>(Open DataBase Connectivity) 같은 표준 인터페이스로 상호 호환이 가능하다. "동일해야 한다·같아야 한다"처럼 <b>강한 제약을 주장하는 선택지</b>는 대체로 오답이다.</div>
+
+    <h3>분산 투명성 5종 — 정의 그대로 외우기</h3>
+    <table>
+      <tr><th>투명성</th><th>정의 (시험 문구)</th></tr>
+      <tr><td><b>위치 투명성</b><br>(Location)</td><td>데이터가 <b>어디에 저장되어 있는지 몰라도</b> 논리적 이름만으로 접근 가능</td></tr>
+      <tr><td><b>단편화(분할) 투명성</b><br>(Fragmentation)</td><td>데이터가 <b>여러 조각으로 나뉘어</b> 저장되어도 하나인 것처럼 사용</td></tr>
+      <tr><td><b>중복 투명성</b><br>(Replication)</td><td>데이터가 <b>여러 곳에 중복</b>되어 있어도 동일한 값을 유지·하나처럼 사용</td></tr>
+      <tr><td><b>장애 투명성</b><br>(Failure)</td><td>일부 시스템에 <b>장애가 발생해도</b> 사용자는 정상적으로 사용 가능</td></tr>
+      <tr><td><b>병행 투명성</b><br>(Concurrency)</td><td>여러 사용자가 <b>동시에 접근해도</b> 충돌 없이 일관된 결과 제공</td></tr>
+    </table>
+    <div class="tip"><b>매년 나오는 함정(2025 법원직):</b> "장애 투명성은 <b>장애가 발생하지 않도록 조치</b>하여 DB가 운영되는 것" → ❌ 틀림. 장애 투명성은 <b>장애를 막는 것이 아니라, 장애가 나도 사용자는 모른 채 계속 쓸 수 있게</b> 하는 것이다. 투명성은 전부 <b>"사용자에게 숨긴다"</b>는 뜻이지 "문제를 없앤다"는 뜻이 아니라는 점을 기억해라.</div>
+
+    <h3>단편화(Fragmentation)의 3가지 방식</h3>
     <table>
       <tr><th>방식</th><th>쪼개는 기준</th></tr>
-      <tr><td>수평적 단편화</td><td><b>행(row)</b> 기준으로 나눔 — 예: 서울지점 고객 / 부산지점 고객</td></tr>
-      <tr><td>수직적 단편화</td><td><b>열(column)</b> 기준으로 나눔 — 예: 자주 조회하는 컬럼 / 거의 안 쓰는 컬럼</td></tr>
+      <tr><td>수평적 단편화</td><td><b>행(row)</b> 기준 — 예: 서울지점 고객 / 부산지점 고객</td></tr>
+      <tr><td>수직적 단편화</td><td><b>열(column)</b> 기준 — 예: 자주 조회하는 컬럼 / 거의 안 쓰는 컬럼</td></tr>
       <tr><td>혼합 단편화</td><td>행과 열 기준을 <b>둘 다</b> 적용</td></tr>
     </table>
     <figure class="diagram">
@@ -90,16 +161,58 @@
       </svg>
       <figcaption>수평적 단편화는 같은 구조의 표를 행(레코드) 단위로, 수직적 단편화는 같은 표를 열(속성) 단위로 나눠 서로 다른 사이트에 저장한다. 혼합 단편화는 이 둘을 함께 적용한 것.</figcaption>
     </figure>
-    <div class="tip"><b>함정 주의:</b> "장애 투명성은 장애가 발생하지 않도록 예방하는 것" → ❌ 틀림. 장애 투명성은 <b>장애가 나도 사용자가 정상적으로 계속 쓸 수 있게</b> 하는 것이지, 장애 자체를 막는 개념이 아니다.</div>
+
+    <h3>2단계 완료 규약(2PC, Two-Phase Commit) <span class="page-ref">📖 기출문제집 p.601</span></h3>
+    <p>분산 환경에서는 여러 사이트가 함께 하나의 트랜잭션을 처리한다. 이때 <b>어떤 사이트는 커밋하고 어떤 사이트는 롤백</b>하면 원자성이 깨진다. 그래서 <b>조정자(coordinator)</b>가 전체의 의견을 모아 <b>다 함께 커밋하거나 다 함께 롤백</b>하도록 통제하는데, 이것이 2단계 완료 규약이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 280" role="img" aria-label="2단계 완료 규약: 1단계에서 조정자가 준비 요청을 보내고 각 사이트가 OK 또는 Not OK로 응답하며, 2단계에서 모두 OK일 때만 커밋을 지시하고 하나라도 Not OK면 롤백을 지시한다">
+        <defs>
+          <marker id="pc1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="270" y="20" width="150" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="345" y="48" font-size="13" text-anchor="middle" font-weight="700">조정자 (Coordinator)</text>
+
+        <text x="60" y="100" font-size="12.5" font-weight="700">1단계 (준비)</text>
+        <line x1="300" y1="70" x2="150" y2="125" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <line x1="345" y1="70" x2="345" y2="125" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <line x1="390" y1="70" x2="540" y2="125" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <text x="200" y="100" font-size="10.5" opacity="0.85">"커밋 준비됐나?"</text>
+
+        <rect x="95" y="128" width="110" height="42" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="154" font-size="12" text-anchor="middle">사이트 A</text>
+        <rect x="290" y="128" width="110" height="42" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="345" y="154" font-size="12" text-anchor="middle">사이트 B</text>
+        <rect x="485" y="128" width="110" height="42" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="540" y="154" font-size="12" text-anchor="middle">사이트 C</text>
+
+        <line x1="150" y1="172" x2="150" y2="200" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <text x="150" y="216" font-size="12" text-anchor="middle" font-weight="700">OK</text>
+        <line x1="345" y1="172" x2="345" y2="200" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <text x="345" y="216" font-size="12" text-anchor="middle" font-weight="700">OK</text>
+        <line x1="540" y1="172" x2="540" y2="200" stroke="currentColor" stroke-width="1.5" marker-end="url(#pc1)"/>
+        <text x="540" y="216" font-size="12" text-anchor="middle" font-weight="700">Not OK</text>
+
+        <text x="60" y="216" font-size="12.5" font-weight="700">응답</text>
+
+        <rect x="180" y="235" width="340" height="36" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="350" y="258" font-size="12" text-anchor="middle">2단계: 하나라도 Not OK → <tspan font-weight="700">전원 rollback</tspan></text>
+      </svg>
+      <figcaption>2단계 완료 규약 — 1단계에서 모든 사이트의 준비 여부를 묻고, 2단계에서 결정을 통보한다. <b>전원이 OK일 때만 commit</b>, <b>하나라도 Not OK면 전원 rollback</b>이다.</figcaption>
+    </figure>
+    <div class="tip"><b>함정(2007 국가직 7급):</b> "응답이 <b>모두</b> 'Not OK'일 경우에만 rollback으로 결정한다" → ❌ 틀림. <b>하나라도</b> Not OK면 rollback이다. 반대로 commit은 <b>모두 OK일 때만</b> 가능하다. <b>"commit은 만장일치, rollback은 한 표면 충분"</b>으로 외워라.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>지지도·신뢰도 계산 문제 — 분모를 무엇으로 하는지가 함정 포인트</li>
-      <li>데이터마이닝 5대 규칙의 이름과 설명 매칭</li>
-      <li>단편화 투명성의 3가지 방식(수평/수직/혼합) 구분</li>
-      <li>장애 투명성 = "장애 예방"이 아니라 "장애 발생해도 정상 이용 가능"</li>
+      <li><b>신뢰도 분모 = A(조건절)를 포함한 거래 수</b>, <b>지지도 분모 = 전체 거래 수</b></li>
+      <li>"시계열·향후 예측" → <b>연속성 규칙</b> (특성화 규칙과 바꿔치기하는 함정 최다)</li>
+      <li>분류 = 정해진 그룹에 배정 / 군집 = 정해진 그룹 없이 유사도로 묶기</li>
+      <li>분산DB에서 <b>모든 사이트의 DBMS가 동일할 필요는 없다</b> (ODBC로 호환)</li>
+      <li><b>장애 투명성 = 장애가 나도 정상 사용</b> (장애 예방이 아님)</li>
+      <li>단편화 3종: 수평(행) · 수직(열) · 혼합</li>
+      <li>2PC: <b>전원 OK → commit</b>, <b>하나라도 Not OK → rollback</b>, 목적은 <b>원자성 보장</b></li>
+      <li>모바일·임베디드용 경량 DBMS = <b>SQLite</b> (별도 서버 불필요)</li>
     </ul>
   </section>
 
@@ -107,13 +220,183 @@
     <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
     <table>
       <tr><th>구분</th><th>지지도 (Support)</th><th>신뢰도 (Confidence)</th></tr>
-      <tr><td>분모</td><td><b>전체</b> 트랜잭션 수</td><td><b>조건절 항목</b>이 포함된 트랜잭션 수</td></tr>
+      <tr><td>분모</td><td><b>전체</b> 트랜잭션 수</td><td><b>조건절 A</b>가 포함된 트랜잭션 수</td></tr>
       <tr><td>의미</td><td>두 항목이 같이 나올 전체 확률</td><td>A를 샀을 때 B도 살 조건부 확률</td></tr>
+      <tr><td>쓰임</td><td>"충분히 자주 나오는가" 1차 거름망</td><td>"규칙이 얼마나 강한가" 강도 측정</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>분류 (Classification)</th><th>군집 (Clustering)</th></tr>
       <tr><td>그룹</td><td>이미 <b>정의된</b> 그룹에 배정</td><td>정해진 그룹 없이 <b>유사도로</b> 스스로 묶음</td></tr>
+      <tr><td>정답표</td><td>있음 (지도학습에 대응)</td><td>없음 (비지도학습에 대응)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>수평적 단편화</th><th>수직적 단편화</th></tr>
+      <tr><td>자르는 방향</td><td>가로 (행 묶음)</td><td>세로 (열 묶음)</td></tr>
+      <tr><td>조각의 구조</td><td>컬럼 구성이 <b>동일</b></td><td>컬럼 구성이 <b>서로 다름</b></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2018 국회 · 기출문제집 p.602</span></div>
+      <p class="q-body">다음은 마트의 판매 기록이다. 규칙 <b>"기저귀 → 맥주"</b>의 <b>신뢰도(confidence)</b> 값으로 옳은 것은?</p>
+      <table>
+        <tr><th>식별자</th><th>품목</th></tr>
+        <tr><td>1</td><td>맥주, 땅콩, 기저귀</td></tr>
+        <tr><td>2</td><td>맥주, 커피, 기저귀</td></tr>
+        <tr><td>3</td><td>맥주, 기저귀, 계란</td></tr>
+        <tr><td>4</td><td>땅콩, 계란, 우유</td></tr>
+        <tr><td>5</td><td>땅콩, 커피, 기저귀, 우유</td></tr>
+      </table>
+      <ol class="choices">
+        <li>0.33</li>
+        <li>0.5</li>
+        <li>0.75</li>
+        <li>0.8</li>
+        <li>1.00</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 0.75</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>규칙이 "<b>기저귀</b> → 맥주"이므로 분모는 <b>기저귀를 산 거래 수</b></li>
+            <li>기저귀 포함 거래: 1, 2, 3, 5번 → <b>4건</b></li>
+            <li>그 중 맥주도 함께 산 거래: 1, 2, 3번 → <b>3건</b> (5번은 기저귀는 있지만 맥주가 없다)</li>
+            <li>신뢰도 = 3 ÷ 4 = <b>0.75</b></li>
+          </ol>
+          <p><b>오답이 만들어지는 방식:</b> ④번 0.8은 분자를 4로 잘못 센 경우(5번 거래를 포함시킴), <b>선택지에 없지만 0.6</b>은 분모를 전체 5건으로 잡은 경우(그건 지지도다). 5번 거래에 <b>맥주가 없다는 것</b>을 놓치지 않는 게 핵심이라, 표에 O/X를 직접 적어가며 세는 습관이 중요하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2025 소방경채 · 기출문제집 p.603</span></div>
+      <p class="q-body">데이터마이닝 기법에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>연관 규칙(Association rules)은 관련성이 강한 데이터의 조합을 통해 패턴을 발견한다.</li>
+        <li>군집 규칙(Clustering rules)은 상호 유사한 특성을 지닌 데이터를 그룹화하여 패턴을 분석한다.</li>
+        <li>분류 규칙(Classification rules)은 이미 알려진 특정 그룹의 특징을 부여하고 기준에 맞게 분류한다.</li>
+        <li>특성화 규칙(Characterization rules)은 트랜잭션 이력 데이터를 시계열로 분석하여 트랜잭션의 향후 발생 가능성을 예측한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>④번의 설명("시계열로 분석하여 향후 발생 가능성 예측")은 <b>연속성 규칙(Sequence)</b>의 정의다. <b>특성화 규칙</b>은 특정 클래스나 그룹의 <b>고유한 특징을 도출</b>하는 것으로, 예측과는 무관하다.</p>
+          <div class="tip" style="margin-top:8px;"><b>키워드 반사 훈련:</b> "동시에·같이" → 연관 / <b>"시계열·예측·향후"</b> → <b>연속성</b> / "이미 정해진 그룹" → 분류 / "유사한 것끼리" → 군집 / "고유한 특징 도출" → 특성화</div>
+          <p>이 유형은 5개 중 <b>두 개의 정의를 서로 맞바꾸는</b> 방식으로만 출제되므로, 다섯 키워드만 확실히 외우면 매번 맞힐 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2025 법원직 · 기출문제집 p.600</span></div>
+      <p class="q-body">분산 데이터베이스의 <b>분산 투명성</b>에 관한 설명 중 가장 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>위치 투명성은 데이터의 실제 저장 위치를 알 필요 없이 논리적인 이름만으로 데이터에 접근할 수 있다는 것을 의미한다.</li>
+        <li>중복 투명성은 동일한 데이터가 여러 지역에 저장되었더라도 하나의 데이터베이스 시스템에 저장된 것처럼 사용하는 것을 의미한다.</li>
+        <li>단편화 투명성에는 수직적 단편화, 수평적 단편화, 혼합 단편화가 있다.</li>
+        <li>장애 투명성은 장애가 발생하지 않도록 조치하여 데이터베이스가 운영되는 것을 의미한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>장애 투명성은 <b>"일부 시스템에 장애가 발생해도 사용자는 정상적으로 사용 가능"</b>하다는 뜻이다. 장애를 <b>예방</b>한다는 말이 아니다.</p>
+          <p><b>개념적으로 왜 그런가:</b> 투명성(transparency)이라는 단어 자체가 <b>"사용자에게 보이지 않게 숨긴다"</b>는 의미다. 위치 투명성은 위치를 숨기고, 중복 투명성은 중복을 숨기고, <b>장애 투명성은 장애를 숨긴다.</b> 어느 것도 "문제 자체를 없앤다"는 뜻이 아니다 — 이 관점 하나면 다섯 개 정의를 전부 일관되게 이해할 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2012 지방직 · 기출문제집 p.600</span></div>
+      <p class="q-body">분산 데이터베이스에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>데이터 분산 기술을 이용하여 트랜잭션 처리성능을 향상시킬 수 있다.</li>
+        <li>지역 사이트에 있는 모든 DBMS가 동일해야 한다.</li>
+        <li>데이터 중복기술을 이용하여 가용성을 높일 수 있다.</li>
+        <li>트랜잭션의 원자성을 보장하기 위해 2단계 완료 규약(2-phase commit protocol)을 사용할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>각 지역 사이트가 <b>서로 다른 DBMS를 사용해도</b> ODBC(Open DataBase Connectivity) 같은 표준 인터페이스를 통해 상호 호환이 가능하다. "모든 DBMS가 동일해야 한다"는 제약은 존재하지 않는다.</p>
+          <p><b>선택지 감별법:</b> <b>"반드시·모두·항상·동일해야"</b> 같은 <b>절대적 표현</b>이 들어간 선택지는 오답일 확률이 높다. 반대로 ①③④처럼 <b>"~할 수 있다"</b>는 가능성 표현은 대체로 옳은 진술이다. 물론 내용 확인이 우선이지만, 시간이 부족할 때 유용한 감별 기준이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2007 국가직 7급 · 기출문제집 p.601</span></div>
+      <p class="q-body">2단계 완료 규약(two-phase commit protocol)에 관한 설명 중 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>2단계 완료 규약은 연동된 데이터베이스 시스템에서 트랜잭션의 원자성을 지원하기 위한 방법이다.</li>
+        <li>조정자가 존재하여 여러 데이터베이스 시스템들 간의 commit이나 rollback이 일치하도록 보장한다.</li>
+        <li>모든 데이터베이스 시스템으로부터 전달된 강제 쓰기(force-write)에 대한 응답이 <b>모두 'Not OK'일 경우에만</b> 조정자는 'rollback'으로 결정한다.</li>
+        <li>모든 데이터베이스 시스템으로부터 전달된 강제 쓰기에 대한 응답이 <b>모두 'OK'일 경우에만</b> 조정자는 'commit'으로 결정한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p><b>하나라도</b> 'Not OK'가 있으면 rollback으로 결정한다. "모두 Not OK일 경우에만"은 조건이 지나치게 까다로워, 한 사이트만 실패해도 나머지는 커밋해버리는 결과가 되어 <b>원자성이 깨진다.</b></p>
+          <ol class="steps">
+            <li>목적을 먼저 떠올린다 — 2PC의 존재 이유는 <b>"전부 커밋 or 전부 롤백"(원자성)</b></li>
+            <li>따라서 <b>commit은 만장일치 조건</b>(④번이 옳음), <b>rollback은 반대표 1개면 성립</b></li>
+            <li>③번은 rollback 조건을 만장일치로 바꿔 놓았으므로 틀림</li>
+          </ol>
+          <p><b>비유:</b> 등산 동아리가 "전원이 가겠다고 해야 출발, 한 명이라도 못 간다면 전원 취소"로 정한 것과 같다. 한 명이 못 간다고 나머지만 출발하면 "다 같이 가거나 다 같이 안 간다"는 원칙이 깨진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2017 국회 · 기출문제집 p.601</span></div>
+      <p class="q-body">현재 모바일 기기에 탑재되는 임베디드 데이터베이스 엔진의 대표적인 예로서, <b>서버가 따로 필요하지 않아</b> 널리 활용되는 것은?</p>
+      <ol class="choices">
+        <li>SQLite</li>
+        <li>MySQL</li>
+        <li>mSQL</li>
+        <li>Oracle</li>
+        <li>SQL Server</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① SQLite</p>
+        <div class="explain">
+          <p>SQLite는 구글 안드로이드, 애플 아이폰 등에 기본 탑재된 DBMS로 표준 SQL의 대부분을 지원한다. <b>별도의 서버 프로세스가 필요 없는 경량 DB</b>라서 앱 안에 파일 하나로 내장된다.</p>
+          <p><b>구별 포인트:</b> MySQL·Oracle·SQL Server는 모두 <b>서버-클라이언트 구조</b>로 동작하는 대형 DBMS다. 문제에 <b>"임베디드·모바일·서버 불필요·경량"</b>이라는 키워드가 나오면 답은 SQLite다. 이름 끝의 <b>"Lite"(가벼운)</b>가 그대로 힌트다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">문제 1의 거래 데이터에서 <b>"기저귀와 맥주"의 지지도(support)</b>를 구하고, 신뢰도(0.75)와 값이 다른 이유를 설명하시오.</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 지지도 = 3 ÷ 5 = 0.6</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>분자는 신뢰도와 <b>동일</b>하다 — 기저귀와 맥주를 <b>모두</b> 산 거래 = 1, 2, 3번 → <b>3건</b></li>
+            <li>지지도의 분모는 <b>전체 거래 수</b> = <b>5건</b></li>
+            <li>지지도 = 3 ÷ 5 = <b>0.6</b></li>
+          </ol>
+          <p><b>값이 다른 이유:</b> 분자는 같지만 분모가 다르기 때문이다. 신뢰도의 분모(기저귀 거래 4건)는 전체(5건)보다 작으므로 <b>신뢰도(0.75) &gt; 지지도(0.6)</b>가 된다. 일반적으로 <b>신뢰도는 지지도보다 크거나 같다</b>(분모가 전체의 부분집합이므로).</p>
+          <p><b>해석:</b> 지지도 0.6은 "전체 거래의 60%에서 이 조합이 나타난다"(충분히 흔하다)는 뜻이고, 신뢰도 0.75는 "기저귀를 산 사람의 75%가 맥주도 샀다"(규칙이 꽤 강하다)는 뜻이다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>이어서 볼 문서</h2>
+    <p>분산 데이터베이스의 기본 개념과 투명성 목록은 <a href="분산데이터베이스.md">분산 데이터베이스</a> 문서에, 2PC와 관련된 트랜잭션 원자성·회복 개념은 <a href="트랜잭션과ACID.html">트랜잭션과 ACID</a> 문서에 정리되어 있다.</p>
   </section>
 
   <section class="block">
@@ -121,16 +404,24 @@
     <div class="keywords">
       <span class="chip">데이터마이닝</span>
       <span class="chip">연관규칙</span>
-      <span class="chip">지지도</span>
-      <span class="chip">신뢰도</span>
+      <span class="chip">연속성규칙</span>
       <span class="chip">분류규칙</span>
       <span class="chip">군집규칙</span>
       <span class="chip">특성화규칙</span>
-      <span class="chip">연속성규칙</span>
-      <span class="chip">단편화투명성</span>
+      <span class="chip">지지도</span>
+      <span class="chip">신뢰도</span>
+      <span class="chip">분산 데이터베이스</span>
+      <span class="chip">위치 투명성</span>
+      <span class="chip">단편화 투명성</span>
+      <span class="chip">중복 투명성</span>
+      <span class="chip">장애 투명성</span>
+      <span class="chip">병행 투명성</span>
       <span class="chip">수평적단편화</span>
       <span class="chip">수직적단편화</span>
       <span class="chip">혼합단편화</span>
+      <span class="chip">2단계 완료 규약</span>
+      <span class="chip">ODBC</span>
+      <span class="chip">SQLite</span>
     </div>
   </section>
 

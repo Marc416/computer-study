@@ -20,9 +20,19 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>게이트 몇 개로 "계산기"와 "기억장치"가 만들어진다</h4>
+      <p>앞 단원에서 AND·OR·NOT 게이트를 배웠다. 그런데 게이트 하나는 그냥 스위치일 뿐이다. 이걸 <b>어떻게 조합해야 실제로 덧셈을 하고, 값을 기억하는 물건이 되는가</b> — 그게 이 단원의 내용이다. 컴퓨터의 모든 부품은 결국 이 두 종류 회로의 조합일 뿐이다.</p>
+      <p>세상의 모든 디지털 회로는 딱 두 갈래로 나뉜다. <b>조합논리회로</b>는 "지금 들어온 입력만 보고" 즉시 답을 내놓는다 — 계산기 같은 것이다. <b>순서논리회로</b>는 "과거에 무슨 일이 있었는지"를 기억해서 답을 바꾼다 — 메모장 같은 것이다. CPU 안에서 <b>ALU는 조합회로</b>(더하기만 하면 되니 기억할 필요 없음), <b>레지스터는 순서회로</b>(값을 붙들고 있어야 함)인 이유가 여기 있다.</p>
+      <p>시험에서는 거의 항상 <b>"이 회로/부품이 둘 중 어느 쪽인가"</b>를 묻는다. 판별법 한 줄만 확실히 잡으면 그 유형은 전부 맞힐 수 있고, 나머지는 각 부품(가산기·MUX·디코더·플립플롭)이 무슨 일을 하는지 외우는 문제다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>조합논리회로 vs 순서논리회로 판별법</h3>
+    <h3>조합논리회로 vs 순서논리회로 판별법 <span class="page-ref">📖 기출문제집 p.87~88</span></h3>
     <div class="analogy"><b>판별 기준:</b> "지금 입력만 보고 답이 나오나?" → 조합논리회로 / "과거에 뭘 했는지 기억해야 답이 나오나?" → 순서논리회로 (카운터, 레지스터는 이전 값을 기억해야 하므로 순서논리회로)</div>
 
     <table>
@@ -31,6 +41,13 @@
       <tr><td>인코더, 디코더</td><td>레지스터</td></tr>
       <tr><td>멀티플렉서(MUX), 디멀티플렉서(DEMUX)</td><td>카운터 (동기식/비동기식, 링 카운터)</td></tr>
     </table>
+
+    <div class="deep">
+      <h4>왜 순서회로만 "기억"할 수 있나 — 되먹임(feedback)</h4>
+      <p>결정적 차이는 <b>출력이 다시 입력으로 되돌아가는 선(피드백 루프)이 있느냐</b>다. 조합회로는 신호가 입력 → 게이트 → 출력으로 <b>한 방향으로만</b> 흐른다. 그래서 입력이 사라지면 출력도 즉시 사라진다.</p>
+      <p>순서회로는 출력선 하나를 뒤로 돌려 자기 입력에 물린다. 그러면 <b>"내가 방금 낸 출력"이 다음 계산의 입력이 되므로, 입력이 없어져도 값이 계속 맴돌며 살아남는다.</b> 이것이 1비트를 붙들어 두는 원리이고, 플립플롭이 바로 그 구조다. 아래 SR 래치 회로도에서 X자로 교차한 되먹임 선이 정확히 그 역할을 한다.</p>
+      <p><b>시험 표현 주의:</b> "순서논리회로"와 "순차논리회로"는 <b>같은 말</b>(sequential logic circuit)이다. 문제마다 표기가 다르니 당황하지 말 것.</p>
+    </div>
 
     <h3>조합논리회로 ① 가산기 (Adder) <span class="page-ref">📖 기출문제집 p.85</span></h3>
     <table>
@@ -183,17 +200,63 @@
       </ol>
     </div>
 
-    <h3>조합논리회로 ② 선택 회로</h3>
+    <h3>조합논리회로 ② 선택 회로 <span class="page-ref">📖 기출문제집 p.83~84</span></h3>
     <table>
-      <tr><th>이름</th><th>기능</th></tr>
-      <tr><td>멀티플렉서 (MUX)</td><td>여러 입력 중 <b>선택선</b>으로 고른 1개만 출력 (다대일)</td></tr>
-      <tr><td>디멀티플렉서 (DEMUX)</td><td>1개의 입력을 선택선에 따라 여러 출력 중 하나로 분배 (일대다)</td></tr>
-      <tr><td>디코더 (Decoder)</td><td>n비트 입력 → 2ⁿ개 출력 중 <b>해당하는 하나만 1</b>로 활성화</td></tr>
-      <tr><td>인코더 (Encoder)</td><td>디코더의 반대, 2ⁿ개 입력 중 활성화된 것을 n비트 코드로 변환</td></tr>
+      <tr><th>이름</th><th>기능</th><th>입력 → 출력</th></tr>
+      <tr><td>멀티플렉서 (MUX)</td><td>여러 입력 중 <b>선택선</b>으로 고른 1개만 출력 (다대일)</td><td>2ⁿ개 → 1개</td></tr>
+      <tr><td>디멀티플렉서 (DEMUX)</td><td>1개의 입력을 선택선에 따라 여러 출력 중 하나로 분배 (일대다)</td><td>1개 → 2ⁿ개</td></tr>
+      <tr><td>디코더 (Decoder)</td><td>n비트 입력 → 2ⁿ개 출력 중 <b>해당하는 하나만 1</b>로 활성화</td><td>n개 → 2ⁿ개</td></tr>
+      <tr><td>인코더 (Encoder)</td><td>디코더의 반대, 2ⁿ개 입력 중 활성화된 것을 n비트 코드로 변환</td><td>2ⁿ개 → n개</td></tr>
     </table>
     <div class="analogy"><b>비유:</b> 멀티플렉서 = 여러 채널 중 하나를 고르는 TV 리모컨, 디코더 = 우편번호(코드) 하나를 보고 해당 지역(출력선) 하나를 찾아가는 것</div>
 
-    <h3>순서논리회로 — 플립플롭(Flip-Flop) 종류</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="4대1 멀티플렉서는 4개의 데이터 입력과 2개의 선택선을 받아 1개를 출력하고, 2대4 디코더는 2비트 입력에 따라 4개 출력선 중 하나만 1로 만든다">
+        <defs>
+          <marker id="mx1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="150" y="20" font-size="13" text-anchor="middle" font-weight="700">4×1 멀티플렉서 (MUX) — 다대일</text>
+        <line x1="20" y1="50" x2="90" y2="50" stroke="currentColor" stroke-width="1.5"/><text x="12" y="54" font-size="12" text-anchor="end">D0</text>
+        <line x1="20" y1="75" x2="90" y2="75" stroke="currentColor" stroke-width="1.5"/><text x="12" y="79" font-size="12" text-anchor="end">D1</text>
+        <line x1="20" y1="100" x2="90" y2="100" stroke="currentColor" stroke-width="1.5"/><text x="12" y="104" font-size="12" text-anchor="end">D2</text>
+        <line x1="20" y1="125" x2="90" y2="125" stroke="currentColor" stroke-width="1.5"/><text x="12" y="129" font-size="12" text-anchor="end">D3</text>
+        <path d="M 90,38 L 150,62 L 150,113 L 90,137 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="120" y="92" font-size="11.5" text-anchor="middle">MUX</text>
+        <line x1="150" y1="87" x2="230" y2="87" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/>
+        <text x="238" y="91" font-size="12">Y (1개만)</text>
+        <line x1="105" y1="175" x2="105" y2="140" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/>
+        <line x1="130" y1="175" x2="130" y2="133" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/>
+        <text x="117" y="192" font-size="12" text-anchor="middle">S1 S0</text>
+        <text x="117" y="210" font-size="11" text-anchor="middle" opacity="0.8">선택선 2개</text>
+        <text x="117" y="228" font-size="11" text-anchor="middle" opacity="0.8">→ 2²=4개 중 택1</text>
+
+        <text x="510" y="20" font-size="13" text-anchor="middle" font-weight="700">2×4 디코더 (Decoder) — 일대다</text>
+        <line x1="380" y1="75" x2="440" y2="75" stroke="currentColor" stroke-width="1.5"/><text x="372" y="79" font-size="12" text-anchor="end">A1</text>
+        <line x1="380" y1="100" x2="440" y2="100" stroke="currentColor" stroke-width="1.5"/><text x="372" y="104" font-size="12" text-anchor="end">A0</text>
+        <rect x="440" y="45" width="70" height="85" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="475" y="92" font-size="11.5" text-anchor="middle">DEC</text>
+        <line x1="510" y1="58" x2="580" y2="58" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/><text x="588" y="62" font-size="12">Y0</text>
+        <line x1="510" y1="79" x2="580" y2="79" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/><text x="588" y="83" font-size="12">Y1</text>
+        <line x1="510" y1="100" x2="580" y2="100" stroke="currentColor" stroke-width="2.5" marker-end="url(#mx1)"/><text x="588" y="104" font-size="12" font-weight="700">Y2 = 1</text>
+        <line x1="510" y1="121" x2="580" y2="121" stroke="currentColor" stroke-width="1.5" marker-end="url(#mx1)"/><text x="588" y="125" font-size="12">Y3</text>
+        <text x="475" y="160" font-size="11.5" text-anchor="middle">입력 A1A0 = 10 (2진수 2)</text>
+        <text x="475" y="178" font-size="11.5" text-anchor="middle">→ 2번 출력선만 1, 나머지는 0</text>
+        <text x="475" y="204" font-size="11" text-anchor="middle" opacity="0.8">n비트 입력 → 2ⁿ개 출력</text>
+        <text x="475" y="222" font-size="11" text-anchor="middle" opacity="0.8">"숫자를 자리로 번역"</text>
+      </svg>
+      <figcaption>MUX는 여러 입력 중 선택선이 지정한 하나만 통과시키고(다대일), 디코더는 입력한 2진수에 해당하는 출력선 하나만 1로 만든다(일대다) — 방향이 정반대다.</figcaption>
+    </figure>
+
+    <div class="tip">
+      <b>개수 세기 공식 (자주 나오는 계산):</b><br>
+      MUX: 데이터 입력이 2ⁿ개면 선택선은 <b>n개</b> (입력 4개 → 선택선 2개, 입력 8개 → 선택선 3개)<br>
+      디코더: 입력이 n비트면 출력은 <b>2ⁿ개</b> (3-to-8 디코더 = 입력 3비트, 출력 8개)<br>
+      → <b>"입력 4개 + 선택선 2개 + 출력 1개"라고 문제에 쓰여 있으면 무조건 멀티플렉서다.</b>
+    </div>
+
+    <h3>순서논리회로 — 플립플롭(Flip-Flop) 종류 <span class="page-ref">📖 기출문제집 p.88~90</span></h3>
+    <p>플립플롭은 <b>1비트(0 또는 1)를 안정적으로 붙들어 두는 최소 단위 회로</b>다. 출력이 Q와 Q'(반전) 두 개로 나오는 게 특징이고, 클록(CP) 신호가 들어오는 순간에만 값이 바뀐다. 아래 표의 4종류는 <b>"입력을 어떻게 받느냐"만 다를 뿐 하는 일(1비트 저장)은 같다.</b></p>
     <table>
       <tr><th>종류</th><th>입력</th><th>특징</th></tr>
       <tr><td><b>SR</b> 플립플롭</td><td>S(Set), R(Reset)</td><td>S=R=1인 경우 <b>동작 불능(금지 상태)</b> — 가장 큰 단점</td></tr>
@@ -202,7 +265,51 @@
       <tr><td><b>T</b> 플립플롭</td><td>T(Toggle)</td><td>T=1이면 매 클록마다 <b>출력을 반전</b>, T=0이면 유지 — 카운터에 주로 사용</td></tr>
     </table>
 
-    <h3>JK 플립플롭 진리표 (기출 포인트)</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="NOR 게이트 두 개를 서로 교차 연결한 SR 래치 회로도. 위쪽 NOR의 출력 Q가 아래쪽 NOR의 입력으로, 아래쪽 NOR의 출력 Q 바가 위쪽 NOR의 입력으로 되먹임된다">
+        <defs>
+          <marker id="ff1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="20" font-size="13" font-weight="700">SR 래치 (NOR 2개를 교차 연결) — 되먹임이 "기억"을 만든다</text>
+
+        <line x1="30" y1="55" x2="95" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <text x="22" y="59" font-size="12.5" text-anchor="end">R</text>
+        <path d="M 95,40 Q 115,62 95,84 Q 140,84 160,62 Q 140,40 95,40 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="166" cy="62" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="122" y="66" font-size="11" text-anchor="middle">NOR</text>
+        <line x1="172" y1="62" x2="290" y2="62" stroke="currentColor" stroke-width="1.5" marker-end="url(#ff1)"/>
+        <text x="300" y="66" font-size="13" font-weight="700">Q</text>
+
+        <line x1="30" y1="185" x2="95" y2="185" stroke="currentColor" stroke-width="1.5"/>
+        <text x="22" y="189" font-size="12.5" text-anchor="end">S</text>
+        <path d="M 95,150 Q 115,172 95,194 Q 140,194 160,172 Q 140,150 95,150 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="166" cy="172" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="122" y="176" font-size="11" text-anchor="middle">NOR</text>
+        <line x1="172" y1="172" x2="290" y2="172" stroke="currentColor" stroke-width="1.5" marker-end="url(#ff1)"/>
+        <text x="300" y="176" font-size="13" font-weight="700">Q′</text>
+
+        <polyline points="215,62 215,120 60,120 60,155 95,155" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ff1)"/>
+        <circle cx="215" cy="62" r="2.5" fill="currentColor"/>
+        <polyline points="245,172 245,110 75,110 75,72 95,72" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ff1)"/>
+        <circle cx="245" cy="172" r="2.5" fill="currentColor"/>
+        <text x="150" y="134" font-size="11" opacity="0.85">되먹임 ①: Q → 아래 NOR 입력</text>
+        <text x="150" y="102" font-size="11" opacity="0.85">되먹임 ②: Q′ → 위 NOR 입력</text>
+
+        <text x="400" y="45" font-size="12.5" font-weight="700">동작</text>
+        <text x="400" y="68" font-size="12">S=1, R=0 → Q=1 (세트)</text>
+        <text x="400" y="90" font-size="12">S=0, R=1 → Q=0 (리셋)</text>
+        <text x="400" y="112" font-size="12">S=0, R=0 → <tspan font-weight="700">이전 값 그대로 유지</tspan></text>
+        <text x="400" y="134" font-size="12" opacity="0.9">S=1, R=1 → Q=Q′=0, <tspan font-weight="700">금지 상태</tspan></text>
+        <text x="400" y="170" font-size="11.5" opacity="0.85">S=R=0일 때 값이 유지되는 이유가</text>
+        <text x="400" y="188" font-size="11.5" opacity="0.85">바로 점선(되먹임)이다. 출력이 자기</text>
+        <text x="400" y="206" font-size="11.5" opacity="0.85">입력으로 돌아와 상태를 계속 붙든다.</text>
+        <text x="400" y="228" font-size="11.5" opacity="0.85">S=R=1은 Q와 Q′이 둘 다 0이 되어</text>
+        <text x="400" y="240" font-size="11.5" opacity="0.85">"서로 반대"라는 약속이 깨지므로 금지.</text>
+      </svg>
+      <figcaption>SR 래치 — NOR 게이트 2개의 출력을 서로의 입력으로 교차 연결(점선)하면, 입력이 0,0으로 돌아가도 직전 상태가 계속 맴돌며 유지된다. 이것이 플립플롭이 1비트를 "기억"하는 물리적 원리다.</figcaption>
+    </figure>
+
+    <h3>JK 플립플롭 진리표 (기출 포인트) <span class="page-ref">📖 기출문제집 p.89</span></h3>
     <table>
       <tr><th>J</th><th>K</th><th>다음 출력 Q</th><th>의미</th></tr>
       <tr><td>0</td><td>0</td><td>Q (그대로)</td><td>이전 상태 유지</td></tr>
@@ -210,12 +317,32 @@
       <tr><td>1</td><td>0</td><td>1</td><td>셋</td></tr>
       <tr><td>1</td><td>1</td><td>Q' (반전)</td><td>토글 — SR의 금지상태를 대체</td></tr>
     </table>
+    <div class="deep">
+      <h4>JK 진리표를 외우지 않고 유도하는 법</h4>
+      <p>가운데 두 줄(J·K가 서로 다를 때)은 <b>"Q는 J를 따라간다"</b> 한 마디로 끝난다. J=0,K=1이면 Q=0. J=1,K=0이면 Q=1. J의 값이 그대로 출력이다.</p>
+      <p>바깥 두 줄만 따로 기억하면 된다: <b>둘 다 0이면 그대로(유지), 둘 다 1이면 뒤집기(토글).</b> SR 플립플롭에서 "둘 다 1"은 쓸 수 없는 금지 상태였는데, JK는 그 자리를 토글로 바꿔 써먹은 것이 개선점이다.</p>
+      <p><b>한 줄 암기:</b> "다르면 J를 따라가고, 00은 그대로, 11은 뒤집는다"</p>
+    </div>
 
-    <h3>카운터(Counter)와 레지스터</h3>
+    <h4 style="margin:18px 0 6px;font-size:14px;">클록마다 값이 어떻게 변하는지 추적해보기</h4>
+    <p>Q의 초기값이 0이라 할 때, 아래 입력이 순서대로 들어오면 Q가 어떻게 바뀌는지 직접 따라가 보자. <b>각 줄의 "다음 Q"가 그 다음 줄의 "현재 Q"가 된다</b>는 점이 핵심이다.</p>
+    <table>
+      <tr><th>클록</th><th>J</th><th>K</th><th>현재 Q</th><th>규칙</th><th>다음 Q</th></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>다르면 J를 따라감 → 1</td><td><b>1</b></td></tr>
+      <tr><td>2</td><td>0</td><td>0</td><td>1</td><td>00이면 유지</td><td><b>1</b></td></tr>
+      <tr><td>3</td><td>1</td><td>1</td><td>1</td><td>11이면 토글 → 반전</td><td><b>0</b></td></tr>
+      <tr><td>4</td><td>1</td><td>1</td><td>0</td><td>11이면 토글 → 반전</td><td><b>1</b></td></tr>
+      <tr><td>5</td><td>0</td><td>1</td><td>1</td><td>다르면 J를 따라감 → 0</td><td><b>0</b></td></tr>
+    </table>
+    <div class="tip"><b>관찰:</b> 3·4번 클록처럼 <b>J=K=1을 계속 넣으면 0↔1이 번갈아 나온다.</b> 클록 2번에 한 번씩 1이 나오므로 <b>주파수가 절반</b>이 되는데, 이 성질을 이용한 것이 바로 카운터(T 플립플롭)다.</div>
+
+    <h3>카운터(Counter)와 레지스터 <span class="page-ref">📖 기출문제집 p.88</span></h3>
     <ul>
-      <li><b>레지스터</b>: 플립플롭 여러 개를 나열해 여러 비트를 저장하는 장치</li>
+      <li><b>레지스터</b>: 플립플롭 여러 개를 나열해 여러 비트를 저장하는 장치 (8비트 레지스터 = 플립플롭 8개)</li>
       <li><b>카운터</b>: 클록이 들어올 때마다 정해진 순서로 값이 변하는 레지스터 (동기식/비동기식)</li>
-      <li><b>링 카운터(Ring Counter)</b>: 플립플롭들을 고리(ring) 모양으로 연결 — 마지막 플립플롭의 출력이 다시 첫 번째로 돌아감</li>
+      <li><b>동기식 카운터</b>: 모든 플립플롭이 <b>같은 클록</b>을 동시에 받음 → 빠르지만 회로 복잡</li>
+      <li><b>비동기식(리플) 카운터</b>: 앞 플립플롭의 출력이 뒤 플립플롭의 클록이 됨 → 회로는 간단하나 <b>전파 지연이 누적</b>되어 느림</li>
+      <li><b>링 카운터(Ring Counter)</b>: 플립플롭들을 고리(ring) 모양으로 연결 — 마지막 플립플롭의 출력이 다시 첫 번째로 돌아감. <b>이전 값을 기억하므로 순서논리회로</b> (2024 지방직 출제)</li>
     </ul>
   </section>
 
@@ -223,12 +350,217 @@
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>주어진 회로/기능이 조합논리회로인지 순서논리회로인지 구분하기 (카운터·레지스터·플립플롭 = 순서논리)</li>
-      <li>전가산기는 <b>반가산기 2개 + OR 게이트 1개</b>로 구성 가능</li>
+      <li>전가산기는 <b>반가산기 2개 + OR 게이트 1개</b>로 구성 가능 — "반가산기 2개<b>만으로</b> 구성"은 오답</li>
       <li>4비트 병렬 가감산기에서 M(모드) 값에 따라 덧셈/뺄셈이 결정되는 원리 (XOR + 2의 보수)</li>
-      <li>SR 플립플롭의 <b>불능(금지) 상태</b>는 S=R=1일 때 발생 — JK가 이를 해결</li>
-      <li>JK 플립플롭에서 <b>J=K=1이면 반전(toggle)</b> — 자주 나오는 계산/진리표 문제</li>
-      <li>멀티플렉서·디멀티플렉서·디코더·인코더 기능 서로 구분하기</li>
+      <li>가감산기에서 <b>V=1이면 오버플로</b>, Cout은 unsigned 연산의 자리올림일 뿐 오버플로 판단과 별개</li>
+      <li>SR 플립플롭의 <b>불능(금지) 상태</b>는 S=R=1일 때 발생 — JK가 이를 토글로 대체</li>
+      <li>JK 플립플롭 진리표 채우기: <b>00=유지(Q), 01=0, 10=1, 11=반전(Q′)</b> — 매년 출제</li>
+      <li>멀티플렉서·디멀티플렉서·디코더·인코더 기능 서로 구분하기 (MUX=다대일, DEMUX·디코더=일대다)</li>
+      <li>"입력 2ⁿ개 + 선택선 n개 + 출력 1개" → <b>멀티플렉서</b>, "n비트 입력 → 2ⁿ개 중 하나만 1" → <b>디코더</b></li>
+      <li>플립플롭의 용도 = <b>1비트의 0/1 두 상태 중 하나를 안정적으로 저장</b> (2016 국회 출제 문장 그대로 암기)</li>
+      <li>링 카운터·동기식 카운터는 <b>순서(순차)논리회로</b>, 전가산기·MUX·디코더는 조합논리회로</li>
     </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2017 서울시 · 기출문제집 p.84</span></div>
+      <p class="q-body">다음 <b>전가산기</b> 논리회로에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>전가산기는 캐리를 포함하여 연산처리하기 위해 설계되었다.</li>
+        <li>S = (A⊕B)⊕C<sub>i</sub></li>
+        <li>C<sub>o</sub> = AB + AC<sub>i</sub> + BC<sub>i</sub></li>
+        <li>전가산기는 두 개의 반가산기만으로 구성할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ — 반가산기 2개 <b>+ OR 게이트</b>가 있어야 한다</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>반가산기 1: A, B를 더해 합 S1과 캐리 C1을 만든다</li>
+            <li>반가산기 2: S1과 입력캐리 C<sub>i</sub>를 더해 최종 합 S와 캐리 C2를 만든다</li>
+            <li>여기서 캐리가 <b>C1, C2 두 개</b> 생긴다 — 둘 중 하나라도 1이면 출력캐리가 1이어야 하므로 <b>OR 게이트로 묶어야</b> 한다</li>
+            <li>따라서 전가산기 = 반가산기 2개 + <b>OR 게이트 1개</b> → ④번이 틀렸다</li>
+          </ol>
+          <p><b>함정:</b> ②·③번 식은 모두 맞다. S는 세 입력의 XOR, C<sub>o</sub>는 "셋 중 둘 이상이 1일 때 1"을 뜻하는 식이다. 식이 맞는지 헷갈리면 A=B=1, C<sub>i</sub>=0을 넣어 검산해보면 된다(S=0, C<sub>o</sub>=1로 올바름).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2010 국가직 · 기출문제집 p.85</span></div>
+      <p class="q-body">음수를 2의 보수로 표현한다고 가정할 때, 4비트 병렬 가감산기 회로(FA 4개 + B 입력마다 XOR)에서 <b>입력 M의 값이 1</b>일 때 수행하는 동작은?</p>
+      <ol class="choices">
+        <li>A − B</li>
+        <li>A + B + 1</li>
+        <li>A + B</li>
+        <li>B − A</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① A − B</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>M은 B 쪽 XOR 게이트에 들어간다. <b>M=1이면 B의 모든 비트가 반전</b>되어 B의 1의 보수가 만들어진다</li>
+            <li>동시에 M은 맨 오른쪽 FA의 <b>입력 캐리 C₀</b>로도 들어간다 → 1의 보수에 <b>+1</b>이 더해진다</li>
+            <li>1의 보수 + 1 = <b>2의 보수</b> = −B</li>
+            <li>결국 회로는 A + (−B) = <b>A − B</b>를 계산한다</li>
+          </ol>
+          <p><b>함정:</b> ②번(A+B+1)은 "C₀에 1이 들어간다"만 보고 B 반전을 빠뜨린 경우다. XOR과 캐리 <b>두 곳 모두</b> M이 들어간다는 점이 이 회로의 핵심이다. 참고로 M=0이면 B가 그대로 통과하고 캐리도 0이므로 단순한 A+B가 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2017 하반기 국가직 · 기출문제집 p.86~87</span></div>
+      <p class="q-body">4개의 전가산기를 사용한 가감산기(M: 모드, Cout: 출력캐리, V: 오버플로 플래그)에서 <b>오버플로우가 발생한 경우가 아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>M = 0, Cout = 1, 부호 없는(unsigned) 연산으로 해석</li>
+        <li>M = 1, Cout = 1, 부호 없는 연산으로 해석</li>
+        <li>M = 0, V = 1, 2의 보수를 사용하는 부호 있는(signed) 연산으로 해석</li>
+        <li>M = 1, V = 1, 2의 보수를 사용하는 부호 있는 연산으로 해석</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② M = 1, Cout = 1, 부호 없는 연산</p>
+        <div class="explain">
+          <p>오버플로 판단 기준이 <b>부호 없는 연산과 부호 있는 연산에서 서로 다르다</b>는 것이 이 문제의 핵심이다.</p>
+          <ol class="steps">
+            <li><b>부호 없는(unsigned) 연산</b>: 자리올림 Cout이 넘치면 값이 표현 범위를 벗어난 것 → <b>Cout=1이 오버플로</b>. 단 이것은 <b>덧셈(M=0)</b>일 때 이야기다</li>
+            <li><b>뺄셈(M=1)</b>에서의 Cout=1은 의미가 다르다 — 2의 보수 뺄셈에서 마지막 캐리가 1로 나오면 <b>결과가 0 이상(양수)이라 정상</b>이라는 뜻이다. 오히려 Cout=0일 때가 음수(빌림 발생) 상황이다</li>
+            <li><b>부호 있는(signed) 연산</b>: 오버플로는 V 플래그로 판단한다 → ③·④처럼 <b>V=1이면 무조건 오버플로</b></li>
+            <li>따라서 오버플로가 아닌 것은 ②번</li>
+          </ol>
+          <p><b>정리:</b> unsigned는 Cout으로, signed는 V로 판단한다. 그리고 <b>뺄셈에서의 Cout=1은 정상 신호</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2018 서울시 · 기출문제집 p.87~88</span></div>
+      <p class="q-body">〈보기〉 회로의 종류를 바르게 연결한 것은?<br>
+      ㄱ. 3개의 입력 중에서 적어도 2개의 입력이 1이면 출력이 1이 되는 회로<br>
+      ㄴ. 설정된 값이 표시되었을 때, 경고음을 울리는 카운터</p>
+      <ol class="choices">
+        <li>ㄱ 조합논리회로 — ㄴ 조합논리회로</li>
+        <li>ㄱ 조합논리회로 — ㄴ 순차논리회로</li>
+        <li>ㄱ 순차논리회로 — ㄴ 조합논리회로</li>
+        <li>ㄱ 순차논리회로 — ㄴ 순차논리회로</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② ㄱ 조합논리회로 — ㄴ 순차논리회로</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄱ 판별:</b> "지금 들어온 3개 입력 중 1이 몇 개인가"만 세면 답이 나온다. 과거 기록이 전혀 필요 없다 → <b>조합논리회로</b> (참고로 이 회로가 바로 전가산기의 캐리 출력 C<sub>o</sub>와 같은 다수결 회로다)</li>
+            <li><b>ㄴ 판별:</b> 카운터는 "지금까지 몇 번 셌는지"를 기억하고 있어야 다음 값을 낼 수 있다 → <b>순차(순서)논리회로</b></li>
+          </ol>
+          <p><b>함정:</b> "경고음을 울린다"는 표현에 현혹되지 말 것. 핵심 단어는 <b>카운터</b>이고, 카운터는 레지스터의 일종이므로 무조건 순차논리회로다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2016 국회 · 기출문제집 p.88</span></div>
+      <p class="q-body">다음 중 <b>플립플롭(flip-flop)</b>의 용도에 해당하는 것은?</p>
+      <ol class="choices">
+        <li>n비트의 입력에서 1의 개수가 짝수면 1, 홀수면 0을 출력한다.</li>
+        <li>1비트의 0과 1의 두 개의 상태 중 하나를 안정적으로 저장할 수 있다.</li>
+        <li>n비트의 입력에 따라 2ⁿ개의 출력 중 하나만 1을 출력한다.</li>
+        <li>두 비트의 입력에 대하여 합과 자리올림(carry)을 출력한다.</li>
+        <li>여러 개의 입력 회선 중 선택된 한 회선의 입력을 출력 회선으로 출력한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 1비트의 0과 1 두 상태 중 하나를 안정적으로 저장</p>
+        <div class="explain">
+          <p>이 문제는 <b>오답 선택지 전부가 다른 부품의 정의</b>라서, 한 문제로 이 단원 전체를 복습할 수 있다.</p>
+          <table>
+            <tr><th>선택지</th><th>실제 부품</th></tr>
+            <tr><td>① 1의 개수가 짝수면 1</td><td><b>XNOR 게이트</b> (패리티 검사)</td></tr>
+            <tr><td>② 1비트 저장</td><td><b>플립플롭</b> ← 정답</td></tr>
+            <tr><td>③ n비트 → 2ⁿ개 중 하나만 1</td><td><b>디코더</b></td></tr>
+            <tr><td>④ 두 비트의 합과 자리올림</td><td><b>반가산기</b></td></tr>
+            <tr><td>⑤ 여러 입력 중 선택된 하나를 출력</td><td><b>멀티플렉서</b></td></tr>
+          </table>
+          <p>이 표는 그대로 외워두면 여러 문제에서 재활용된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2024 지방직 · 기출문제집 p.88</span></div>
+      <p class="q-body">현재의 출력값이 <b>현재의 입력값에 의해서만 결정되는</b> 논리회로에 <b>해당하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>반가산기 (half adder)</li>
+        <li>링 카운터 (ring counter)</li>
+        <li>멀티플렉서 (multiplexer)</li>
+        <li>디멀티플렉서 (demultiplexer)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 링 카운터</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>문제 문장 "현재의 입력값에 의해서만 결정" = <b>조합논리회로의 정의</b>다. 즉 "조합논리회로가 아닌 것"을 고르라는 뜻</li>
+            <li>반가산기·멀티플렉서·디멀티플렉서는 모두 조합논리회로</li>
+            <li>링 카운터는 플립플롭들을 고리 모양으로 연결한 것으로, <b>이전 상태를 기억</b>해야 다음 출력이 나온다 → 순서논리회로</li>
+          </ol>
+          <p><b>비슷한 유형(2018 지방직):</b> "순차논리회로에 해당하는 것은?" → 4-to-1 멀티플렉서 / <b>동기식 카운터</b> / 전가산기 / 3-to-8 디코더 중 정답은 <b>동기식 카운터</b>. 결국 <b>"카운터·레지스터·플립플롭이 보이면 순서논리"</b> 하나로 두 문제 다 풀린다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2022 지방직 · 기출문제집 p.89</span></div>
+      <p class="q-body">다음은 정논리를 사용하는 <b>JK 플립플롭의 진리표</b>이다. (가)~(라)에 들어갈 내용으로 옳은 것은? (단, Q′은 Q의 반댓값)</p>
+      <table>
+        <tr><th>CP</th><th>J</th><th>K</th><th>다음상태 Q</th></tr>
+        <tr><td>↑</td><td>0</td><td>0</td><td>(가)</td></tr>
+        <tr><td>↑</td><td>0</td><td>1</td><td>(나)</td></tr>
+        <tr><td>↑</td><td>1</td><td>0</td><td>(다)</td></tr>
+        <tr><td>↑</td><td>1</td><td>1</td><td>(라)</td></tr>
+      </table>
+      <ol class="choices">
+        <li>(가) Q, (나) 1, (다) 0, (라) Q′</li>
+        <li>(가) Q′, (나) 1, (다) 0, (라) Q</li>
+        <li>(가) Q, (나) 0, (다) 1, (라) Q′</li>
+        <li>(가) Q′, (나) 0, (다) 1, (라) Q</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (가) Q, (나) 0, (다) 1, (라) Q′</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>(가) J=0, K=0 → <b>유지</b> → 이전 값 그대로 <b>Q</b></li>
+            <li>(나) J=0, K=1 → J·K가 다르므로 <b>J를 따라감</b> → <b>0</b> (리셋)</li>
+            <li>(다) J=1, K=0 → J를 따라감 → <b>1</b> (셋)</li>
+            <li>(라) J=1, K=1 → <b>토글</b> → <b>Q′</b></li>
+          </ol>
+          <p><b>선택지 빠르게 거르는 법:</b> (가)가 Q인 것(①·③)만 남기고, (나)가 0인 것을 고르면 ③ 하나만 남는다. "00은 유지"만 확실하면 2초 만에 풀린다.</p>
+          <p><b>함정:</b> ①번은 (나)·(다)를 뒤집어 놓은 것이다. <b>K가 1이면 리셋(0)</b>이라는 방향을 헷갈리지 말 것 — K는 Kill(끄기)로 외우면 편하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">데이터 입력이 <b>8개</b>인 멀티플렉서를 만들려면 선택선(select line)은 몇 개가 필요한가? 또 <b>3-to-8 디코더</b>의 출력선은 몇 개인가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 선택선 <b>3개</b>, 디코더 출력선 <b>8개</b></p>
+        <div class="explain">
+          <ol class="steps">
+            <li>MUX는 선택선 n개로 <b>2ⁿ개</b> 중 하나를 고른다 → 8개를 고르려면 2ⁿ = 8 → <b>n = 3</b></li>
+            <li>디코더는 "n-to-2ⁿ"로 이름이 붙는다 → 3-to-8은 <b>입력 3비트, 출력 8개</b> (이름에 답이 이미 적혀 있다)</li>
+          </ol>
+          <p><b>정리:</b> 두 회로 모두 2ⁿ 관계이지만 방향이 반대다. MUX는 <b>많은 입력 → 1개 출력</b>(선택선이 주소 역할), 디코더는 <b>n개 입력 → 많은 출력</b>(입력이 주소 역할). 메모리 주소 해독기가 바로 디코더다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -262,7 +594,14 @@
       <span class="chip">토글</span>
       <span class="chip">불능상태</span>
       <span class="chip">링카운터</span>
+      <span class="chip">동기식 카운터</span>
+      <span class="chip">비동기식 카운터</span>
       <span class="chip">병렬가감산기</span>
+      <span class="chip">오버플로(V)</span>
+      <span class="chip">SR 래치</span>
+      <span class="chip">되먹임</span>
+      <span class="chip">조합논리회로</span>
+      <span class="chip">순차논리회로</span>
     </div>
   </section>
 

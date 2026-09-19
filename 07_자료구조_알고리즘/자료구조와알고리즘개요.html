@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"데이터를 어떻게 담아두느냐"가 프로그램의 속도를 결정한다</h4>
+      <p>같은 데이터 1만 개라도 <b>어떤 그릇에 담느냐</b>에 따라 "특정 값 찾기"가 1번 만에 끝날 수도, 1만 번을 뒤져야 할 수도 있다. 전화번호부가 가나다순으로 정렬돼 있으면 몇 번 펼쳐서 찾지만, 순서 없이 쌓여 있으면 처음부터 다 읽어야 하는 것과 같다. <b>자료구조 = 데이터를 담는 그릇의 설계</b>, <b>알고리즘 = 그 그릇에서 일을 처리하는 절차</b>다.</p>
+      <p>그런데 "빠르다/느리다"를 초 단위로 말하면 컴퓨터 성능마다 달라져 비교가 안 된다. 그래서 <b>입력이 n개일 때 연산을 몇 번 하는가</b>로 표현하기로 약속한 것이 <b>시간복잡도(Big-O)</b>다. 기계가 아니라 <b>알고리즘 자체의 성질</b>을 재는 자라서, 어떤 컴퓨터에서 돌리든 결론이 같다.</p>
+      <p>시험은 이 단원에서 딱 세 가지를 묻는다 — ① 이 자료구조가 선형인가 비선형인가, ② 이 코드의 시간복잡도가 무엇인가(반복문 중첩 세기), ③ 이 재귀 함수의 호출 횟수·결과값이 얼마인가(손으로 펼쳐 세기). 전부 <b>손으로 직접 세어보는 연습</b>이 답이다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — 자료구조의 분류</h2>
 
     <h3>선형 구조 vs 비선형 구조 <span class="page-ref">📖 기출문제집 p.431</span></h3>
@@ -89,6 +99,29 @@
       <b>시간복잡도 크기 순서 (작은 것 → 큰 것):</b><br>
       O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!) &lt; O(nⁿ)
     </div>
+
+    <div class="deep">
+      <h4>코드를 보고 시간복잡도 알아내는 3단계 — 이것만 하면 다 맞는다</h4>
+      <ul>
+        <li><b>1단계. 반복문의 반복 횟수를 n으로 표현한다.</b> <code>for(i=0; i&lt;n; i++)</code> → n번, <code>for(i=0; i&lt;500; i++)</code> → <b>500번 = 상수 = O(1)</b> (n과 무관하면 아무리 큰 수라도 상수다!), <code>while(n &gt; 1) n = n/2;</code> → 절반씩 줄어드니 <b>log n번</b></li>
+        <li><b>2단계. 중첩되어 있으면 곱한다.</b> 바깥 n번 × 안쪽 n번 = n². 바깥 n번 × 안쪽 500번 = 500n = <b>O(n)</b></li>
+        <li><b>3단계. 나란히 있으면 더한 뒤 가장 큰 항만 남긴다.</b> n² + n + 100 → <b>O(n²)</b>. 계수(3n → n)와 상수(+100)는 전부 버린다.</li>
+      </ul>
+      <p><b>왜 계수와 낮은 항을 버리나?</b> n이 100만이 되면 n²은 1조인데 거기에 붙은 +100이나 ×3은 비율로 보면 무의미하다. Big-O는 "n이 아주 커질 때의 추세"만 보는 도구이기 때문이다.</p>
+    </div>
+
+    <p><b>연습: 아래 코드의 시간복잡도는?</b> <span class="page-ref">📖 기출문제집 p.433</span></p>
+    <div class="tip">
+      <code>for (i = 0; i &lt; n; i++)</code><br>
+      &nbsp;&nbsp;<code>for (j = 0; j &lt; 500; j++)</code><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<code>printf("...");</code>
+      <ol class="steps">
+        <li>바깥 for문: i가 0부터 n-1까지 → <b>n번</b> 반복 → O(n)</li>
+        <li>안쪽 for문: j가 0부터 499까지 → n과 <b>무관하게 항상 500번</b> → O(1)</li>
+        <li>중첩이므로 곱한다: n × 500 = 500n</li>
+        <li>계수 500을 버리면 → <b>O(n)</b> (이중 for문이라고 무조건 O(n²)이 아니다!)</li>
+      </ol>
+    </div>
   </section>
 
   <section class="block">
@@ -152,6 +185,18 @@
         <li>최종 결과값 fib(5) = <b>5</b></li>
       </ol>
     </div>
+
+    <div class="deep">
+      <h4>재귀 호출 횟수를 실수 없이 세는 법 — 아래에서부터 쌓아 올려라</h4>
+      <p>fib(5)를 트리로 그려서 세면 가지가 15개나 되어 반드시 실수한다. <b>작은 것부터 표로 쌓아 올리면</b> 절대 틀리지 않는다.</p>
+      <p>호출 횟수를 C(n)이라 하자. fib(n)은 자기 자신 1번 + fib(n-1)의 호출들 + fib(n-2)의 호출들이므로 <b>C(n) = 1 + C(n-1) + C(n-2)</b>이고, 종료조건인 C(0) = C(1) = 1이다.</p>
+      <table>
+        <tr><th>n</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+        <tr><td><b>호출 횟수 C(n)</b></td><td>1</td><td>1</td><td>1+1+1=<b>3</b></td><td>1+3+1=<b>5</b></td><td>1+5+3=<b>9</b></td><td>1+9+5=<b>15</b></td></tr>
+        <tr><td><b>결과값 fib(n)</b></td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td><b>5</b></td></tr>
+      </table>
+      <p><b>덤으로 알 수 있는 것:</b> n이 1 늘 때마다 호출 횟수가 거의 1.6배씩 불어난다 → 이 단순 재귀 피보나치의 시간복잡도가 <b>O(2ⁿ)</b>급으로 끔찍한 이유이고, 그래서 실무에서는 표에 저장해두고 재활용하는 방식(동적 계획법)을 쓴다.</p>
+    </div>
     <div class="tip"><b>재귀 → 반복문 변환 팁:</b> 재귀함수가 종료되는 조건(base case, 예: n==0)이 반복문에서는 <b>루프를 멈추는 조건의 반대</b>가 된다. factorial 재귀의 종료조건이 n==0이면, 반복문의 while 조건은 <b>n&gt;0</b>이어야 한다.</div>
   </section>
 
@@ -181,6 +226,218 @@
       <tr><td>관계</td><td>1:1</td><td>1:n, n:m</td></tr>
       <tr><td>예시</td><td>배열, 연결리스트, 스택, 큐</td><td>트리, 그래프</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2022 지방직 · 기출문제집 p.432</span></div>
+      <p class="q-body">컴퓨터 알고리즘의 조건에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>각 명령어의 의미는 모호하지 않고 명확해야 한다.</li>
+        <li>알고리즘 단계들에는 순서가 정해져 있지 않다.</li>
+        <li>한정된 수의 단계 후에는 반드시 종료되어야 한다.</li>
+        <li>각 명령어들은 실행 가능한 연산이어야 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 알고리즘 단계들에는 순서가 정해져 있지 않다 (틀린 설명)</p>
+        <div class="explain">
+          <p>알고리즘은 <b>정해진 순서대로 수행되는 절차</b>다. 순서가 없으면 같은 입력에 대해 결과가 달라질 수 있어 애초에 알고리즘이 아니다.</p>
+          <p>나머지 선택지는 각각 <b>명확성(①)·유한성(③)·실제성(④)</b>으로, 모두 알고리즘의 정당한 조건이다.</p>
+          <p><b>암기:</b> 입력 · 출력 · 명확성 · 유한성 · 실제성 · 유효성 — 이 중 "출력은 <b>1개 이상</b> 반드시 있어야 하지만 <b>입력은 0개여도 된다</b>"는 점이 따로 출제되니 함께 기억할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2007 국가직 7급 · 기출문제집 p.432</span></div>
+      <p class="q-body">입력 데이터의 개수 n에 대한 <b>시간 복잡도가 가장 큰</b> 것은?</p>
+      <ol class="choices">
+        <li>O(10(n + log n))</li>
+        <li>O(n² + 1)</li>
+        <li>O(3n log n + 100)</li>
+        <li>O(n² log n)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ O(n² log n)</p>
+        <div class="explain">
+          <p>각 선택지를 먼저 <b>간단히 정리(계수·상수·낮은 항 제거)</b>한 뒤 크기를 비교한다.</p>
+          <ol class="steps">
+            <li>① O(10(n + log n)) → 계수 10 제거, n과 log n 중 큰 항만 → <b>O(n)</b></li>
+            <li>② O(n² + 1) → 상수 제거 → <b>O(n²)</b></li>
+            <li>③ O(3n log n + 100) → 계수·상수 제거 → <b>O(n log n)</b></li>
+            <li>④ O(n² log n) → 더 줄일 항이 없음 → <b>O(n² log n)</b></li>
+            <li>크기 순서 O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n² log n) 이므로 가장 큰 것은 <b>④</b></li>
+          </ol>
+          <p><b>함정:</b> ②번 O(n²)와 ④번 O(n² log n)을 헷갈리기 쉽다. 같은 n²이라도 <b>log n이 더 곱해져 있으면 더 크다.</b> 계수 10이 붙은 ①번을 크다고 착각하는 것도 흔한 실수 — 계수는 크기 판단에 아무 영향이 없다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2024 지방직 · 기출문제집 p.433</span></div>
+      <p class="q-body">다음 C 언어 코드의 시간 복잡도는? (단, n은 임의의 양의 정수)</p>
+      <div class="tip" style="margin-top:8px;">
+        <code>for (i = 0; i &lt; n; i++)</code><br>
+        &nbsp;&nbsp;<code>for (j = 0; j &lt; 500; j++)</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>printf("i * j = %d\n", i * j);</code>
+      </div>
+      <ol class="choices">
+        <li>O(n)</li>
+        <li>O(n²)</li>
+        <li>O(log n)</li>
+        <li>O(n log n)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① O(n)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>바깥 for문은 n번 반복 → O(n)</li>
+            <li>안쪽 for문은 <b>n과 무관하게 항상 500번</b> 반복 → 상수 → O(1)</li>
+            <li>전체 실행 횟수 = n × 500 = 500n → 계수를 버리면 <b>O(n)</b></li>
+          </ol>
+          <p><b>함정:</b> ②번 O(n²)을 고르기 쉽다. <b>"for문이 2개 중첩 = O(n²)"이 아니다.</b> 안쪽 반복 횟수가 n에 연동되어야 n²이 된다. 안쪽이 고정 횟수(500, 1000, 10만이어도)면 그냥 상수배일 뿐이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2020 국회 · 기출문제집 p.433</span></div>
+      <p class="q-body">다음 C 언어 프로그램에서 <code>calc</code> 함수의 실행 시간을 점근 표기법으로 표시한 것은?</p>
+      <div class="tip" style="margin-top:8px;">
+        <code>int calc(int n) {</code><br>
+        &nbsp;&nbsp;<code>int i, ret = 0;</code><br>
+        &nbsp;&nbsp;<code>if (n &lt;= 0) return 0;</code><br>
+        &nbsp;&nbsp;<code>for (i = 1; i &lt;= n; i++)</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>ret += 1;</code><br>
+        &nbsp;&nbsp;<code>return ret + calc(n - 1);</code><br>
+        <code>}</code>
+      </div>
+      <ol class="choices">
+        <li>O(log₂n)</li>
+        <li>O(n log₂n)</li>
+        <li>O(n)</li>
+        <li>O(n²)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ O(n²)</p>
+        <div class="explain">
+          <p>재귀 + 반복문이 섞인 유형이다. <b>"몇 번 호출되는가 × 한 번 호출될 때 하는 일"</b>로 분리해서 생각한다.</p>
+          <ol class="steps">
+            <li><b>호출 횟수:</b> calc(n) → calc(n-1) → calc(n-2) → … → calc(0). n이 1씩 줄며 한 줄로 내려가므로 <b>총 n번 호출</b> → O(n)</li>
+            <li><b>한 번 호출될 때의 일:</b> 내부 for문이 1부터 n까지 도므로 <b>약 n번</b> 반복 → O(n)</li>
+            <li>둘을 곱하면 n × n = <b>O(n²)</b></li>
+          </ol>
+          <p><b>함정:</b> ③번 O(n)은 <b>재귀 깊이만 세고 내부 for문을 놓친</b> 경우다. 반대로 반복문만 보고 O(n)이라 답해도 똑같이 틀린다. 재귀 문제는 항상 <b>"깊이 × 각 단계 비용"</b> 두 가지를 다 확인해야 한다.</p>
+          <p>참고로 앞 문제(문제 3)와 비교하면 차이가 선명하다 — 거기서는 안쪽이 고정 500회라 O(n)이었지만, 여기서는 안쪽이 n에 연동되므로 O(n²)이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2007 국가직 · 기출문제집 p.434</span></div>
+      <p class="q-body">다음 함수 <code>fib()</code>를 사용하여 <code>fib(5)</code>를 실행했을 때, <b>fib(5)를 포함한 fib() 함수의 총 호출 횟수</b>와 <b>최종 리턴 값</b>으로 옳은 것은?</p>
+      <div class="tip" style="margin-top:8px;">
+        <code>int fib(int n) {</code><br>
+        &nbsp;&nbsp;<code>if (n &lt;= 0) return 0;</code><br>
+        &nbsp;&nbsp;<code>if (n == 1) return 1;</code><br>
+        &nbsp;&nbsp;<code>else return fib(n-1) + fib(n-2);</code><br>
+        <code>}</code>
+      </div>
+      <ol class="choices">
+        <li>15, 5</li>
+        <li>15, 8</li>
+        <li>20, 5</li>
+        <li>20, 8</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 총 15번 호출, 리턴 값 5</p>
+        <div class="explain">
+          <p>트리를 그려 세면 실수하니 <b>작은 n부터 표로 쌓아 올린다.</b> 호출 횟수 C(n) = 1(자기 자신) + C(n-1) + C(n-2), C(0)=C(1)=1.</p>
+          <table>
+            <tr><th>n</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+            <tr><td>호출 횟수</td><td>1</td><td>1</td><td>3</td><td>5</td><td>9</td><td><b>15</b></td></tr>
+            <tr><td>리턴 값</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td><b>5</b></td></tr>
+          </table>
+          <p><b>함정:</b> ②·④번의 "8"은 <b>fib(6)의 값</b>이다. 이 코드는 fib(0)=0에서 시작하므로 fib(5)=5이지, 8이 아니다. 문제의 종료조건(fib(0)=0인지 fib(1)=1부터인지)을 반드시 확인하고 표를 채울 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2012 국가직 7급 · 기출문제집 p.434</span></div>
+      <p class="q-body">다음 함수를 이용하여 <code>recursive(4)</code>를 수행한 결과 값은? (단, 곱해지는 값은 2² = 4이다)</p>
+      <div class="tip" style="margin-top:8px;">
+        <code>int recursive(int n) {</code><br>
+        &nbsp;&nbsp;<code>if (n &lt; 1) return 2;</code><br>
+        &nbsp;&nbsp;<code>else return (4 * recursive(n-1) + 1);</code><br>
+        <code>}</code>
+      </div>
+      <ol class="choices">
+        <li>149</li>
+        <li>265</li>
+        <li>373</li>
+        <li>597</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 597</p>
+        <div class="explain">
+          <p>재귀는 <b>종료조건부터 거꾸로 올라오며</b> 계산하는 것이 가장 빠르고 안전하다.</p>
+          <ol class="steps">
+            <li>recursive(0) = <b>2</b> (종료조건: n &lt; 1)</li>
+            <li>recursive(1) = 4 × 2 + 1 = <b>9</b></li>
+            <li>recursive(2) = 4 × 9 + 1 = <b>37</b></li>
+            <li>recursive(3) = 4 × 37 + 1 = <b>149</b></li>
+            <li>recursive(4) = 4 × 149 + 1 = <b>597</b></li>
+          </ol>
+          <p><b>함정:</b> ①번 149는 <b>recursive(3)에서 멈춘</b> 값이다. 재귀를 한 단계 덜 올라가거나 더 올라가는 실수가 가장 흔하니, 표로 n=0부터 차례로 적어놓고 세어라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2020 지방직 · 기출문제집 p.435</span></div>
+      <p class="q-body">다음 재귀 함수를 동일한 기능의 반복 함수로 바꿀 때, ⓐ와 ⓑ에 들어갈 내용으로 옳은 것은?</p>
+      <div class="tip" style="margin-top:8px;">
+        <code>int func(int n) {</code> &nbsp;<span style="opacity:.7">// 재귀</span><br>
+        &nbsp;&nbsp;<code>if (n == 0) return 1;</code><br>
+        &nbsp;&nbsp;<code>else return n * func(n-1);</code><br>
+        <code>}</code><br><br>
+        <code>int iter_func(int n) {</code> &nbsp;<span style="opacity:.7">// 반복</span><br>
+        &nbsp;&nbsp;<code>int f = 1;</code><br>
+        &nbsp;&nbsp;<code>while ( ⓐ )</code><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<code>ⓑ</code><br>
+        &nbsp;&nbsp;<code>return f;</code><br>
+        <code>}</code>
+      </div>
+      <ol class="choices">
+        <li>ⓐ n &lt; 0 &nbsp;&nbsp; ⓑ f = f * n--;</li>
+        <li>ⓐ n &lt; 0 &nbsp;&nbsp; ⓑ f = f * n++;</li>
+        <li>ⓐ n &gt; 0 &nbsp;&nbsp; ⓑ f = f * n--;</li>
+        <li>ⓐ n &gt; 0 &nbsp;&nbsp; ⓑ f = f * n++;</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ ⓐ n &gt; 0, ⓑ f = f * n--;</p>
+        <div class="explain">
+          <p>이 재귀 함수는 <b>팩토리얼(n!)</b>이다. n × (n-1) × … × 1을 계산한다.</p>
+          <ol class="steps">
+            <li><b>ⓐ 반복 조건:</b> 재귀의 종료조건이 <code>n == 0</code>이므로, 반복문은 <b>그 반대인 n &gt; 0 동안 계속</b> 돌아야 한다. ①·②번의 <code>n &lt; 0</code>은 애초에 한 번도 실행되지 않는다.</li>
+            <li><b>ⓑ 본체:</b> f에 현재 n을 곱한 뒤 n을 <b>1씩 감소</b>시켜야 n, n-1, n-2 … 순으로 곱해진다 → <code>f = f * n--</code></li>
+            <li>④번처럼 <code>n++</code>이면 n이 계속 커져 <b>무한 루프</b>에 빠진다.</li>
+          </ol>
+          <p><b>변환 공식:</b> 재귀 → 반복으로 바꿀 때 <b>"종료조건의 부정 = 루프 조건"</b>, <b>"재귀 호출 인자의 변화 = 루프 안의 증감"</b> 두 가지만 맞추면 된다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

@@ -20,44 +20,130 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"마이너스 기호"를 저장할 자리가 없다</h4>
+      <p>컴퓨터 메모리에는 0과 1밖에 없다. 그러면 <b>−5의 "−"는 어디에 저장하나?</b> 가장 단순한 답은 "맨 앞 비트 하나를 부호 전용으로 쓰자"(부호-절대치 방식)인데, 이 방식엔 치명적 문제가 둘 있다. <b>+0과 −0이 따로 생기고</b>(0이 두 개!), 무엇보다 <b>뺄셈 회로를 따로 만들어야 한다.</b></p>
+      <p>2의 보수는 이 두 문제를 한 번에 해결한다. 음수를 "보수"로 표현하면 <b>A − B를 A + (B의 2의 보수)로, 즉 뺄셈을 덧셈으로 바꿀 수 있다.</b> 그러면 CPU 안에 <b>덧셈 회로 하나만</b> 있으면 되고(앞 단원의 4비트 가산기/감산기가 정확히 이 원리다), 0도 하나뿐이다. 현대의 모든 컴퓨터가 2의 보수를 쓰는 이유다.</p>
+      <p>실수는 또 다른 문제다. 3.14 같은 수는 정수부·소수부 자릿수가 제각각이라 고정된 자리에 담기 어렵다. 그래서 <b>과학적 표기법(1.xxx × 2ⁿ)으로 바꿔 "부호·지수·가수"를 따로 저장</b>하기로 전 세계가 약속한 것이 IEEE 754다. 시험에서는 <b>2진수 32비트 ↔ 10진 실수</b>를 양방향으로 변환시키는 문제가 거의 매년 나온다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>보수(Complement) 표현법 3가지 <span class="page-ref">📖 기출문제집 p.49</span></h3>
+    <h3>보수(Complement) 표현법 3가지 <span class="page-ref">📖 기출문제집 p.46~48</span></h3>
     <table>
-      <tr><th>방식</th><th>표현 규칙 (4비트, -4 예시)</th></tr>
+      <tr><th>방식</th><th>표현 규칙 (4비트, −4 예시)</th></tr>
       <tr><td>부호와 절대치</td><td>최상위 비트=부호(1=음수), 나머지는 절대값 그대로 → <b>1100</b></td></tr>
       <tr><td>1의 보수</td><td>양수 절대치의 모든 비트를 반전(0↔1) → 0100 반전 → <b>1011</b></td></tr>
       <tr><td>2의 보수</td><td>1의 보수에 <b>+1</b> → 1011 + 1 = <b>1100</b></td></tr>
     </table>
-    <p><b>계산 방법: -35를 8비트 2의 보수로 바꾸는 순서</b> <span class="page-ref">📖 기출문제집 p.51</span></p>
-    <ol class="steps">
-      <li>35를 2진수(절대치)로 변환: <b>00100011</b></li>
-      <li>모든 비트 반전(1의 보수): 00100011 → <b>11011100</b></li>
-      <li>+1 (2의 보수 완성): 11011100 + 1 = <b>11011101</b></li>
-    </ol>
-    <div class="tip">
-      <b>2의 보수 → 10진수로 되돌리기 (예: 10111100)</b><br>
-      최상위 비트가 1 → 음수. 2의 보수를 취해(1의 보수 후 +1) 절대값을 구한다.<br>
-      10111100 → 1의 보수 01000011 → +1 → 01000100(=68) → 결과 <b>-68</b>
+
+    <h4 style="margin:18px 0 6px;font-size:14px;">세 방식을 한눈에 비교 (4비트)</h4>
+    <table>
+      <tr><th>10진수</th><th>부호-절대치</th><th>1의 보수</th><th>2의 보수</th></tr>
+      <tr><td>+3</td><td>0011</td><td>0011</td><td>0011</td></tr>
+      <tr><td>+1</td><td>0001</td><td>0001</td><td>0001</td></tr>
+      <tr><td>+0</td><td>0000</td><td>0000</td><td>0000</td></tr>
+      <tr><td>−0</td><td><b>1000</b></td><td><b>1111</b></td><td>없음 ✓</td></tr>
+      <tr><td>−1</td><td>1001</td><td>1110</td><td>1111</td></tr>
+      <tr><td>−3</td><td>1011</td><td>1100</td><td>1101</td></tr>
+      <tr><td>−4</td><td>1100</td><td>1011</td><td>1100</td></tr>
+      <tr><td>−8</td><td>표현 불가</td><td>표현 불가</td><td><b>1000</b> ✓</td></tr>
+    </table>
+    <div class="tip"><b>표에서 읽어야 할 두 가지:</b> ① 양수는 세 방식이 <b>전부 똑같다</b> — 보수는 음수에만 적용된다. ② 2의 보수만 <b>−0이 없고</b>, 그 덕에 음수 쪽을 하나 더(−8까지) 표현한다.</div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 230" role="img" aria-label="10진수 마이너스 20을 8비트 2의 보수로 변환하는 3단계 과정: 절대값의 2진수, 비트 반전, 1 더하기">
+        <defs>
+          <marker id="cp1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="22" font-size="13" font-weight="700">−20을 8비트 2의 보수로 바꾸는 3단계</text>
+
+        <text x="20" y="58" font-size="12.5">① 절대값 20을 2진수로</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="250" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="267" y="58">0</text>
+          <rect x="284" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="301" y="58">0</text>
+          <rect x="318" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="335" y="58">0</text>
+          <rect x="352" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="369" y="58">1</text>
+          <rect x="386" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="403" y="58">0</text>
+          <rect x="420" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="437" y="58">1</text>
+          <rect x="454" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="471" y="58">0</text>
+          <rect x="488" y="40" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="505" y="58">0</text>
+        </g>
+        <text x="540" y="58" font-size="12" opacity="0.8">= 16+4 = 20</text>
+
+        <line x1="386" y1="68" x2="386" y2="92" stroke="currentColor" stroke-width="1.5" marker-end="url(#cp1)"/>
+        <text x="398" y="85" font-size="11.5" opacity="0.85">모든 비트 뒤집기</text>
+
+        <text x="20" y="118" font-size="12.5">② 1의 보수 (반전)</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="250" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="267" y="118">1</text>
+          <rect x="284" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="301" y="118">1</text>
+          <rect x="318" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="335" y="118">1</text>
+          <rect x="352" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="369" y="118">0</text>
+          <rect x="386" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="403" y="118">1</text>
+          <rect x="420" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="437" y="118">0</text>
+          <rect x="454" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="471" y="118">1</text>
+          <rect x="488" y="100" width="34" height="26" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="505" y="118">1</text>
+        </g>
+        <text x="540" y="118" font-size="12" opacity="0.8">여기까지가 −20의 1의 보수</text>
+
+        <line x1="386" y1="128" x2="386" y2="152" stroke="currentColor" stroke-width="1.5" marker-end="url(#cp1)"/>
+        <text x="398" y="145" font-size="11.5" opacity="0.85">맨 오른쪽에 1 더하기</text>
+
+        <text x="20" y="178" font-size="12.5" font-weight="700">③ 2의 보수 (+1)</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="250" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="267" y="178" font-weight="700">1</text>
+          <rect x="284" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="301" y="178" font-weight="700">1</text>
+          <rect x="318" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="335" y="178" font-weight="700">1</text>
+          <rect x="352" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="369" y="178" font-weight="700">0</text>
+          <rect x="386" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="403" y="178" font-weight="700">1</text>
+          <rect x="420" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="437" y="178" font-weight="700">1</text>
+          <rect x="454" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="471" y="178" font-weight="700">0</text>
+          <rect x="488" y="160" width="34" height="26" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="505" y="178" font-weight="700">0</text>
+        </g>
+        <text x="540" y="178" font-size="12" opacity="0.8">= −20의 최종 표현</text>
+        <text x="267" y="205" font-size="11" text-anchor="middle" opacity="0.8">부호비트 1(음수)</text>
+      </svg>
+      <figcaption>−20을 8비트 2의 보수로 바꾸는 과정 — ① 절대값을 2진수로 → ② 전부 반전 → ③ 1을 더한다. 되돌릴 때도 똑같이 "반전 후 +1"을 한 번 더 하면 원래 절대값이 나온다.</figcaption>
+    </figure>
+
+    <div class="deep">
+      <h4>왜 "반전하고 +1"이 음수가 되는가 — 시계 비유</h4>
+      <p>4비트로 표현 가능한 수는 0~15까지 16개이고, 16이 되면 <b>자리올림이 버려져 다시 0으로 돌아온다.</b> 시계가 12를 지나면 1로 돌아오는 것과 같다. 이런 세계에서는 <b>"−3"과 "+13"이 같은 동작을 한다.</b> 3시간 되감는 것과 13시간 감는 것이 12시간 시계에서 같은 결과이듯이.</p>
+      <p>그래서 −N을 <b>2ⁿ − N</b>으로 표현하기로 한 것이 2의 보수다. 4비트에서 −3 = 16 − 3 = 13 = <code>1101</code>. 그런데 2ⁿ − N을 매번 빼기로 계산하긴 번거로우니, <b>(2ⁿ−1) − N을 먼저 하고(= 그냥 비트 반전) +1</b>을 하는 요령을 쓰는 것이다. 반전이 곧 뺄셈인 이유는 <code>1111 − 0011 = 1100</code>처럼 <b>전부 1인 수에서 빼면 각 자리가 그대로 뒤집히기</b> 때문이다.</p>
+      <p>이 관점으로 보면 덧셈만으로 뺄셈이 되는 것도 당연하다. A − B = A + (2ⁿ − B)이고, 넘친 2ⁿ은 어차피 <b>자리올림으로 버려지기</b> 때문이다.</p>
     </div>
 
     <h3>2의 보수를 쓰는 이유 — 뺄셈을 덧셈으로</h3>
     <ul>
-      <li>A - B 연산을 <b>A + (B의 2의 보수)</b>로 바꿔서 덧셈 회로 하나로 가감산 모두 처리</li>
-      <li>예: 7 - 3 → 3의 2의 보수를 구해 7에 더한다</li>
-      <li>최상위 자리에서 <b>캐리(carry)가 발생하면 결과는 양수</b>, 발생하지 않으면 결과는 2의 보수 형태의 음수</li>
+      <li>A − B 연산을 <b>A + (B의 2의 보수)</b>로 바꿔서 덧셈 회로 하나로 가감산 모두 처리</li>
+      <li>최상위 자리에서 발생한 <b>캐리(carry)는 버린다</b> — 위 시계 비유의 "한 바퀴 돈 것"에 해당</li>
+      <li>실제 회로 구현은 <a href="논리회로.html">4비트 병렬 가산기/감산기</a>에서 모드신호 M으로 처리한다</li>
     </ul>
+    <div class="tip">
+      <b>예: 7 − 3 을 2의 보수 덧셈으로 (4비트)</b>
+      <ol class="steps">
+        <li>3 = 0011 → 1의 보수 1100 → +1 → <b>1101</b> (= −3)</li>
+        <li>7(0111) + (−3)(1101) = 1 0100 — 5비트가 되었다</li>
+        <li>넘친 최상위 캐리 1을 <b>버린다</b> → <b>0100 = 4</b> ✓ (7−3=4)</li>
+      </ol>
+    </div>
 
-    <h3>표현 범위와 오버플로</h3>
+    <h3>표현 범위와 오버플로 <span class="page-ref">📖 기출문제집 p.53</span></h3>
     <table>
-      <tr><th>비트 수</th><th>2의 보수 표현 범위</th></tr>
-      <tr><td>n비트</td><td>-2ⁿ⁻¹ ~ +(2ⁿ⁻¹ - 1)</td></tr>
-      <tr><td>4비트 예시</td><td>-8 ~ +7</td></tr>
+      <tr><th>비트 수</th><th>2의 보수 표현 범위</th><th>총 개수</th></tr>
+      <tr><td>n비트</td><td>−2ⁿ⁻¹ ~ +(2ⁿ⁻¹ − 1)</td><td>2ⁿ개</td></tr>
+      <tr><td>4비트</td><td>−8 ~ +7</td><td>16개</td></tr>
+      <tr><td>8비트</td><td>−128 ~ +127</td><td>256개</td></tr>
+      <tr><td>16비트</td><td>−32,768 ~ +32,767</td><td>65,536개</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 최댓값(2ⁿ⁻¹-1)과 최솟값(-2ⁿ⁻¹)의 합은 항상 <b>-1</b>이다. 2의 보수는 0을 한 가지로만 표현하므로(부호와 절대치·1의 보수 대비) 음수 범위가 하나 더 넓다.</div>
-    <p><b>오버플로(Overflow):</b> 덧셈 결과가 표현 범위(-2ⁿ⁻¹~2ⁿ⁻¹-1)를 벗어날 때 발생 — 마지막 캐리와 그 앞 비트의 캐리를 XOR해서 1이면 오버플로.</p>
+    <div class="tip"><b>함정 주의:</b> 음수 쪽이 <b>항상 하나 더 많다</b>(−8은 되는데 +8은 안 됨). 2의 보수는 0을 한 가지로만 표현하므로 남는 자리 하나가 음수로 간다. 최댓값 + 최솟값 = <b>−1</b>이라는 것도 같은 이야기다.</div>
+    <p><b>오버플로(Overflow):</b> 덧셈 결과가 표현 범위를 벗어날 때 발생한다. 판정법은 <b>최상위 비트로 들어온 캐리와 나간 캐리를 XOR</b>해서 1이면 오버플로다. 직관적으로는 <b>"같은 부호끼리 더했는데 부호가 바뀌면 오버플로"</b>로 기억하면 된다(양수+양수=음수, 음수+음수=양수는 불가능하니까).</p>
 
-    <h3>고정소수점 vs 부동소수점</h3>
+    <h3>고정소수점 vs 부동소수점 <span class="page-ref">📖 기출문제집 p.54</span></h3>
     <table>
       <tr><th>구분</th><th>고정소수점</th><th>부동소수점</th></tr>
       <tr><td>표현 대상</td><td>정수</td><td>실수</td></tr>
@@ -65,9 +151,14 @@
       <tr><td>속도/복잡도</td><td>단순, 빠름</td><td>복잡, 느림</td></tr>
       <tr><td>표현 범위</td><td>좁음</td><td>매우 크거나 작은 수까지 표현 가능</td></tr>
     </table>
+    <div class="deep">
+      <h4>컴퓨터가 "정확히" 표현하지 못하는 수도 있다</h4>
+      <p>√2나 π처럼 <b>끝나지 않고 반복도 하지 않는 무리수</b>는 비트가 아무리 많아도 정확히 담을 수 없다. 심지어 10진수 <b>0.1조차</b> 2진수로는 무한소수(0.000110011001100…)라서 근사값으로 저장된다. 프로그래밍에서 <code>0.1 + 0.2 != 0.3</code>이 되는 유명한 현상의 원인이 이것이다.</p>
+      <p>반대로 <b>0.5, 0.25, 2.5, −0.25×2⁻⁵</b>처럼 <b>분모가 2의 거듭제곱인 수</b>는 2진 소수로 딱 떨어지므로 정확히 표현된다. 시험에서 "정확히 표현하기 어려운 것"을 고르라면 <b>무리수(√2, π)</b>를 고르면 된다.</p>
+    </div>
 
-    <h3>IEEE 754 부동소수점 표준 <span class="page-ref">📖 기출문제집 p.54</span></h3>
-    <p>정규화된 형태 <b>±1.bbb...b × 2±E</b> 로 표현하며, 아래 3부분으로 저장한다.</p>
+    <h3>IEEE 754 부동소수점 표준 <span class="page-ref">📖 기출문제집 p.55</span></h3>
+    <p>정규화된 형태 <b>±1.bbb…b × 2<sup>±E</sup></b> 로 표현하며, 아래 3부분으로 저장한다.</p>
     <table>
       <tr><th>구분</th><th>단일 정밀도 (32비트)</th><th>이중 정밀도 (64비트)</th></tr>
       <tr><td>부호부</td><td>1비트</td><td>1비트</td></tr>
@@ -75,7 +166,7 @@
       <tr><td>가수부</td><td>23비트</td><td>52비트</td></tr>
     </table>
     <figure class="diagram">
-      <svg viewBox="0 0 640 140" role="img" aria-label="IEEE 754 단정도 32비트 비트필드 구조: 부호 1비트, 지수 8비트, 가수 23비트가 순서대로 배치된다">
+      <svg viewBox="0 0 640 150" role="img" aria-label="IEEE 754 단정도 32비트 비트필드 구조: 부호 1비트, 지수 8비트, 가수 23비트가 순서대로 배치된다">
         <rect x="20" y="30" width="40" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="40" y="60" font-size="13" text-anchor="middle">S</text>
         <rect x="60" y="30" width="200" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -85,52 +176,97 @@
         <text x="40" y="20" font-size="11" text-anchor="middle" opacity="0.75">1비트</text>
         <text x="160" y="20" font-size="11" text-anchor="middle" opacity="0.75">8비트 (바이어스 127)</text>
         <text x="440" y="20" font-size="11" text-anchor="middle" opacity="0.75">23비트</text>
-        <text x="40" y="100" font-size="11" text-anchor="middle" opacity="0.75">0=양수<br/>1=음수</text>
-        <text x="160" y="100" font-size="11" text-anchor="middle" opacity="0.75">실제 지수 + 127</text>
-        <text x="440" y="100" font-size="11" text-anchor="middle" opacity="0.75">정규화 후 "1." 다음 소수부만 저장</text>
-        <text x="20" y="125" font-size="11.5" opacity="0.8">bit 31</text>
-        <text x="600" y="125" font-size="11.5" text-anchor="end" opacity="0.8">bit 0</text>
+        <text x="40" y="98" font-size="11" text-anchor="middle" opacity="0.75">0=양수</text>
+        <text x="40" y="112" font-size="11" text-anchor="middle" opacity="0.75">1=음수</text>
+        <text x="160" y="98" font-size="11" text-anchor="middle" opacity="0.75">실제 지수 + 127</text>
+        <text x="160" y="112" font-size="11" text-anchor="middle" opacity="0.75">(음수 지수를 양수로 저장)</text>
+        <text x="440" y="98" font-size="11" text-anchor="middle" opacity="0.75">정규화 후 "1." 다음 소수부만 저장</text>
+        <text x="440" y="112" font-size="11" text-anchor="middle" opacity="0.75">(맨 앞 1은 생략 = 숨은 비트)</text>
+        <text x="20" y="137" font-size="11.5" opacity="0.8">bit 31</text>
+        <text x="620" y="137" font-size="11.5" text-anchor="end" opacity="0.8">bit 0</text>
       </svg>
-      <figcaption>IEEE 754 단정도(32비트)의 비트 배치 — 왼쪽부터 부호(1) · 지수(8, 바이어스 127) · 가수(23) 순서로 저장된다. 배정도(64비트)는 지수 11비트·가수 52비트로 늘어날 뿐 구조는 동일하다.</figcaption>
+      <figcaption>IEEE 754 단정도(32비트)의 비트 배치 — 왼쪽부터 부호(1) · 지수(8, 바이어스 127) · 가수(23) 순서. 배정도(64비트)는 지수 11비트·가수 52비트로 늘어날 뿐 구조는 동일하다.</figcaption>
     </figure>
     <ul>
       <li>부호 비트: 0=양수, 1=음수</li>
       <li>지수부에는 <b>실제 지수 + 바이어스</b> 값을 저장 (음수 지수를 양수로 표현하기 위함)</li>
-      <li>가수부에는 정규화된 "1." 을 <b>제외한 나머지</b> 소수 부분만 저장</li>
-      <li>가수부 비트가 많을수록 정밀도(정확도)가 높아짐</li>
+      <li>가수부에는 정규화된 "1." 을 <b>제외한 나머지</b> 소수 부분만 저장 (어차피 항상 1이므로 저장하지 않고 1비트를 아낀다 — <b>숨은 비트</b>)</li>
+      <li>가수부 비트가 많을수록 <b>정밀도</b>가, 지수부 비트가 많을수록 <b>표현 범위</b>가 커진다</li>
       <li>0은 특별한 값으로 모든 비트를 0으로 표현</li>
     </ul>
-    <p><b>계산 방법: 10진수 -2.75 → IEEE 754 단정도 변환 순서</b> <span class="page-ref">📖 기출문제집 p.55</span></p>
-    <ol class="steps">
-      <li>2진수로 변환: 2.75 = <b>10.11</b>₂</li>
-      <li>정규화(소수점을 맨 앞자리 1 뒤로 이동): 10.11 → <b>1.011 × 2¹</b></li>
-      <li>부호 결정: 음수이므로 부호비트 = <b>1</b></li>
-      <li>지수 계산: 실제 지수 1 + 바이어스 127 = 128 = 2진수 <b>10000000</b></li>
-      <li>가수 채우기: 정규화된 가수 "011" 뒤에 0을 채워 23비트로: <b>01100000000000000000000</b></li>
-      <li>합치기: <b>1 10000000 01100000000000000000000</b></li>
-    </ol>
+
+    <h4 style="margin:18px 0 6px;font-size:14px;">정규화(Normalization)를 하는 이유</h4>
+    <p>같은 수라도 <code>0.001011 × 2⁵</code>, <code>1.011 × 2¹</code>처럼 여러 방식으로 쓸 수 있다. 그중 <b>소수점 왼쪽에 1 하나만 남는 형태</b>로 통일하는 것이 정규화다. 이렇게 하면 표현이 딱 하나로 정해져 비교가 쉬워지고, 무엇보다 <b>앞자리의 의미 없는 0들이 사라져 그만큼 가수부에 유효숫자를 더 담을 수 있다.</b> 시험에서 "정규화의 목적"을 물으면 <b>유효숫자를 늘리기 위해서</b>가 정답이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="10진수 마이너스 2.75를 IEEE 754 단정도로 변환하는 과정: 2진 변환, 정규화, 부호 지수 가수 배치">
+        <defs>
+          <marker id="fp1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="22" font-size="13" font-weight="700">−2.75 → IEEE 754 단정도(32비트)</text>
+
+        <text x="30" y="55" font-size="13">−2.75</text>
+        <line x1="80" y1="50" x2="140" y2="50" stroke="currentColor" stroke-width="1.5" marker-end="url(#fp1)"/>
+        <text x="110" y="42" font-size="10.5" text-anchor="middle" opacity="0.8">2진 변환</text>
+        <text x="150" y="55" font-size="13">−10.11₂</text>
+        <line x1="225" y1="50" x2="285" y2="50" stroke="currentColor" stroke-width="1.5" marker-end="url(#fp1)"/>
+        <text x="255" y="42" font-size="10.5" text-anchor="middle" opacity="0.8">정규화</text>
+        <text x="295" y="55" font-size="13" font-weight="700">−1.011 × 2¹</text>
+        <text x="420" y="55" font-size="11.5" opacity="0.8">소수점을 왼쪽으로 1칸 → 지수 +1</text>
+
+        <text x="30" y="95" font-size="12.5">부호 S = <tspan font-weight="700">1</tspan> (음수)　　지수 E = 1 + 127(바이어스) = 128 = <tspan font-weight="700">10000000</tspan>₂</text>
+        <text x="30" y="118" font-size="12.5">가수 M = 1.<tspan font-weight="700">011</tspan> 에서 "1."을 뗀 <tspan font-weight="700">011</tspan> + 뒤를 0으로 채워 23비트</text>
+
+        <rect x="30" y="140" width="46" height="46" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="53" y="169" font-size="15" text-anchor="middle" font-weight="700">1</text>
+        <text x="53" y="202" font-size="11" text-anchor="middle" opacity="0.8">부호</text>
+
+        <rect x="76" y="140" width="190" height="46" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="171" y="169" font-size="14" text-anchor="middle" font-weight="700">1000 0000</text>
+        <text x="171" y="202" font-size="11" text-anchor="middle" opacity="0.8">지수부 8비트 (=128)</text>
+
+        <rect x="266" y="140" width="404" height="46" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="468" y="169" font-size="13" text-anchor="middle" font-weight="700">011 0000 0000 0000 0000 0000</text>
+        <text x="468" y="202" font-size="11" text-anchor="middle" opacity="0.8">가수부 23비트</text>
+
+        <text x="30" y="235" font-size="12" opacity="0.85">4비트씩 묶어 읽으면 → 1100 0000 0011 0000 0000 0000 0000 0000 (16진수 C0300000)</text>
+      </svg>
+      <figcaption>−2.75를 IEEE 754 단정도로 바꾸는 전 과정 — 2진 변환 → 정규화 → 부호·지수(+127)·가수(1. 제거) 순으로 채운다.</figcaption>
+    </figure>
+
+    <div class="tip">
+      <b>반대 방향(비트열 → 10진수)도 같은 순서를 거꾸로</b>
+      <ol class="steps">
+        <li>맨 앞 1비트로 부호 판정 (1이면 음수)</li>
+        <li>다음 8비트를 10진수로 읽고 <b>−127</b> → 실제 지수 E</li>
+        <li>나머지 23비트 앞에 <b>"1."을 붙여</b> 가수 복원</li>
+        <li>가수 × 2<sup>E</sup> 계산 (소수점을 E칸 오른쪽으로 이동)</li>
+        <li>2진 소수를 10진수로 환산 (.101 = 0.5 + 0.125 = 0.625)</li>
+      </ol>
+    </div>
 
     <h3>부동소수점의 사칙연산 규칙 <span class="page-ref">📖 기출문제집 p.58</span></h3>
     <table>
       <tr><th>연산</th><th>규칙</th></tr>
       <tr><td>덧셈/뺄셈</td><td>① 0인지 검사 → ② <b>지수가 큰 쪽에 맞춰</b> 작은 쪽 가수 위치 조정 → ③ 가수 연산 → ④ 결과를 다시 정규화</td></tr>
-      <tr><td>곱셈</td><td><b>지수를 더한다</b></td></tr>
-      <tr><td>나눗셈</td><td><b>지수를 뺀다</b></td></tr>
+      <tr><td>곱셈</td><td><b>지수를 더한다</b> (가수는 곱한다)</td></tr>
+      <tr><td>나눗셈</td><td><b>지수를 뺀다</b> (가수는 나눈다)</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 지수를 맞출 때는 항상 "지수가 작은 수"의 가수 위치를 조정한다 (지수가 큰 수를 기준으로 삼음). 반대로 알면 오답.</div>
+    <div class="tip"><b>함정 주의:</b> 지수를 맞출 때는 항상 <b>지수가 작은 쪽</b>의 가수를 오른쪽으로 밀어 <b>큰 쪽에 맞춘다.</b> 반대로 하면(큰 쪽을 작은 쪽에 맞추면) 큰 수의 유효숫자가 잘려나가 정보가 손실된다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>10진수를 2의 보수 n비트로 변환하는 계산 문제 (절대치 → 1의 보수 → +1 순서)</li>
-      <li>2의 보수 값을 다시 10진수로 해석하는 문제 (최상위 비트=부호 확인 먼저)</li>
-      <li>2의 보수 n비트 표현 범위 = -2ⁿ⁻¹ ~ 2ⁿ⁻¹-1, 최댓값+최솟값 = <b>-1</b></li>
-      <li>뺄셈을 2의 보수 덧셈으로 바꿔 계산하는 문제, 오버플로 판정 문제</li>
-      <li>IEEE 754 단정도=32비트(부호1·지수8·가수23), 배정도=64비트(부호1·지수11·가수52)</li>
-      <li>바이어스 값: 단정도=127, 배정도=1023</li>
-      <li>부동소수점 덧셈/뺄셈은 "지수가 큰 쪽" 기준으로 정렬, 곱셈=지수 덧셈, 나눗셈=지수 뺄셈</li>
-      <li>같은 비트 수라면 IEEE 754와 2의 보수 정수가 표현 가능한 "개수"는 <b>동일</b>(2ⁿ개) — 표현 "범위"만 다름</li>
+      <li>10진수를 2의 보수 n비트로 변환 (절대치 → 반전 → +1 순서)</li>
+      <li>2의 보수 값을 다시 10진수로 해석 (최상위 비트=부호 먼저 확인, 음수면 다시 보수 취해 절대값)</li>
+      <li>같은 비트열을 <b>1의 보수로 해석 vs 2의 보수로 해석</b>하면 값이 1 차이난다는 유형</li>
+      <li>2의 보수 n비트 범위 = −2ⁿ⁻¹ ~ 2ⁿ⁻¹−1, 최댓값+최솟값 = <b>−1</b>, 음수가 하나 더 많다</li>
+      <li>뺄셈을 2의 보수 덧셈으로 바꿔 계산 (최상위 캐리는 버림), 오버플로 판정</li>
+      <li>IEEE 754 단정도=32비트(1·8·23), 배정도=64비트(1·11·52), 바이어스=127/1023</li>
+      <li>비트열 ↔ 10진 실수 <b>양방향 변환</b> 계산 (매년 출제)</li>
+      <li>정규화의 목적 = <b>유효숫자를 늘리기 위해</b>, 부동소수점 구성요소에 <b>기수(base)는 포함되지 않음</b></li>
+      <li>덧셈/뺄셈은 지수가 큰 쪽 기준 정렬, 곱셈=지수 덧셈, 나눗셈=지수 뺄셈</li>
     </ul>
   </section>
 
@@ -139,9 +275,223 @@
     <table>
       <tr><th>구분</th><th>1의 보수</th><th>2의 보수</th></tr>
       <tr><td>구하는 법</td><td>모든 비트 반전</td><td>1의 보수 + 1</td></tr>
-      <tr><td>0의 표현</td><td>+0, -0 두 가지 존재</td><td>0 표현이 <b>한 가지</b></td></tr>
+      <tr><td>0의 표현</td><td>+0, −0 두 가지 존재</td><td>0 표현이 <b>한 가지</b></td></tr>
+      <tr><td>4비트 범위</td><td>−7 ~ +7</td><td>−8 ~ +7</td></tr>
+      <tr><td>같은 비트열 해석</td><td colspan="2">2의 보수로 −5인 비트열은 1의 보수로는 <b>−4</b> (항상 1 차이)</td></tr>
       <tr><td>실제 사용</td><td>거의 안 씀(중간 계산용)</td><td>실제 컴퓨터가 사용</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>지수부를 늘리면</th><th>가수부를 늘리면</th></tr>
+      <tr><td>좋아지는 것</td><td>표현 <b>범위</b>가 넓어짐</td><td><b>정밀도</b>가 높아짐</td></tr>
+      <tr><td>예</td><td>더 크고 더 작은 수를 담음</td><td>소수점 아래를 더 정확히</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2016 지방직 · 기출문제집 p.48</span></div>
+      <p class="q-body">10진수 <b>−20</b>을 2의 보수 형식의 8비트 2진수로 나타낸 것은?</p>
+      <ol class="choices">
+        <li>10010100</li>
+        <li>11101011</li>
+        <li>11101100</li>
+        <li>11110100</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 11101100</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>절대값 20을 8비트 2진수로: <b>00010100</b> (16+4=20)</li>
+            <li>모든 비트 반전(1의 보수): <b>11101011</b></li>
+            <li>+1 (2의 보수): 11101011 + 1 = <b>11101100</b></li>
+          </ol>
+          <p><b>검산:</b> 다시 반전 후 +1 하면 00010011+1 = 00010100 = 20 ✓</p>
+          <p><b>선택지가 곧 오답 유형표다:</b> ①10010100은 <b>부호-절대치</b> 표현, ②11101011은 <b>1의 보수</b>(+1을 안 함)다. 문제가 어느 방식을 묻는지 반드시 확인할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2018 지방직 · 기출문제집 p.47</span></div>
+      <p class="q-body">비트열 A를 <b>2의 보수</b>로 표현된 부호 있는 2진 정수로 해석한 값은 <b>−5</b>이다. 비트열 A를 <b>1의 보수</b>로 표현된 부호 있는 2진 정수로 해석한 값은?</p>
+      <ol class="choices">
+        <li>−4</li>
+        <li>−5</li>
+        <li>−6</li>
+        <li>−7</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① −4</p>
+        <div class="explain">
+          <p>"같은 비트열을 두 가지 방식으로 읽으면 얼마가 되나"를 묻는 유형이다. <b>비트열을 먼저 복원</b>하는 것이 출발점.</p>
+          <ol class="steps">
+            <li>2의 보수로 −5인 비트열 구하기(4비트): 5 = 0101 → 반전 1010 → +1 → <b>A = 1011</b></li>
+            <li>이제 <b>A를 1의 보수로 해석</b>: 최상위 비트가 1이므로 음수</li>
+            <li>1의 보수에서 절대값은 <b>반전만</b> 하면 된다: 1011 → 0100 = 4</li>
+            <li>따라서 값은 <b>−4</b></li>
+          </ol>
+          <p><b>일반 규칙:</b> 같은 음수 비트열이라면 <b>1의 보수 해석값이 2의 보수 해석값보다 항상 1 크다</b>(−5 → −4). 2의 보수가 +1을 더한 표현이기 때문이다. 이 규칙만 알면 계산 없이 ①을 고를 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2018 국가직 · 기출문제집 p.46</span></div>
+      <p class="q-body">다음 수식에서 이진수 Y의 값은? (단, 모든 수는 8비트 이진수이고 <b>1의 보수</b>로 표현된다)<br><code>11110100₂ + Y = 11011111₂</code></p>
+      <ol class="choices">
+        <li>11101001₂</li>
+        <li>11101010₂</li>
+        <li>11101011₂</li>
+        <li>11101100₂</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 11101010₂</p>
+        <div class="explain">
+          <p>비트 상태로 낑낑대지 말고 <b>10진수로 번역 → 계산 → 다시 번역</b>이 가장 안전하다.</p>
+          <ol class="steps">
+            <li>11110100: MSB=1(음수) → 반전 00001011 = 11 → 값은 <b>−11</b></li>
+            <li>11011111: MSB=1(음수) → 반전 00100000 = 32 → 값은 <b>−32</b></li>
+            <li>−11 + Y = −32 → <b>Y = −21</b></li>
+            <li>−21을 1의 보수로: 21 = 00010101 → 반전 → <b>11101010</b></li>
+          </ol>
+          <p><b>함정:</b> ④11101100은 −21의 <b>2의 보수</b>다(반전 후 +1까지 함). 문제에 "1의 보수"라 못박혀 있으므로 <b>+1을 하면 안 된다.</b> 1의 보수 문제에서 가장 흔한 실수다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2023 소방경채 · 기출문제집 p.46</span></div>
+      <p class="q-body">다음 연산식에서 이진수 Y의 값으로 옳은 것은?<br><code>(10110101)₂ + Y = (11101111)₂</code></p>
+      <ol class="choices">
+        <li>(01110101)₂</li>
+        <li>(11001001)₂</li>
+        <li>(11001110)₂</li>
+        <li>(00111010)₂</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (00111010)₂</p>
+        <div class="explain">
+          <p>Y = 11101111 − 10110101 이다. 뺄셈은 <b>2의 보수를 더하는 것</b>으로 바꿔 푼다.</p>
+          <ol class="steps">
+            <li>빼는 수 10110101의 2의 보수: 반전 01001010 → +1 → <b>01001011</b></li>
+            <li>더하기: 11101111 + 01001011 = <b>1</b> 00111010 (9비트 발생)</li>
+            <li>최상위로 넘친 캐리 1은 <b>버린다</b> → <b>00111010</b></li>
+          </ol>
+          <p><b>10진수 검산:</b> 11101111 = 239, 10110101 = 181 → 239 − 181 = 58, 그리고 00111010 = 32+16+8+2 = 58 ✓</p>
+          <p><b>포인트:</b> 결과의 MSB가 0(양수)이라는 점도 맞는 답임을 뒷받침한다. 더 큰 수에서 작은 수를 뺐으니 양수가 나와야 정상이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2009 국가직 · 기출문제집 p.53</span></div>
+      <p class="q-body">4비트를 이용한 정수 자료 표현에서 <b>2의 보수</b>를 이용하여 음수로 표현했을 때 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>십진수 −4는 이진수 1100으로 표현된다.</li>
+        <li>십진수 8은 이진수 1000으로 표현된다.</li>
+        <li>십진수 −1은 이진수 1111로 표현된다.</li>
+        <li>십진수 5는 이진수 0101로 표현된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (4비트 2의 보수로 +8은 표현 불가)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>4비트 2의 보수 범위는 <b>−8 ~ +7</b>. 따라서 <b>+8은 애초에 표현할 수 없다</b> → ②가 틀림</li>
+            <li>참고로 1000은 이 체계에서 <b>−8</b>을 의미한다 (+8이 아니다)</li>
+            <li>① −4: 4=0100 → 반전 1011 → +1 → <b>1100</b> ✓</li>
+            <li>③ −1: 1=0001 → 반전 1110 → +1 → <b>1111</b> ✓ (−1은 항상 전부 1)</li>
+            <li>④ +5는 양수이므로 보수 없이 그대로 <b>0101</b> ✓</li>
+          </ol>
+          <p><b>외워두면 편한 두 가지:</b> 2의 보수에서 <b>−1은 항상 전부 1</b>(1111…1), <b>최솟값은 1 뒤에 전부 0</b>(1000…0)이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2017 하반기 국가직 · 기출문제집 p.56</span></div>
+      <p class="q-body">다음 2진 표현이 나타내는 IEEE 754 표준 <b>단정도</b>(single precision) 부동소수점 수의 값은?<br><code>1 10000011 10101010000000000000000</code></p>
+      <ol class="choices">
+        <li>+5.3125₍₁₀₎</li>
+        <li>−26.625₍₁₀₎</li>
+        <li>+21.25₍₁₀₎</li>
+        <li>−13.3125₍₁₀₎</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② −26.625</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>부호</b>: 첫 비트가 1 → <b>음수</b> (①③ 즉시 탈락)</li>
+            <li><b>지수</b>: 10000011₂ = 128+2+1 = 131 → 실제 지수 = 131 − 127 = <b>4</b></li>
+            <li><b>가수</b>: 저장된 1010101… 앞에 "1."을 붙여 <b>1.1010101</b></li>
+            <li>소수점을 지수만큼(4칸) 오른쪽으로: 1.1010101 × 2⁴ = <b>11010.101</b></li>
+            <li>10진 변환: 정수부 11010 = 16+8+2 = 26, 소수부 .101 = 0.5+0.125 = 0.625 → <b>26.625</b></li>
+            <li>부호 적용 → <b>−26.625</b></li>
+          </ol>
+          <p><b>시간 절약 팁:</b> 부호비트만 봐도 선택지 절반이 날아간다. 그다음 지수로 대략의 크기(2⁴ ≈ 16~32 사이)를 가늠하면 ④(−13.3)도 걸러져 계산 전에 답이 보인다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2018 계리직 · 기출문제집 p.56</span></div>
+      <p class="q-body">10진수 <b>−2.75</b>를 IEEE 754 표준 32비트 단정도 부동소수점 방식으로 표기했을 때 옳은 것은? (부호 1비트, 지수부 8비트, 가수부 23비트)</p>
+      <ol class="choices">
+        <li>1000 0000 0000 0000 0000 0000 0000 1011</li>
+        <li>1000 0000 1011 0000 0000 0000 0000 0000</li>
+        <li>1010 0000 0110 0000 0000 0000 0000 0000</li>
+        <li>1100 0000 0011 0000 0000 0000 0000 0000</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 1100 0000 0011 0000 0000 0000 0000 0000</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>2.75를 2진수로: 2 = 10, 0.75 = 0.11 → <b>10.11₂</b></li>
+            <li>정규화: 소수점을 왼쪽으로 1칸 → <b>1.011 × 2¹</b></li>
+            <li>부호 = <b>1</b> (음수)</li>
+            <li>지수 = 1 + 127 = 128 = <b>10000000</b>₂</li>
+            <li>가수 = "1."을 뗀 <b>011</b> + 0으로 채워 23비트 → 01100000…0</li>
+            <li>이어 붙이면 <code>1|10000000|01100000…</code> → 4비트씩 끊어 <b>1100 0000 0011 0000 …</b></li>
+          </ol>
+          <p><b>비트 경계 주의:</b> 부호 1비트 때문에 <b>지수부가 4비트 경계와 어긋난다.</b> 그래서 지수 10000000이 화면상 "100 0000 0"처럼 쪼개져 보이는 것이다. 이 어긋남 때문에 ②(지수를 4비트 경계에 맞춰버린 오답)에 낚이기 쉽다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2021 국가직 · 기출문제집 p.57</span></div>
+      <p class="q-body"><code>−30.25 × 2⁻⁸</code>의 값을 갖는 IEEE 754 단정도 부동소수점 수를 <b>16진수</b>로 변환하면?</p>
+      <ol class="choices">
+        <li>5DF30000</li>
+        <li>9ED40000</li>
+        <li>BDF20000</li>
+        <li>C8F40000</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ BDF20000</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>30.25를 2진수로: 30 = 11110, 0.25 = 0.01 → <b>11110.01₂</b>, 즉 −11110.01 × 2⁻⁸</li>
+            <li>정규화: 소수점을 왼쪽으로 4칸 옮기면 1.111001 × 2⁴ → 원래 지수와 합쳐 <b>−1.111001 × 2⁻⁴</b> (4 − 8 = −4)</li>
+            <li>부호 = <b>1</b>, 지수 = −4 + 127 = 123 = <b>01111011</b>₂</li>
+            <li>가수 = <b>111001</b> + 0으로 채워 23비트</li>
+            <li>전체: <code>1 01111011 11100100000000000000000</code></li>
+            <li>4비트씩: 1011 1101 1111 0010 0000 0000 0000 0000 → <b>B D F 2 0 0 0 0</b></li>
+          </ol>
+          <p><b>부분 점수 전략:</b> 지수가 음수(−4)이므로 저장값은 127보다 작은 123 → 지수부가 <code>0111…</code>로 시작한다. 부호 1과 합치면 첫 4비트가 <code>1011</code> = <b>B</b>로 확정되어, 계산을 끝까지 안 해도 ③으로 좁혀진다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -149,6 +499,7 @@
     <div class="keywords">
       <span class="chip">1의 보수</span>
       <span class="chip">2의 보수</span>
+      <span class="chip">부호-절대치</span>
       <span class="chip">오버플로</span>
       <span class="chip">캐리</span>
       <span class="chip">고정소수점</span>
@@ -156,11 +507,13 @@
       <span class="chip">IEEE 754</span>
       <span class="chip">정규화</span>
       <span class="chip">바이어스</span>
+      <span class="chip">숨은 비트</span>
       <span class="chip">단정도</span>
       <span class="chip">배정도</span>
       <span class="chip">부호부</span>
       <span class="chip">지수부</span>
       <span class="chip">가수부</span>
+      <span class="chip">유효숫자</span>
     </div>
   </section>
 

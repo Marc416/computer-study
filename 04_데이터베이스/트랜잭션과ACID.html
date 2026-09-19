@@ -11,23 +11,37 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">04. 데이터베이스</a> / 트랜잭션과 ACID</div>
   <h1 class="page-title">트랜잭션과 ACID</h1>
-  <p class="page-subtitle">트랜잭션의 정의와 생명주기(상태 전이) · PART 05. 데이터베이스론</p>
+  <p class="page-subtitle">상태 전이 · ACID · 병행제어(로킹/2PL) · 회복 기법(REDO/UNDO) · PART 05. 데이터베이스론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p>트랜잭션 = 데이터베이스의 <b>더 이상 쪼갤 수 없는 작업 단위</b>. "전부 성공 아니면 전부 취소"가 원칙.</p>
-    <p>트랜잭션은 시작부터 끝까지 <b>5가지 상태</b>를 오가며, 이 흐름을 알아야 회복(REDO/UNDO) 문제를 풀 수 있다.</p>
+    <p>ACID를 실제로 지켜내는 두 장치가 <b>병행제어(로킹)</b>와 <b>회복(REDO/UNDO)</b>이고, 시험 계산문제는 거의 전부 이 둘에서 나온다.</p>
   </div>
 
   <section class="block">
-    <h2><span class="emoji">💡</span>주요 개념</h2>
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"돈은 빠져나갔는데 안 들어왔다"를 막는 기술</h4>
+      <p>A 계좌에서 B 계좌로 1,000원을 이체한다고 하자. DBMS 입장에서 이건 두 개의 쓰기 연산이다 — <b>A에서 1,000 빼기</b>, <b>B에 1,000 더하기</b>. 그런데 첫 번째 연산을 끝내고 두 번째를 하기 직전에 <b>정전이 났다면?</b> 돈은 공중으로 사라진다. 이 사고를 원천적으로 막기 위해 "이 두 연산은 한 덩어리다, 쪼개서 반영하지 마라"고 DBMS에 선언하는 것이 <b>트랜잭션</b>이다.</p>
+      <p>문제는 하나 더 있다. 내가 이체하는 <b>동시에</b> 다른 사람도 같은 계좌를 건드리면? 두 작업이 뒤엉켜 잔액이 엉망이 된다. 그래서 DBMS는 두 가지 장치를 둔다.</p>
+      <ul>
+        <li><b>병행제어(Concurrency Control)</b> — 여러 트랜잭션이 동시에 돌아도 서로 방해하지 않게 <b>잠금(Lock)</b>으로 교통정리</li>
+        <li><b>회복(Recovery)</b> — 장애가 나도 <b>로그(log)</b>를 보고 완료된 것은 다시 반영(REDO), 미완료는 되돌리기(UNDO)</li>
+      </ul>
+      <p>시험은 이 구조를 정확히 반영한다. <b>개념 문제는 ACID 4개 이름 매칭</b>, <b>계산 문제는 로그를 주고 "어느 트랜잭션을 REDO/UNDO 하는가"</b>를 묻는다. 후자가 매년 나오는데, 아래 판정 규칙 하나만 외우면 전부 풀린다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 트랜잭션과 ACID</h2>
 
     <h3>트랜잭션(Transaction)이란? <span class="page-ref">📖 기출문제집 p.568</span></h3>
-    <p>데이터베이스에 대한 하나의 논리적 작업 단위. 여러 개의 연산(읽기/쓰기)이 모여 있지만, DBMS 입장에서는 <b>더 쪼갤 수 없는 한 덩어리</b>로 취급된다.</p>
+    <p>데이터베이스에 대한 하나의 논리적 작업 단위. 여러 개의 연산(읽기/쓰기)이 모여 있지만, DBMS 입장에서는 <b>더 쪼갤 수 없는 한 덩어리</b>로 취급된다. 정의를 정확히 말하면 <b>"한꺼번에 모두 수행되어야 할 일련의 데이터베이스 연산들의 모임"</b>이자 <b>병행 제어 및 회복 작업의 논리적 단위</b>다.</p>
     <div class="analogy"><b>비유:</b> 계좌이체 = "A 계좌에서 -1000원" + "B 계좌에 +1000원"이라는 2개의 연산이지만, 사용자에게는 "이체"라는 <b>하나의 행위</b>다. 둘 중 하나만 성공하면 절대 안 된다.</div>
 
     <h3>트랜잭션의 생명주기 — 5가지 상태</h3>
-    <p>트랜잭션은 실행되는 동안 아래 5개 상태 중 하나에 반드시 속해 있다. 이 전이도를 알아야 "커밋 전/후" 회복 문제(<a href="회복과_동시성제어.md">회복과 동시성 제어 문서</a>)를 정확히 풀 수 있다.</p>
+    <p>트랜잭션은 실행되는 동안 아래 5개 상태 중 하나에 반드시 속해 있다. 이 전이도를 알아야 "커밋 전/후" 회복 문제를 정확히 풀 수 있다.</p>
     <figure class="diagram">
       <svg viewBox="0 0 700 300" role="img" aria-label="트랜잭션 상태 전이도: 활성 상태에서 시작해 부분완료를 거쳐 완료 상태로 가거나, 중간에 실패하면 철회 상태로 간다">
         <defs>
@@ -73,24 +87,169 @@
       <figcaption>트랜잭션은 활성→부분완료→완료 순으로 정상 종료되거나, 중간에 오류가 나면 실패→철회로 빠져 UNDO(되돌리기)를 거친다. "커밋됐다"는 곧 완료(Committed) 상태에 도달했다는 뜻이다.</figcaption>
     </figure>
 
-    <h3>ACID 4대 특성</h3>
+    <h3>ACID 4대 특성 <span class="page-ref">📖 기출문제집 p.568~571</span></h3>
     <table>
-      <tr><th>특성</th><th>의미</th><th>비유</th></tr>
-      <tr><td><b>A</b>tomicity (원자성)</td><td>전부 실행 or 전부 취소, 중간은 없음</td><td>계좌이체: 보내기+받기 둘 다 되거나 둘 다 안 됨</td></tr>
-      <tr><td><b>C</b>onsistency (일관성)</td><td>실행 전후 DB가 정해진 규칙(제약조건)을 계속 만족</td><td>이체 전후 두 계좌 잔액의 합은 항상 동일</td></tr>
-      <tr><td><b>I</b>solation (격리성)</td><td>동시에 실행되는 다른 트랜잭션이 중간 결과를 못 봄</td><td>내가 이체 중일 때 남이 내 중간 잔액을 못 봄</td></tr>
-      <tr><td><b>D</b>urability (영속성)</td><td>커밋되면 그 결과는 <b>영구히</b> 보존 (전원이 나가도 유지)</td><td>결제 완료 문자를 받았다면 그 기록은 절대 사라지지 않음</td></tr>
+      <tr><th>특성</th><th>교과서 정의 (시험 문구 그대로)</th><th>비유</th></tr>
+      <tr><td><b>A</b>tomicity<br>원자성</td><td>트랜잭션은 <b>전부(all) 또는 전무(nothing)</b>의 실행만 있지, 일부 실행으로는 기능을 가질 수 없다</td><td>계좌이체: 보내기+받기 둘 다 되거나 둘 다 안 됨</td></tr>
+      <tr><td><b>C</b>onsistency<br>일관성</td><td>트랜잭션이 성공적으로 완료하면 <b>언제나 일관된 DB 상태</b>가 된다 (실행으로 일관성이 깨지지 않음)</td><td>이체 전후 두 계좌 잔액의 합은 항상 동일</td></tr>
+      <tr><td><b>I</b>solation<br>격리성·고립성</td><td>연산의 <b>중간 결과에 다른 트랜잭션이 접근할 수 없다</b></td><td>내가 이체 중일 때 남이 내 중간 잔액을 못 봄</td></tr>
+      <tr><td><b>D</b>urability<br>영속성·지속성</td><td>일단 성공적으로 끝내면 그 결과는 <b>어떠한 경우에도 보장</b>된다 (장애가 나도 손실 없음)</td><td>결제 완료 문자를 받았다면 그 기록은 절대 사라지지 않음</td></tr>
     </table>
-    <div class="tip">REDO/UNDO, 로그(Log) 기반 회복, 로킹(잠금) 같은 <b>ACID를 실제로 지켜내는 기법</b>은 이미 <a href="회복과_동시성제어.md">회복과 동시성 제어</a> 문서에 자세히 정리되어 있다. 이 문서는 "트랜잭션이 무엇이고 어떤 상태를 거치는지"에 집중.</div>
+    <div class="deep">
+      <h4>용어가 문제마다 다르게 나온다 — 전부 같은 말</h4>
+      <ul>
+        <li>Isolation = <b>격리성 = 고립성 = 독립성</b></li>
+        <li>Durability = <b>영속성 = 지속성</b></li>
+      </ul>
+      <p>반대로 <b>ACID가 아닌데 자꾸 선택지로 나오는 가짜들</b>이 있다: <b>일시성(temporality), 병행성(concurrency), 의존성(dependency), 종속성, 투명성(transparency)</b>. "ACID가 아닌 것을 고르시오" 유형은 이 가짜 목록만 외워도 바로 풀린다.</p>
+      <p><b>원자성 vs 일관성 구별법:</b> 원자성은 <b>"연산이 몇 개 반영됐나"</b>(전부 or 전무)에 대한 말이고, 일관성은 <b>"DB가 규칙을 지키고 있나"</b>(제약조건 만족)에 대한 말이다. 초점이 다르다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔐</span>주요 개념 — 병행제어(Concurrency Control)</h2>
+
+    <h3>병행 수행이 일으키는 3가지 사고 <span class="page-ref">📖 기출문제집 p.577</span></h3>
+    <p>여러 트랜잭션을 동시에 돌리면 처리량은 올라가지만, 통제하지 않으면 아래 문제가 생긴다. <b>이름과 현상을 짝짓는 문제가 자주 나오고, 셋을 서로 바꿔 놓은 선택지가 함정</b>이다.</p>
+    <table>
+      <tr><th>문제</th><th>무슨 일이 벌어지나</th></tr>
+      <tr><td><b>갱신 분실</b><br>(Lost Update)</td><td>두 트랜잭션이 같은 데이터를 동시에 갱신해서 <b>먼저 한 갱신이 덮어써져 사라짐</b></td></tr>
+      <tr><td><b>모순성</b><br>(Inconsistency)</td><td>한 트랜잭션이 여러 갱신을 하는 중에, 다른 트랜잭션이 <b>일관성 없는 중간 상태의 데이터를 읽어</b> 모순된 결과를 냄</td></tr>
+      <tr><td><b>연쇄 복귀</b><br>(Cascading Rollback)</td><td>트랜잭션이 rollback되면, 그 트랜잭션이 <b>변경한 데이터를 이미 읽어간 다른 트랜잭션들도 줄줄이 rollback</b>해야 함</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "갱신 분실 = 일관성 없는 데이터를 읽어 모순된 결과가 나오는 것" → ❌ 그건 <b>모순성</b>이다. "갱신 분실 = 롤백 시 다른 트랜잭션도 롤백" → ❌ 그건 <b>연쇄 복귀</b>다. 2024 국가직 문제가 정확히 이 셋을 뒤섞어 냈다.</div>
+
+    <h3>로킹(Locking) — 공유 락 vs 배타 락</h3>
+    <p>로크(lock)는 <b>하나의 트랜잭션이 데이터를 접근하는 동안 다른 트랜잭션이 그 데이터를 접근하지 못하게</b> 막는 장치다. 두 종류가 있다.</p>
+    <table>
+      <tr><th>구분</th><th>공유 락 (Shared, S)</th><th>배타 락 (eXclusive, X)</th></tr>
+      <tr><td>가능한 연산</td><td><b>read만</b> 가능 (write 불가)</td><td><b>read·write 모두</b> 가능</td></tr>
+      <tr><td>다른 트랜잭션과 공존</td><td>다른 S락과는 <b>동시 보유 가능</b></td><td>어떤 락과도 <b>공존 불가</b> (독점)</td></tr>
+      <tr><td>비유</td><td>도서관 책을 여럿이 <b>같이 읽기</b></td><td>책을 <b>혼자 빌려 가서 고치기</b></td></tr>
+    </table>
+    <div class="tip"><b>매년 나오는 함정:</b> "공용(공유) lock을 수행하면 read·write를 모두 할 수 있다" → ❌ <b>read만</b> 가능하다. 쓰려면 배타 락이 필요하다.</div>
+
+    <h3>2단계 로킹 규약(2PL) — 이름의 뜻과 한계</h3>
+    <p>이름 그대로 트랜잭션의 생애를 <b>두 단계</b>로 나눈다. <b>확장 단계</b>에서는 락을 얻기만 하고, <b>축소 단계</b>에서는 락을 풀기만 한다. 한 번 풀기 시작하면 <b>다시는 새 락을 얻을 수 없다</b>는 것이 규칙의 전부다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 230" role="img" aria-label="2단계 로킹 규약 그래프: 확장 단계에서 보유 락 수가 계단식으로 올라가고 정점을 지나 축소 단계에서 계단식으로 내려간다">
+        <defs>
+          <marker id="pl1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <line x1="60" y1="180" x2="620" y2="180" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl1)"/>
+        <text x="620" y="200" font-size="11.5" text-anchor="end">시간 →</text>
+        <line x1="60" y1="180" x2="60" y2="30" stroke="currentColor" stroke-width="1.5" marker-end="url(#pl1)"/>
+        <text x="50" y="40" font-size="11.5" text-anchor="end">보유한</text>
+        <text x="50" y="54" font-size="11.5" text-anchor="end">락 개수</text>
+
+        <polyline points="60,180 120,180 120,145 190,145 190,110 260,110 260,75 330,75" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <polyline points="330,75 400,75 400,110 470,110 470,145 540,145 540,180 600,180" fill="none" stroke="currentColor" stroke-width="2.5"/>
+
+        <line x1="330" y1="30" x2="330" y2="190" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4"/>
+        <text x="330" y="24" font-size="11.5" text-anchor="middle" font-weight="700">정점(lock point)</text>
+
+        <text x="195" y="205" font-size="12.5" text-anchor="middle" font-weight="700">① 확장 단계 (Growing)</text>
+        <text x="195" y="222" font-size="11" text-anchor="middle" opacity="0.8">락을 얻기만 함 · 해제 금지</text>
+        <text x="465" y="205" font-size="12.5" text-anchor="middle" font-weight="700">② 축소 단계 (Shrinking)</text>
+        <text x="465" y="222" font-size="11" text-anchor="middle" opacity="0.8">락을 풀기만 함 · 신규 획득 금지</text>
+      </svg>
+      <figcaption>2단계 로킹 규약 — 락을 모으는 구간과 푸는 구간이 정점을 기준으로 완전히 분리된다. 이 규칙만 지키면 직렬 가능성(serializability)이 보장된다.</figcaption>
+    </figure>
+    <div class="deep">
+      <h4>가장 많이 틀리는 한 줄 — 2PL은 교착상태를 막지 못한다</h4>
+      <p>2PL이 보장하는 것은 <b>직렬 가능성(serializability)</b>뿐이다. 즉 "동시에 돌렸지만 결과는 하나씩 차례로 돌린 것과 같다"를 보장한다. 그런데 T1은 A락을 쥔 채 B를 기다리고, T2는 B락을 쥔 채 A를 기다리면? <b>둘 다 영원히 대기 = 교착상태(deadlock)</b>다. 2PL은 이걸 전혀 막지 못한다.</p>
+      <p>선택지에 <b>"2단계 로킹 규약을 적용하면 교착상태를 예방할 수 있다"</b>가 보이면 <b>거의 무조건 오답</b>이다. 반대로 <b>"직렬 가능성은 보장하지만 교착상태는 발생할 수 있다"</b>가 정답 문장이다. 2018 국가직·2022 계리직·2024 국가직에서 반복 출제됐다.</p>
+    </div>
+    <p><b>로킹 단위(granularity)</b>도 자주 나온다. 단위가 <b>작아질수록</b> → 락 개수가 많아져 관리는 복잡해지지만 <b>병행성(동시성)은 높아진다.</b> 단위가 <b>커질수록</b> → 관리는 단순하지만 병행성이 떨어진다.</p>
+
+    <h3>교착상태 예방 — wait-die vs wound-wait <span class="page-ref">📖 기출문제집 p.578</span></h3>
+    <p>타임스탬프(먼저 시작한 쪽이 "고참")를 이용해 교착상태를 예방하는 두 기법이다. 요청하는 쪽이 고참이냐 신참이냐에 따라 행동이 갈린다.</p>
+    <table>
+      <tr><th>기법</th><th>요청자가 <b>고참</b>(먼저 시작)일 때</th><th>요청자가 <b>신참</b>일 때</th></tr>
+      <tr><td><b>wait-die</b></td><td><b>기다린다</b> (wait)</td><td><b>자신이 죽는다</b> (die → 나중에 재시작)</td></tr>
+      <tr><td><b>wound-wait</b></td><td><b>상대를 죽이고 선점</b> (wound)</td><td><b>기다린다</b> (wait)</td></tr>
+    </table>
+    <div class="analogy"><b>이름으로 외우기:</b> 두 이름 모두 <b>"고참이 하는 행동"이 앞에</b> 온다. wait-die → 고참은 <b>wait</b>. wound-wait → 고참은 <b>wound</b>(상대에게 상처 입혀 쫓아냄). 뒤 단어는 신참의 행동이다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔁</span>주요 개념 — 회복(Recovery) 기법</h2>
+
+    <h3>즉시 갱신 vs 지연 갱신 <span class="page-ref">📖 기출문제집 p.572~575</span></h3>
+    <p>트랜잭션이 바꾼 값을 <b>언제 디스크에 쓰느냐</b>가 두 기법을 가른다. 이 차이가 곧 <b>UNDO가 필요한지 여부</b>를 결정하기 때문에, 문제를 풀 때 <b>제일 먼저 확인해야 할 조건</b>이다.</p>
+    <table>
+      <tr><th>구분</th><th>즉시 갱신 (Immediate Update)</th><th>지연 갱신 (Deferred Update)</th></tr>
+      <tr><td>디스크 반영 시점</td><td>커밋 <b>전에도</b> 수시로 씀</td><td>커밋 <b>이후에만</b> 씀</td></tr>
+      <tr><td>미완료 트랜잭션의 변경이 디스크에?</td><td><b>있을 수 있음</b> → 지워야 함</td><td><b>절대 없음</b> → 지울 것도 없음</td></tr>
+      <tr><td>필요한 회복 연산</td><td><b>REDO + UNDO 둘 다</b></td><td><b>REDO만</b> (UNDO 불필요)</td></tr>
+    </table>
+    <div class="tip"><b>한 줄 정리:</b> <b>지연 갱신에는 UNDO가 없다.</b> 문제에 "지연 갱신"이라 쓰여 있는데 선택지에 "undo한다"가 있으면 그게 바로 정답(틀린 것 고르기) 또는 오답(옳은 것 고르기)이다. 2012 국가직 문제가 정확히 이것을 물었다.</div>
+
+    <h3>검사점(Checkpoint)과 REDO/UNDO 판정 규칙</h3>
+    <p>검사점은 <b>"여기까지는 디스크에 확실히 반영해뒀다"고 도장을 찍는 지점</b>이다. 덕분에 회복할 때 로그 전체를 뒤질 필요 없이 검사점 이후만 보면 된다. 아래 3분류 규칙이 이 단원 계산문제의 <b>전부</b>다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="검사점과 장애 시점을 기준으로 트랜잭션을 제외, REDO, UNDO 세 가지로 분류하는 타임라인 다이어그램">
+        <defs>
+          <marker id="rc1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <line x1="40" y1="255" x2="660" y2="255" stroke="currentColor" stroke-width="1.5" marker-end="url(#rc1)"/>
+        <text x="655" y="275" font-size="11.5" text-anchor="end">시간 →</text>
+
+        <line x1="250" y1="30" x2="250" y2="262" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <text x="250" y="22" font-size="12" text-anchor="middle" font-weight="700">검사점(Checkpoint)</text>
+        <line x1="560" y1="30" x2="560" y2="262" stroke="currentColor" stroke-width="1.8"/>
+        <text x="560" y="22" font-size="12" text-anchor="middle" font-weight="700">장애 발생</text>
+
+        <line x1="80" y1="60" x2="200" y2="60" stroke="currentColor" stroke-width="3"/>
+        <circle cx="200" cy="60" r="5" fill="currentColor"/>
+        <text x="74" y="64" font-size="12" text-anchor="end">T1</text>
+        <text x="215" y="64" font-size="11" opacity="0.85">commit (검사점 이전)</text>
+        <text x="600" y="64" font-size="12" font-weight="700">제외</text>
+
+        <line x1="150" y1="105" x2="420" y2="105" stroke="currentColor" stroke-width="3"/>
+        <circle cx="420" cy="105" r="5" fill="currentColor"/>
+        <text x="144" y="109" font-size="12" text-anchor="end">T2</text>
+        <text x="435" y="109" font-size="11" opacity="0.85">commit (검사점 이후)</text>
+        <text x="600" y="109" font-size="12" font-weight="700">REDO</text>
+
+        <line x1="300" y1="150" x2="500" y2="150" stroke="currentColor" stroke-width="3"/>
+        <circle cx="500" cy="150" r="5" fill="currentColor"/>
+        <text x="294" y="154" font-size="12" text-anchor="end">T3</text>
+        <text x="515" y="154" font-size="11" opacity="0.85">commit</text>
+        <text x="600" y="154" font-size="12" font-weight="700">REDO</text>
+
+        <line x1="320" y1="195" x2="560" y2="195" stroke="currentColor" stroke-width="3" stroke-dasharray="7 3"/>
+        <text x="314" y="199" font-size="12" text-anchor="end">T4</text>
+        <text x="380" y="188" font-size="11" opacity="0.85">commit 못 함</text>
+        <text x="600" y="199" font-size="12" font-weight="700">UNDO</text>
+
+        <line x1="460" y1="235" x2="560" y2="235" stroke="currentColor" stroke-width="3" stroke-dasharray="7 3"/>
+        <text x="454" y="239" font-size="12" text-anchor="end">T5</text>
+        <text x="600" y="239" font-size="12" font-weight="700">UNDO</text>
+      </svg>
+      <figcaption>회복 판정 3분류 — 검사점 <b>이전</b>에 커밋했으면 아무것도 안 함(제외), 검사점 <b>이후</b>에 커밋했으면 REDO, 장애 시점까지 <b>커밋 못 했으면</b> UNDO. 실선은 커밋 성공, 점선은 미완료.</figcaption>
+    </figure>
+    <ol class="steps">
+      <li><b>검사점 이전에 commit</b> → 이미 디스크에 안전하게 반영됨 → <b>제외</b>(아무 작업 없음)</li>
+      <li><b>검사점 이후 ~ 장애 전에 commit</b> → 반영이 안 됐을 수 있음 → <b>REDO</b>(새 값으로 다시 쓰기)</li>
+      <li><b>장애 시점까지 commit 못 함</b> → 반쪽짜리 변경이 남아 있을 수 있음 → <b>UNDO</b>(옛 값으로 되돌리기)</li>
+      <li>단, <b>지연 갱신</b>이면 3번 대상들도 애초에 디스크에 안 쓰였으므로 <b>UNDO 없이 그냥 무시</b></li>
+    </ol>
+    <div class="tip"><b>Abort된 트랜잭션은?</b> 지연 갱신에서는 커밋 전에 디스크를 건드리지 않았으니 <b>아무 조치도 필요 없다</b>. 즉시 갱신에서는 이미 UNDO가 수행됐거나 수행해야 한다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>ACID 각 항목의 정의를 예시와 매칭하는 문제 (특히 원자성 vs 일관성 헷갈림)</li>
-      <li>"커밋(Commit)"은 트랜잭션이 <b>완료(Committed)</b> 상태에 도달했다는 뜻</li>
-      <li>"철회(Abort/Rollback)"가 일어나면 <b>UNDO</b>로 트랜잭션 시작 전 상태로 되돌림</li>
-      <li>부분완료(Partially Committed)는 아직 디스크에 영구 반영되지 않은 상태 — 이 시점에도 장애가 나면 실패로 전이될 수 있음</li>
+      <li>ACID가 <b>아닌</b> 가짜 목록: 일시성·병행성·의존성·종속성·투명성 → "아닌 것 고르기"의 단골 정답</li>
+      <li>"전부 또는 전무" = <b>원자성</b>, "중간 결과 접근 불가" = <b>격리성</b>, "장애에도 결과 보존" = <b>영속성</b></li>
+      <li>commit/rollback으로 전부 반영 or 전부 취소 → <b>원자성</b>이 담당 (일관성 아님)</li>
+      <li><b>2PL은 직렬 가능성 보장 O, 교착상태 예방 X</b> — 최다 함정</li>
+      <li>공유 락은 <b>read 전용</b>, 배타 락이라야 write 가능</li>
+      <li>로킹 단위가 작아지면 → 락 수 증가·관리 복잡·<b>병행성 증가</b></li>
+      <li><b>지연 갱신 = UNDO 없음</b>, 즉시 갱신 = REDO + UNDO 둘 다</li>
+      <li>회복 3분류: 검사점 전 커밋=제외 / 검사점 후 커밋=REDO / 미커밋=UNDO</li>
+      <li>wound-wait: 고참이 요청하면 <b>상대를 죽이고 선점</b>, wait-die: 고참이 요청하면 <b>기다림</b></li>
     </ul>
   </section>
 
@@ -106,6 +265,285 @@
       <tr><td>의미</td><td>오류가 발생해서 더 진행 못 하는 상태</td><td>UNDO를 거쳐 <b>원상복구까지 끝난</b> 상태</td></tr>
       <tr><td>순서</td><td>먼저 발생</td><td>실패 이후에 도달</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>REDO (재실행)</th><th>UNDO (실행취소)</th></tr>
+      <tr><td>대상</td><td><b>커밋된</b> 트랜잭션</td><td><b>커밋 안 된</b> 트랜잭션</td></tr>
+      <tr><td>쓰는 값</td><td>로그의 <b>new(이후) 값</b></td><td>로그의 <b>old(이전) 값</b></td></tr>
+      <tr><td>지연 갱신에서</td><td>필요함</td><td><b>불필요</b></td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>갱신 분실</th><th>모순성</th><th>연쇄 복귀</th></tr>
+      <tr><td>핵심</td><td>갱신이 <b>덮어써져 사라짐</b></td><td><b>중간 상태를 읽어</b> 잘못된 결과</td><td>롤백이 <b>다른 트랜잭션까지 전파</b></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2024 계리직 · 기출문제집 p.569</span></div>
+      <p class="q-body">트랜잭션의 특성(ACID)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>지속성(durability): 트랜잭션이 실행을 성공적으로 완료하면 결과는 영속적이다.</li>
+        <li>일관성(consistency): 트랜잭션이 실행을 성공적으로 완료하면 언제나 일관성 있는 데이터베이스 상태로 변환한다.</li>
+        <li>원자성(atomicity): 트랜잭션은 전체 또는 일부 실행만으로도 트랜잭션의 기능을 갖는다.</li>
+        <li>고립성(isolation): 트랜잭션 실행 중에 있는 연산의 중간 결과는 다른 트랜잭션이 접근할 수 없다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>원자성은 <b>전부(all) 또는 전무(nothing)</b>만 인정한다. "일부 실행만으로도 기능을 갖는다"는 원자성을 정면으로 부정하는 문장이다.</p>
+          <p><b>함정 구조:</b> 이 유형은 ACID 4개 중 <b>딱 하나의 정의만 슬쩍 뒤집어</b> 놓는다. 특히 원자성의 "전부/전무"를 "일부도 가능"으로 바꾸는 패턴이 가장 흔하니, 원자성 선택지부터 확인하는 습관을 들이면 빨리 풀린다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2014 국가직 · 기출문제집 p.569</span></div>
+      <p class="q-body">데이터베이스에서 트랜잭션(transaction)이 가져야 할 ACID 특성으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>원자성 (atomicity)</li>
+        <li>고립성 (isolation)</li>
+        <li>지속성 (durability)</li>
+        <li>병행성 (concurrency)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 병행성(concurrency)</p>
+        <div class="explain">
+          <p>ACID = <b>A</b>tomicity(원자성) · <b>C</b>onsistency(일관성) · <b>I</b>solation(고립성) · <b>D</b>urability(지속성). 병행성은 여기 없다.</p>
+          <p><b>같은 유형 모아보기:</b> 같은 자리에 들어가는 가짜 선택지가 해마다 바뀐다 — <b>일시성</b>(2011 지방), <b>병행성</b>(2014 국가직), <b>종속성</b>(2012 계리직), <b>의존성</b>(2025 지방직), <b>투명성</b>(2018 국회). 전부 ACID가 아니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2017 국가직 · 기출문제집 p.571</span></div>
+      <p class="q-body">트랜잭션이 정상적으로 완료(commit)되거나, 중단(abort)되었을 때 롤백(rollback)되어야 하는 트랜잭션의 성질은?</p>
+      <ol class="choices">
+        <li>원자성 (atomicity)</li>
+        <li>일관성 (consistency)</li>
+        <li>격리성 (isolation)</li>
+        <li>영속성 (durability)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 원자성</p>
+        <div class="explain">
+          <p>"모두 실행되어 commit되거나, 모두 실행되지 않은 상태로 rollback된다" — 이것이 바로 <b>전부 또는 전무</b>, 즉 원자성의 정의다.</p>
+          <p><b>함정:</b> ②번 일관성을 고르기 쉽다. 하지만 일관성은 "끝나고 나서 DB가 규칙을 지키는가"에 대한 성질이고, <b>commit/rollback이라는 메커니즘 자체</b>는 원자성을 구현하기 위한 장치다. 문제에 <b>commit·rollback·전부·전무</b>라는 단어가 보이면 원자성을 먼저 의심해라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2007 국가직 · 기출문제집 p.570</span></div>
+      <p class="q-body">데이터베이스 시스템의 트랜잭션이 가져야 할 속성에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>트랜잭션에 포함된 연산들이 수행 중에 오류가 발생할 경우에 어떠한 연산도 수행되지 않은 상태로 되돌려져야 한다.</li>
+        <li>만약 데이터베이스가 처음에 일관된 상태에 있었다면 트랜잭션이 실행되고 난 후에도 계속 일관된 상태로 유지되어야 한다.</li>
+        <li>동시에 수행되는 트랜잭션들은 상호 작용할 수 있다.</li>
+        <li>트랜잭션이 성공적으로 수행 완료된 후에 시스템의 오류가 발생한다 하더라도 트랜잭션에 의해 데이터베이스에 변경된 내용은 보존된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>각 선택지가 어느 특성을 설명하는지 매칭해보면 답이 바로 보인다.</p>
+          <ol class="steps">
+            <li>①번 = <b>원자성</b> (오류 시 아무것도 수행 안 한 상태로 복귀) → 옳음</li>
+            <li>②번 = <b>일관성</b> (실행 전후로 일관된 상태 유지) → 옳음</li>
+            <li>③번 = 격리성을 <b>위반하는</b> 문장. 격리성에 의해 동시 수행 트랜잭션은 서로의 중간 결과에 접근할 수 없으므로 <b>상호 작용할 수 없다</b> → 틀림</li>
+            <li>④번 = <b>영속성</b> (완료 후 장애가 나도 보존) → 옳음</li>
+          </ol>
+          <p><b>풀이 요령:</b> 이런 "서술형 4지선다"는 각 문장 옆에 A·C·I·D를 적어보면 하나가 반드시 안 맞는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2012 국가직 · 기출문제집 p.572~573</span></div>
+      <p class="q-body"><b>지연 갱신(deferred update)</b> 기반 회복 기법을 사용하는 DBMS에서 다음과 같은 로그 레코드가 생성되었다. 시스템 실패가 발생해 DBMS가 재시작할 때, 데이터베이스에 수행되는 연산으로 <b>옳지 않은</b> 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">(단, &lt;Tn, A, old, new&gt;는 트랜잭션 Tn이 데이터 A의 이전값을 이후값으로 갱신했다는 의미)</span></p>
+      <div class="deep" style="margin:10px 0;">
+        <p style="margin:0;font-family:monospace;font-size:12.5px;line-height:1.9;">
+        &lt;T1, Start&gt;<br>
+        &lt;T1, A, 900, 1000&gt;<br>
+        &lt;T1, Commit&gt;<br>
+        &lt;T4, Start&gt;<br>
+        &lt;T3, Start&gt;<br>
+        &lt;T2, Start&gt;<br>
+        <b>&lt; 검사점 연산(Checkpoint) &gt;</b><br>
+        &lt;T2, B, 2100, 2200&gt;<br>
+        &lt;T2, Commit&gt;<br>
+        &lt;T3, C, 1700, 1800&gt;<br>
+        &lt;T3, Abort&gt;<br>
+        &lt;T4, A, 600, 700&gt;<br>
+        <b>시스템 실패</b>
+        </p>
+      </div>
+      <ol class="choices">
+        <li>T1 : no operation</li>
+        <li>T2 : redo</li>
+        <li>T3 : no operation</li>
+        <li>T4 : undo</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (T4는 undo가 아니라 no operation)</p>
+        <div class="explain">
+          <p>문제 첫 줄의 <b>"지연 갱신"</b>이 모든 것을 결정한다. 지연 갱신에서는 커밋될 때 비로소 디스크에 쓰므로, <b>커밋 안 된 트랜잭션의 변경은 애초에 디스크에 없다 → 지울 것이 없다 → UNDO를 하지 않는다.</b></p>
+          <ol class="steps">
+            <li><b>T1</b>: 검사점 <b>이전</b>에 Commit 완료 → 이미 안전하게 반영됨 → <b>no operation</b> (①번 옳음)</li>
+            <li><b>T2</b>: 검사점 <b>이후</b>에 Commit → 반영을 보장하기 위해 <b>REDO</b> (②번 옳음)</li>
+            <li><b>T3</b>: Abort됨 → 지연 갱신이라 디스크에 쓴 적 없음 → <b>no operation</b> (③번 옳음)</li>
+            <li><b>T4</b>: Commit 못 하고 장애 발생 → 역시 디스크에 쓴 적 없음 → <b>no operation</b>이 맞다. "undo"라고 한 ④번이 <b>틀린 설명</b></li>
+          </ol>
+          <p><b>함정:</b> 습관적으로 "미커밋 = UNDO"라고 반사적으로 답하면 바로 틀린다. <b>기법 이름(지연/즉시)을 먼저 확인</b>하는 것이 이 유형의 유일한 요령이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2010 국가직 7급 · 기출문제집 p.573</span></div>
+      <p class="q-body">로그를 이용한 <b>즉시 갱신</b> 회복 기법을 사용하는 DB 시스템이 다운된 후 재기동되었을 때, 로그에 다음 레코드들이 들어 있었다. 복구를 수행한 후 데이터베이스 항목 A, B, C, D의 값으로 옳은 것은?</p>
+      <div class="deep" style="margin:10px 0;">
+        <p style="margin:0;font-family:monospace;font-size:12.5px;line-height:1.9;">
+        <b>&lt; 체크포인트 &gt;</b><br>
+        [T1, start]<br>
+        [T1, A, 100, 300]<br>
+        [T2, start]<br>
+        [T1, B, 200, 300]<br>
+        [T3, start]<br>
+        [T2, C, 700, 400]<br>
+        [T3, D, 200, 800]<br>
+        [T2, commit]<br>
+        [T4, start]<br>
+        [T4, C, 400, 500]<br>
+        [T1, commit]<br>
+        <b>시스템 다운</b>
+        </p>
+      </div>
+      <ol class="choices">
+        <li>A:100, B:200, C:700, D:200</li>
+        <li>A:300, B:300, C:400, D:200</li>
+        <li>A:100, B:200, C:400, D:800</li>
+        <li>A:300, B:300, C:400, D:800</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② A:300, B:300, C:400, D:200</p>
+        <div class="explain">
+          <p>즉시 갱신이므로 <b>커밋된 것은 REDO(new값), 커밋 안 된 것은 UNDO(old값)</b>. 트랜잭션별로 커밋 여부부터 표시하고 시작하면 실수가 없다.</p>
+          <table>
+            <tr><th>트랜잭션</th><th>커밋?</th><th>처리</th><th>결과</th></tr>
+            <tr><td>T1 (A:100→300, B:200→300)</td><td>✅ commit</td><td>REDO</td><td>A=<b>300</b>, B=<b>300</b></td></tr>
+            <tr><td>T2 (C:700→400)</td><td>✅ commit</td><td>REDO</td><td>C=400</td></tr>
+            <tr><td>T3 (D:200→800)</td><td>❌ 미커밋</td><td>UNDO</td><td>D=<b>200</b> (old값 복원)</td></tr>
+            <tr><td>T4 (C:400→500)</td><td>❌ 미커밋</td><td>UNDO</td><td>C=<b>400</b> (old값 복원)</td></tr>
+          </table>
+          <p><b>C값이 헷갈리는 이유:</b> C는 T2가 400으로 바꾸고(커밋됨), T4가 다시 500으로 바꿨다(미커밋). T4를 UNDO하면 T4의 old값인 <b>400</b>으로 돌아가는데, 이 값이 마침 T2의 REDO 결과와 같다. 따라서 최종 C = 400.</p>
+          <p><b>함정:</b> ④번(D:800)은 T3의 커밋 여부를 확인하지 않고 그냥 new값을 쓴 오답이다. 로그에서 <b>commit 줄이 있는지</b>를 트랜잭션마다 눈으로 찍어가며 확인해라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2021 계리직 · 기출문제집 p.576</span></div>
+      <p class="q-body">트랜잭션 복구 진행 시 복구대상을 <b>제외 / 재실행(Redo) / 실행취소(Undo)</b>로 구분할 때 옳은 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">T1~T6은 각 트랜잭션의 시작·끝 구간, Ts는 검사점 시점, Tf는 장애 발생 시점. T1은 검사점 이전 커밋, T2·T3·T6은 검사점 이후 장애 이전 커밋, T4·T5는 장애 시점까지 미완료.</span></p>
+      <ol class="choices">
+        <li>제외: T1 / 재실행: T2, T3 / 실행취소: T4, T5, T6</li>
+        <li>제외: T1 / 재실행: T2, T3, T6 / 실행취소: T4, T5</li>
+        <li>제외: T2, T3 / 재실행: T1, T6 / 실행취소: T4, T5</li>
+        <li>제외: T4, T5 / 재실행: T6 / 실행취소: T1, T2, T3</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>검사점 이전에 커밋</b>한 T1 → 이미 디스크 반영 보장 → <b>제외</b></li>
+            <li><b>검사점과 장애 사이에 커밋</b>한 T2, T3, T6 → <b>REDO</b></li>
+            <li><b>장애 시점까지 커밋 못 한</b> T4, T5 → <b>UNDO</b></li>
+          </ol>
+          <p><b>그림 문제 푸는 순서:</b> ① 검사점 세로선과 장애 세로선을 긋는다 → ② 각 트랜잭션의 <b>끝점이 어디에 있는지</b>만 본다(시작점은 상관없다) → ③ 끝점이 검사점 왼쪽이면 제외, 검사점과 장애 사이면 REDO, 장애선에 걸쳐 있으면 UNDO.</p>
+          <p><b>함정:</b> 시작점 위치에 눈이 가면 헷갈린다. <b>판정은 오직 커밋(끝) 시점</b>으로만 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2024 국가직 · 기출문제집 p.577</span></div>
+      <p class="q-body">DBMS에서의 병행 수행 및 병행 제어에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>2단계 로킹 규약을 적용하면 트랜잭션 스케줄의 직렬 가능성을 보장할 수 있으나 교착상태가 발생할 수도 있다.</li>
+        <li>트랜잭션이 데이터에 공용 lock 연산을 수행하면 해당 데이터에 read, write 연산을 모두 수행할 수 있다.</li>
+        <li>연쇄 복귀는 하나의 트랜잭션이 여러 개의 데이터 변경 연산을 수행할 때 일관성 없는 상태의 데이터베이스에서 데이터를 가져와 연산을 수행함으로써 모순된 결과가 발생하는 것이다.</li>
+        <li>갱신 분실은 트랜잭션이 완료되기 전에 장애가 발생하여 rollback 연산을 수행하면, 이 트랜잭션이 장애 발생 전에 변경한 데이터를 가져가 변경 연산을 수행한 또 다른 트랜잭션에도 rollback 연산을 수행하여야 한다는 것이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>①</b> 2PL의 정확한 성질이다 — 직렬 가능성은 <b>보장하지만</b> 교착상태는 <b>막지 못한다</b> → <b>옳음</b></li>
+            <li><b>②</b> 공용(공유) 락은 <b>read만</b> 가능하다. write까지 하려면 배타 락이 필요 → 틀림</li>
+            <li><b>③</b> 이 설명은 <b>모순성(inconsistency)</b>의 정의다 → 이름이 바뀜</li>
+            <li><b>④</b> 이 설명은 <b>연쇄 복귀(cascading rollback)</b>의 정의다 → 이름이 바뀜</li>
+          </ol>
+          <p><b>출제 패턴:</b> ③·④처럼 <b>설명은 맞는데 이름표만 바꿔 다는</b> 수법이 병행제어 파트의 주력 함정이다. 갱신분실·모순성·연쇄복귀 셋의 <b>핵심 동사</b>를 기억해라 — 갱신분실은 "<b>덮어써짐</b>", 모순성은 "<b>중간값을 읽음</b>", 연쇄복귀는 "<b>덩달아 롤백</b>".</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2025 법원직 · 기출문제집 p.578</span></div>
+      <p class="q-body">교착상태 예방을 위해 <b>wound-wait</b> 기법을 사용한다고 가정한다. 트랜잭션 T1과 T2가 존재하고 <b>T1의 우선순위가 T2보다 높은</b> 경우, T2가 할당받은 자원을 T1이 요청한다면 어떤 결과가 발생하는가?</p>
+      <ol class="choices">
+        <li>T1은 T2가 해당 자원을 반납할 때까지 대기 상태에서 기다린다.</li>
+        <li>T2가 할당받고 있는 자원을 선점(preemption)하여 T1에게 할당한다.</li>
+        <li>T1의 실행을 취소(abort)하고 이후 재실행(restart)하도록 한다.</li>
+        <li>T1으로 하여금 busy-waiting하면서 해당 자원의 점유를 시도하게 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② T2의 자원을 선점하여 T1에게 할당</p>
+        <div class="explain">
+          <p><b>wound</b>-wait의 앞 단어가 고참(우선순위 높은 쪽)의 행동이다. 고참 T1이 요청하면 <b>신참 T2에게 상처를 입혀(wound) 쫓아내고 자원을 뺏는다.</b></p>
+          <ol class="steps">
+            <li>요청자 T1 = 우선순위 높음 = <b>고참</b></li>
+            <li>기법이 wound-wait → 고참의 행동은 <b>wound(선점)</b></li>
+            <li>따라서 T2를 강제로 롤백시키고 자원을 T1에게 넘김 → ②</li>
+          </ol>
+          <p><b>비교:</b> 만약 <b>wait-die</b>였다면? 고참의 행동은 <b>wait</b>이므로 ①번(기다린다)이 정답이 된다. 같은 상황이라도 <b>기법 이름에 따라 답이 정반대</b>가 되니, 문제에서 기법 이름을 먼저 동그라미 쳐라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">로킹 단위(locking granularity)를 <b>레코드 단위에서 테이블 단위로 크게</b> 바꾸면 어떤 변화가 생기는가? 락의 개수, 관리 복잡도, 병행성 측면에서 설명하시오.</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 락 개수 감소 · 관리 단순화 · 병행성(동시성) 저하</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>단위가 커지면 한 번에 잠그는 범위가 넓어지므로 필요한 <b>락의 개수는 줄어든다</b></li>
+            <li>관리할 락이 적으니 <b>DBMS의 오버헤드와 관리 복잡도는 낮아진다</b></li>
+            <li>그러나 테이블 하나를 통째로 잠그면 <b>다른 트랜잭션은 그 테이블의 무관한 행조차 건드릴 수 없다</b> → 병행성 저하</li>
+          </ol>
+          <p><b>정리:</b> 로킹 단위와 병행성은 <b>반비례</b>, 로킹 단위와 관리 편의성은 <b>비례</b>다. 시험에서는 주로 반대 방향(단위가 <b>작아지면</b> 락 수 증가·관리 복잡·병행성 증가)으로 출제된다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>이어서 볼 문서</h2>
+    <p>로그 기반 회복의 세부 절차와 동시성 제어 기법의 추가 설명은 <a href="회복과_동시성제어.md">회복과 동시성 제어</a> 문서에, 트랜잭션 제어 명령어(COMMIT/ROLLBACK/SAVEPOINT)는 <a href="SQL_분류.md">SQL 분류</a> 문서에 정리되어 있다.</p>
   </section>
 
   <section class="block">
@@ -115,14 +553,30 @@
       <span class="chip">ACID</span>
       <span class="chip">원자성</span>
       <span class="chip">일관성</span>
-      <span class="chip">격리성</span>
-      <span class="chip">영속성</span>
+      <span class="chip">격리성·고립성</span>
+      <span class="chip">영속성·지속성</span>
       <span class="chip">활성상태</span>
       <span class="chip">부분완료</span>
       <span class="chip">완료(Commit)</span>
       <span class="chip">실패</span>
       <span class="chip">철회(Abort)</span>
+      <span class="chip">REDO</span>
       <span class="chip">UNDO</span>
+      <span class="chip">검사점(Checkpoint)</span>
+      <span class="chip">즉시갱신</span>
+      <span class="chip">지연갱신</span>
+      <span class="chip">로킹</span>
+      <span class="chip">공유락</span>
+      <span class="chip">배타락</span>
+      <span class="chip">2단계 로킹(2PL)</span>
+      <span class="chip">직렬가능성</span>
+      <span class="chip">교착상태</span>
+      <span class="chip">wait-die</span>
+      <span class="chip">wound-wait</span>
+      <span class="chip">갱신분실</span>
+      <span class="chip">모순성</span>
+      <span class="chip">연쇄복귀</span>
+      <span class="chip">로킹단위</span>
     </div>
   </section>
 

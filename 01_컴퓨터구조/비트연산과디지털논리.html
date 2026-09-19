@@ -11,7 +11,7 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 비트 논리연산과 디지털 논리</div>
   <h1 class="page-title">비트 논리연산과 디지털 논리</h1>
-  <p class="page-subtitle">비트 논리연산 · 연산자 우선순위 · 논리 게이트 · PART 01. 전자계산기구조론</p>
+  <p class="page-subtitle">비트 논리연산 · 시프트 · 논리 게이트 · 연산자 우선순위 · PART 01. 전자계산기구조론</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
@@ -20,42 +20,249 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"비트 하나만 건드리고 싶다"는 문제</h4>
+      <p>CPU는 메모리를 <b>바이트(8비트) 단위</b>로만 읽고 쓴다. 그런데 실제로는 "8개 비트 중 3번째 비트만 1로 켜고 나머지는 그대로 두고 싶다" 같은 상황이 계속 생긴다. 예를 들어 상태 레지스터의 <b>Carry 플래그만 켜기</b>, 네트워크 IP 주소에서 <b>네트워크 부분만 추출하기</b>(서브넷 마스크가 바로 이것이다), 파일 권한에서 <b>쓰기 권한만 빼기</b> 같은 것들이다.</p>
+      <p>이때 쓰는 도구가 비트 논리연산이다. 핵심 아이디어는 이렇다 — <b>"바꾸고 싶은 자리에는 1을, 그대로 두고 싶은 자리에는 0을 놓은 값(마스크)"을 하나 만들어서 연산한다.</b> 어떤 연산을 쓰느냐에 따라 "바꾼다"의 의미가 켜기(OR)·끄기(AND)·뒤집기(XOR)로 달라질 뿐이다.</p>
+      <p>그래서 시험 문제도 항상 같은 모양이다: "A는 그대로 두고 특정 비트만 ○○하려면 B는 무엇이어야 하는가?" → <b>연산 종류를 보고 마스크를 역추적</b>하면 된다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>기본 비트 논리연산의 용도</h3>
+    <h3>기본 비트 논리연산의 용도 <span class="page-ref">📖 기출문제집 p.60</span></h3>
     <table>
       <tr><th>연산</th><th>용도</th><th>원리</th></tr>
       <tr><td><b>OR</b></td><td>선택적 세트 (selective-set)</td><td>특정 비트와 <b>1</b>을 OR하면 그 비트는 무조건 1이 됨, <b>0</b>과 OR하면 원래 값 유지</td></tr>
       <tr><td><b>AND</b></td><td>마스크 (mask, 삭제)</td><td>특정 비트와 <b>0</b>을 AND하면 그 비트는 무조건 0이 됨, <b>1</b>과 AND하면 원래 값 유지</td></tr>
       <tr><td><b>XOR</b></td><td>선택적 보수 (selective-complement)</td><td>특정 비트와 <b>1</b>을 XOR하면 반전됨, <b>0</b>과 XOR하면 원래 값 유지</td></tr>
     </table>
-    <div class="analogy"><b>암기:</b> "OR는 켜고(1), AND는 끄고(0), XOR는 뒤집는다(반전)" — 어떤 값과 연산했을 때 <b>1</b>이 곱해지면 "특별한 동작"이 일어난다고 기억</div>
+    <div class="analogy"><b>암기:</b> "OR는 켜고(1), AND는 끄고(0), XOR는 뒤집는다(반전)" — 마스크 B에 <b>1</b>이 놓인 자리에서만 "특별한 동작"이 일어난다고 기억</div>
 
-    <h3>NAND / NOR 진리표</h3>
+    <h4 style="margin:18px 0 6px;font-size:14px;">실제로 비트가 어떻게 바뀌는지 직접 보기</h4>
+    <p>아래 세 표는 <b>똑같은 A(1101 1110)에 똑같은 마스크 B(0000 1111)</b>를 연산 종류만 바꿔 적용한 것이다. 마스크의 오른쪽 4비트가 1이므로, <b>오른쪽 4비트에서만 변화가 일어나고 왼쪽 4비트는 세 경우 모두 그대로</b>인 것을 확인해라.</p>
+
     <table>
-      <tr><th>A</th><th>B</th><th>AND</th><th>NAND</th><th>OR</th><th>NOR</th></tr>
-      <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
-      <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
-      <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
-      <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+      <tr><th>OR (선택적 세트)</th><th>1</th><th>1</th><th>0</th><th>1</th><th>1</th><th>1</th><th>1</th><th>0</th></tr>
+      <tr><td>A (원본)</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>B (마스크)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td><b>A OR B</b></td><td>1</td><td>1</td><td>0</td><td>1</td><td><b>1</b></td><td><b>1</b></td><td><b>1</b></td><td><b>1</b></td></tr>
     </table>
-    <div class="tip"><b>계산 예시:</b> 10111000 NAND 00110011 → 먼저 AND(00110000) 하고 반전 → <b>11001111</b></div>
+    <p style="margin-top:-6px;font-size:13.5px;color:var(--text-dim);">→ 오른쪽 4비트가 <b>전부 1로 세트</b>됨 (원래 1110이었든 0000이었든 무조건 1111)</p>
 
-    <h3>유니버설 게이트 (Universal Gate)</h3>
+    <table>
+      <tr><th>AND (마스크·삭제)</th><th>1</th><th>1</th><th>0</th><th>1</th><th>1</th><th>1</th><th>1</th><th>0</th></tr>
+      <tr><td>A (원본)</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>B (마스크)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td><b>A AND B</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+    </table>
+    <p style="margin-top:-6px;font-size:13.5px;color:var(--text-dim);">→ 이번엔 반대로 <b>왼쪽 4비트가 전부 0으로 삭제</b>되고, 마스크가 1인 오른쪽 4비트만 원본 그대로 살아남음. "필요한 부분만 남기고 나머지를 지우는" 추출(extract) 용도로 쓴다.</p>
+
+    <table>
+      <tr><th>XOR (선택적 보수)</th><th>1</th><th>1</th><th>0</th><th>1</th><th>1</th><th>1</th><th>1</th><th>0</th></tr>
+      <tr><td>A (원본)</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>B (마스크)</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td><b>A XOR B</b></td><td>1</td><td>1</td><td>0</td><td>1</td><td><b>0</b></td><td><b>0</b></td><td><b>0</b></td><td><b>1</b></td></tr>
+    </table>
+    <p style="margin-top:-6px;font-size:13.5px;color:var(--text-dim);">→ 오른쪽 4비트(1110)가 <b>반전되어 0001</b>이 됨 = 그 부분의 <b>1의 보수</b>. 왼쪽은 그대로.</p>
+
+    <div class="tip"><b>시험에서 역으로 묻는 방식:</b> "A XOR B의 결과가 상위 4비트는 A의 1의 보수, 하위 4비트는 A와 같다. B는?" → 반전할 자리에 1, 유지할 자리에 0을 놓으면 되므로 <b>B = 1111 0000</b>. 아래 연습문제 1번이 바로 이 문제다.</div>
+
+    <h3>논리 게이트 기호와 진리표 <span class="page-ref">📖 기출문제집 p.63</span></h3>
+    <p>회로도 문제에서는 게이트를 <b>기호 모양</b>으로 준다. 모양만 보고 어떤 게이트인지 바로 읽을 수 있어야 한다. 출력 쪽에 <b>작은 동그라미(버블)</b>가 붙어 있으면 "결과를 뒤집는다"는 뜻이다 — AND에 버블이 붙으면 NAND, OR에 버블이 붙으면 NOR.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 220" role="img" aria-label="논리 게이트 기호 모음: AND는 D자 모양, OR는 곡선 모양, NOT은 삼각형에 버블, NAND와 NOR는 각각 AND OR에 버블이 붙은 모양, XOR는 OR 앞에 곡선이 하나 더 있는 모양">
+        <defs>
+          <marker id="gt1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="55" y="20" font-size="12.5" text-anchor="middle" font-weight="700">AND</text>
+        <path d="M 30,35 L 55,35 A 22,22 0 0 1 55,79 L 30,79 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="10" y1="45" x2="30" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="10" y1="69" x2="30" y2="69" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="77" y1="57" x2="100" y2="57" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="55" y="100" font-size="11" text-anchor="middle" opacity="0.75">둘 다 1일 때만 1</text>
+
+        <text x="205" y="20" font-size="12.5" text-anchor="middle" font-weight="700">OR</text>
+        <path d="M 172,35 Q 195,57 172,79 Q 215,79 238,57 Q 215,35 172,35 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="152" y1="45" x2="180" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="152" y1="69" x2="180" y2="69" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="238" y1="57" x2="262" y2="57" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="205" y="100" font-size="11" text-anchor="middle" opacity="0.75">하나만 1이어도 1</text>
+
+        <text x="360" y="20" font-size="12.5" text-anchor="middle" font-weight="700">NOT (인버터)</text>
+        <path d="M 335,35 L 375,57 L 335,79 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="381" cy="57" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="312" y1="57" x2="335" y2="57" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="387" y1="57" x2="410" y2="57" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="360" y="100" font-size="11" text-anchor="middle" opacity="0.75">입력을 반전</text>
+
+        <text x="545" y="20" font-size="12.5" text-anchor="middle" font-weight="700">XOR</text>
+        <path d="M 505,35 Q 528,57 505,79" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M 515,35 Q 538,57 515,79 Q 558,79 581,57 Q 558,35 515,35 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="485" y1="45" x2="520" y2="45" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="485" y1="69" x2="520" y2="69" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="581" y1="57" x2="605" y2="57" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="545" y="100" font-size="11" text-anchor="middle" opacity="0.75">서로 다를 때만 1</text>
+
+        <text x="55" y="140" font-size="12.5" text-anchor="middle" font-weight="700">NAND</text>
+        <path d="M 22,155 L 47,155 A 22,22 0 0 1 47,199 L 22,199 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="75" cy="177" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="2" y1="165" x2="22" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="2" y1="189" x2="22" y2="189" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="81" y1="177" x2="105" y2="177" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="60" y="215" font-size="11" text-anchor="middle" opacity="0.75">AND + 버블 (결과 반전)</text>
+
+        <text x="255" y="140" font-size="12.5" text-anchor="middle" font-weight="700">NOR</text>
+        <path d="M 222,155 Q 245,177 222,199 Q 265,199 288,177 Q 265,155 222,155 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="294" cy="177" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="202" y1="165" x2="230" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="202" y1="189" x2="230" y2="189" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="300" y1="177" x2="324" y2="177" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt1)"/>
+        <text x="262" y="215" font-size="11" text-anchor="middle" opacity="0.75">OR + 버블 (결과 반전)</text>
+
+        <text x="500" y="140" font-size="12.5" text-anchor="middle" font-weight="700">버블(○)의 의미</text>
+        <text x="500" y="168" font-size="12" text-anchor="middle">출력 쪽 ○ = NOT이 붙었다</text>
+        <text x="500" y="188" font-size="12" text-anchor="middle">AND+○ = NAND, OR+○ = NOR</text>
+        <text x="500" y="208" font-size="12" text-anchor="middle" opacity="0.75">회로도 읽을 때 ○부터 찾아라</text>
+      </svg>
+      <figcaption>기본 논리 게이트 기호 — 몸통 모양이 연산 종류(AND는 D자, OR는 곡선, XOR는 곡선 2겹)를, 출력의 버블(○)이 반전 여부를 나타낸다.</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th><th>NAND</th><th>NOR</th><th>XNOR</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+    </table>
+    <p><b>XOR</b>: 두 입력이 <b>다르면</b> 1 · <b>XNOR</b>: 두 입력이 <b>같으면</b> 1 (XOR의 부정) · <b>NAND/NOR는 각각 AND/OR 열을 통째로 뒤집은 것</b>이므로 따로 외울 필요 없다.</p>
+
+    <h3>유니버설 게이트 — NAND 하나로 전부 만들기</h3>
+    <p>NAND와 NOR를 <b>유니버설 게이트</b>라고 부르는 이유는 말 그대로 <b>그것 하나만 여러 개 있으면 AND·OR·NOT을 전부 만들 수 있기 때문</b>이다. 실제 반도체 공장에서도 NAND 한 종류만 대량으로 찍어내 조합하는 편이 여러 종류를 따로 만드는 것보다 싸다. 아래가 그 증명이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 300" role="img" aria-label="NAND 게이트로 NOT, AND, OR를 만드는 방법: 두 입력을 묶으면 NOT, NAND 뒤에 NAND로 만든 NOT을 붙이면 AND, 두 입력을 각각 NOT 처리한 뒤 NAND하면 OR가 된다">
+        <defs>
+          <marker id="gt2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="20" y="22" font-size="13" font-weight="700">① NOT 만들기 — 두 입력에 같은 값 A를 넣는다</text>
+        <line x1="30" y1="55" x2="70" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <text x="20" y="59" font-size="12" text-anchor="end">A</text>
+        <polyline points="50,55 50,40 70,40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <polyline points="50,55 50,70 70,70" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="50" cy="55" r="2.5" fill="currentColor"/>
+        <path d="M 70,33 L 92,33 A 22,22 0 0 1 92,77 L 70,77 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="120" cy="55" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="126" y1="55" x2="165" y2="55" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt2)"/>
+        <text x="172" y="59" font-size="12">A′ (NOT A)</text>
+        <text x="30" y="98" font-size="11.5" opacity="0.8">A NAND A = (A·A)′ = A′ &nbsp;→&nbsp; A가 1이면 0, 0이면 1</text>
+
+        <text x="380" y="22" font-size="13" font-weight="700">② AND 만들기 — NAND 뒤에 NOT(=NAND) 하나 더</text>
+        <line x1="390" y1="42" x2="420" y2="42" stroke="currentColor" stroke-width="1.5"/>
+        <text x="382" y="46" font-size="12" text-anchor="end">A</text>
+        <line x1="390" y1="68" x2="420" y2="68" stroke="currentColor" stroke-width="1.5"/>
+        <text x="382" y="72" font-size="12" text-anchor="end">B</text>
+        <path d="M 420,33 L 442,33 A 22,22 0 0 1 442,77 L 420,77 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="470" cy="55" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="476" y1="55" x2="510" y2="55" stroke="currentColor" stroke-width="1.5"/>
+        <text x="493" y="48" font-size="10.5" text-anchor="middle" opacity="0.75">(A·B)′</text>
+        <path d="M 510,38 L 527,38 A 17,17 0 0 1 527,72 L 510,72 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="550" cy="55" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="555" y1="55" x2="590" y2="55" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt2)"/>
+        <text x="597" y="59" font-size="12">A · B</text>
+        <text x="390" y="98" font-size="11.5" opacity="0.8">((A·B)′)′ = A·B &nbsp;→&nbsp; 두 번 뒤집으면 원래대로</text>
+
+        <text x="20" y="150" font-size="13" font-weight="700">③ OR 만들기 — 두 입력을 각각 NOT 한 뒤 NAND (드모르간 활용)</text>
+        <line x1="30" y1="185" x2="60" y2="185" stroke="currentColor" stroke-width="1.5"/>
+        <text x="22" y="189" font-size="12" text-anchor="end">A</text>
+        <path d="M 60,170 L 77,170 A 17,17 0 0 1 77,200 L 60,200 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="100" cy="185" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="105" y1="185" x2="170" y2="185" stroke="currentColor" stroke-width="1.5"/>
+        <text x="137" y="178" font-size="10.5" text-anchor="middle" opacity="0.75">A′</text>
+
+        <line x1="30" y1="255" x2="60" y2="255" stroke="currentColor" stroke-width="1.5"/>
+        <text x="22" y="259" font-size="12" text-anchor="end">B</text>
+        <path d="M 60,240 L 77,240 A 17,17 0 0 1 77,270 L 60,270 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="100" cy="255" r="5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="105" y1="255" x2="170" y2="255" stroke="currentColor" stroke-width="1.5"/>
+        <text x="137" y="248" font-size="10.5" text-anchor="middle" opacity="0.75">B′</text>
+
+        <path d="M 170,175 L 195,175 A 25,25 0 0 1 195,265 L 170,265 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="226" cy="220" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="232" y1="220" x2="280" y2="220" stroke="currentColor" stroke-width="1.5" marker-end="url(#gt2)"/>
+        <text x="288" y="224" font-size="12">A + B</text>
+        <text x="30" y="290" font-size="11.5" opacity="0.8">(A′ · B′)′ = A″ + B″ = A + B &nbsp;(드모르간 법칙을 그대로 회로로 옮긴 것)</text>
+      </svg>
+      <figcaption>NAND 게이트만으로 NOT·AND·OR를 전부 구성하는 방법 — 이것이 NAND를 "유니버설 게이트"라 부르는 이유다. NOR도 같은 방식으로 셋을 다 만들 수 있다.</figcaption>
+    </figure>
     <ul>
       <li><b>NAND</b>, <b>NOR</b> 게이트는 그 자체 하나만으로 AND, OR, NOT 등 <b>모든 논리 게이트를 구현</b>할 수 있다</li>
-      <li>그래서 실제 반도체 칩은 NAND나 NOR만으로 회로를 구성하는 경우가 많다</li>
+      <li>반대로 <b>AND·OR·XOR 단독으로는 NOT을 만들 수 없다</b> → 유니버설이 아니다 (시험에서 "유니버설 게이트가 아닌 것" 문제의 정답 근거)</li>
       <li>OR+DECODER, MULTIPLEXER 조합도 응용하면 유니버설 게이트 역할 가능</li>
     </ul>
 
-    <h3>드모르간의 법칙 (De Morgan's Law)</h3>
+    <h3>드모르간의 법칙 (De Morgan's Law) <span class="page-ref">📖 기출문제집 p.71</span></h3>
     <div class="tip">
-      (A · B)' = A' + B' <br>
-      (A + B)' = A' · B'
+      (A · B)′ = A′ + B′ &nbsp;&nbsp;— AND의 부정은 각각 부정해서 OR<br>
+      (A + B)′ = A′ · B′ &nbsp;&nbsp;— OR의 부정은 각각 부정해서 AND
     </div>
-    <p>NAND/NOR로 구성된 회로의 논리식을 AND/OR/NOT 식으로 바꾸거나, 그 반대로 변환할 때 필수로 쓰인다.</p>
+    <div class="deep">
+      <h4>말로 이해하기</h4>
+      <p>"(비가 오고 <b>그리고</b> 춥다)가 <b>아니다</b>" = "비가 안 오<b>거나</b> 춥지 않다" — 둘 중 하나만 어긋나도 전체가 거짓이 되니까 OR로 바뀐다.</p>
+      <p>"(비가 오<b>거나</b> 춥다)가 <b>아니다</b>" = "비도 안 오<b>고</b> 춥지도 않다" — 둘 다 아니어야 하니까 AND로 바뀐다.</p>
+      <p><b>규칙 한 줄 요약:</b> 괄호 밖의 부정을 안으로 집어넣으면서 <b>·(AND) ↔ +(OR)를 서로 바꾼다.</b> 각 항에는 부정을 하나씩 붙인다.</p>
+    </div>
+    <p>NAND/NOR로 구성된 회로의 논리식을 AND/OR/NOT 식으로 바꾸거나, 그 반대로 변환할 때 필수로 쓰인다. 위 유니버설 게이트 ③번 그림이 바로 드모르간을 회로로 옮긴 예다.</p>
 
-    <h3>연산자 우선순위 (C 언어 기준)</h3>
+    <h3>시프트 연산 — 논리 시프트 vs 산술 시프트 <span class="page-ref">📖 기출문제집 p.61</span></h3>
+    <p>시프트는 비트를 통째로 좌우로 밀어내는 연산이다. 왼쪽으로 1비트 밀면 값이 <b>×2</b>, 오른쪽으로 1비트 밀면 <b>÷2</b>가 되기 때문에 곱셈·나눗셈을 빠르게 대신하는 데 쓴다. 문제는 <b>오른쪽으로 밀 때 왼쪽에 새로 생기는 빈칸을 무엇으로 채우느냐</b>인데, 여기서 논리 시프트와 산술 시프트가 갈린다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="논리 우측 시프트는 빈자리를 0으로 채우고, 산술 우측 시프트는 부호비트를 복사해 채운다는 비교 다이어그램">
+        <text x="20" y="20" font-size="13" font-weight="700">논리 우측 시프트 (1비트) — 빈칸을 무조건 0으로</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="30" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="47" y="52">1</text>
+          <rect x="64" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="81" y="52">0</text>
+          <rect x="98" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="115" y="52">1</text>
+          <rect x="132" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="149" y="52">1</text>
+        </g>
+        <text x="185" y="52" font-size="16">→</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="210" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="227" y="52" font-weight="700">0</text>
+          <rect x="244" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="261" y="52">1</text>
+          <rect x="278" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="295" y="52">0</text>
+          <rect x="312" y="32" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="329" y="52">1</text>
+        </g>
+        <text x="360" y="52" font-size="12" opacity="0.8">← 맨 오른쪽 1은 버려짐</text>
+        <text x="227" y="78" font-size="11" text-anchor="middle" opacity="0.8">새로 생긴 자리 = 0</text>
+
+        <text x="20" y="115" font-size="13" font-weight="700">산술 우측 시프트 (1비트) — 빈칸을 부호비트로 복사</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="30" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="47" y="147" font-weight="700">1</text>
+          <rect x="64" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="81" y="147">0</text>
+          <rect x="98" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="115" y="147">1</text>
+          <rect x="132" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="149" y="147">1</text>
+        </g>
+        <text x="47" y="172" font-size="11" text-anchor="middle" opacity="0.8">부호비트(음수)</text>
+        <text x="185" y="147" font-size="16">→</text>
+        <g font-size="13" text-anchor="middle">
+          <rect x="210" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="227" y="147" font-weight="700">1</text>
+          <rect x="244" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="261" y="147">1</text>
+          <rect x="278" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="295" y="147">0</text>
+          <rect x="312" y="127" width="34" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="329" y="147">1</text>
+        </g>
+        <text x="227" y="172" font-size="11" text-anchor="middle" opacity="0.8">부호비트 그대로 복사</text>
+        <text x="360" y="147" font-size="12" opacity="0.8">← 음수는 계속 음수로 유지</text>
+
+        <text x="20" y="215" font-size="12.5">왜 이렇게 다른가: 2의 보수에서 <tspan font-weight="700">맨 왼쪽 비트는 부호</tspan>다. 음수(1로 시작)를 0으로 채우며 밀면</text>
+        <text x="20" y="235" font-size="12.5">갑자기 양수가 되어 값이 완전히 깨진다. 그래서 부호 있는 수는 부호비트를 복사해 채운다.</text>
+      </svg>
+      <figcaption>논리 시프트는 빈칸을 항상 0으로, 산술 시프트는 부호비트를 복사해 채운다 — 음수를 2로 나눠도 음수로 남게 하기 위해서다.</figcaption>
+    </figure>
+
+    <h3>연산자 우선순위 (C 언어 기준) <span class="page-ref">📖 기출문제집 p.62</span></h3>
     <table>
       <tr><th>우선순위</th><th>연산자</th><th>종류</th></tr>
       <tr><td>1 (높음)</td><td><code>()</code></td><td>괄호</td></tr>
@@ -71,28 +278,20 @@
       <tr><td>11</td><td><code>= += -= ...</code></td><td>대입 연산자</td></tr>
       <tr><td>12 (낮음)</td><td><code>,</code></td><td>콤마 연산자</td></tr>
     </table>
-    <div class="analogy"><b>암기:</b> "괄호 → 단항 → 산술 → 시프트 → 관계 → 비트논리 → 논리 → 조건 → 대입 → 콤마" 순서로 높다에서 낮다로. 산술이 논리보다 먼저 계산된다는 것이 핵심.</div>
-
-    <h3>기본 논리 게이트 진리표</h3>
-    <table>
-      <tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th><th>XNOR</th></tr>
-      <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
-      <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
-      <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
-      <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
-    </table>
-    <p><b>XOR</b>: 두 입력이 <b>다르면</b> 1 · <b>XNOR</b>: 두 입력이 <b>같으면</b> 1 (XOR의 부정)</p>
+    <div class="analogy"><b>암기:</b> "괄호 → 단항 → 산술 → 시프트 → 관계 → 비트논리 → 논리 → 조건 → 대입 → 콤마" 순서로 높다에서 낮다로. <b>산술이 관계·논리보다 먼저</b> 계산된다는 것이 핵심.</div>
+    <div class="tip"><b>실전 함정:</b> <code>a &amp; b == c</code> 는 <code>a &amp; (b == c)</code> 로 계산된다 — 비트논리(&amp;)가 관계(==)보다 <b>낮기</b> 때문이다. 의도대로 쓰려면 <code>(a &amp; b) == c</code> 처럼 괄호를 반드시 써야 한다.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>"특정 비트를 세트(1로 고정)" → <b>OR</b>, "특정 비트를 삭제(0으로 고정)" → <b>AND</b>, "특정 비트를 반전" → <b>XOR</b></li>
-      <li>유니버설 게이트 = <b>NAND, NOR</b> (AND, OR, XOR 단독은 아님)</li>
+      <li>마스크 역추적 문제: <b>바꿀 자리에 1, 유지할 자리에 0</b>을 놓으면 끝</li>
+      <li>유니버설 게이트 = <b>NAND, NOR</b> (AND, OR, XOR 단독은 아님 — NOT을 못 만들기 때문)</li>
       <li>NAND/XOR 등 비트 연산 결과를 직접 계산하는 문제 (2진수 → 결과 → 16진수 변환까지 이어지는 복합 문제)</li>
       <li>드모르간 법칙으로 논리식 간략화·게이트 변환하는 문제 매년 출제</li>
       <li>연산자 우선순위: 산술 &gt; 시프트 &gt; 관계 &gt; 비트논리 &gt; 논리 순서 헷갈리지 말 것</li>
-      <li>산술 우측 시프트(arithmetic right shift)는 부호비트를 유지하며 채워짐 — 음수의 경우 부호(1)로 채움</li>
+      <li>산술 우측 시프트는 <b>부호비트를 복사</b>해 채운다 — 음수(1로 시작)는 왼쪽이 1로 채워짐</li>
     </ul>
   </section>
 
@@ -103,12 +302,149 @@
       <tr><td>목적</td><td>비트를 1로 만듦</td><td>비트를 0으로 만듦</td><td>비트를 반전시킴</td></tr>
       <tr><td>변화 없음 조건</td><td>0과 연산 시</td><td>1과 연산 시</td><td>0과 연산 시</td></tr>
       <tr><td>변화 있음 조건</td><td>1과 연산 시 → 무조건 1</td><td>0과 연산 시 → 무조건 0</td><td>1과 연산 시 → 반전</td></tr>
+      <tr><td>실제 용도</td><td>플래그 켜기</td><td>필요한 부분만 추출</td><td>토글, 암호화</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>논리 시프트</th><th>산술 시프트</th></tr>
-      <tr><td>빈 자리</td><td>항상 0으로 채움</td><td>부호비트를 유지하며 채움</td></tr>
+      <tr><td>빈 자리</td><td>항상 0으로 채움</td><td>부호비트를 복사해 채움</td></tr>
       <tr><td>용도</td><td>부호 없는 수(unsigned)</td><td>부호 있는 수(signed, 2의 보수)</td></tr>
+      <tr><td>음수 우측 시프트 시</td><td>양수로 바뀌어 값이 깨짐</td><td>음수 그대로 유지 (÷2)</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2014 지방직 · 기출문제집 p.60</span></div>
+      <p class="q-body">8비트 데이터 A와 B에 대해 <b>A XOR B</b> 연산을 수행하였더니, A의 값에 상관없이 연산 결과의 <b>상위(왼쪽) 4비트는 A 상위 4비트의 1의 보수</b>이고, <b>하위(오른쪽) 4비트는 A의 하위 4비트와 같았다.</b> B의 값을 이진수로 표현한 것은?</p>
+      <ol class="choices">
+        <li>00001111₂</li>
+        <li>11110000₂</li>
+        <li>10010000₂</li>
+        <li>00001001₂</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 11110000₂</p>
+        <div class="explain">
+          <p>XOR의 성질부터 정리하자. <b>1과 XOR하면 반전, 0과 XOR하면 그대로</b>다.</p>
+          <ol class="steps">
+            <li>상위 4비트는 "1의 보수(= 반전)"가 되어야 한다 → 그 자리의 B는 <b>1111</b></li>
+            <li>하위 4비트는 "A와 같다(= 유지)"여야 한다 → 그 자리의 B는 <b>0000</b></li>
+            <li>합치면 B = <b>1111 0000</b></li>
+          </ol>
+          <p><b>함정:</b> ①번(00001111)은 상하위를 거꾸로 생각한 경우다. "반전할 자리에 1"이라는 방향을 반드시 확인할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2013 국가직 · 기출문제집 p.60</span></div>
+      <p class="q-body">다음 두 이진수에 대한 <b>NAND</b> 비트 연산 결과는?<br><code>10111000₂ NAND 00110011₂</code></p>
+      <ol class="choices">
+        <li>00110000₂</li>
+        <li>10111011₂</li>
+        <li>11001111₂</li>
+        <li>01000100₂</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 11001111₂</p>
+        <div class="explain">
+          <p>NAND = AND한 다음 전부 반전. 두 단계로 나눠 풀면 실수하지 않는다.</p>
+          <ol class="steps">
+            <li>먼저 AND: 10111000 AND 00110011 → 각 자리에서 <b>둘 다 1일 때만 1</b> → <b>00110000</b></li>
+            <li>그 결과를 반전(NOT): 00110000 → <b>11001111</b></li>
+          </ol>
+          <p><b>함정:</b> ①번(00110000)은 <b>AND까지만 하고 반전을 빼먹은</b> 오답이다. NAND·NOR 문제는 "마지막에 뒤집기"를 잊지 않는 것이 전부다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2016 계리직 · 기출문제집 p.61</span></div>
+      <p class="q-body">2진수 <code>11110000</code>과 <code>10101010</code>에 대해 <b>XOR</b> 논리 연산을 수행한 결과값을 <b>16진수</b>로 바르게 표현한 것은?</p>
+      <ol class="choices">
+        <li>5A</li>
+        <li>6B</li>
+        <li>A5</li>
+        <li>B6</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 5A</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>XOR 수행 (같으면 0, 다르면 1):<br><code>11110000</code><br><code>10101010</code><br>→ <code>01011010</code></li>
+            <li>16진수 변환은 <b>4비트씩 끊어서</b> 한다: <code>0101</code> | <code>1010</code></li>
+            <li>0101₂ = 5, 1010₂ = A → <b>5A</b></li>
+          </ol>
+          <p><b>함정:</b> ③번 A5는 <b>4비트 묶음의 앞뒤를 바꿔 읽은</b> 오답이다. 항상 <b>왼쪽 묶음이 앞자리</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2023 지방직 · 기출문제집 p.61</span></div>
+      <p class="q-body">2의 보수로 표현된 부호 있는 8비트 2진 정수 <code>10110101</code>을 <b>2비트만큼 산술 우측 시프트</b>(arithmetic right shift)한 결과는?</p>
+      <ol class="choices">
+        <li>00101101</li>
+        <li>11010100</li>
+        <li>11010111</li>
+        <li>11101101</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 11101101</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>맨 왼쪽 비트가 <b>1이므로 음수</b>다 → 산술 시프트에서는 왼쪽 빈칸을 <b>1(부호비트)</b>로 채워야 한다</li>
+            <li>원본: <code>1011 0101</code> — 오른쪽 끝 2비트(<code>01</code>)는 밀려나 <b>버려진다</b></li>
+            <li>남은 6비트(<code>101101</code>)를 오른쪽으로 2칸 밀고, 왼쪽에 생긴 2칸을 <b>11</b>로 채운다</li>
+            <li>결과: <code>11</code> + <code>101101</code> = <b>11101101</b></li>
+          </ol>
+          <p><b>함정:</b> ①번(00101101)은 <b>논리 시프트</b>처럼 0으로 채운 오답 — 음수가 갑자기 양수가 되어버린다. 문제에 "산술"이라 쓰여 있으면 반드시 부호비트를 복사해야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2007 국가직 · 기출문제집 p.62</span></div>
+      <p class="q-body">프로그램의 연산자 실행 우선순위가 <b>높은 것에서 낮은 순</b>으로 옳게 연결한 것은?</p>
+      <ol class="choices">
+        <li>괄호 안의 수식 → 산술 연산자 → 관계 연산자 → 논리 연산자</li>
+        <li>산술 연산자 → 관계 연산자 → 논리 연산자 → 괄호 안의 수식</li>
+        <li>괄호 안의 수식 → 산술 연산자 → 논리 연산자 → 관계 연산자</li>
+        <li>산술 연산자 → 관계 연산자 → 논리 연산자 → 괄호 안의 수식</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 괄호 → 산술 → 관계 → 논리</p>
+        <div class="explain">
+          <p>괄호는 항상 <b>최우선</b>이므로 ②·④번처럼 괄호가 맨 뒤에 오는 선택지는 바로 제외된다. 남은 ①·③ 중에서는 <b>관계 연산자가 논리 연산자보다 먼저</b>다.</p>
+          <p>이유를 생각하면 외우기 쉽다: <code>if (a &gt; 3 &amp;&amp; b &lt; 5)</code> 에서 <b>비교를 먼저 끝내야(a&gt;3, b&lt;5) 그 참·거짓을 논리 연산(&amp;&amp;)으로 묶을 수 있다.</b> 순서가 반대면 애초에 계산이 불가능하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">어떤 8비트 값 A에서 <b>상위 4비트만 남기고 하위 4비트는 0으로 지우고 싶다.</b> 어떤 연산과 어떤 마스크를 써야 하는가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: A AND 11110000₂</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>"0으로 지운다(삭제)"가 목적 → <b>AND 연산</b> (AND는 0과 만나면 무조건 0)</li>
+            <li>AND에서는 <b>1인 자리가 원본 유지, 0인 자리가 삭제</b>된다 (OR·XOR와 반대 방향이라 헷갈리기 쉬움)</li>
+            <li>상위 4비트는 살려야 하므로 <b>1111</b>, 하위 4비트는 지워야 하므로 <b>0000</b> → 마스크 = <b>11110000</b></li>
+          </ol>
+          <p><b>정리:</b> OR·XOR는 "1인 자리에서 동작", AND는 "<b>0인 자리에서 동작</b>"이다. 이 방향 차이만 확실히 잡으면 이 유형은 전부 맞힐 수 있다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -124,8 +460,10 @@
       <span class="chip">연산자 우선순위</span>
       <span class="chip">산술 시프트</span>
       <span class="chip">논리 시프트</span>
+      <span class="chip">부호비트</span>
       <span class="chip">XOR</span>
       <span class="chip">XNOR</span>
+      <span class="chip">버블(인버터)</span>
     </div>
   </section>
 

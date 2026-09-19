@@ -20,6 +20,17 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"비싼 회선 하나를 어떻게 나눠 쓸 것인가"</h4>
+      <p>서울에서 부산까지 광케이블 한 가닥을 까는 데는 엄청난 돈이 든다. 그런데 통화하는 사람은 수백만 명이다. <b>사람마다 케이블을 따로 깔 수는 없으니</b>, 이미 깔린 한 가닥을 여럿이 동시에 쓰는 방법이 필요하다. 그게 <b>다중화(multiplexing)</b>다.</p>
+      <p>나누는 방법은 딱 세 가지 축밖에 없다 — <b>주파수를 쪼개거나(FDM), 시간을 쪼개거나(TDM), 코드로 구분하거나(CDMA)</b>. 라디오 방송국이 93.1MHz, 95.9MHz로 주파수를 나눠 쓰는 게 FDM이고, 한 회선을 0.1초씩 돌아가며 쓰는 게 TDM이다.</p>
+      <p>회선을 나눠 쓰게 됐다면 다음 질문은 "<b>내 데이터가 목적지까지 어떤 경로로 가느냐</b>"다. 길을 통째로 예약하고 갈 것인가(회선교환), 아니면 짐을 쪼개서 그때그때 빈 길로 보낼 것인가(패킷교환). 전화망은 전자를, 인터넷은 후자를 택했고 그 선택의 결과가 두 망의 성격을 완전히 갈랐다.</p>
+      <p><b>시험 포인트:</b> 거의 모든 문제가 "<b>어느 쪽이 효율이 높은가 / 동시 사용자가 많은가 / 지연이 적은가</b>"를 묻는 비교 문제다. 표로 외우지 말고 "<b>독점이냐 공유냐</b>"라는 한 가지 기준에서 나머지를 유도하면 헷갈리지 않는다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>다중화(Multiplexing) 방식 <span class="page-ref">📖 기출문제집 p.289</span></h3>
@@ -67,6 +78,22 @@
     </table>
     <div class="tip"><b>함정 주의:</b> "TDMA는 대역확산 기법을 사용한다" → ❌ 대역확산은 <b>CDMA</b>의 특징이다. TDMA는 시간을 슬롯으로 나눌 뿐이다.</div>
 
+    <div class="deep">
+      <h4>동기식(STDM)은 왜 낭비인가 — 숫자로 보기</h4>
+      <p>4명(A·B·C·D)이 한 회선을 시분할로 나눠 쓴다고 하자. <b>동기식 TDM</b>은 <b>보낼 데이터가 있든 없든</b> A→B→C→D 순서로 무조건 슬롯을 하나씩 배정한다. 만약 지금 A만 데이터가 있고 B·C·D는 놀고 있다면?</p>
+      <ul>
+        <li>동기식: A□□□ A□□□ A□□□ … → 4칸 중 1칸만 쓰이므로 <b>회선 이용률 25%</b></li>
+        <li>비동기식(ATDM): AAAA AAAA … → 데이터가 있는 A에게만 몰아주므로 <b>이용률 100%</b></li>
+      </ul>
+      <p>그래서 비동기식을 <b>통계적 시분할 다중화(Statistical TDM)</b>라고도 부른다. "통계적으로 실제 쓸 만큼만 배분한다"는 뜻이다. 대신 슬롯이 고정이 아니어서 <b>어느 슬롯이 누구 것인지 표시하는 주소 정보가 추가로 필요</b>하고, 그만큼 장비가 복잡해진다 — 공짜 점심은 없다.</p>
+    </div>
+
+    <div class="deep">
+      <h4>CDMA를 직관적으로 — 시끄러운 파티장 비유</h4>
+      <p>큰 방에서 여러 커플이 동시에 대화한다고 하자. FDM은 "각 커플이 다른 방을 쓰는 것"(주파수 분리), TDM은 "한 방에서 순서를 정해 돌아가며 말하는 것"(시간 분리)이다.</p>
+      <p><b>CDMA는 한 방에서 모두가 동시에 떠들되, 커플마다 서로 다른 언어(코드)로 말하는 것</b>이다. 한국어 커플은 한국어만 알아듣고 나머지는 소음으로 흘려버린다. 그래서 <b>같은 시간, 같은 주파수</b>를 쓰면서도 서로 구분이 된다. 이때 신호를 넓은 대역에 펼쳐 뿌리는 기법이 <b>대역확산(Spread Spectrum)</b>이며, 이것이 CDMA만의 특징이다.</p>
+    </div>
+
     <h3>데이터 교환 방식 <span class="page-ref">📖 기출문제집 p.290~291</span></h3>
     <p>다중화가 "회선을 나눠쓰는 법"이라면, 교환 방식은 "내 데이터가 목적지까지 <b>어떤 경로로</b> 가는가"의 문제다.</p>
     <figure class="diagram">
@@ -113,6 +140,73 @@
       <tr><td>대표 예</td><td>전화망</td><td>이메일(구형 방식)</td><td>인터넷</td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> "회선교환이 패킷교환보다 더 많은 동시 접속자를 수용한다" → ❌ 틀림. 회선을 <b>독점</b>하는 회선교환은 오히려 동시 접속자 수가 <b>적다</b>. 회선을 나눠 쓰는 패킷교환이 더 많은 사용자를 수용한다.</div>
+
+    <div class="deep">
+      <h4>"독점이냐 공유냐" 하나로 나머지를 전부 유도하기</h4>
+      <p>회선교환과 패킷교환의 비교표는 외울 필요가 없다. <b>회선교환은 길을 통째로 예약(독점)한다</b>는 사실 하나에서 나머지가 전부 따라 나온다.</p>
+      <ul>
+        <li>독점하니까 → 중간에 남이 끼어들지 않는다 → <b>전송 지연이 적고 속도가 일정하다</b> (실시간 음성·영상에 유리)</li>
+        <li>독점하니까 → 내가 말 안 하는 동안에도 회선이 놀고 있다 → <b>회선 이용 효율이 낮다</b></li>
+        <li>독점하니까 → 회선 수만큼만 사람을 받을 수 있다 → <b>동시 접속자가 적다</b></li>
+        <li>독점하려면 → 먼저 길을 예약해야 한다 → <b>통신 전 연결 설정(end-to-end) 과정이 필요하다</b></li>
+      </ul>
+      <p>패킷교환은 전부 반대다. 공유하니까 효율이 높고 동시 접속자가 많지만, 남들과 길을 나눠 쓰니 <b>혼잡하면 지연이 들쭉날쭉</b>해진다. 인터넷 영상통화가 가끔 끊기는 이유이고, 전화망이 오랫동안 회선교환을 고수한 이유이기도 하다.</p>
+    </div>
+
+    <h3>패킷교환의 두 갈래 — 데이터그램 vs 가상회선 <span class="page-ref">📖 기출문제집 p.291</span></h3>
+    <p>패킷교환도 "경로를 미리 정해 두느냐"에 따라 다시 두 방식으로 나뉜다. 이름은 헷갈리지만 차이는 단순하다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 230" role="img" aria-label="데이터그램 방식은 패킷마다 다른 경로로 가서 순서가 뒤바뀔 수 있고, 가상회선 방식은 미리 정한 하나의 논리 경로로 모든 패킷이 순서대로 지나간다">
+        <defs>
+          <marker id="swA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="175" y="20" font-size="13" text-anchor="middle" font-weight="700">데이터그램 (Datagram)</text>
+        <circle cx="40" cy="95" r="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="40" y="99" font-size="10" text-anchor="middle">송신</text>
+        <rect x="110" y="40" width="26" height="20" fill="none" stroke="currentColor"/><text x="123" y="55" font-size="10" text-anchor="middle">1</text>
+        <rect x="110" y="140" width="26" height="20" fill="none" stroke="currentColor"/><text x="123" y="155" font-size="10" text-anchor="middle">2</text>
+        <rect x="200" y="75" width="26" height="20" fill="none" stroke="currentColor"/><text x="213" y="90" font-size="10" text-anchor="middle">3</text>
+        <circle cx="300" cy="95" r="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="99" font-size="10" text-anchor="middle">수신</text>
+        <polyline points="56,88 110,52" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <polyline points="56,102 110,148" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <polyline points="56,95 200,88" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <polyline points="136,52 284,88" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <polyline points="136,148 284,102" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <polyline points="226,88 284,93" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#swA)"/>
+        <text x="175" y="185" font-size="10.5" text-anchor="middle" opacity="0.8">패킷마다 <tspan font-weight="700">그때그때 빈 경로</tspan>로 따로 감</text>
+        <text x="175" y="202" font-size="10.5" text-anchor="middle" opacity="0.8">→ 도착 순서가 <tspan font-weight="700">뒤바뀔 수 있음</tspan> (수신측이 재정렬)</text>
+        <text x="175" y="219" font-size="10.5" text-anchor="middle" opacity="0.8">패킷마다 목적지 주소를 전부 담고 다님</text>
+
+        <text x="540" y="20" font-size="13" text-anchor="middle" font-weight="700">가상회선 (Virtual Circuit)</text>
+        <circle cx="405" cy="95" r="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="405" y="99" font-size="10" text-anchor="middle">송신</text>
+        <rect x="480" y="85" width="26" height="20" fill="none" stroke="currentColor"/><text x="493" y="100" font-size="10" text-anchor="middle">3</text>
+        <rect x="545" y="85" width="26" height="20" fill="none" stroke="currentColor"/><text x="558" y="100" font-size="10" text-anchor="middle">2</text>
+        <rect x="610" y="85" width="26" height="20" fill="none" stroke="currentColor"/><text x="623" y="100" font-size="10" text-anchor="middle">1</text>
+        <circle cx="680" cy="95" r="16" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="680" y="99" font-size="9" text-anchor="middle">수신</text>
+        <line x1="421" y1="95" x2="478" y2="95" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="506" y1="95" x2="543" y2="95" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="571" y1="95" x2="608" y2="95" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3"/>
+        <line x1="636" y1="95" x2="662" y2="95" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#swA)"/>
+        <text x="540" y="65" font-size="10" text-anchor="middle" opacity="0.7">미리 설정된 논리적 경로(점선)</text>
+        <text x="540" y="185" font-size="10.5" text-anchor="middle" opacity="0.8">통신 전 <tspan font-weight="700">경로를 한 번 정해두고</tspan> 모두 그 길로</text>
+        <text x="540" y="202" font-size="10.5" text-anchor="middle" opacity="0.8">→ 보낸 <tspan font-weight="700">순서 그대로 도착</tspan></text>
+        <text x="540" y="219" font-size="10.5" text-anchor="middle" opacity="0.8">물리적 독점은 아님 — 회선은 여전히 공유</text>
+      </svg>
+      <figcaption>같은 패킷교환이라도 데이터그램은 매번 길을 새로 찾고, 가상회선은 길을 한 번 정해 그대로 따라간다. 가상회선의 "회선"은 물리적 독점이 아니라 <b>논리적인 약속</b>이라는 점이 핵심.</figcaption>
+    </figure>
+    <table>
+      <tr><th>구분</th><th>데이터그램 방식</th><th>가상회선 방식</th></tr>
+      <tr><td>경로 설정</td><td>패킷마다 독립적으로 결정</td><td>통신 전 <b>논리적 경로를 미리 설정</b></td></tr>
+      <tr><td>도착 순서</td><td>뒤바뀔 수 있음 → 수신측 재조립 필요</td><td><b>보낸 순서 그대로</b> 도착</td></tr>
+      <tr><td>주소 정보</td><td>패킷마다 <b>목적지 주소 전부 포함</b></td><td>가상회선 번호만 있으면 됨</td></tr>
+      <tr><td>장애 대응</td><td>경로 하나가 막혀도 우회 가능 (<b>유연</b>)</td><td>설정된 경로가 끊기면 재설정 필요</td></tr>
+      <tr><td>적합한 상황</td><td>짧은 데이터, 소량 전송</td><td>긴 데이터, 지속적 전송</td></tr>
+      <tr><td>대표 예</td><td>IP (인터넷)</td><td>X.25, 프레임 릴레이, ATM</td></tr>
+    </table>
+    <div class="tip"><b>헷갈림 방지:</b> "가상회선"이라는 이름 때문에 회선교환과 혼동하기 쉽다. <b>가상회선은 엄연히 패킷교환의 한 종류</b>이며, 회선을 <b>독점하지 않는다</b>. "경로만 미리 정한 패킷교환"이라고 이해하면 된다.</div>
   </section>
 
   <section class="block">
@@ -123,6 +217,10 @@
       <li>회선교환=경로 독점·저지연·실시간용, 패킷교환=경로 공유·효율적·인터넷용</li>
       <li>"더 많은 동시 접속자 수용" → 회선을 공유하는 <b>패킷교환</b>이 정답</li>
       <li>패킷교환은 <b>데이터그램 방식</b>과 <b>가상회선 방식</b>으로 다시 나뉜다는 점 기억</li>
+      <li>CDMA는 정보의 <b>압축·에러복구가 용이하다</b> — "어렵다"는 설명은 오답</li>
+      <li>패킷교환망에서는 <b>동시에 여러 쌍의 통신이 가능하다</b> — "불가능하다"는 설명은 오답</li>
+      <li>패킷 크기 단위는 <b>옥텟(octet, 8비트)</b>, 패킷에는 송·수신지 정보가 포함됨</li>
+      <li>가상회선은 <b>패킷교환의 한 종류</b> — 회선교환처럼 회선을 독점하는 것이 아님</li>
     </ul>
   </section>
 
@@ -141,6 +239,147 @@
   </section>
 
   <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2013 서울시 · 기출문제집 p.289</span></div>
+      <p class="q-body">다중화 방식에 대한 설명으로 옳지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>FDMA : 전송하려는 신호보다 대역폭이 큰 매체를 사용한다.</li>
+        <li>TDMA : 한 개의 고속 전송선로를 일정한 시간폭으로 나누어 전송하는 기술이다.</li>
+        <li>ATDMA : 전송할 정보가 존재하는 단말기에만 타임슬롯을 할당한다.</li>
+        <li>CDMA : FDMA와 TDMA의 혼합 방식으로 정보의 압축, 에러 복구가 어렵다.</li>
+        <li>STDMA : 한 전송선로의 시간축을 타임슬롯으로 나누어 각 채널에 할당한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (CDMA는 압축·에러복구가 <b>용이하다</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>CDMA가 FDMA와 TDMA의 혼합 방식이라는 앞부분은 <b>맞는 설명</b>이다</li>
+            <li>하지만 CDMA는 대역확산 기법 덕분에 <b>정보 압축과 에러 복구에 오히려 유리</b>해서, 현재 디지털 이동통신에서 널리 쓰인다</li>
+            <li>"어렵다"는 정반대 서술이므로 이것이 틀린 선지</li>
+          </ol>
+          <p><b>나머지 확인:</b> ① FDMA는 신호보다 넓은 대역을 쪼개 쓰므로 맞다. ②⑤ TDMA·STDMA는 시간축 분할이 맞다. ③ ATDMA(비동기식)가 "데이터 있는 단말기에만 할당"하는 것도 맞다 — ⑤와 ③의 차이(무조건 할당 vs 필요할 때만)를 구분하는 것이 이 문제의 숨은 포인트다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2013 국가직 · 기출문제집 p.290</span></div>
+      <p class="q-body">다중접속(multiple access) 방식에 대한 설명으로 옳지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>코드분할 다중접속(CDMA)은 디지털 방식의 데이터 송수신 기술이다.</li>
+        <li>시분할 다중접속(TDMA)은 대역확산 기법을 사용한다.</li>
+        <li>주파수분할 다중접속(FDMA)은 할당된 유효 주파수 대역폭을 작은 주파수 영역인 채널로 분할한다.</li>
+        <li>시분할 다중접속(TDMA)은 할당된 주파수를 시간상에서 여러 개의 슬롯으로 나누어 하나의 조각을 한 명의 사용자가 사용하는 방식이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (대역확산은 <b>CDMA</b>의 기법이다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>대역확산(Spread Spectrum)</b>은 전송할 신호를 원래 필요한 대역폭보다 <b>훨씬 넓은 대역에 펼쳐서</b> 보내는 기법이다</li>
+            <li>이렇게 해야 여러 사용자가 <b>같은 주파수·같은 시간</b>을 쓰면서 코드로만 구분할 수 있다 → 그래서 CDMA의 필수 기술</li>
+            <li>TDMA는 시간 슬롯을 나눌 뿐, 주파수를 넓게 펼치지 않는다</li>
+          </ol>
+          <p><b>한 줄 정리:</b> <b>대역확산 = CDMA</b>. 이 조합만 기억하면 다중화 문제의 절반은 걸러진다. ①③④는 모두 올바른 설명이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2009 국가직 · 기출문제집 p.290</span></div>
+      <p class="q-body">패킷교환 방식과 회선교환 방식에 대한 설명으로 옳지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>패킷교환 방식은 두 호스트 간에 전용 통신 경로가 설정되지 않아도 된다.</li>
+        <li>일반적으로 패킷교환 방식은 회선교환 방식보다 통신선로 사용의 효율성이 낮다.</li>
+        <li>기존 유선 전화는 회선교환 방식을 사용한다.</li>
+        <li>회선교환 방식은 패킷교환 방식보다 전송지연이 적다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (패킷교환이 회선교환보다 효율성이 <b>높다</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>회선교환은 연결된 동안 <b>말하지 않는 시간에도 회선을 붙들고 있다</b> → 놀고 있는 시간만큼 낭비</li>
+            <li>패킷교환은 데이터가 있을 때만 회선을 쓰고, 빈 시간은 다른 사용자가 채운다 → <b>선로 이용 효율이 높다</b></li>
+            <li>따라서 "패킷교환의 효율성이 낮다"는 정반대 서술</li>
+          </ol>
+          <p><b>주의 — ④번은 맞는 말이다:</b> 효율은 패킷교환이 높지만, <b>지연은 회선교환이 더 적다.</b> 이미 길을 예약해 뒀으니 중간에서 기다릴 일이 없기 때문이다. "효율 = 패킷교환 승", "지연 = 회선교환 승"으로 <b>항목별로 승자가 다르다</b>는 점이 이 유형의 핵심이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2022 지방직 · 기출문제집 p.291</span></div>
+      <p class="q-body">패킷 교환 네트워크에 대한 설명으로 옳지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>패킷 크기는 옥텟(Octet) 단위로 사용한다.</li>
+        <li>네트워크로 전송되는 모든 데이터는 송·수신지 정보를 포함하는 패킷들로 구성된다.</li>
+        <li>패킷 교환 방식은 접속 방식에 따라 데이터그램 방식과 가상회선 방식이 있다.</li>
+        <li>패킷 교환 네트워크에서는 동시에 2쌍 이상의 통신이 불가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (동시에 여러 쌍의 통신이 <b>가능하다</b>)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>패킷교환의 존재 이유 자체가 <b>여러 사용자가 회선을 나눠 쓰기 위해서</b>다</li>
+            <li>노드와 노드 사이 회선을 다수의 패킷이 공유하므로 <b>동시에 수많은 통신 쌍이 오갈 수 있다</b> — 지금 이 순간의 인터넷이 그 증거</li>
+            <li>"동시 통신 불가"는 오히려 <b>회선교환</b>(회선을 독점하는 한 쌍만 가능)에 가까운 설명이다</li>
+          </ol>
+          <p><b>나머지 확인:</b> ① 옥텟은 8비트를 뜻하는 단위로 맞다. ② 패킷마다 송·수신지 정보를 담는 것도 맞다. ③ 데이터그램/가상회선 2분류도 맞다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2018 국회직 · 기출문제집 p.291</span></div>
+      <p class="q-body">회선 교환 방식(circuit switching)의 특성으로 옳지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>데이터를 주고받기 전에 종단 간 연결(end to end connection) 과정이 필요하다.</li>
+        <li>연결이 수립되면, 해당 회선을 독점적으로 사용한다.</li>
+        <li>회선 교환 방식의 대표적인 예로는 전화망이 있다.</li>
+        <li>패킷 교환 방식에 비해 더 많은 동시 접속자를 수용할 수 있다.</li>
+        <li>패킷 교환 방식에 비해 안정적인 전송속도를 보장할 수 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (동시 접속자는 <b>패킷교환</b>이 더 많다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>회선교환은 한 쌍이 연결되면 그 회선을 <b>통째로 독점</b>한다 (②번이 그렇게 말하고 있다)</li>
+            <li>독점한다는 것은 곧 <b>회선 개수만큼만 사용자를 받을 수 있다</b>는 뜻 → 동시 접속자 수가 제한된다</li>
+            <li>반면 패킷교환은 회선을 잘게 나눠 공유하므로 훨씬 많은 사용자를 수용한다 → ④는 정반대</li>
+          </ol>
+          <p><b>선지끼리 모순 찾기:</b> 이 문제는 ②번("회선을 독점적으로 사용")과 ④번("동시 접속자가 더 많다")이 <b>논리적으로 충돌</b>한다. 독점하는데 동시 접속자가 많을 수는 없다. 이렇게 선지끼리 모순되면 둘 중 하나가 답이고, 일반 상식(전화는 회선 수만큼만 통화 가능)으로 ④가 틀렸음을 확정할 수 있다.</p>
+          <p>⑤번은 맞는 설명이다 — 독점하므로 남의 트래픽에 방해받지 않아 <b>전송속도가 일정</b>하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">데이터그램 방식과 가상회선 방식 중, <b>패킷이 보낸 순서와 다르게 도착할 수 있어 수신측에서 재정렬이 필요한</b> 방식은 무엇이며 그 이유는?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 데이터그램 방식</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>데이터그램은 <b>패킷마다 독립적으로 경로를 결정</b>한다 — 1번 패킷은 A경로, 2번 패킷은 B경로로 갈 수 있다</li>
+            <li>경로마다 거리·혼잡도가 다르므로 <b>나중에 출발한 패킷이 먼저 도착</b>할 수 있다</li>
+            <li>따라서 수신측은 패킷에 붙은 순서번호를 보고 <b>재조립(reassembly)</b>해야 한다</li>
+            <li>반대로 가상회선은 <b>모든 패킷이 같은 논리 경로를 따라가므로</b> 추월이 발생하지 않아 순서가 보장된다</li>
+          </ol>
+          <p><b>확장 이해:</b> 인터넷의 IP는 데이터그램 방식이라 순서를 보장하지 않는다. 그래서 그 위에 있는 <b>TCP가 순서번호를 붙여 재정렬하고 빠진 패킷을 재요청</b>하는 역할을 맡는다 — 계층 구조가 이렇게 역할을 나눠 갖는다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">FDM</span>
@@ -155,6 +394,11 @@
       <span class="chip">패킷교환</span>
       <span class="chip">데이터그램</span>
       <span class="chip">가상회선</span>
+      <span class="chip">통계적 시분할</span>
+      <span class="chip">옥텟</span>
+      <span class="chip">재조립</span>
+      <span class="chip">X.25</span>
+      <span class="chip">ATM</span>
     </div>
   </section>
 

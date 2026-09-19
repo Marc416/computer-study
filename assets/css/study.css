@@ -366,6 +366,111 @@ figure.diagram figcaption .credit a { color: inherit; }
   white-space: nowrap;
 }
 
+/* ===== 연습문제 (스스로 풀고 해설 펼치기) ===== */
+.quiz {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  background: var(--surface);
+}
+.quiz .q-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.quiz .q-no {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 6px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.quiz .q-src {
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.quiz .q-body { font-size: 14.5px; margin: 0 0 10px; }
+.quiz ol.choices {
+  list-style: none;
+  counter-reset: choice;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.quiz ol.choices li {
+  counter-increment: choice;
+  position: relative;
+  padding: 4px 0 4px 26px;
+  font-size: 14px;
+}
+.quiz ol.choices li::before {
+  content: counter(choice);
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 18px;
+  height: 18px;
+  line-height: 17px;
+  text-align: center;
+  border: 1px solid var(--text-dim);
+  border-radius: 50%;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.quiz details {
+  margin-top: 12px;
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+}
+.quiz details > summary {
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--accent);
+  list-style: none;
+  user-select: none;
+}
+.quiz details > summary::-webkit-details-marker { display: none; }
+.quiz details > summary::before {
+  content: "▶ ";
+  font-size: 11px;
+}
+.quiz details[open] > summary::before { content: "▼ "; }
+.quiz details[open] > summary { margin-bottom: 8px; }
+.quiz .answer {
+  background: var(--good-soft);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+.quiz .explain { font-size: 13.5px; margin: 0; }
+.quiz .explain p { font-size: 13.5px; }
+.quiz .explain table { font-size: 13px; }
+
+/* 깊이 있는 설명 박스 */
+.deep {
+  background: var(--surface-2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.deep h4 {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.deep p { margin: 6px 0; font-size: 14px; }
+.deep ul { margin: 6px 0; padding-left: 20px; }
+.deep li { font-size: 14px; margin: 3px 0; }
+
 @media (max-width: 480px) {
   .page-title { font-size: 22px; }
   section.block { padding: 16px; }

@@ -20,9 +20,19 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>CPU는 "한 번에 한 명령어씩" 똑같은 동작을 반복하는 기계다</h4>
+      <p>CPU가 하는 일은 겉보기엔 복잡해 보이지만, 실제로는 <b>딱 네 동작을 죽을 때까지 반복</b>하는 것뿐이다 — 메모리에서 명령어를 꺼내오고(인출), 그게 무슨 명령인지 해독하고(해독), 시키는 대로 하고(실행), 급한 일이 생겼는지 확인한다(인터럽트 확인). 전원이 켜진 순간부터 꺼질 때까지 이 사이클이 초당 수십억 번 돌아간다.</p>
+      <p>그런데 "메모리에서 꺼내온다"는 말은 물리적으로 <b>주소를 어딘가에 적어서 메모리에 보내고, 돌아온 데이터를 어딘가에 받아둔다</b>는 뜻이다. 그 "어딘가"가 바로 <b>레지스터</b>다. PC는 다음에 읽을 주소, MAR은 지금 접근할 주소, MBR은 주고받는 데이터, IR은 지금 해독 중인 명령어를 담는다. <b>레지스터 이름을 외우는 게 아니라, 사이클의 어느 단계에서 어떤 레지스터가 쓰이는지 흐름으로 이해하면</b> 관련 문제가 전부 한 덩어리로 풀린다.</p>
+      <p>마지막으로, 명령어 안에는 "무엇을 할지(OP-Code)"와 "누구를 대상으로 할지(오퍼랜드)"가 적혀 있다. 오퍼랜드가 대상을 가리키는 방법이 여러 가지인데 이것이 <b>주소지정 방식</b>이고, 시험에서는 특히 <b>"메모리에 몇 번 접근하는가"</b>를 집요하게 묻는다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>CPU 내부 레지스터</h3>
+    <h3>CPU 내부 레지스터 <span class="page-ref">📖 기출문제집 p.91~95</span></h3>
     <table>
       <tr><th>레지스터</th><th>이름</th><th>역할</th></tr>
       <tr><td><b>PC</b></td><td>Program Counter (프로그램 카운터)</td><td>다음에 인출할 명령어의 <b>주소</b>를 기억. 인출할 때마다 자동 증가, 분기 시 목적지 주소로 갱신</td></tr>
@@ -33,7 +43,7 @@
     </table>
     <div class="tip"><b>자주 나오는 함정:</b> "가장 최근에 인출한 명령어를 보관" → IR이 정답 (MAR 아님). MAR·MBR은 오답 선택지로 자주 뒤바뀌어 나온다.</div>
 
-    <h3>명령어 실행 사이클 (Instruction Cycle)</h3>
+    <h3>명령어 실행 사이클 (Instruction Cycle) <span class="page-ref">📖 기출문제집 p.96~97</span></h3>
     <table>
       <tr><th>순서</th><th>단계</th><th>레지스터 이동</th></tr>
       <tr><td>1</td><td>인출 (Fetch)</td><td>MAR ← PC → MBR ← M[MAR] → IR ← MBR</td></tr>
@@ -42,6 +52,75 @@
       <tr><td>4</td><td>인터럽트 확인</td><td>요청이 있으면 인터럽트 사이클로, 없으면 다시 인출로</td></tr>
     </table>
     <div class="analogy"><b>비유:</b> PC = "다음에 읽을 페이지 번호", MAR = "책장에서 그 페이지를 찾기 위한 색인", MBR = "찾은 내용을 옮겨 담는 바구니", IR = "지금 읽고 있는 문장"</div>
+
+    <p>순서를 묻는 문제가 매년 나오므로, <b>레지스터 사이로 값이 옮겨 다니는 경로</b>를 그림으로 한 번 익혀두면 외울 필요가 없어진다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 330" role="img" aria-label="인출 사이클 데이터 흐름: PC의 주소가 MAR로 복사되고, MAR이 가리키는 메모리 내용이 MBR로 읽혀오며, MBR의 명령어가 IR로 옮겨진 뒤 해독과 실행을 거쳐 인터럽트 확인 후 다시 인출로 돌아간다">
+        <defs>
+          <marker id="ic1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <rect x="30" y="200" width="250" height="110" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="155" y="222" font-size="12" text-anchor="middle" opacity="0.8">주기억장치 (Memory)</text>
+        <rect x="55" y="238" width="200" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="155" y="260" font-size="12" text-anchor="middle">M[MAR] 번지의 내용</text>
+        <text x="155" y="278" font-size="11" text-anchor="middle" opacity="0.75">= 실행할 명령어</text>
+
+        <rect x="30" y="40" width="110" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="85" y="62" font-size="13" text-anchor="middle" font-weight="700">PC</text>
+        <text x="85" y="78" font-size="10.5" text-anchor="middle" opacity="0.75">다음 명령어 주소</text>
+
+        <rect x="200" y="40" width="110" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="255" y="62" font-size="13" text-anchor="middle" font-weight="700">MAR</text>
+        <text x="255" y="78" font-size="10.5" text-anchor="middle" opacity="0.75">접근할 주소</text>
+
+        <rect x="200" y="125" width="110" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="255" y="147" font-size="13" text-anchor="middle" font-weight="700">MBR</text>
+        <text x="255" y="163" font-size="10.5" text-anchor="middle" opacity="0.75">주고받는 데이터</text>
+
+        <rect x="390" y="125" width="110" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="445" y="147" font-size="13" text-anchor="middle" font-weight="700">IR</text>
+        <text x="445" y="163" font-size="10.5" text-anchor="middle" opacity="0.75">현재 명령어</text>
+
+        <line x1="140" y1="63" x2="196" y2="63" stroke="currentColor" stroke-width="1.8" marker-end="url(#ic1)"/>
+        <text x="168" y="54" font-size="11" text-anchor="middle" font-weight="700">①</text>
+        <text x="168" y="34" font-size="10.5" text-anchor="middle" opacity="0.8">MAR←PC</text>
+
+        <polyline points="255,86 255,105 190,105 190,250 51,250" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ic1)"/>
+        <text x="197" y="185" font-size="11" font-weight="700">②</text>
+        <text x="130" y="242" font-size="10.5" opacity="0.8">주소 전달</text>
+
+        <polyline points="255,238 255,175" fill="none" stroke="currentColor" stroke-width="1.8" marker-end="url(#ic1)"/>
+        <text x="265" y="205" font-size="11" font-weight="700">③</text>
+        <text x="272" y="222" font-size="10.5" opacity="0.8">MBR←M[MAR]</text>
+
+        <line x1="314" y1="148" x2="386" y2="148" stroke="currentColor" stroke-width="1.8" marker-end="url(#ic1)"/>
+        <text x="350" y="139" font-size="11" text-anchor="middle" font-weight="700">④</text>
+        <text x="350" y="120" font-size="10.5" text-anchor="middle" opacity="0.8">IR←MBR</text>
+
+        <rect x="555" y="40" width="120" height="46" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="615" y="68" font-size="12" text-anchor="middle">해독 · 실행</text>
+        <polyline points="500,140 530,140 530,63 551,63" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ic1)"/>
+        <text x="536" y="108" font-size="11" font-weight="700">⑤</text>
+
+        <rect x="545" y="200" width="140" height="56" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="615" y="222" font-size="12" text-anchor="middle">인터럽트 확인</text>
+        <text x="615" y="240" font-size="10.5" text-anchor="middle" opacity="0.75">있으면 인터럽트 사이클</text>
+        <line x1="615" y1="86" x2="615" y2="196" stroke="currentColor" stroke-width="1.5" marker-end="url(#ic1)"/>
+        <text x="623" y="145" font-size="11" font-weight="700">⑥</text>
+
+        <polyline points="545,228 400,228 400,300 85,300 85,90" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ic1)"/>
+        <text x="300" y="316" font-size="11" opacity="0.85">⑦ 인터럽트 없으면 다시 인출 사이클로 (PC는 이미 +1 되어 있음)</text>
+      </svg>
+      <figcaption>인출 사이클의 데이터 흐름 — 주소는 PC→MAR→메모리로, 데이터는 메모리→MBR→IR로 흐른다. <b>주소 계열(PC·MAR)과 데이터 계열(MBR·IR)이 분리되어 있다</b>는 점만 잡으면 순서 문제는 틀릴 수 없다.</figcaption>
+    </figure>
+
+    <div class="deep">
+      <h4>순서 문제를 푸는 요령</h4>
+      <p>기출은 늘 다음 5개를 섞어놓고 순서를 맞추라고 한다: ㄱ. PC값을 MAR로 적재 / ㄴ. 메모리에서 읽어 MBR로 적재 / ㄷ. MBR의 명령어를 IR로 적재 / ㄹ. IR을 해독해 연산 수행 / ㅁ. 인터럽트 발생 유무 확인.</p>
+      <p>정답 순서는 언제나 <b>ㄱ → ㄴ → ㄷ → ㄹ → ㅁ</b>이다. 외우기 어려우면 이렇게 생각하라 — <b>"주소부터 보내야(ㄱ) 읽어올 수 있고(ㄴ), 읽어와야 해독할 자리에 놓고(ㄷ), 놓아야 해독·실행하며(ㄹ), 다 끝나고 나서야 다른 일을 확인한다(ㅁ)."</b> 각 단계는 앞 단계 없이는 불가능하므로 논리적으로 순서가 하나뿐이다.</p>
+      <p><b>PC 증가 시점 주의:</b> PC는 인출 직후(ㄴ 단계 무렵)에 이미 +1 된다. "실행이 끝난 뒤에 증가한다"는 선택지는 오답이다.</p>
+    </div>
 
     <h3>제어장치 vs 연산장치 구성요소 구분 <span class="page-ref">📖 기출문제집 p.90~91</span></h3>
     <table>
@@ -156,6 +235,61 @@
       <tr><td>인덱스 (Indexed)</td><td>인덱스 레지스터 값 + 오퍼랜드 = 유효주소</td><td>1회</td></tr>
     </table>
     <div class="tip"><b>간접 주소지정을 쓰는 이유:</b> 오퍼랜드 비트 수의 한계로 표현 가능한 주소 범위가 좁아지는 문제를 해결하기 위해 — 메모리 1워드 전체를 주소로 활용해 <b>지정 가능한 주소 범위를 확대</b>한다.</div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="주소지정 방식별 데이터 도달 경로 비교: 즉치는 명령어 안에 데이터가 있고, 직접은 메모리를 한 번, 간접은 메모리를 두 번 거쳐야 데이터에 도달한다">
+        <defs>
+          <marker id="am1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="20" y="20" font-size="13" font-weight="700">① 즉치(Immediate) — 메모리 접근 0회</text>
+        <rect x="30" y="32" width="170" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="115" y1="32" x2="115" y2="70" stroke="currentColor" stroke-width="1.5"/>
+        <text x="72" y="56" font-size="11.5" text-anchor="middle">OP-Code</text>
+        <text x="157" y="56" font-size="11.5" text-anchor="middle" font-weight="700">25</text>
+        <line x1="204" y1="51" x2="280" y2="51" stroke="currentColor" stroke-width="1.8" marker-end="url(#am1)"/>
+        <text x="290" y="55" font-size="12">데이터 = 25 (즉시 사용)</text>
+        <text x="500" y="55" font-size="11" opacity="0.8">가장 빠름, 값 범위는 좁음</text>
+
+        <text x="20" y="105" font-size="13" font-weight="700">② 직접(Direct) — 메모리 접근 1회</text>
+        <rect x="30" y="117" width="170" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="115" y1="117" x2="115" y2="155" stroke="currentColor" stroke-width="1.5"/>
+        <text x="72" y="141" font-size="11.5" text-anchor="middle">OP-Code</text>
+        <text x="157" y="141" font-size="11.5" text-anchor="middle" font-weight="700">500</text>
+        <line x1="204" y1="136" x2="290" y2="136" stroke="currentColor" stroke-width="1.8" marker-end="url(#am1)"/>
+        <text x="247" y="128" font-size="10.5" text-anchor="middle" opacity="0.8">1차 접근</text>
+        <rect x="294" y="117" width="150" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="369" y="134" font-size="11" text-anchor="middle" opacity="0.75">메모리 500번지</text>
+        <text x="369" y="150" font-size="11.5" text-anchor="middle" font-weight="700">데이터</text>
+        <text x="470" y="141" font-size="11" opacity="0.8">오퍼랜드 = 데이터의 주소</text>
+
+        <text x="20" y="195" font-size="13" font-weight="700">③ 간접(Indirect) — 메모리 접근 2회 (가장 많음)</text>
+        <rect x="30" y="207" width="170" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <line x1="115" y1="207" x2="115" y2="245" stroke="currentColor" stroke-width="1.5"/>
+        <text x="72" y="231" font-size="11.5" text-anchor="middle">OP-Code</text>
+        <text x="157" y="231" font-size="11.5" text-anchor="middle" font-weight="700">500</text>
+        <line x1="204" y1="226" x2="290" y2="226" stroke="currentColor" stroke-width="1.8" marker-end="url(#am1)"/>
+        <text x="247" y="218" font-size="10.5" text-anchor="middle" opacity="0.8">1차 접근</text>
+        <rect x="294" y="207" width="150" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="369" y="224" font-size="11" text-anchor="middle" opacity="0.75">메모리 500번지</text>
+        <text x="369" y="240" font-size="11.5" text-anchor="middle" font-weight="700">800 (또 다른 주소)</text>
+        <line x1="448" y1="226" x2="510" y2="226" stroke="currentColor" stroke-width="1.8" marker-end="url(#am1)"/>
+        <text x="479" y="218" font-size="10.5" text-anchor="middle" opacity="0.8">2차 접근</text>
+        <rect x="514" y="207" width="150" height="38" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="589" y="224" font-size="11" text-anchor="middle" opacity="0.75">메모리 800번지</text>
+        <text x="589" y="240" font-size="11.5" text-anchor="middle" font-weight="700">진짜 데이터</text>
+        <text x="30" y="275" font-size="11.5" opacity="0.85">→ 느리지만, 오퍼랜드(짧은 필드) 대신 <tspan font-weight="700">메모리 1워드 전체를 주소로 쓸 수 있어 주소 범위가 넓어진다.</tspan></text>
+        <text x="30" y="292" font-size="11.5" opacity="0.85">이것이 간접 주소지정을 쓰는 유일한 이유다 (보안·속도 향상과는 무관).</text>
+      </svg>
+      <figcaption>주소지정 방식별로 "데이터에 도달하기까지 메모리를 몇 번 거치는가"가 다르다 — 즉치 0회, 직접 1회, 간접 2회. 시험은 거의 항상 이 횟수를 묻는다.</figcaption>
+    </figure>
+
+    <div class="deep">
+      <h4>속도 순서와 그 이유</h4>
+      <p><b>레지스터(0회) &gt; 즉치(0회) &gt; 직접·레지스터간접·상대·인덱스(1회) &gt; 간접(2회)</b> 순으로 빠르다. 메모리를 한 번 더 갈 때마다 느려지기 때문이다.</p>
+      <p>특히 <b>"레지스터 주소지정이 직접 주소지정보다 느리다"는 서술은 틀린 문장</b>이다(2019 지방직 출제). 레지스터는 CPU 안에 있고 직접 주소지정은 CPU 밖 주기억장치를 다녀와야 하므로, 레지스터 쪽이 압도적으로 빠르다.</p>
+      <p><b>상대 주소지정(PC + 변위)</b>은 분기 명령어 전용이라고 봐도 된다. "지금 위치에서 몇 칸 떨어진 곳으로 점프"라는 뜻이라 프로그램을 메모리 어디에 올려도 그대로 동작한다(재배치 가능).</p>
+    </div>
   </section>
 
   <section class="block">
@@ -168,7 +302,215 @@
       <li>간접 주소지정 방식은 메모리 접근 <b>2회</b>, 유효주소 확장이 목적 (보안과는 무관)</li>
       <li>레지스터 주소지정 &gt; 직접 주소지정 &gt; 간접 주소지정 순으로 접근 속도가 빠름</li>
       <li>상대 주소지정 = <b>PC + 변위</b> → 분기(branch) 명령어에서 사용된다는 것 암기</li>
+      <li><b>캐시 메모리는 CPU 내부 "레지스터"가 아니다</b> — 레지스터 목록을 고르는 문제의 단골 오답</li>
+      <li>제어장치 구성요소 = PC·IR·MAR·MBR·명령어 해독기·순서 제어 논리장치 / <b>시프트 레지스터·가산기·보수기는 연산장치</b></li>
+      <li>"기억장치에서 꺼내진 명령어를 누산기가 기억한다" → <b>오답</b> (MBR을 거쳐 IR로 간다. 누산기는 LOAD된 데이터를 받음)</li>
+      <li>CPU와 주기억장치 사이 통신은 DMA가 아니다 — <b>DMA는 주기억장치↔입출력장치</b> 사이를 CPU 없이 잇는 방식</li>
     </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2019 국가직 · 기출문제집 p.91</span></div>
+      <p class="q-body">CPU 내부 레지스터로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>누산기 (accumulator)</li>
+        <li>캐시 메모리 (cache memory)</li>
+        <li>프로그램 카운터 (program counter)</li>
+        <li>메모리 버퍼 레지스터 (memory buffer register)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 캐시 메모리</p>
+        <div class="explain">
+          <p>CPU 내부 레지스터는 <b>PC, IR, MAR, MBR, AC(누산기)</b> 등이다. 캐시 메모리는 CPU와 주기억장치 사이의 <b>속도 차이를 줄이기 위한 별도의 고속 기억장치</b>로, 지역성(locality)을 이용해 자주 쓰는 데이터를 미리 담아두는 장치다.</p>
+          <p><b>함정:</b> 요즘 CPU는 캐시를 칩 안에 내장하고 있어서 "CPU 안에 있으니 레지스터 아닌가?" 싶을 수 있다. 하지만 <b>물리적 위치와 논리적 분류는 별개</b>다 — 레지스터는 명령어가 직접 이름을 불러 쓰는 저장소이고, 캐시는 프로그래머에게 보이지 않는 자동 버퍼다. 자세한 내용은 <a href="캐시기억장치.md">캐시기억장치 문서</a> 참고.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2020 국가직 · 기출문제집 p.93</span></div>
+      <p class="q-body">CPU 내의 레지스터에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>Accumulator(AC): 연산 과정의 데이터를 일시적으로 저장하는 레지스터</li>
+        <li>Program Counter(PC): 다음에 인출될 명령어의 주소를 보관하는 레지스터</li>
+        <li>Memory Address Register(MAR): 가장 최근에 인출한 명령어를 보관하는 레지스터</li>
+        <li>Memory Buffer Register(MBR): 기억장치에 저장될 데이터 혹은 기억장치로부터 읽힌 데이터가 일시적으로 저장되는 버퍼 레지스터</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ — "가장 최근에 인출한 명령어"를 보관하는 것은 <b>IR</b>이다</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>MAR</b>은 CPU가 주기억장치에 접근할 때 필요한 <b>주소</b>를 담는다 (명령어 자체가 아니라 그 명령어가 있는 번지)</li>
+            <li>가장 최근에 인출된 <b>명령어 자체</b>를 담는 것은 <b>IR</b>(Instruction Register)</li>
+            <li>①·②·④는 모두 올바른 설명</li>
+          </ol>
+          <p><b>구분 요령:</b> 이름에 <b>Address</b>가 들어가면 주소(MAR), <b>Buffer</b>가 들어가면 데이터(MBR), <b>Instruction</b>이 들어가면 명령어(IR)다. 이름이 곧 답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2009 국가직 · 기출문제집 p.92</span></div>
+      <p class="q-body">다음 기능을 수행하는 CPU의 레지스터는?<br>
+      • 다음에 수행할 명령의 주소를 기억한다.<br>
+      • <b>상대주소지정방식</b>에서 유효번지를 구하기 위해 이 레지스터의 내용을 명령어의 오퍼랜드에 더한다.</p>
+      <ol class="choices">
+        <li>PC</li>
+        <li>AC</li>
+        <li>MAR</li>
+        <li>MBR</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① PC (Program Counter)</p>
+        <div class="explain">
+          <p>두 조건이 <b>동시에</b> 가리키는 레지스터를 찾아야 한다.</p>
+          <ol class="steps">
+            <li>"다음에 수행할 명령의 주소를 기억" → PC의 기본 정의</li>
+            <li>"상대주소지정에서 오퍼랜드에 더하는 값" → 상대 주소지정의 공식은 <b>유효주소 = PC + 변위(오퍼랜드)</b>이므로 역시 PC</li>
+            <li>두 조건 모두 만족 → PC</li>
+          </ol>
+          <p><b>추가 정리:</b> PC는 명령어를 인출할 때마다 <b>1 또는 명령어 길이만큼 자동 증가</b>하고, 분기 명령을 만나면 목적지 주소로 <b>갱신</b>된다. 이 세 가지(주소 보관·자동 증가·분기 시 갱신)가 PC 문제의 출제 포인트 전부다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2012 지방직 · 기출문제집 p.96</span></div>
+      <p class="q-body">CPU가 명령어를 처리하는 과정의 순서로 옳은 것은?<br>
+      ㄱ. IR에 적재된 명령어를 해독한 후 그 결과에 따라 연산을 수행한다.<br>
+      ㄴ. 주기억장치로부터 명령어를 읽어 MBR로 적재한다.<br>
+      ㄷ. 프로그램 카운터 값을 MAR로 적재한다.<br>
+      ㄹ. 인터럽트 발생유무를 확인한다.<br>
+      ㅁ. MBR에 있는 명령어를 IR로 적재한다.</p>
+      <ol class="choices">
+        <li>ㄴ → ㄷ → ㅁ → ㄱ → ㄹ</li>
+        <li>ㄷ → ㄱ → ㄴ → ㅁ → ㄹ</li>
+        <li>ㄷ → ㄴ → ㅁ → ㄱ → ㄹ</li>
+        <li>ㄷ → ㄹ → ㄴ → ㅁ → ㄱ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ ㄷ → ㄴ → ㅁ → ㄱ → ㄹ</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>ㄷ</b> MAR ← PC : 읽어올 주소를 먼저 MAR에 실어야 메모리에 요청할 수 있다</li>
+            <li><b>ㄴ</b> MBR ← M[MAR] : 그 주소의 내용(명령어)을 읽어 MBR에 담는다</li>
+            <li><b>ㅁ</b> IR ← MBR : 해독하려면 명령어 전용 자리인 IR로 옮겨야 한다</li>
+            <li><b>ㄱ</b> 해독 후 실행 : IR 내용을 해독해 제어신호를 보내고 연산 수행</li>
+            <li><b>ㄹ</b> 인터럽트 확인 : 명령 하나를 끝낸 뒤 확인 — 있으면 인터럽트 사이클, 없으면 다시 ㄷ으로</li>
+          </ol>
+          <p><b>함정:</b> ①번은 주소를 보내기도 전에 메모리에서 읽는(ㄴ이 ㄷ보다 먼저) 불가능한 순서다. ④번은 명령어를 읽기도 전에 인터럽트를 확인한다. <b>"주소 → 읽기 → 옮기기 → 실행 → 확인"</b>의 인과관계만 따지면 나머지는 자동으로 걸러진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2012 계리직 · 기출문제집 p.97~98</span></div>
+      <p class="q-body">〈보기〉는 스택을 이용한 <b>0-주소 명령어</b> 프로그램이다. 이 프로그램이 수행하는 계산으로 옳은 것은?<br>
+      <code>PUSH C / PUSH A / PUSH B / ADD / MUL / POP Z</code></p>
+      <ol class="choices">
+        <li>Z = C + A * B</li>
+        <li>Z = (A + B) * C</li>
+        <li>Z = B + C * A</li>
+        <li>Z = (C + B) * A</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② Z = (A + B) * C</p>
+        <div class="explain">
+          <p>규칙 하나만 지키면 된다 — <b>숫자는 쌓고, 연산자를 만나면 위에서 2개를 꺼내 계산한 뒤 결과를 다시 쌓는다.</b></p>
+          <ol class="steps">
+            <li>PUSH C → 스택: [C]</li>
+            <li>PUSH A → 스택: [C, A]</li>
+            <li>PUSH B → 스택: [C, A, B]</li>
+            <li>ADD → 위 2개(B, A)를 꺼내 A+B → 스택: [C, (A+B)]</li>
+            <li>MUL → 위 2개((A+B), C)를 꺼내 곱함 → 스택: [C×(A+B)]</li>
+            <li>POP Z → Z = (A+B) × C</li>
+          </ol>
+          <p><b>함정:</b> ①번은 ADD와 MUL의 적용 대상을 뒤바꾼 경우다. <b>연산자는 항상 "가장 최근에 쌓인 2개"에만 적용</b>되므로, ADD 시점에 스택 맨 위인 A와 B가 먼저 묶인다는 점이 핵심이다. 위 <b>스택 흐름 다이어그램</b>을 함께 보면 확실하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2011 국가직 · 기출문제집 p.99</span></div>
+      <p class="q-body">CPU가 명령어를 실행할 때 피연산자를 얻기 위해 <b>메모리에 접근하는 횟수가 가장 많은</b> 주소지정 방식은?</p>
+      <ol class="choices">
+        <li>직접 주소지정 방식 (direct addressing mode)</li>
+        <li>간접 주소지정 방식 (indirect addressing mode)</li>
+        <li>인덱스 주소지정 방식 (indexed addressing mode)</li>
+        <li>상대 주소지정 방식 (relative addressing mode)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 간접 주소지정 방식 (2회)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>직접</b>: 오퍼랜드가 곧 데이터 주소 → 메모리 <b>1회</b></li>
+            <li><b>인덱스</b>: (인덱스 레지스터 + 오퍼랜드)로 주소 계산 후 접근 → 레지스터 읽기는 메모리 접근이 아니므로 <b>1회</b></li>
+            <li><b>상대</b>: (PC + 변위)로 주소 계산 후 접근 → <b>1회</b></li>
+            <li><b>간접</b>: 오퍼랜드가 가리키는 곳에서 <b>진짜 주소를 먼저 읽고</b>(1회), 그 주소로 <b>데이터를 읽는다</b>(2회) → <b>2회</b></li>
+          </ol>
+          <p><b>핵심:</b> "레지스터를 읽는 것은 메모리 접근으로 세지 않는다." 이 원칙 때문에 인덱스·상대 방식은 계산이 끼어 있어도 접근 횟수가 1회다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2019 지방직 · 기출문제집 p.101</span></div>
+      <p class="q-body">유효 주소(Effective Address)를 찾기 위한 주소 지정 방식에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>즉시 주소 지정 방식은 유효 데이터가 명령어 레지스터 내에 있다.</li>
+        <li>간접 주소 지정 방식으로 유효 데이터에 접근하는 경우 주기억장치 최소접근횟수는 2이다.</li>
+        <li>상대 주소 지정 방식은 프로그램 카운터와 명령어 내의 주소필드 값을 결합하여 유효 주소를 도출한다.</li>
+        <li>레지스터 주소 지정 방식은 직접 주소 지정 방식보다 유효 데이터 접근속도가 느리다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ — 레지스터 방식이 직접 방식보다 <b>빠르다</b></p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>레지스터 주소 지정</b>: 데이터가 CPU 내부 레지스터에 있다 → 메모리 접근 0회, 가장 빠름</li>
+            <li><b>직접 주소 지정</b>: 데이터가 CPU 밖 주기억장치에 있다 → 메모리 접근 1회 필요</li>
+            <li>따라서 레지스터 방식이 더 <b>빠르다</b> → ④번 서술은 정반대</li>
+          </ol>
+          <p>①·②·③은 모두 맞는 설명이다. 특히 ①의 "즉시 주소 지정에서 데이터가 명령어 레지스터(IR) 안에 있다"는 표현은 낯설어 보이지만, <b>오퍼랜드 자체가 데이터이고 그 명령어가 IR에 적재되어 있으므로 맞는 말</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2022 국가직 · 기출문제집 p.101</span></div>
+      <p class="q-body">(가)에 들어갈 어드레싱 모드로 옳은 것은?<br>
+      「(가)는 명령어가 <b>피연산자의 주소를 가지고 있는 레지스터</b>를 지정한다. 즉, 선택된 레지스터는 피연산자 그 자체가 아니라 피연산자의 주소이다.」</p>
+      <ol class="choices">
+        <li>레지스터 간접 모드 (Register Indirect mode)</li>
+        <li>레지스터 모드 (Register mode)</li>
+        <li>간접 주소 모드 (Indirect Addressing mode)</li>
+        <li>인덱스 어드레싱 모드 (Indexed Addressing mode)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 레지스터 간접 모드</p>
+        <div class="explain">
+          <p>두 단어로 쪼개서 읽으면 바로 구분된다 — <b>"레지스터"는 어디를 보라는 뜻, "간접"은 거기 든 게 값이 아니라 주소라는 뜻</b>이다.</p>
+          <table>
+            <tr><th>방식</th><th>레지스터 안에 든 것</th><th>메모리 접근</th></tr>
+            <tr><td>레지스터 모드</td><td><b>데이터 자체</b></td><td>0회</td></tr>
+            <tr><td>레지스터 간접 모드</td><td><b>데이터의 주소</b></td><td>1회</td></tr>
+            <tr><td>간접 주소 모드</td><td>레지스터를 안 씀 (오퍼랜드가 "주소가 든 메모리 번지")</td><td>2회</td></tr>
+          </table>
+          <p><b>함정:</b> ③번 간접 주소 모드는 <b>레지스터를 전혀 거치지 않는다.</b> 문제 지문에 "레지스터를 지정한다"가 있으므로 ③은 제외된다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

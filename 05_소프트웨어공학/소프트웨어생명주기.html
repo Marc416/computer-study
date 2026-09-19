@@ -11,18 +11,29 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 소프트웨어 생명주기</div>
   <h1 class="page-title">소프트웨어 생명주기 (SDLC)</h1>
-  <p class="page-subtitle">개발 모델별 흐름 시각화 · PART 06. 소프트웨어공학</p>
+  <p class="page-subtitle">개발 모델 · 비용 산정 · 일정 계획(CPM) · PART 06. 소프트웨어공학</p>
 
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p>SDLC(Software Development Life Cycle) 표준 순서는 <b>계획 → 분석 → 설계 → 구현 → 테스트 → 유지보수</b>다.</p>
-    <p>각 개발 모델(폭포수·프로토타입·나선형·애자일)은 이 6단계를 <b>"어떤 순서/반복 방식으로 밟느냐"</b>가 다를 뿐이다. 모델별 키워드·비교표는 이미 <a href="개발방법론.md">개발방법론</a> 문서에 자세히 있으니, 여기서는 그 흐름을 눈으로 보는 데 집중한다.</p>
+    <p>각 개발 모델(폭포수·프로토타입·나선형·애자일)은 이 6단계를 <b>"어떤 순서/반복 방식으로 밟느냐"</b>가 다를 뿐이다.</p>
+    <p>계획 단계의 계산 문제 3종 — <b>LOC 기반 기간 산정 · 기능점수(FP) · CPM 임계경로</b> — 는 거의 매년 나온다.</p>
   </div>
 
   <section class="block">
-    <h2><span class="emoji">💡</span>주요 개념</h2>
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"그냥 만들면 되지 왜 모델이 필요한가"</h4>
+      <p>혼자 만드는 200줄짜리 프로그램은 그냥 짜면 된다. 그런데 <b>20명이 2년 동안 50만 줄</b>을 만든다고 해보자. 누가 언제 무엇을 끝내야 다음 사람이 시작할 수 있는지, 고객이 "생각해보니 이게 아니었다"고 할 때 어디까지 되돌려야 하는지가 즉시 문제가 된다. 소프트웨어는 눈에 보이지 않아서 <b>진척도를 눈으로 확인할 수 없다</b>는 점이 건설·제조업과 결정적으로 다르다.</p>
+      <p>그래서 나온 것이 생명주기 모델이다. 핵심 질문은 딱 하나다 — <b>"고객에게 결과물을 언제 보여줄 것인가?"</b> 끝까지 다 만들고 보여주면 <b>폭포수</b>, 시제품을 먼저 보여주면 <b>프로토타입</b>, 위험한 것부터 조금씩 돌려가며 보여주면 <b>나선형</b>, 2주마다 계속 보여주면 <b>애자일</b>이다. 모델 이름을 외우기 전에 이 한 줄을 잡아두면 거의 모든 문제가 풀린다.</p>
+      <p>그리고 계획 단계에서는 <b>"얼마나 걸리고 얼마나 드는가"</b>를 숫자로 답해야 한다. 그 도구가 LOC·COCOMO·기능점수(규모 추정)와 CPM·간트차트(일정 추정)다. 시험은 이 부분을 <b>계산 문제</b>로 낸다.</p>
+    </div>
+  </section>
 
-    <h3>SDLC 6단계 순서 확인 문제 <span class="page-ref">📖 기출문제집 p.606~607</span></h3>
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 개발 모델</h2>
+
+    <h3>SDLC 6단계 순서 <span class="page-ref">📖 기출문제집 p.606~607</span></h3>
     <p>시험은 순서를 살짝 뒤섞어서 "옳은 것은?" 형태로 자주 낸다. 실제 기출 선택지 예시:</p>
     <ol class="steps">
       <li>① 계획 — 분석 — 설계 — 구현 — 테스트 — 유지보수 <b>← 정답</b></li>
@@ -31,6 +42,7 @@
       <li>④ 계획 — 설계 — 분석 — 구현 — 테스트 — 유지보수 (설계·분석 순서가 바뀜 → 오답)</li>
     </ol>
     <div class="analogy"><b>암기 순서:</b> "계획 없이 분석 못하고, 분석 없이 설계 못하고, 설계 없이 못 만들고(구현), 만든 건 테스트하고, 다 끝나도 고쳐야(유지보수) 한다" — 당연한 흐름이라 순서 자체는 상식적으로 유추 가능.</div>
+    <div class="tip"><b>표기 차이 주의:</b> 폭포수 모형을 세분화하면 <b>계획 → 요구분석 → 설계 → 구현 → 시험 → 인수/설치 → 유지보수</b>가 된다. 문제마다 "분석/요구분석", "테스트/시험"처럼 표기가 다르니 단어가 아니라 <b>순서</b>로 판단할 것.</div>
 
     <h3>4대 모델의 흐름 비교 (한눈에 보기)</h3>
     <figure class="diagram">
@@ -98,47 +110,458 @@
       <figcaption>네 가지 SDLC 모델의 실제 흐름 — 폭포수만 유일하게 "되돌아가는 화살표"가 없다는 점이 시험에서 제일 많이 활용되는 차이다.</figcaption>
     </figure>
 
-    <div class="tip"><b>모델별 키워드·세부 비교표(코코모, XP 실천법, V-모델 대응관계 등)는 이미 정리되어 있음:</b> <a href="개발방법론.md">→ 개발방법론 문서 보기</a></div>
+    <h3>모델별 상세 — 시험에 나오는 문장들</h3>
+
+    <div class="deep">
+      <h4>폭포수(Waterfall) <span class="page-ref">📖 p.608~609</span></h4>
+      <ul>
+        <li>1950년대 <b>항공 방위 소프트웨어</b> 개발 경험에서 나온 <b>가장 오래되고 널리 쓰인</b> 모델</li>
+        <li>각 단계가 순차적 — <b>병행 진행도, 거슬러 반복도 없다.</b> 이전 단계가 끝나야 다음 단계 시작</li>
+        <li>단계마다 나와야 할 <b>중간 산출물(deliverable)이 명확히 정의</b>되어 있다 → 문서화·관리가 쉽다</li>
+        <li><b>단점:</b> 고객 요구를 초기에 완벽히 기술하기 어렵고, 동작하는 시스템이 <b>후반부에야</b> 나오므로 중요한 문제가 늦게 발견된다</li>
+        <li><b>적합:</b> 요구사항이 잘 이해되고 개발 중 급격한 변경이 없는 경우</li>
+      </ul>
+    </div>
+
+    <div class="deep">
+      <h4>프로토타입(Prototype, 원형) <span class="page-ref">📖 p.609~610</span></h4>
+      <ul>
+        <li>순서: <b>요구분석 → 시제품 설계 → 시제품 개발 → 고객 평가 → 시제품 정제 → 완제품 생산</b></li>
+        <li>목적은 <b>초기에 고객 요구를 제대로 뽑아내는 것</b> — 발주자가 목표 시스템을 미리 볼 수 있다</li>
+        <li>프로토타입은 <b>품질보다 속도</b>가 중요하며, 만든 뒤 <b>폐기될 수도 재사용될 수도</b> 있다</li>
+        <li><b>사용자 요구가 불투명할 때</b> 폭포수를 대체할 수 있는 방법. 시스템 이해도가 <b>낮은</b> 관리자가 있을 때 유용</li>
+      </ul>
+      <p><b>자주 나오는 함정 ①:</b> "프로토타입 모형의 마지막 단계는 설계이다" → ✗ 마지막은 <b>완제품 생산</b>. <b>함정 ②:</b> "가장 오래되고 널리 사용된 방법" → ✗ 그건 <b>폭포수</b>다.</p>
+    </div>
+
+    <div class="deep">
+      <h4>나선형(Spiral) <span class="page-ref">📖 p.611~613</span></h4>
+      <ul>
+        <li><b>보헴(Boehm)</b>이 제안. <b>폭포수 + 프로토타입의 장점에 "위험 분석"을 추가</b>한 모델</li>
+        <li>한 바퀴(나선) = <b>① 계획 및 정의 → ② 위험 분석 → ③ 개발 및 검증 → ④ 고객 평가</b> 의 <b>4단계</b></li>
+        <li>비선형적·반복적으로 진행되므로 소프트웨어 품질 중 <b>강인성(robustness)</b>을 높일 수 있다</li>
+        <li><b>대규모 시스템</b>에 가장 적합 (소규모에 적합하다는 선택지는 오답)</li>
+        <li><b>단점:</b> 초기 위험 분석을 잘못하면 많은 비용을 쓰고도 실패할 수 있고, 관리가 복잡하다</li>
+      </ul>
+      <p><b>위험의 3분류:</b> 프로젝트 위험(인력부족·관리변화·하드웨어 미비·규모 과소평가) / 프로덕트 위험(요구변경·명세서 지연) / 비즈니스 위험(기술변화·생산품 경쟁)</p>
+      <p><b>자주 나오는 함정:</b> "3단계(계획·개발·평가)로 이루어진다" → ✗ <b>위험 분석을 포함한 4단계</b>다. "소규모에 적합" → ✗ <b>대규모</b>.</p>
+    </div>
+
+    <div class="deep">
+      <h4>V 모델 <span class="page-ref">📖 p.613~614</span></h4>
+      <ul>
+        <li>폭포수의 변형 — <b>산출물보다 각 개발 단계의 "테스트와 검증"에 중점</b></li>
+        <li>순서: 요구분석 → <b>시스템설계 → 상세설계 → 코딩 → 단위테스트 → 통합테스트 → 시스템테스트</b> → 인수/설치</li>
+        <li>왼쪽(개발)과 오른쪽(테스트)이 <b>짝을 이룬다</b> — 상세설계↔단위테스트, 시스템설계↔통합/시스템테스트</li>
+        <li><b>높은 신뢰성</b>이 요구되는 분야에 적합. V자 모양 그림은 <a href="소프트웨어테스트와유지보수.html">테스트 문서</a> 참고</li>
+      </ul>
+    </div>
+
+    <div class="deep">
+      <h4>애자일(Agile)과 XP <span class="page-ref">📖 p.617~619</span></h4>
+      <p><b>애자일 4대 가치</b> — 시험에 거의 그대로 나온다:</p>
+      <ol class="steps">
+        <li>프로세스와 도구 중심이 아닌 → <b>개인과 상호 소통</b></li>
+        <li>문서 중심이 아닌 → <b>실행 가능한(동작하는) 소프트웨어</b></li>
+        <li>계약·협상 중심이 아닌 → <b>고객과의 협력</b></li>
+        <li>계획 중심이 아닌 → <b>변화에 대한 민첩한 대응</b></li>
+      </ol>
+      <p>짧은 릴리즈 주기(small release)로 <b>점증적</b>으로 개발하고, 각 반복 종료마다 완성된 시스템을 고객에게 인도해 피드백을 받는다. <b>개발 후반에 추가되는 요구사항도 기꺼이 받아들인다.</b></p>
+      <p><b>XP(익스트림 프로그래밍)</b>: 애자일의 한 종류. <b>켄트 벡</b>이 고안. 가치는 <b>의사소통·단순성·피드백·용기</b>(+ 존중). 요구 변화가 잦은 <b>소규모 팀</b> 프로젝트에 효과적.</p>
+      <p><b>UP(Unified Process)</b>: 반복적·점진적, <b>유스케이스 기반</b>, 아키텍처 중심, 위험 관리 중시. "모든 요구사항을 초기에 완전히 파악하도록 요구한다"는 서술은 <b>오답</b>(반복 모델이므로).</p>
+    </div>
+
+    <h3>기타 모델·도구 한 줄 정리</h3>
+    <table>
+      <tr><th>용어</th><th>핵심</th></tr>
+      <tr><td>컴포넌트 기반(CBD)</td><td>기존 컴포넌트를 조립 → <b>개발할 소프트웨어의 양을 줄인다</b></td></tr>
+      <tr><td>RAD</td><td><b>CASE 도구</b>를 활용해 빠르게 개발</td></tr>
+      <tr><td>CASE 도구</td><td><b>상위</b> CASE = 요구분석·설계 지원 / <b>하위</b> CASE = 코드 작성·문서화 지원 / <b>통합</b> CASE = 전 과정 지원</td></tr>
+    </table>
+    <div class="tip"><b>함정:</b> "하위 CASE 도구는 프로젝트 계획 수립 및 요구 분석을 지원한다" → ✗ 그건 <b>상위</b> CASE다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧮</span>주요 개념 — 계획 단계의 계산 (비용·일정)</h2>
+
+    <h3>규모·비용 추정 방법 <span class="page-ref">📖 기출문제집 p.622~624</span></h3>
+    <table>
+      <tr><th>구분</th><th>방법</th><th>핵심</th></tr>
+      <tr><td rowspan="2">노력(비용) 추정</td><td><b>LOC / MM</b></td><td>코드 라인 수 ÷ (인원 × 1인당 생산성) = 기간</td></tr>
+      <tr><td><b>COCOMO</b></td><td>보헴이 제안. <b>원시 코드 라인 수(LOC) 기반</b> 비용 추정 모델</td></tr>
+      <tr><td>규모 추정</td><td><b>기능점수(FP)</b></td><td>라인 수 대신 <b>기능의 개수·복잡도</b>로 점수화</td></tr>
+      <tr><td rowspan="3">일정 계획</td><td><b>WBS</b></td><td>업무 분류 구조 — 작업을 잘게 쪼갠 것</td></tr>
+      <tr><td><b>CPM</b></td><td>임계경로법 — 네트워크에서 <b>가장 긴 경로</b>가 전체 기간</td></tr>
+      <tr><td><b>간트 차트</b></td><td>작업별 기간을 막대로 표시한 일정표</td></tr>
+      <tr><td>조직 계획</td><td colspan="2">책임프로그래머 팀, 분산형 팀, 혼합형 팀</td></tr>
+    </table>
+    <div class="tip"><b>함정:</b> <b>나씨-슈나이더만(NS) 도표</b>는 계획 도구가 아니라 <b>설계(알고리즘 표현) 도구</b>다. "계획 단계의 도구를 모두 고르시오"에서 NS 도표가 섞여 나온다.</div>
+
+    <div class="deep">
+      <h4>기능점수(Function Point)는 왜 만들어졌나</h4>
+      <p>COCOMO·LOC 방식은 <b>"코드 몇 줄인가"</b>로 규모를 잰다. 그런데 같은 기능도 언어에 따라 줄 수가 3배씩 차이나고, <b>개발 전에는 줄 수를 알 수도 없다.</b> 이 부정확함을 개선하려고 나온 것이 기능점수다.</p>
+      <p>기능점수는 라인 수 대신 <b>입력·출력·조회·파일·인터페이스의 개수와 복잡도</b>로 점수를 매긴다. 그래서 <b>구현 방법·개발 언어와 무관</b>하고, <b>계획 단계부터 분석·설계·구현 단계까지 전 단계에서 사용 가능</b>하다.</p>
+      <p><b>측정 요소 5가지:</b> 내부논리파일(ILF), 외부연계파일(EIF), <b>외부</b>입력(EI), <b>외부</b>출력(EO), <b>외부</b>조회(EQ)</p>
+      <p><b>함정 ①:</b> "트랜잭션 측정 기준은 <u>내부</u>입력·<u>내부</u>출력·<u>내부</u>조회" → ✗ 전부 <b>외부</b>(External)다. <b>함정 ②:</b> "측정의 일관성을 위해 개발 기술·방법·품질 수준을 고려한다" → ✗ <b>고려하지 않는다.</b> <b>함정 ③:</b> 기능점수 산정 시 <b>원시 코드 라인 수는 고려하지 않는다.</b></p>
+    </div>
+
+    <h3>CPM 임계경로 — 계산하는 법</h3>
+    <p>CPM은 "작업들의 선후 관계를 네트워크로 그렸을 때 <b>전체 프로젝트가 최소 얼마나 걸리는가</b>"를 구하는 방법이다. 답은 항상 <b>시작에서 끝까지 가는 경로 중 가장 긴 것</b>이다. 가장 긴 경로가 안 끝나면 프로젝트가 안 끝나기 때문이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 740 300" role="img" aria-label="CPM 네트워크 예시: 작업 A B C D E의 선후관계를 그래프로 그리고 각 경로의 길이를 비교해 임계경로 40일을 찾는 과정">
+        <defs>
+          <marker id="cpm1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <circle cx="60" cy="130" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="135" font-size="12" text-anchor="middle">시작</text>
+
+        <line x1="82" y1="118" x2="168" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#cpm1)"/>
+        <text x="115" y="88" font-size="11.5">A(15)</text>
+        <line x1="82" y1="142" x2="168" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#cpm1)"/>
+        <text x="115" y="180" font-size="11.5">B(10)</text>
+
+        <circle cx="190" cy="60" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="65" font-size="12" text-anchor="middle">a</text>
+        <circle cx="190" cy="200" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="205" font-size="12" text-anchor="middle">b</text>
+
+        <line x1="212" y1="68" x2="308" y2="118" stroke="currentColor" stroke-width="2.2" marker-end="url(#cpm1)"/>
+        <line x1="212" y1="192" x2="308" y2="142" stroke="currentColor" stroke-width="1.5" marker-end="url(#cpm1)"/>
+        <text x="250" y="105" font-size="11.5" font-weight="700">C(10)</text>
+        <text x="245" y="180" font-size="11.5">C는 A와 B가</text>
+        <text x="245" y="194" font-size="11.5">둘 다 끝나야 시작</text>
+
+        <circle cx="330" cy="130" r="22" fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <text x="330" y="135" font-size="12" text-anchor="middle">c</text>
+
+        <line x1="352" y1="130" x2="448" y2="130" stroke="currentColor" stroke-width="2.2" marker-end="url(#cpm1)"/>
+        <text x="385" y="122" font-size="11.5" font-weight="700">E(15)</text>
+
+        <line x1="212" y1="210" x2="448" y2="240" stroke="currentColor" stroke-width="1.5" marker-end="url(#cpm1)"/>
+        <text x="300" y="242" font-size="11.5">D(25)</text>
+
+        <circle cx="480" cy="180" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="185" font-size="12" text-anchor="middle">끝</text>
+
+        <text x="540" y="70" font-size="12" font-weight="700">경로별 길이</text>
+        <text x="540" y="95" font-size="11.5">A→C→E = 15+10+15 = <tspan font-weight="700">40</tspan> ← 가장 김</text>
+        <text x="540" y="115" font-size="11.5">B→C→E = 10+10+15 = 35</text>
+        <text x="540" y="135" font-size="11.5">B→D &nbsp;&nbsp;&nbsp;= 10+25 &nbsp;&nbsp;&nbsp;&nbsp;= 35</text>
+        <text x="540" y="163" font-size="12" font-weight="700">임계경로 = 40일</text>
+        <text x="540" y="183" font-size="11" opacity="0.8">굵은 선이 임계경로</text>
+        <text x="540" y="203" font-size="11" opacity="0.8">여기 있는 작업이 하루 늦으면</text>
+        <text x="540" y="219" font-size="11" opacity="0.8">프로젝트 전체가 하루 늦는다</text>
+
+        <text x="20" y="275" font-size="11.5">여유기간(slack) = 가장 늦은 착수일(LS) − 가장 빠른 착수일(ES). <tspan font-weight="700">임계경로 위의 작업은 slack = 0</tspan> (여유가 없다).</text>
+      </svg>
+      <figcaption>CPM 네트워크의 임계경로 구하기 — 모든 경로의 길이를 각각 더해보고 가장 긴 것을 고르면 끝. 임계경로 위 작업의 여유기간은 항상 0이다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>CPM 3종 공식</b><br>
+      • <b>ES</b>(가장 빠른 착수일) = 선행 작업들이 <b>전부</b> 끝나는 시점 = 선행 경로 중 <b>가장 긴</b> 것<br>
+      • <b>LS</b>(가장 늦은 착수일) = 전체 기간 − (그 작업부터 끝까지 가는 경로 길이)<br>
+      • <b>여유기간(slack)</b> = LS − ES &nbsp;→&nbsp; 임계경로 위에서는 <b>0</b>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>SDLC 표준 순서: <b>계획 → 분석 → 설계 → 구현 → 테스트 → 유지보수</b> (순서 뒤섞은 오답 선택지 주의)</li>
-      <li>폭포수 모델은 <b>되돌아가는 흐름이 없다</b> — 유일하게 "일직선"인 모델</li>
-      <li>나선형 모델의 핵심 키워드는 <b>위험 분석(Risk Analysis)</b> — 매 반복(나선 한 바퀴)마다 수행</li>
-      <li>프로토타입 모델은 "시제품 → 평가 → 재개발" 루프가 있다는 것이 폭포수와의 결정적 차이</li>
-      <li>애자일은 <b>문서보다 동작하는 소프트웨어</b>, 짧은 주기(스프린트) 반복이 핵심</li>
+      <li>폭포수 모델은 <b>되돌아가는 흐름이 없다</b> — 유일하게 "일직선"인 모델, <b>단계별 산출물 관리</b>를 강조</li>
+      <li>나선형 모델의 핵심 키워드는 <b>위험 분석(Risk Analysis)</b>, <b>4단계</b>, <b>보헴</b>, <b>대규모</b> 시스템</li>
+      <li>프로토타입 모델은 "시제품 → 평가 → 재개발" 루프가 있고, 마지막 단계는 <b>완제품 생산</b></li>
+      <li>V 모델 = 폭포수 + <b>테스트/검증 강조</b>, 단계 순서(시스템설계→상세설계→코딩→단위→통합→시스템테스트)</li>
+      <li>애자일은 <b>문서보다 동작하는 소프트웨어</b>, <b>점증적</b> 개발, 후반 요구 변경도 수용</li>
+      <li>XP는 켄트 벡, 가치 = <b>의사소통·단순성·피드백·용기</b></li>
+      <li><b>LOC 기간 계산</b>: 전체 LOC ÷ (인원수 × 1인당 월 생산성)</li>
+      <li><b>기능점수</b>는 라인 수와 무관, 외부입력/외부출력/<b>외부</b>조회 기준, 전 생명주기 단계에서 사용 가능</li>
+      <li><b>CPM 임계경로 = 가장 긴 경로</b>, 임계경로 작업의 여유기간 = 0</li>
+      <li>상위 CASE = 분석·설계 지원, 하위 CASE = 코딩·문서화 지원</li>
     </ul>
   </section>
 
   <section class="block">
     <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
     <table>
-      <tr><th>구분</th><th>되돌아가기</th><th>결과물을 보는 시점</th><th>핵심 키워드</th></tr>
-      <tr><td>폭포수</td><td>없음</td><td>맨 마지막에</td><td>순차적, 산출물</td></tr>
-      <tr><td>프로토타입</td><td>평가 후 재개발</td><td>시제품 단계에서 일찍</td><td>시제품, 피드백</td></tr>
-      <tr><td>나선형</td><td>매 나선마다</td><td>반복할 때마다 점점</td><td>위험 분석</td></tr>
-      <tr><td>애자일</td><td>매 스프린트마다</td><td>매 스프린트 종료 시</td><td>동작하는 SW, 고객 소통</td></tr>
+      <tr><th>구분</th><th>되돌아가기</th><th>결과물을 보는 시점</th><th>핵심 키워드</th><th>적합 규모</th></tr>
+      <tr><td>폭포수</td><td>없음</td><td>맨 마지막에</td><td>순차적, 산출물</td><td>요구 명확한 경우</td></tr>
+      <tr><td>프로토타입</td><td>평가 후 재개발</td><td>시제품 단계에서 일찍</td><td>시제품, 피드백</td><td>요구 불투명한 경우</td></tr>
+      <tr><td>나선형</td><td>매 나선마다</td><td>반복할 때마다 점점</td><td><b>위험 분석</b>, 보헴</td><td><b>대규모</b></td></tr>
+      <tr><td>애자일/XP</td><td>매 스프린트마다</td><td>매 스프린트 종료 시</td><td>동작하는 SW, 고객 소통</td><td>소~중규모, 변경 잦음</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>LOC / COCOMO</th><th>기능점수(FP)</th></tr>
+      <tr><td>측정 기준</td><td>원시 코드 <b>라인 수</b></td><td><b>기능의 개수·복잡도</b></td></tr>
+      <tr><td>언어 의존성</td><td>있음 (언어마다 라인 수 다름)</td><td><b>없음</b></td></tr>
+      <tr><td>사용 시점</td><td>코드량 추정 가능해야 함</td><td><b>전 생명주기 단계</b></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2020 국가직 · 기출문제집 p.609</span></div>
+      <p class="q-body">소프트웨어 개발 프로세스 중 <b>원형(Prototyping) 모델</b>의 단계별 진행 과정을 올바르게 나열한 것은?</p>
+      <ol class="choices">
+        <li>요구사항 분석 → 시제품 설계 → 고객의 시제품 평가 → 시제품 개발 → 시제품 정제 → 완제품 생산</li>
+        <li>요구사항 분석 → 시제품 설계 → 시제품 개발 → 고객의 시제품 평가 → 시제품 정제 → 완제품 생산</li>
+        <li>요구사항 분석 → 고객의 시제품 평가 → 시제품 개발 → 시제품 설계 → 시제품 정제 → 완제품 생산</li>
+        <li>요구사항 분석 → 시제품 개발 → 시제품 설계 → 고객의 시제품 평가 → 시제품 정제 → 완제품 생산</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>상식적으로 생각하면 순서가 보인다 — <b>설계해야 만들 수 있고, 만들어야 평가할 수 있다.</b></p>
+          <ol class="steps">
+            <li>요구사항 분석 (무엇을 원하는지 파악)</li>
+            <li>시제품 <b>설계</b> → 시제품 <b>개발</b> (설계가 먼저, 개발이 나중)</li>
+            <li>고객 <b>평가</b> (만들어진 것을 보여줘야 평가 가능)</li>
+            <li>시제품 정제 → 완제품 생산</li>
+          </ol>
+          <p><b>함정:</b> ①·③은 <b>만들기도 전에 평가</b>하는 순서라 말이 안 되고, ④는 <b>개발이 설계보다 먼저</b> 나와 틀렸다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2009 국가직 7급 · 기출문제집 p.611</span></div>
+      <p class="q-body"><b>나선형(spiral) 모형</b>에서 단계별로 수행하는 작업 순서로 옳은 것은?</p>
+      <ol class="choices">
+        <li>위험분석 → 계획 및 정의 → 개발 → 고객평가</li>
+        <li>계획 및 정의 → 위험분석 → 개발 → 고객평가</li>
+        <li>계획 및 정의 → 개발 → 위험분석 → 고객평가</li>
+        <li>위험분석 → 계획 및 정의 → 고객평가 → 개발</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 계획 및 정의 → 위험분석 → 개발 → 고객평가</p>
+        <div class="explain">
+          <p>나선 한 바퀴는 항상 <b>계·위·개·평</b> 순서다.</p>
+          <ol class="steps">
+            <li><b>계획 및 정의</b> — 목표·요구사항·제약조건을 규명</li>
+            <li><b>위험 분석</b> — 목표에 잠재된 위험을 분석 (나선형만의 고유 단계)</li>
+            <li><b>개발 및 검증</b> — 시제품을 개발</li>
+            <li><b>고객 평가</b> — 평가 후 다시 ①로 돌아가 다음 바퀴를 돈다</li>
+          </ol>
+          <p><b>함정:</b> ①·④처럼 <b>위험분석이 계획보다 먼저</b> 오는 선택지는 오답이다. 무엇을 할지 정해야(계획) 그 안의 위험을 분석할 수 있다. 또 "계획·개발·평가 <b>3단계</b>"라고 서술하면 <b>위험분석이 빠진 오답</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2007 국가직 7급 · 기출문제집 p.613</span></div>
+      <p class="q-body"><b>V 모형</b>은 폭포수 모형에 테스트와 검증을 강조한 것이다. V 모형의 단계를 순서대로 바르게 나열한 것은?</p>
+      <ol class="choices">
+        <li>시스템설계 → 상세설계 → 코딩 → 단위테스트 → 통합테스트 → 시스템테스트</li>
+        <li>시스템설계 → 시스템테스트 → 상세설계 → 통합테스트 → 코딩 → 단위테스트</li>
+        <li>시스템테스트 → 통합테스트 → 단위테스트 → 코딩 → 상세설계 → 시스템설계</li>
+        <li>시스템테스트 → 시스템설계 → 통합테스트 → 상세설계 → 단위테스트 → 코딩</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>V 모델은 <b>V자의 왼쪽(설계)을 내려갔다가 오른쪽(테스트)을 올라오는</b> 모양이다. 따라서 실행 순서는 "설계 → 코딩 → 테스트"로 <b>큰 것에서 작은 것으로 설계하고, 작은 것에서 큰 것으로 테스트</b>한다.</p>
+          <ol class="steps">
+            <li>내려가는 길(설계): 요구분석 → <b>시스템설계</b>(큰 그림) → <b>상세설계</b>(작은 단위)</li>
+            <li>바닥: <b>코딩</b></li>
+            <li>올라오는 길(테스트): <b>단위테스트</b>(작은 단위) → <b>통합테스트</b> → <b>시스템테스트</b>(큰 그림)</li>
+          </ol>
+          <p><b>함정:</b> ②·④처럼 설계와 테스트가 번갈아 나오는 선택지는 "짝을 이룬다"는 개념을 <b>실행 순서로 착각</b>하게 만든 함정이다. 짝을 이루는 것은 맞지만 <b>실행은 설계 전부 → 코딩 → 테스트 전부</b> 순이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2018 지방직 · 기출문제집 p.617~618</span></div>
+      <p class="q-body">소프트웨어 개발을 위한 <b>애자일 기법</b>에 대한 설명으로 옳은 것은?</p>
+      <ol class="choices">
+        <li>고객과의 협업보다 계약 협상을 더 중요시한다.</li>
+        <li>계획에 따라 단계적으로 개발하므로 변화에 대응하기 어렵다.</li>
+        <li>작동하는 소프트웨어보다 포괄적인 문서에 더 가치를 둔다.</li>
+        <li>소프트웨어를 점증적으로 개발한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 소프트웨어를 점증적으로 개발한다</p>
+        <div class="explain">
+          <p>애자일 4대 가치를 알면 ①②③이 전부 <b>정확히 반대로 뒤집힌 문장</b>임을 바로 알 수 있다.</p>
+          <table>
+            <tr><th>선택지</th><th>애자일의 실제 가치</th></tr>
+            <tr><td>① 계약 협상 &gt; 고객 협업</td><td>✗ <b>고객과의 협력</b>이 우선</td></tr>
+            <tr><td>② 계획대로, 변화에 약함</td><td>✗ <b>변화에 민첩한 대응</b>이 핵심</td></tr>
+            <tr><td>③ 문서 &gt; 동작하는 SW</td><td>✗ <b>동작하는 소프트웨어</b>가 우선</td></tr>
+            <tr><td>④ 점증적 개발</td><td>✓ 짧은 릴리즈로 조금씩 완성해 나감</td></tr>
+          </table>
+          <p><b>풀이 요령:</b> 애자일 문제는 선택지에서 "문서·계약·계획"을 <b>우선한다</b>고 하면 거의 오답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2016 국회 · 기출문제집 p.622</span></div>
+      <p class="q-body">개발할 프로그램의 <b>LOC(Line of Code)가 50,000</b>이고 개발에 참여할 <b>프로그래머가 5명</b>, 각 프로그래머들의 <b>평균 생산성이 1,000 LOC/MM(Man-Month)</b>일 때 개발에 소요되는 기간은?</p>
+      <ol class="choices">
+        <li>10개월</li>
+        <li>15개월</li>
+        <li>20개월</li>
+        <li>30개월</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 10개월</p>
+        <div class="explain">
+          <p>단위를 따라가면 자동으로 풀린다. <b>MM(Man-Month) = 한 사람이 한 달 동안 하는 일의 양</b>이다.</p>
+          <ol class="steps">
+            <li>1인당 생산성 = <b>1,000 LOC / 월</b></li>
+            <li>5명이 함께 일하면 팀 전체 생산성 = 1,000 × 5 = <b>5,000 LOC / 월</b></li>
+            <li>필요 기간 = 전체 규모 ÷ 팀 생산성 = 50,000 ÷ 5,000 = <b>10개월</b></li>
+          </ol>
+          <p><b>공식:</b> 기간 = 전체 LOC ÷ (인원수 × 1인당 월 생산성)</p>
+          <p><b>함정:</b> ⑤ 50개월류의 선택지는 <b>인원수로 나누는 것을 빼먹은</b> 경우(50,000÷1,000)다. "몇 명이 함께 하는가"를 반드시 곱할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2019 계리직 · 기출문제집 p.624</span></div>
+      <p class="q-body">작업 분할을 통해 파악된 다음 소작업 목록을 AOE(Activity On Edge) 네트워크로 표현하였을 때, 이 프로젝트가 끝날 수 있는 <b>가장 빠른 소요시간</b>은?</p>
+      <table>
+        <tr><th>소작업</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th></tr>
+        <tr><td>소요시간</td><td>5</td><td>5</td><td>8</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+        <tr><td>선행 소작업</td><td>없음</td><td>없음</td><td>a, b</td><td>c</td><td>b, c</td><td>d</td><td>e, f</td></tr>
+      </table>
+      <ol class="choices">
+        <li>13</li>
+        <li>21</li>
+        <li>24</li>
+        <li>32</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 24</p>
+        <div class="explain">
+          <p>각 작업의 <b>완료 시각</b>을 앞에서부터 차례로 구하면 된다. 규칙은 하나 — <b>"선행 작업이 여러 개면 그중 가장 늦게 끝나는 것을 기다린다(= max)"</b>.</p>
+          <ol class="steps">
+            <li><b>a</b>: 선행 없음 → 0에 시작, 5에 끝남. <b>b</b>: 선행 없음 → 0에 시작, 5에 끝남</li>
+            <li><b>c</b>: 선행 a(5), b(5) → max(5,5)=5에 시작 + 8 = <b>13에 끝남</b></li>
+            <li><b>d</b>: 선행 c(13) → 13 + 2 = <b>15에 끝남</b></li>
+            <li><b>e</b>: 선행 b(5), c(13) → max(5,13)=13에 시작 + 3 = <b>16에 끝남</b></li>
+            <li><b>f</b>: 선행 d(15) → 15 + 4 = <b>19에 끝남</b></li>
+            <li><b>g</b>: 선행 e(16), f(19) → max(16,19)=19에 시작 + 5 = <b>24에 끝남</b> → 전체 기간 <b>24</b></li>
+          </ol>
+          <p><b>함정:</b> ② 21은 g의 선행에서 <b>max 대신 e(16)를 골라</b> 16+5로 계산한 경우다. 선행 작업이 둘 이상이면 <b>무조건 늦은 쪽</b>을 기다려야 한다는 것이 이 유형의 전부다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2012 계리직 · 기출문제집 p.628</span></div>
+      <p class="q-body">다음 CPM 소작업 리스트에서 작업 <b>C</b>의 가장 빠른 착수일(ES), 가장 늦은 착수일(LS), 여유 기간(slack)을 순서대로 나열한 것은?</p>
+      <table>
+        <tr><th>소작업</th><th>선행 작업</th><th>소요 기간(일)</th></tr>
+        <tr><td>A</td><td>없음</td><td>15</td></tr>
+        <tr><td>B</td><td>없음</td><td>10</td></tr>
+        <tr><td>C</td><td>A, B</td><td>10</td></tr>
+        <tr><td>D</td><td>B</td><td>25</td></tr>
+        <tr><td>E</td><td>C</td><td>15</td></tr>
+      </table>
+      <ol class="choices">
+        <li>15일, 15일, 0일</li>
+        <li>10일, 15일, 5일</li>
+        <li>10일, 25일, 5일</li>
+        <li>15일, 25일, 0일</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 15일, 15일, 0일</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>전체 기간 먼저 구하기</b>: 경로는 A→C→E = 15+10+15 = <b>40</b>, B→C→E = 10+10+15 = 35, B→D = 10+25 = 35 → 전체 기간 = 가장 긴 <b>40일</b></li>
+            <li><b>ES(C)</b>: C는 A(15일)와 B(10일)가 <b>둘 다</b> 끝나야 시작 → max(15, 10) = <b>15일</b></li>
+            <li><b>LS(C)</b>: 전체 40일에서 C 이후로 남은 작업량을 뺀다 → 40 − (C 10일 + E 15일) = 40 − 25 = <b>15일</b></li>
+            <li><b>slack</b> = LS − ES = 15 − 15 = <b>0일</b></li>
+          </ol>
+          <p><b>의미:</b> slack이 0이라는 것은 C가 <b>임계경로 위에 있다</b>는 뜻 — C가 하루라도 늦으면 프로젝트 전체가 하루 늦는다.</p>
+          <p><b>함정:</b> ②·③처럼 ES를 10일로 잡는 것은 <b>선행 작업 중 빨리 끝나는 B만 보고</b> 계산한 실수다. 선행이 여럿이면 항상 <b>가장 늦게 끝나는 것</b>을 기다린다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2019 국가직 · 기출문제집 p.623</span></div>
+      <p class="q-body">소프트웨어 규모를 예측하기 위한 <b>기능점수(function point)</b>를 산정할 때 <b>고려하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>내부논리파일(Internal Logical File)</li>
+        <li>외부입력(External Input)</li>
+        <li>외부조회(External inQuiry)</li>
+        <li>원시 코드 라인 수(Line Of Code)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 원시 코드 라인 수(LOC)</p>
+        <div class="explain">
+          <p>기능점수가 <b>태어난 이유 자체</b>가 이 문제의 답이다. COCOMO·LOC 방식이 쓰던 <b>"코드 라인 수"가 부정확</b>해서(언어마다 다르고 개발 전엔 알 수도 없음) 그걸 <b>버리려고</b> 만든 것이 기능점수다.</p>
+          <ol class="steps">
+            <li>기능점수는 라인 수 대신 <b>기능의 개수와 복잡도</b>로 점수를 매긴다</li>
+            <li>측정 대상: 내부논리파일(ILF), 외부연계파일(EIF), 외부입력(EI), 외부출력(EO), 외부조회(EQ)</li>
+            <li>따라서 ①②③은 모두 측정 요소이고, <b>④ LOC만 기능점수와 무관</b></li>
+          </ol>
+          <p><b>같이 외울 함정:</b> 트랜잭션 측정 기준은 <b>외부</b>입력·<b>외부</b>출력·<b>외부</b>조회다. "<b>내부</b>입력·<b>내부</b>출력"으로 바꿔 쓴 선택지가 자주 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">어떤 프로젝트의 전체 규모가 <b>120,000 LOC</b>이고, 투입 가능한 프로그래머는 <b>8명</b>, 1인당 평균 생산성은 <b>500 LOC/MM</b>이다. 개발 기간은 몇 개월인가? 또, 기간을 절반으로 줄이려면 이론상 몇 명이 필요한가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 30개월, 기간을 절반(15개월)으로 줄이려면 이론상 16명</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>팀 전체 생산성 = 8명 × 500 = <b>4,000 LOC/월</b></li>
+            <li>기간 = 120,000 ÷ 4,000 = <b>30개월</b></li>
+            <li>15개월로 줄이려면 필요한 월 생산성 = 120,000 ÷ 15 = 8,000 LOC/월</li>
+            <li>필요 인원 = 8,000 ÷ 500 = <b>16명</b> (현재의 2배)</li>
+          </ol>
+          <p><b>실제로는 이렇게 안 된다 (브룩스의 법칙):</b> 사람을 2배 넣는다고 기간이 정확히 절반이 되지는 않는다. 인원이 늘면 <b>의사소통 경로가 급증</b>하고 신규 인력 교육 비용이 들어서, "지연된 프로젝트에 인력을 추가하면 더 늦어진다"는 말이 나온다. 시험 계산 문제에서는 이상적인 비례 관계로 풀되, 서술형 선택지에서 "인원을 늘리면 항상 기간이 비례해서 준다"는 문장이 나오면 <b>오답</b>으로 판단할 것.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">SDLC</span>
-      <span class="chip">계획</span>
-      <span class="chip">분석</span>
-      <span class="chip">설계</span>
-      <span class="chip">구현</span>
-      <span class="chip">테스트</span>
-      <span class="chip">유지보수</span>
       <span class="chip">폭포수모델</span>
       <span class="chip">프로토타입모델</span>
       <span class="chip">나선형모델</span>
       <span class="chip">위험분석</span>
+      <span class="chip">보헴(Boehm)</span>
+      <span class="chip">V모델</span>
       <span class="chip">애자일</span>
       <span class="chip">스프린트</span>
+      <span class="chip">XP</span>
+      <span class="chip">켄트벡</span>
+      <span class="chip">UP</span>
+      <span class="chip">CBD</span>
+      <span class="chip">RAD</span>
+      <span class="chip">CASE</span>
+      <span class="chip">LOC</span>
+      <span class="chip">COCOMO</span>
+      <span class="chip">Man-Month</span>
+      <span class="chip">기능점수</span>
+      <span class="chip">WBS</span>
+      <span class="chip">CPM</span>
+      <span class="chip">임계경로</span>
+      <span class="chip">여유기간</span>
+      <span class="chip">간트차트</span>
     </div>
   </section>
 

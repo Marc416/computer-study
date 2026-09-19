@@ -16,43 +16,103 @@
   <div class="summary-box">
     <span class="tag">핵심 요약</span>
     <p>계리직 시험은 <b>VLOOKUP/HLOOKUP/INDEX/MATCH 같은 찾기함수</b>와 <b>절대·상대·혼합 참조</b>를 압도적으로 많이 묻는다.</p>
-    <p>수식을 손으로 풀 때는 "안쪽 함수부터 계산 → 바깥 함수에 대입" 순서만 지키면 아무리 중첩돼도 풀린다.</p>
+    <p>수식을 손으로 풀 때는 <b>"안쪽 함수부터 계산 → 바깥 함수에 대입"</b> 순서만 지키면 아무리 중첩돼도 풀린다.</p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>거의 전부 계리직 문제 — 그리고 100% "손으로 풀 수 있는" 문제다</h4>
+      <p>이 단원은 출제 이력이 특이하다. 기출을 보면 <b>거의 전부 계리직</b>이고, 매년 <b>1~2문항이 고정으로</b> 나온다. 국가직·지방직에는 거의 안 나오므로, 계리직 준비생에게는 반드시 챙겨야 할 파트이고 다른 직렬이면 우선순위를 낮춰도 된다.</p>
+      <p>중요한 건 이 단원의 문제가 <b>암기가 아니라 "따라 계산하기"</b>라는 점이다. 워크시트 그림과 수식이 주어지고 "결과값은?"을 묻는다. 엑셀을 켜본 적이 없어도 <b>함수의 형식(인수 순서)과 규칙만 알면 종이 위에서 그대로 재현</b>할 수 있다. 즉 외울 게 적고 확실히 맞힐 수 있는, 가성비 좋은 단원이다.</p>
+      <h4>모든 문제를 푸는 단 하나의 원칙</h4>
+      <p><b>중첩 함수는 반드시 안쪽(괄호 깊은 쪽)부터 계산해서 결과를 바깥에 대입한다.</b> 예를 들어 <code>=HLOOKUP(INDEX(A2:C5,2,2), B7:E9, 2)</code>가 나오면, 먼저 INDEX를 풀어 "C123"을 얻고, 그 값을 넣어 <code>=HLOOKUP("C123", B7:E9, 2)</code>를 다시 푼다. 아무리 복잡해 보여도 이 순서로 한 겹씩 벗기면 예외 없이 풀린다.</p>
+      <p>틀리는 지점도 정해져 있다 — <b>①VLOOKUP과 HLOOKUP의 방향 혼동</b>(세로냐 가로냐), <b>②MATCH가 값이 아니라 "위치"를 돌려준다는 것을 잊음</b>, <b>③$ 위치를 착각</b>(행 고정인지 열 고정인지), <b>④검색유형 0(정확히 일치)과 1/TRUE(근사값)의 차이</b>. 이 네 가지만 조심하면 된다.</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>셀 서식 표시 형식 코드 <span class="page-ref">📖 기출문제집 p.799</span></h3>
+    <p>셀에 저장된 <b>실제 값은 그대로</b> 두고 <b>보이는 모양만</b> 바꾸는 것이 표시 형식이다. 핵심은 자리표시자 두 개(<code>0</code>과 <code>#</code>)의 차이다.</p>
     <table>
-      <tr><th>코드</th><th>의미</th><th>1234.5 입력 시 출력</th></tr>
-      <tr><td><code>0</code></td><td>유효하지 않은 자리도 <b>0으로 채워서</b> 표시</td><td>#,##0 → 1,235</td></tr>
-      <tr><td><code>#</code></td><td>유효하지 않은 자리는 <b>표시 안 함</b> (무시)</td><td>#,### → 1,235 (소수부 반올림)</td></tr>
-      <tr><td><code>,</code></td><td>천 단위 구분 기호</td><td>#,##0 → 1,235</td></tr>
-      <tr><td><code>.</code></td><td>소수점 표시 위치</td><td>#,###.# → 1,234.5</td></tr>
+      <tr><th>코드</th><th>의미</th><th>입력 1234.5 → 출력</th></tr>
+      <tr><td><code>G/표준</code></td><td>기본 형식 (그대로 표시)</td><td>1234.5</td></tr>
+      <tr><td><code>#,##0</code></td><td>정수부만, 천단위 구분, 빈자리는 0으로 채움</td><td><b>1,235</b> (소수 첫째에서 반올림)</td></tr>
+      <tr><td><code>#,###</code></td><td>정수부만, 천단위 구분, 빈자리는 생략</td><td>1,235</td></tr>
+      <tr><td><code>#,###.#</code></td><td>소수 첫째 자리까지 표시</td><td>1,234.5</td></tr>
+      <tr><td><code>#,###.#0</code></td><td>소수 둘째 자리까지, 빈자리는 0으로 채움</td><td>1,234.50</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> <code>0</code>과 <code>#</code>은 둘 다 숫자 자리표시자이지만, <code>0</code>은 빈자리를 0으로 채우고 <code>#</code>은 자리 자체를 생략한다는 점이 다르다. 정수부만 표현하는 서식(<code>#,##0</code>)에 소수점이 있는 값을 넣으면 <b>반올림</b>되어 정수로 표시된다.</div>
+    <div class="deep">
+      <h4><code>0</code>과 <code>#</code>은 뭐가 다른가</h4>
+      <p>둘 다 "여기에 숫자 한 자리"라는 뜻이지만, <b>그 자리에 표시할 숫자가 없을 때</b> 행동이 다르다.</p>
+      <ul>
+        <li><code>0</code> — 숫자가 없어도 <b>0을 강제로 찍는다.</b> 예) 값 7에 <code>00</code> 서식 → <b>07</b></li>
+        <li><code>#</code> — 숫자가 없으면 <b>자리 자체를 생략</b>한다. 예) 값 7에 <code>##</code> 서식 → <b>7</b></li>
+      </ul>
+      <p>그래서 <code>#,##0</code>은 값이 0일 때 "0"이라고 찍히지만, <code>#,###</code>은 아무것도 안 보인다. 금액 표시에 <code>#,##0</code>을 주로 쓰는 이유다.</p>
+      <p><b>반올림 포인트:</b> 서식에 소수 자리가 없으면(<code>#,##0</code>) 소수는 <b>버려지는 게 아니라 반올림</b>된다. 1234.5 → 1,235. 단, <b>셀에 저장된 실제 값은 여전히 1234.5</b>다(보이는 것만 바뀜).</p>
+    </div>
 
-    <h3>문자열 함수 — LEFT / RIGHT / MID / LEN <span class="page-ref">📖 기출문제집 p.799~800</span></h3>
+    <h3>문자열 함수 — LEFT / RIGHT / MID / LEN / FIND <span class="page-ref">📖 기출문제집 p.800</span></h3>
     <table>
       <tr><th>함수</th><th>형식</th><th>예시</th><th>결과</th></tr>
       <tr><td>LEFT</td><td>=LEFT(문자열, 자릿수)</td><td>=LEFT("KOREA", 2)</td><td>"KO"</td></tr>
       <tr><td>RIGHT</td><td>=RIGHT(문자열, 자릿수)</td><td>=RIGHT("KOREA", 2)</td><td>"EA"</td></tr>
-      <tr><td>MID</td><td>=MID(문자열, 시작위치, 자릿수)</td><td>=MID("KOREA", 3, 2)</td><td>"RE"</td></tr>
+      <tr><td>MID</td><td>=MID(문자열, <b>시작위치</b>, 자릿수)</td><td>=MID("KOREA", 3, 2)</td><td>"RE"</td></tr>
       <tr><td>LEN</td><td>=LEN(문자열)</td><td>=LEN("KOREA")</td><td>5</td></tr>
+      <tr><td>FIND</td><td>=FIND(찾을문자, 대상텍스트)</td><td>=FIND(")", "(02)000-0000")</td><td>4 (몇 번째인지)</td></tr>
+      <tr><td><code>&amp;</code></td><td>문자열 <b>연결</b> 연산자</td><td>="AB" &amp; "CD"</td><td>"ABCD"</td></tr>
     </table>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 200" role="img" aria-label="문자열 KOREA의 각 글자에 1부터 5까지 위치 번호가 매겨지고, LEFT는 왼쪽에서, RIGHT는 오른쪽에서, MID는 지정한 시작위치부터 추출한다">
+        <text x="20" y="22" font-size="12.5" font-weight="700">문자열 "KOREA"의 위치 번호 (1부터 시작)</text>
+        <g text-anchor="middle">
+          <rect x="120" y="35" width="50" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="145" y="62" font-size="16">K</text><text x="145" y="94" font-size="11" opacity="0.75">1</text>
+          <rect x="170" y="35" width="50" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="195" y="62" font-size="16">O</text><text x="195" y="94" font-size="11" opacity="0.75">2</text>
+          <rect x="220" y="35" width="50" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="245" y="62" font-size="16">R</text><text x="245" y="94" font-size="11" opacity="0.75">3</text>
+          <rect x="270" y="35" width="50" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="295" y="62" font-size="16">E</text><text x="295" y="94" font-size="11" opacity="0.75">4</text>
+          <rect x="320" y="35" width="50" height="42" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="345" y="62" font-size="16">A</text><text x="345" y="94" font-size="11" opacity="0.75">5</text>
+        </g>
+
+        <line x1="120" y1="118" x2="220" y2="118" stroke="currentColor" stroke-width="3"/>
+        <text x="400" y="122" font-size="12.5">=LEFT("KOREA", <tspan font-weight="700">2</tspan>) → "KO" &nbsp;<tspan opacity="0.75">왼쪽에서 2글자</tspan></text>
+
+        <line x1="270" y1="140" x2="370" y2="140" stroke="currentColor" stroke-width="3"/>
+        <text x="400" y="144" font-size="12.5">=RIGHT("KOREA", <tspan font-weight="700">2</tspan>) → "EA" &nbsp;<tspan opacity="0.75">오른쪽에서 2글자</tspan></text>
+
+        <line x1="220" y1="162" x2="320" y2="162" stroke="currentColor" stroke-width="3"/>
+        <text x="400" y="166" font-size="12.5">=MID("KOREA", <tspan font-weight="700">3</tspan>, <tspan font-weight="700">2</tspan>) → "RE" &nbsp;<tspan opacity="0.75">3번째부터 2글자</tspan></text>
+
+        <text x="20" y="190" font-size="11.5" opacity="0.85">주의: 위치는 <tspan font-weight="700">1부터</tspan> 센다(프로그래밍의 0부터와 다름). 공백·하이픈(-)·괄호도 전부 한 글자로 센다.</text>
+      </svg>
+      <figcaption>문자열 함수 3형제 — LEFT·RIGHT는 끝에서부터 몇 글자, MID는 "몇 번째부터 몇 글자"를 지정한다. MID만 인수가 3개인 이유다.</figcaption>
+    </figure>
     <div class="tip">
-      <b>중첩함수 예제: D4 = RIGHT(C4, LEN(C4)-4) &amp; "****" (C4="010-2109-8765", 문자열 길이 13)</b>
+      <b>중첩 예제: =RIGHT(C4, LEN(C4)-4) &amp; "****"</b> (C4 = <code>019-2119-9019</code>)
       <ol class="steps">
-        <li>안쪽부터 계산: LEN(C4) = 13 ("-"도 문자로 포함해서 센다)</li>
-        <li>RIGHT(C4, 13-4) = RIGHT(C4, 9) → C4의 오른쪽 끝 9글자 추출 = "2109-8765"</li>
-        <li>& 는 문자열을 이어붙이는 연산자 → "2109-8765" & "****" = <b>"2109-8765****"</b></li>
+        <li>안쪽부터: LEN(C4) = <b>13</b> — 하이픈(-)도 한 글자로 센다 (019=3, -=1, 2119=4, -=1, 9019=4 → 총 13)</li>
+        <li>RIGHT(C4, 13−4) = RIGHT(C4, <b>9</b>) → 오른쪽 끝 9글자 = <b>"2119-9019"</b></li>
+        <li><code>&amp;</code>로 이어붙이기: "2119-9019" &amp; "****" = <b>"2119-9019****"</b></li>
       </ol>
     </div>
+    <div class="tip">
+      <b>FIND 활용 예제: (02)000-0000 에서 국번 "02"만 뽑기</b>
+      <ol class="steps">
+        <li>국번은 <b>2번째 문자부터</b> 시작한다 (1번째는 여는 괄호) → MID의 시작위치 = 2</li>
+        <li>몇 글자를 뽑을지는 지역번호마다 다르다(02는 2자리, 032는 3자리) → 고정값을 쓸 수 없다</li>
+        <li>닫는 괄호 위치를 FIND로 찾는다: FIND(")", "(02)000-0000") = <b>4</b></li>
+        <li>추출할 글자 수 = (닫는 괄호 위치) − 2 = 4−2 = <b>2</b> → 최종 <code>=MID(B2, 2, FIND(")",B2)−2)</code></li>
+      </ol>
+      <p style="margin:6px 0 0;font-size:13px;">왜 −2인가: 앞의 여는 괄호 1칸과 닫는 괄호 자신 1칸, 합쳐 2칸을 빼야 순수 숫자만 남는다.</p>
+    </div>
 
-    <h3>셀 참조 방식 — 상대·절대·혼합 참조 <span class="page-ref">📖 기출문제집 p.801~803</span></h3>
-    <p><b>$</b> 기호가 붙은 부분은 수식을 복사해도 <b>바뀌지 않고 고정</b>된다. $가 열 글자 앞에 있으면 열이 고정, 행 번호 앞에 있으면 행이 고정된다.</p>
+    <h3>셀 참조 방식 — 상대·절대·혼합 참조 <span class="page-ref">📖 기출문제집 p.801~802</span></h3>
+    <p><b>$</b> 기호가 붙은 부분은 수식을 복사해도 <b>바뀌지 않고 고정</b>된다. $가 <b>열 문자 앞</b>에 있으면 열 고정, <b>행 번호 앞</b>에 있으면 행 고정이다.</p>
+    <div class="analogy"><b>암기:</b> "<b>$ 바로 뒤에 오는 것이 고정된다.</b>" <code>$B2</code>는 $ 뒤가 B이므로 <b>열 고정</b>, <code>B$2</code>는 $ 뒤가 2이므로 <b>행 고정</b>, <code>$B$2</code>는 둘 다 고정.</div>
     <figure class="diagram">
-      <svg viewBox="0 0 700 260" role="img" aria-label="셀 참조 방식: B2 상대참조는 복사하면 C2로 바뀌지만, $B$2 절대참조는 복사해도 그대로 $B$2를 가리키고, B$2 혼합참조는 열만 바뀌고 행은 고정된다">
+      <svg viewBox="0 0 700 260" role="img" aria-label="셀 참조 방식: B2 상대참조는 복사하면 C6으로 바뀌지만, $B$2 절대참조는 복사해도 그대로이고, B$2 혼합참조는 열만 바뀌고 행은 고정된다">
         <defs>
           <marker id="arS8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
         </defs>
@@ -78,57 +138,79 @@
         <rect x="420" y="150" width="140" height="45" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
         <text x="490" y="177" font-size="14" text-anchor="middle">C$2</text>
         <text x="420" y="212" font-size="11" opacity="0.75">열은 이동, 행은 고정(혼합)</text>
+
+        <text x="20" y="243" font-size="11.5" opacity="0.85">D1 → E5는 오른쪽으로 1칸(D→E), 아래로 4칸(1→5). 고정 안 된 축은 딱 그만큼 움직인다.</text>
       </svg>
-      <figcaption>D1에 입력한 수식을 오른쪽 1칸·아래 4칸(E5)으로 복사했을 때 참조가 바뀌는 모습. $ 앞에 오는 축(행 또는 열)만 고정되고, $가 없는 축은 복사한 방향으로 그대로 이동한다.</figcaption>
+      <figcaption>D1에 입력한 수식을 E5로 복사했을 때 참조가 바뀌는 모습. $가 붙은 축만 고정되고, $가 없는 축은 복사한 방향·거리만큼 그대로 이동한다.</figcaption>
     </figure>
     <div class="tip">
-      <b>계산 예제: [D1]=$A$1+$B2 를 [D5]에 복사하면?</b> (A1=1, B6=빈칸=0)
+      <b>계산 예제: [D1]에 <code>=$A$1+$B2</code> 입력 후 [D5]에 복사하면?</b> (A1=1, B6은 빈칸)
       <ol class="steps">
-        <li>$A$1은 행·열 모두 $로 고정 → D5에 복사해도 그대로 <b>$A$1</b></li>
-        <li>$B2는 열(B)만 고정, 행은 상대참조 → 4행 아래로 복사했으니 2+4=6행 → <b>$B6</b></li>
-        <li>[D5] = $A$1 + $B6 = 1 + 0(빈칸) = <b>1</b></li>
+        <li>D1 → D5는 열은 그대로(D→D), <b>행만 4칸 아래로</b> 이동</li>
+        <li><code>$A$1</code>: 행·열 모두 $로 고정 → 복사해도 그대로 <b>$A$1</b> = 1</li>
+        <li><code>$B2</code>: 열(B)만 고정, <b>행은 상대</b> → 4칸 내려가 2+4 = <b>$B6</b></li>
+        <li>B6은 빈칸이므로 계산에서 <b>0</b>으로 취급 → [D5] = 1 + 0 = <b>1</b></li>
       </ol>
     </div>
     <div class="tip">
-      <b>실무 예제: 여러 열에 같은 수식을 채우기 핸들로 복사할 때</b> — C2(수주량 비율)=B2/B7*100, E2(판매금액 비율)=D2/D7*100 처럼 <b>열 이름은 바뀌지만 분모 행(7)은 고정</b>돼야 하는 상황이면, C2에 <code>=B2/B$7*100</code>을 입력해 오른쪽(E열)으로 복사해도 분모 행만 고정되게 만든다 — <b>행만 고정하는 혼합참조(B$7)</b>가 정답.
+      <b>실무형 예제: C열과 E열에 같은 수식을 복사해 쓰려면?</b>
+      <p style="margin:6px 0;">C2에는 <code>B2/B7</code>(수주량 비율), E2에는 <code>D2/D7</code>(판매금액 비율)이 필요하다. <b>열은 B→D로 바뀌어야 하고(고정하면 안 됨), 분모의 행 7만 고정</b>돼야 한다. 따라서 열에 $를 붙이면 안 되고 행에만 붙인다 → <code>=B2/B$7*100</code></p>
+      <p style="margin:6px 0 0;">만약 <code>$B$7</code>로 절대참조하면 E열로 복사했을 때도 분모가 B7로 남아 판매금액 비율이 엉뚱하게 계산된다.</p>
     </div>
 
-    <h3>수학·통계 함수 <span class="page-ref">📖 기출문제집 p.803</span></h3>
+    <h3>수학·통계 함수 <span class="page-ref">📖 기출문제집 p.802~803</span></h3>
     <table>
-      <tr><th>함수</th><th>기능</th><th>예시 (A1~A6 = 1,7,5,3,0,8)</th></tr>
-      <tr><td>MEDIAN</td><td>중간값(정렬 후 가운데 값)</td><td>=MEDIAN(A1:A6) → 3</td></tr>
-      <tr><td>MODE</td><td>최빈값(가장 많이 나온 값)</td><td>=MODE(A1:A6) → 3</td></tr>
-      <tr><td>GCD</td><td>최대공약수</td><td>=GCD(A1,A6) → 1</td></tr>
-      <tr><td>POWER</td><td>거듭제곱</td><td>=POWER(A1,A6) → 1⁸=1</td></tr>
-      <tr><td>FACT</td><td>계승(팩토리얼)</td><td>=FACT(5) → 120</td></tr>
-      <tr><td>INT</td><td>소수점 <b>이하 버림, 음수는 더 작은 정수로</b></td><td>=INT(-3.14) → -4 (❗ -3 아님)</td></tr>
-      <tr><td>MOD</td><td>나머지</td><td>=MOD(3,4) → 3</td></tr>
-      <tr><td>PRODUCT</td><td>곱셈</td><td>=PRODUCT(3,6,2) → 36</td></tr>
+      <tr><th>함수</th><th>기능</th><th>예시</th><th>결과</th></tr>
+      <tr><td>MEDIAN</td><td>중앙값 (정렬 후 가운데, 짝수개면 두 값의 평균)</td><td>=MEDIAN(3,7,5,3,0,1)</td><td>3</td></tr>
+      <tr><td>MODE</td><td>최빈값 (가장 자주 나온 값)</td><td>=MODE(3,7,5,3,0,1)</td><td>3</td></tr>
+      <tr><td>GCD</td><td>최대공약수</td><td>=GCD(3,1)</td><td>1</td></tr>
+      <tr><td>POWER</td><td>거듭제곱 (=밑, 지수)</td><td>=POWER(3,3)</td><td>27</td></tr>
+      <tr><td>FACT</td><td>계승(팩토리얼)</td><td>=FACT(5)</td><td><b>120</b> (5×4×3×2×1)</td></tr>
+      <tr><td>INT</td><td>더 <b>작은 정수로 내림</b></td><td>=INT(-3.14)</td><td><b>−4</b> (❗ −3 아님)</td></tr>
+      <tr><td>MOD</td><td>나머지 (=피제수, 제수)</td><td>=MOD(3,4)</td><td><b>3</b> (3÷4는 몫0 나머지3)</td></tr>
+      <tr><td>PRODUCT</td><td>모든 인수의 곱</td><td>=PRODUCT(3,6,2)</td><td>36</td></tr>
+      <tr><td>ROUNDDOWN</td><td>0에 가까운 방향으로 내림</td><td>=ROUNDDOWN(1145443, −1)</td><td>1,145,440</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> INT(-3.14)는 "소수점 버림"이 아니라 <b>더 작은 정수로 내림</b>이라 <b>-4</b>가 나온다 (단순히 소수부를 잘라내면 -3이라고 착각하기 쉬움).</div>
-
-    <h3>논리 함수 — IF / OR / AND <span class="page-ref">📖 기출문제집 p.803~805</span></h3>
-    <p><code>=IF(OR(B3&lt;1%, C3&gt;=500), "합격", "재작업")</code> — OR은 <b>조건 중 하나만 참이어도</b> 전체가 참이 된다 (AND는 전부 참이어야 참).</p>
-    <div class="tip">
-      <b>판정 예제:</b> B3=1.05%(1%보다 큼), C3=495(500보다 작음)
-      <ol class="steps">
-        <li>OR(B3&lt;1%, C3&gt;=500) → 두 조건 다 거짓 → OR 결과 = <b>거짓</b></li>
-        <li>IF의 조건이 거짓이므로 세 번째 인수 실행 → <b>"재작업"</b></li>
-      </ol>
+    <div class="deep">
+      <h4>자주 틀리는 세 가지</h4>
+      <ul>
+        <li><b>INT(음수)</b>: "소수점 버림"이 아니라 <b>수직선에서 왼쪽(더 작은 쪽) 정수로 내림</b>이다. INT(3.14)=3이지만 <b>INT(−3.14)=−4</b>. 단순히 소수부를 잘라내면 −3이라 착각하기 쉽다.</li>
+        <li><b>MOD(3,4)</b>: 앞이 나눠지는 수, 뒤가 나누는 수다. 3÷4 = 몫 0, 나머지 <b>3</b>. 순서를 바꿔 MOD(4,3)=1과 헷갈리지 말 것.</li>
+        <li><b>ROUNDDOWN의 자릿수(num_digits)</b>: 양수면 소수점 <b>아래</b> 자리, 0이면 정수, <b>음수면 소수점 위(왼쪽) 자리</b>에서 내린다. −1은 1의 자리를 버려 <b>10원 단위</b>로, −2는 10의 자리까지 버려 100원 단위로 만든다.</li>
+      </ul>
     </div>
 
-    <h3>찾기/참조 함수 <span class="page-ref">📖 기출문제집 p.805~807</span></h3>
+    <h3>논리 함수 — IF / OR / AND <span class="page-ref">📖 기출문제집 p.803~804</span></h3>
+    <p><code>=IF(조건, 참일때값, 거짓일때값)</code> — 조건 자리에 OR·AND를 넣어 여러 조건을 묶는다.</p>
+    <table>
+      <tr><th>함수</th><th>참이 되는 조건</th></tr>
+      <tr><td><b>OR</b>(조건1, 조건2, …)</td><td>조건 중 <b>하나만 참이어도</b> 참</td></tr>
+      <tr><td><b>AND</b>(조건1, 조건2, …)</td><td><b>전부 참이어야</b> 참</td></tr>
+    </table>
+    <div class="tip">
+      <b>판정 예제: <code>=IF(OR(B3&lt;1%, C3&gt;=500), "합격", "재작업")</code></b>
+      <table>
+        <tr><th>행</th><th>오차율(B)</th><th>생산량(C)</th><th>B&lt;1%</th><th>C≥500</th><th>OR</th><th>결과</th></tr>
+        <tr><td>3</td><td>1.05%</td><td>495</td><td>거짓</td><td>거짓</td><td><b>거짓</b></td><td><b>재작업</b></td></tr>
+        <tr><td>4</td><td>1.10%</td><td>510</td><td>거짓</td><td><b>참</b></td><td><b>참</b></td><td><b>합격</b></td></tr>
+        <tr><td>5</td><td>0.90%</td><td>537</td><td><b>참</b></td><td>참</td><td><b>참</b></td><td><b>합격</b></td></tr>
+      </table>
+      <p style="margin:6px 0 0;">→ D3:D5 = <b>재작업, 합격, 합격</b>. 이렇게 표를 그려 조건별 참·거짓을 하나씩 채우면 실수가 없다.</p>
+    </div>
+
+    <h3>찾기/참조 함수 <span class="page-ref">📖 기출문제집 p.804~805</span></h3>
     <table>
       <tr><th>함수</th><th>형식</th><th>기능</th></tr>
-      <tr><td><b>VLOOKUP</b></td><td>=VLOOKUP(검색값, 범위, 열번호, 검색유형)</td><td>범위의 <b>첫 열(세로)</b>에서 검색값을 찾아, 지정한 열 번호의 같은 행 값을 반환</td></tr>
-      <tr><td><b>HLOOKUP</b></td><td>=HLOOKUP(검색값, 범위, 행번호, 검색유형)</td><td>범위의 <b>첫 행(가로)</b>에서 검색값을 찾아, 지정한 행 번호의 같은 열 값을 반환</td></tr>
-      <tr><td>LOOKUP</td><td>=LOOKUP(검색값, 검사범위, 대응범위)</td><td>검사범위에서 찾은 위치와 같은 위치를 대응범위에서 반환</td></tr>
-      <tr><td>MATCH</td><td>=MATCH(검사값, 검사범위, 검사유형)</td><td>검사값이 범위에서 <b>몇 번째 위치</b>인지 반환 (값이 아니라 위치!)</td></tr>
-      <tr><td>INDEX</td><td>=INDEX(범위, 행번호, 열번호)</td><td>범위에서 지정한 <b>행·열 위치의 값</b>을 반환</td></tr>
-      <tr><td>CHOOSE</td><td>=CHOOSE(인덱스, 값1, 값2, ...)</td><td>인덱스 번호에 해당하는 값을 선택</td></tr>
+      <tr><td><b>VLOOKUP</b></td><td>=VLOOKUP(검색값, 범위, <b>열번호</b>, 검색유형)</td><td>범위의 <b>첫 열(세로)</b>에서 검색값을 찾아, 지정한 열 번호의 같은 행 값을 반환</td></tr>
+      <tr><td><b>HLOOKUP</b></td><td>=HLOOKUP(검색값, 범위, <b>행번호</b>, 검색유형)</td><td>범위의 <b>첫 행(가로)</b>에서 검색값을 찾아, 지정한 행 번호의 같은 열 값을 반환</td></tr>
+      <tr><td>LOOKUP</td><td>=LOOKUP(검색값, 검사범위, 대응범위)</td><td>검사범위에서 찾은 위치와 <b>같은 위치</b>를 대응범위에서 반환</td></tr>
+      <tr><td><b>MATCH</b></td><td>=MATCH(검사값, 검사범위, 검사유형)</td><td>검사값이 범위에서 <b>몇 번째인지(위치)</b> 반환 — 값이 아니다!</td></tr>
+      <tr><td><b>INDEX</b></td><td>=INDEX(범위, 행번호, 열번호)</td><td>범위에서 지정한 <b>행·열 위치의 값</b>을 반환</td></tr>
+      <tr><td>CHOOSE</td><td>=CHOOSE(인덱스, 값1, 값2, …)</td><td>인덱스 번호에 해당하는 값을 선택</td></tr>
       <tr><td>OFFSET</td><td>=OFFSET(기준, 행수, 열수)</td><td>기준 셀에서 지정한 만큼 떨어진 셀 값을 반환</td></tr>
+      <tr><td>LARGE</td><td>=LARGE(범위, k)</td><td>범위에서 <b>k번째로 큰</b> 값 (동일 값이 여러 개면 중복을 각각 센다)</td></tr>
     </table>
-    <div class="tip"><b>검색유형:</b> 0(또는 FALSE)=정확히 일치하는 값만 찾음, 1(또는 TRUE·생략)=검색값보다 작거나 같은 값 중 가장 큰 값을 찾음(범위가 오름차순 정렬돼 있어야 함)</div>
+    <div class="tip"><b>검색유형(마지막 인수):</b> <b>0 또는 FALSE</b> = 정확히 일치하는 값만 / <b>1 또는 TRUE 또는 생략</b> = 검색값보다 <b>작거나 같은 값 중 가장 큰 값</b>(근사값, 범위가 오름차순 정렬돼 있어야 함). MATCH는 여기에 더해 <b>−1</b>(검색값보다 크거나 같은 값 중 최소, 내림차순 정렬)도 있다.</div>
 
     <figure class="diagram">
       <svg viewBox="0 0 700 300" role="img" aria-label="VLOOKUP 동작 원리: 검색범위의 첫 열에서 검색값과 일치하는 행을 찾은 뒤, 그 행에서 지정한 열 번호만큼 오른쪽으로 이동해 값을 가져온다">
@@ -158,59 +240,147 @@
 
         <line x1="520" y1="150" x2="600" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV8)"/>
         <text x="610" y="155" font-size="13" text-anchor="start">결과 = 700</text>
+
+        <text x="20" y="255" font-size="12">열 번호는 <tspan font-weight="700">범위의 왼쪽 끝을 1열로</tspan> 세어 매긴다 (시트의 A열이 기준이 아님!)</text>
+        <text x="20" y="278" font-size="12">다른 시트를 참조할 땐 시트명 뒤에 <tspan font-weight="700">!</tspan> 를 붙인다 → Sheet1!A2:D6</text>
       </svg>
-      <figcaption>=VLOOKUP("시금치", A2:D6, 4, 0) — 1열에서 "시금치"가 있는 행을 찾고, 같은 행의 4번째 열(가격) 값을 가져온다. 다른 시트를 참조할 때는 <code>Sheet1!A2:D6</code>처럼 시트명 뒤에 <b>!</b>를 붙인다.</figcaption>
+      <figcaption>=VLOOKUP("시금치", Sheet1!A2:D6, 4, 0) — 1열에서 검색값이 있는 행을 찾고, 같은 행의 4번째 열 값을 가져온다.</figcaption>
     </figure>
 
-    <div class="tip">
-      <b>중첩함수 예제: =HLOOKUP(INDEX(A2:C5, 2, 2), B7:E9, 2)</b> <span class="page-ref">📖 기출문제집 p.807</span>
-      <ol class="steps">
-        <li>안쪽 INDEX(A2:C5, 2, 2)부터 계산: A2:C5 범위에서 2행 2열의 값 = <b>"C123"</b></li>
-        <li>바깥 HLOOKUP("C123", B7:E9, 2) 계산: B7:E9의 <b>첫 행</b>에서 "C123"을 찾고, <b>2번째 행</b>(같은 열)의 값을 반환</li>
-        <li>결과 = <b>"알고리즘"</b></li>
-      </ol>
-    </div>
-    <div class="tip">
-      <b>계산 예제: =VLOOKUP(LARGE(C4:C11,3), C4:F11, 4, 0)</b> <span class="page-ref">📖 기출문제집 p.808</span>
-      <ol class="steps">
-        <li>안쪽 LARGE(C4:C11, 3): C4:C11 중 <b>3번째로 큰 값</b>을 찾음 → 13 (동일값이 여러 개면 먼저 나오는 것을 사용)</li>
-        <li>바깥 VLOOKUP(13, C4:F11, 4, 0): C열(1열 기준)에서 13을 찾고, 같은 행의 4번째 열(판매금액) 값을 반환</li>
-        <li>결과 = <b>2,380</b></li>
-      </ol>
-    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 250" role="img" aria-label="VLOOKUP은 첫 열에서 아래로 검색해 오른쪽 열의 값을 가져오고, HLOOKUP은 첫 행에서 오른쪽으로 검색해 아래 행의 값을 가져온다">
+        <defs>
+          <marker id="arVH" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="30" y="24" font-size="13" font-weight="700">VLOOKUP — V는 Vertical(세로)</text>
+        <rect x="30" y="38" width="70" height="150" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="100" y="38" width="70" height="150" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+        <rect x="170" y="38" width="70" height="150" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+        <text x="65" y="55" font-size="10.5" text-anchor="middle" font-weight="700">1열</text>
+        <line x1="65" y1="62" x2="65" y2="150" stroke="currentColor" stroke-width="2" marker-end="url(#arVH)"/>
+        <text x="65" y="172" font-size="10" text-anchor="middle" opacity="0.8">① 아래로 검색</text>
+        <line x1="75" y1="120" x2="215" y2="120" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arVH)"/>
+        <text x="150" y="112" font-size="10" text-anchor="middle" opacity="0.8">② 오른쪽 열번호로</text>
+        <text x="30" y="210" font-size="11.5">첫 <tspan font-weight="700">열</tspan>에서 찾고 → 지정한 <tspan font-weight="700">열 번호</tspan>의 값 반환</text>
+
+        <text x="390" y="24" font-size="13" font-weight="700">HLOOKUP — H는 Horizontal(가로)</text>
+        <rect x="390" y="38" width="210" height="50" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="390" y="88" width="210" height="50" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+        <rect x="390" y="138" width="210" height="50" fill="none" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+        <text x="410" y="58" font-size="10.5" font-weight="700">1행</text>
+        <line x1="415" y1="70" x2="570" y2="70" stroke="currentColor" stroke-width="2" marker-end="url(#arVH)"/>
+        <text x="500" y="88" font-size="10" text-anchor="middle" opacity="0.8">① 오른쪽으로 검색</text>
+        <line x1="530" y1="78" x2="530" y2="165" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arVH)"/>
+        <text x="560" y="130" font-size="10" opacity="0.8">② 아래 행번호로</text>
+        <text x="390" y="210" font-size="11.5">첫 <tspan font-weight="700">행</tspan>에서 찾고 → 지정한 <tspan font-weight="700">행 번호</tspan>의 값 반환</text>
+
+        <text x="30" y="238" font-size="12">암기: <tspan font-weight="700">V자는 세로로 길쭉, H자는 가로로 넓적</tspan>. 검색하는 방향과 세는 대상(열/행)이 항상 짝을 이룬다.</text>
+      </svg>
+      <figcaption>VLOOKUP과 HLOOKUP의 유일한 차이는 <b>검색 방향</b>이다. 세로로 찾으면 열 번호를, 가로로 찾으면 행 번호를 지정한다.</figcaption>
+    </figure>
+
+    <h3>INDEX + MATCH 조합 — 행·열을 동시에 찾기 <span class="page-ref">📖 기출문제집 p.808</span></h3>
+    <p>VLOOKUP은 "첫 열에서만" 찾을 수 있다는 한계가 있다. 표에서 <b>행과 열을 모두 조건으로</b> 값을 찾으려면 <b>INDEX와 MATCH를 조합</b>한다. MATCH가 "몇 번째 행인지·몇 번째 열인지"를 알아내고, INDEX가 그 좌표의 값을 꺼내오는 <b>역할 분담</b>이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 280" role="img" aria-label="INDEX와 MATCH 조합: MATCH가 행 위치와 열 위치를 각각 숫자로 알아내고 INDEX가 그 좌표의 값을 반환한다">
+        <defs>
+          <marker id="arIM" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="200" y="24" font-size="11.5" text-anchor="middle" opacity="0.8">B2:D2 = 열 제목 (유럽·미국·일본)</text>
+        <g text-anchor="middle" font-size="11">
+          <rect x="30" y="34" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5"/><text x="65" y="54" opacity="0.7">분기\지역</text>
+          <rect x="100" y="34" width="70" height="30" fill="none" stroke="currentColor" stroke-width="2"/><text x="135" y="54" font-weight="700">유럽</text>
+          <rect x="170" y="34" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="205" y="54">미국</text>
+          <rect x="240" y="34" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="275" y="54">일본</text>
+
+          <rect x="30" y="64" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="65" y="84">1분기</text>
+          <rect x="100" y="64" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="135" y="84">800</text>
+          <rect x="170" y="64" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="205" y="84">200</text>
+          <rect x="240" y="64" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="275" y="84">500</text>
+
+          <rect x="30" y="94" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="65" y="114">2분기</text>
+          <rect x="100" y="94" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="135" y="114">550</text>
+          <rect x="170" y="94" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="205" y="114">450</text>
+          <rect x="240" y="94" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="275" y="114">850</text>
+
+          <rect x="30" y="124" width="70" height="30" fill="none" stroke="currentColor" stroke-width="2"/><text x="65" y="144" font-weight="700">3분기</text>
+          <rect x="100" y="124" width="70" height="30" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="135" y="144" font-weight="700">300</text>
+          <rect x="170" y="124" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="205" y="144">690</text>
+          <rect x="240" y="124" width="70" height="30" fill="none" stroke="currentColor" stroke-width="1"/><text x="275" y="144">700</text>
+        </g>
+        <text x="20" y="172" font-size="11" opacity="0.75">A3:A6 = 행 제목 (1~4분기)</text>
+
+        <text x="360" y="50" font-size="12">MATCH("3분기", A3:A6, 0)</text>
+        <line x1="530" y1="46" x2="575" y2="46" stroke="currentColor" stroke-width="1.5" marker-end="url(#arIM)"/>
+        <text x="585" y="50" font-size="13" font-weight="700">3</text>
+        <text x="360" y="68" font-size="10.5" opacity="0.75">→ 1분기·2분기·3분기 중 <tspan font-weight="700">3번째</tspan></text>
+
+        <text x="360" y="105" font-size="12">MATCH("유럽", B2:D2, 0)</text>
+        <line x1="530" y1="101" x2="575" y2="101" stroke="currentColor" stroke-width="1.5" marker-end="url(#arIM)"/>
+        <text x="585" y="105" font-size="13" font-weight="700">1</text>
+        <text x="360" y="123" font-size="10.5" opacity="0.75">→ 유럽·미국·일본 중 <tspan font-weight="700">1번째</tspan></text>
+
+        <rect x="355" y="145" width="320" height="52" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="515" y="167" font-size="12.5" text-anchor="middle">INDEX(B3:D6, <tspan font-weight="700">3</tspan>, <tspan font-weight="700">1</tspan>)</text>
+        <text x="515" y="186" font-size="12.5" text-anchor="middle">= 데이터 영역의 3행 1열 = <tspan font-weight="700">300</tspan></text>
+
+        <text x="20" y="225" font-size="12"><tspan font-weight="700">핵심 규칙:</tspan> INDEX의 범위(B3:D6)에는 <tspan font-weight="700">제목 행·열을 포함하지 않는다.</tspan> 데이터만 잡아야</text>
+        <text x="20" y="245" font-size="12">MATCH가 돌려준 순번과 INDEX의 좌표가 정확히 맞아떨어진다.</text>
+        <text x="20" y="268" font-size="12" opacity="0.85">역할 분담: <tspan font-weight="700">MATCH = 위치(번호)를 찾는다 / INDEX = 그 위치의 값을 꺼낸다</tspan></text>
+      </svg>
+      <figcaption>INDEX+MATCH 조합 — MATCH 두 개로 행·열 좌표를 각각 구하고 INDEX가 교차점 값을 반환한다. INDEX의 범위에 제목 행·열을 넣으면 좌표가 한 칸씩 어긋나므로 반드시 데이터 영역만 지정한다.</figcaption>
+    </figure>
 
     <h3>재무 함수 — FV / ROUNDDOWN <span class="page-ref">📖 기출문제집 p.809</span></h3>
-    <p><code>=FV(rate, nper, pmt, [pv], [type])</code> — 고정 이자율로 <b>미래가치</b>를 계산. rate(기간별 이자율)와 nper(총 납입기간)는 <b>같은 단위</b>로 맞춰야 한다 (연이율을 월단위 기간에 쓰려면 12로 나눈다).</p>
+    <p><code>=FV(rate, nper, pmt, [pv], [type])</code> — 고정 이자율 기반의 <b>미래가치(Future Value)</b>를 계산한다.</p>
+    <table>
+      <tr><th>인수</th><th>의미</th><th>주의</th></tr>
+      <tr><td>rate</td><td><b>기간별</b> 이자율</td><td>월복리면 연이율 ÷ 12</td></tr>
+      <tr><td>nper</td><td>총 납입 <b>기간 수</b></td><td>월납 3년이면 3×12 = 36</td></tr>
+      <tr><td>pmt</td><td>각 기간의 납입액</td><td>저축(나가는 돈)은 <b>음수</b>로 입력</td></tr>
+      <tr><td>pv</td><td>현재가치 (선택)</td><td>생략하면 0</td></tr>
+      <tr><td>type</td><td>납입 시점 (선택)</td><td>0=기간 말, 1=기간 초</td></tr>
+    </table>
     <div class="tip">
       <b>예제: 연이율 4%, 3년 월복리 적금의 만기지급금 (10원 미만 절삭)</b>
       <ol class="steps">
-        <li>월 이자율로 환산: rate = 4%/12</li>
-        <li>총 납입 개월 수: nper = 3*12 = 36개월</li>
-        <li>월 적립액은 저축(지출)이므로 <b>음수</b>로 입력: pmt = -B2</li>
-        <li>10원 단위 미만 절삭 → ROUNDDOWN(FV(4%/12, 3*12, -B2), <b>-1</b>) (num_digits가 음수면 소수점 <b>왼쪽</b> 자리에서 내림 — "-1"은 1의 자리를 버려 10원 단위로 만듦)</li>
+        <li><b>rate와 nper의 단위를 맞춘다</b> — 월복리이므로 둘 다 "월" 기준으로: rate = <b>4%/12</b>, nper = <b>3*12</b></li>
+        <li>월 적립액은 내 지갑에서 나가는 돈이므로 <b>음수</b>: pmt = <b>−B2</b></li>
+        <li>10원 단위 미만 절삭 → ROUNDDOWN의 자릿수는 <b>−1</b> (1의 자리를 버림)</li>
+        <li>최종: <code>=ROUNDDOWN(FV(4%/12, 3*12, −B2), −1)</code></li>
       </ol>
+      <p style="margin:6px 0 0;font-size:13px;"><b>오답 포인트:</b> rate에 4%를 그대로 쓰면(연이율 × 36개월) 완전히 틀린 값이 되고, 자릿수에 −2를 쓰면 100원 단위로 잘려버린다.</p>
     </div>
 
-    <h3>데이터 시각화 도구</h3>
+    <h3>데이터 분석·시각화 도구 <span class="page-ref">📖 기출문제집 p.810</span></h3>
     <table>
       <tr><th>도구</th><th>설명</th></tr>
-      <tr><td><b>스파크라인 (Sparkline)</b></td><td>단일 셀 안에 표시되는 미니 차트. 선형·열(막대)·승패 방식으로 추세를 빠르게 파악</td></tr>
-      <tr><td>슬라이서 (Slicer)</td><td>버튼 클릭만으로 데이터를 직관적으로 필터링하는 도구</td></tr>
-      <tr><td>피벗 테이블 (Pivot Table)</td><td>복잡한 데이터를 표로 재구성해 합계·평균·개수 등 통계를 확인</td></tr>
-      <tr><td>파워 쿼리 (Power Query)</td><td>여러 데이터 원본을 가져와 변환·정리 후 엑셀에 로드</td></tr>
+      <tr><td><b>스파크라인</b> (Sparkline)</td><td><b>단일 셀 안</b>에 그리는 미니 차트. 선(꺾은선형)·열(세로막대형)·승패(음수/양수) 세 방식으로 추세를 표현</td></tr>
+      <tr><td>슬라이서 (Slicer)</td><td><b>버튼 클릭</b>만으로 데이터를 직관적으로 필터링하는 시각적 도구</td></tr>
+      <tr><td>피벗 테이블 (Pivot Table)</td><td>복잡한 데이터를 표로 <b>재구성</b>해 합계·평균·개수·최대/최소 등 통계를 확인</td></tr>
+      <tr><td>파워 쿼리 (Power Query)</td><td>여러 데이터 원본에서 데이터를 <b>가져와 변환·정리</b>한 뒤 시트에 로드</td></tr>
     </table>
+    <div class="tip"><b>구별 요령:</b> "<b>셀 안에</b> 들어가는 작은 차트" = 스파크라인 / "버튼으로 <b>거르기</b>" = 슬라이서 / "<b>재구성해서 집계</b>" = 피벗 테이블 / "<b>가져와서 변환</b>" = 파워 쿼리.</div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>VLOOKUP=세로(첫 열 기준), HLOOKUP=가로(첫 행 기준) — 이름의 V(Vertical)/H(Horizontal)로 암기</li>
-      <li>MATCH는 <b>값이 아니라 위치(순번)</b>를 반환한다는 점을 항상 헷갈림</li>
-      <li>절대참조($A$1)·상대참조(A1)·혼합참조($A1, A$1) 구분 — 복사했을 때 뭐가 바뀌고 안 바뀌는지</li>
-      <li>중첩함수는 반드시 <b>안쪽 함수부터</b> 계산해서 바깥에 대입</li>
-      <li>INT(음수)는 소수점 버림이 아니라 <b>더 작은 정수로 내림</b> (INT(-3.14)=-4)</li>
+      <li>VLOOKUP = 세로(첫 <b>열</b> 기준, <b>열</b>번호 지정), HLOOKUP = 가로(첫 <b>행</b> 기준, <b>행</b>번호 지정) — V/H로 암기</li>
+      <li>열·행 번호는 <b>지정한 범위의 왼쪽/위쪽 끝을 1로</b> 세며, 시트의 A열·1행 기준이 아니다</li>
+      <li>MATCH는 <b>값이 아니라 위치(순번)</b>를 반환 / INDEX는 좌표의 <b>값</b>을 반환</li>
+      <li>INDEX+MATCH 조합 시 INDEX 범위에 <b>제목 행·열을 포함하지 않는다</b></li>
+      <li>검색유형 <b>0/FALSE = 정확히 일치</b>, <b>1/TRUE/생략 = 작거나 같은 값 중 최대</b>(근사값)</li>
+      <li>다른 시트 참조는 <code>Sheet1!A2:D6</code>처럼 <b>시트명 뒤에 !</b>, 여러 셀에 복사할 땐 절대참조 권장</li>
+      <li>절대($A$1)·상대(A1)·혼합($A1, A$1) — <b>$ 바로 뒤가 고정</b>된다</li>
+      <li>중첩함수는 반드시 <b>안쪽부터</b> 계산해 바깥에 대입</li>
+      <li>INT(−3.14) = <b>−4</b> (버림이 아니라 더 작은 정수로 내림)</li>
+      <li>MOD(3,4) = <b>3</b> / FACT(5) = <b>120</b> / POWER(3,3) = 27 / PRODUCT(3,6,2) = 36</li>
+      <li>ROUNDDOWN 자릿수가 <b>음수면 소수점 왼쪽</b>에서 내림 (−1 = 10원 단위)</li>
       <li>OR은 하나만 참이어도 참, AND는 전부 참이어야 참</li>
-      <li>FV 함수에서 rate·nper 단위를 반드시 맞춰야 함 (연이율→월이율 변환 등)</li>
+      <li>FV는 <b>rate와 nper의 단위를 일치</b>시키고, 저축액 pmt는 <b>음수</b>로</li>
+      <li>서식 <code>0</code>은 빈자리를 0으로 채우고 <code>#</code>은 자리를 생략, 정수 서식에 소수 입력 시 <b>반올림</b></li>
+      <li>스파크라인 = 셀 안의 미니 차트 (슬라이서·피벗테이블·파워쿼리와 구분)</li>
     </ul>
   </section>
 
@@ -218,42 +388,473 @@
     <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
     <table>
       <tr><th>구분</th><th>VLOOKUP</th><th>HLOOKUP</th></tr>
-      <tr><td>검색 방향</td><td>범위의 <b>첫 열</b>(세로)</td><td>범위의 <b>첫 행</b>(가로)</td></tr>
-      <tr><td>반환 위치</td><td>지정한 <b>열 번호</b></td><td>지정한 <b>행 번호</b></td></tr>
+      <tr><td>검색 방향</td><td>범위의 <b>첫 열</b>(세로로 아래)</td><td>범위의 <b>첫 행</b>(가로로 오른쪽)</td></tr>
+      <tr><td>세 번째 인수</td><td><b>열 번호</b></td><td><b>행 번호</b></td></tr>
+      <tr><td>이름 유래</td><td>Vertical</td><td>Horizontal</td></tr>
     </table>
     <table>
-      <tr><th>구분</th><th>MATCH</th><th>VLOOKUP</th></tr>
-      <tr><td>반환값</td><td>검색값의 <b>상대적 위치(순번)</b></td><td>검색값과 같은 행의 <b>실제 데이터</b></td></tr>
+      <tr><th>구분</th><th>MATCH</th><th>INDEX</th><th>VLOOKUP</th></tr>
+      <tr><td>반환값</td><td>상대적 <b>위치(번호)</b></td><td>지정 좌표의 <b>값</b></td><td>같은 행의 <b>값</b></td></tr>
+      <tr><td>쓰임</td><td>위치를 알아낼 때</td><td>좌표를 알 때 값 꺼내기</td><td>첫 열 기준 단순 조회</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>상대참조 (A1)</th><th>절대참조 ($A$1)</th><th>혼합참조 (A$1 / $A1)</th></tr>
       <tr><td>복사 시</td><td>행·열 모두 이동</td><td>행·열 모두 고정</td><td>$ 붙은 축만 고정</td></tr>
+      <tr><td>쓰는 상황</td><td>각 행마다 다른 값 참조</td><td>기준값 하나를 계속 참조</td><td>행 또는 열만 고정 (합계 행 등)</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>INT</th><th>ROUNDDOWN</th></tr>
+      <tr><td>방향</td><td>항상 <b>작은 쪽</b>으로 내림 (음수는 절댓값이 커짐)</td><td><b>0에 가까운</b> 쪽으로 내림</td></tr>
+      <tr><td>−3.14 적용 시</td><td><b>−4</b></td><td>−3</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">워크시트 그림이 있는 문제는 표를 그대로 실어두었습니다. 종이에 따라 써보며 풀어보세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2019 계리직 · 기출문제집 p.799</span></div>
+      <p class="q-body">다음 입력 데이터를 엑셀 서식의 표시 형식 코드에 따라 출력한 결과로 옳은 것은?<br>
+      <code>입력 데이터: 1234.5 &nbsp;/&nbsp; 표시 형식 코드: #,##0</code></p>
+      <ol class="choices">
+        <li>1,234</li>
+        <li>1,235</li>
+        <li>1,234.5</li>
+        <li>1,234.50</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 1,235</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>서식 <code>#,##0</code>에는 <b>소수점 자리가 없다</b> → 정수부만 표시하겠다는 뜻</li>
+            <li>정수부만 표시할 때 소수는 버리는 게 아니라 <b>반올림</b>된다: 1234.5 → <b>1235</b></li>
+            <li><code>,</code>가 있으므로 천 단위 구분 기호를 넣는다 → <b>1,235</b></li>
+          </ol>
+          <p><b>①이 오답인 이유:</b> 1,234는 반올림이 아니라 <b>버림</b>을 했을 때의 값이다. 서식은 버리지 않고 반올림한다.</p>
+          <p><b>비교:</b> <code>#,###.#</code>이었다면 소수 한 자리를 살려 <b>1,234.5</b>, <code>#,###.#0</code>이면 <b>1,234.50</b>이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2008 계리직 · 기출문제집 p.800</span></div>
+      <p class="q-body">워크시트에서 <b>D4</b> 셀에 <code>=RIGHT(C4, LEN(C4)-4) &amp; "****"</code> 을 입력했을 때 결과값은?</p>
+      <table>
+        <tr><th></th><th>A (이름)</th><th>B (학번)</th><th>C (연락처)</th></tr>
+        <tr><td><b>2</b></td><td>김철수</td><td>208-4101</td><td>010-2109-8765</td></tr>
+        <tr><td><b>3</b></td><td>이영희</td><td>208-4102</td><td>011-3456-7890</td></tr>
+        <tr><td><b>4</b></td><td>홍길동</td><td>208-4103</td><td>019-2119-9019</td></tr>
+      </table>
+      <ol class="choices">
+        <li>****2119-9019</li>
+        <li>019-2119-****</li>
+        <li>019-****-9019</li>
+        <li>2119-9019****</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 2119-9019****</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>C4가 어느 셀인지부터 확인</b> — 4행이므로 홍길동의 연락처 <code>019-2119-9019</code></li>
+            <li>LEN(C4) = <b>13</b> — 하이픈(-)도 문자로 센다 (3+1+4+1+4 = 13)</li>
+            <li>RIGHT(C4, 13−4) = RIGHT(C4, <b>9</b>) → 오른쪽 끝 9글자 = <b>"2119-9019"</b></li>
+            <li><code>&amp;</code>는 문자열 연결 연산자 → "2119-9019" + "****" = <b>"2119-9019****"</b></li>
+          </ol>
+          <p><b>함정 3종:</b> ①은 앞뒤를 뒤집은 것, ②는 앞에서 잘라낸 것(LEFT로 착각), ③은 가운데를 가린 것. RIGHT는 <b>오른쪽 끝에서부터</b> 가져오고, <code>&amp;</code>로 붙인 문자열은 <b>뒤에</b> 붙는다는 두 가지만 지키면 된다.</p>
+          <p><b>주의:</b> 수식이 D4에 있으므로 C4(4행)를 봐야 한다. 무심코 C2(김철수)를 보고 "2109-8765****"를 고르면 오답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2025 계리직 · 기출문제집 p.801</span></div>
+      <p class="q-body">전화번호가 저장된 B열에서 <b>국번만 추출</b>하여 C열을 채울 때, C2셀에 필요한 수식은?</p>
+      <table>
+        <tr><th></th><th>A (이름)</th><th>B (전화번호)</th><th>C (국번)</th></tr>
+        <tr><td><b>2</b></td><td>신OO</td><td>(02)000-0000</td><td>02</td></tr>
+        <tr><td><b>3</b></td><td>이OO</td><td>(032)000-0000</td><td>032</td></tr>
+        <tr><td><b>4</b></td><td>정OO</td><td>(042)000-0000</td><td>042</td></tr>
+      </table>
+      <ol class="choices">
+        <li>=MID(B2, 2, FIND(")", B2)−2)</li>
+        <li>=MID(B2, 2, FIND(")", B2)−4)</li>
+        <li>=LOOKUP(B2, 2, FIND(")", B2)−2)</li>
+        <li>=LOOKUP(B2, 2, FIND(")", B2)−4)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① =MID(B2, 2, FIND(")", B2)−2)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>문자열 <b>중간</b>에서 뽑아야 하므로 함수는 <b>MID</b> — LOOKUP은 값을 찾는 함수라 애초에 후보가 아니다(③④ 탈락)</li>
+            <li>국번은 여는 괄호 다음, 즉 <b>2번째 문자부터</b> 시작 → MID의 시작위치 = 2</li>
+            <li>글자 수는 지역마다 다르다(02는 2자리, 032는 3자리) → <b>FIND로 닫는 괄호 위치를 찾아</b> 계산해야 한다</li>
+            <li><code>(02)000-0000</code>의 경우 FIND(")",B2) = <b>4</b> → 4−2 = <b>2</b>글자 → "02" ✔</li>
+            <li><code>(032)000-0000</code>의 경우 FIND = <b>5</b> → 5−2 = <b>3</b>글자 → "032" ✔</li>
+          </ol>
+          <p><b>왜 −2인가:</b> 닫는 괄호 위치에는 <b>여는 괄호 1칸 + 닫는 괄호 자신 1칸</b>이 포함돼 있으므로 2를 빼야 순수 숫자 길이가 나온다. ②의 −4를 넣으면 02의 경우 4−4=0글자가 되어 빈 문자열이 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2010 계리직 · 기출문제집 p.801</span></div>
+      <p class="q-body">C열에는 전체 수주량 대비 각 사원 수주량의 비율을, E열에는 전체 판매금액 대비 각 사원 판매금액의 비율을 표시하려 한다. <b>C2셀에 수식을 입력한 뒤 C열과 E열의 나머지 셀에 복사</b>해서 쓰려면 C2셀에 입력할 내용은? (B열=수주량, D열=판매금액, 7행=합계)</p>
+      <ol class="choices">
+        <li>=B2/B7*100</li>
+        <li>=$B$2/B7*100</li>
+        <li>=B2/$B$7*100</li>
+        <li>=B2/B$7*100</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ =B2/B$7*100</p>
+        <div class="explain">
+          <p>핵심은 <b>"C열과 E열 <u>둘 다</u>에 복사해서 쓴다"</b>는 조건이다. 각 열에서 어떤 수식이 나와야 하는지 먼저 적어보자.</p>
+          <ol class="steps">
+            <li>C2에 필요한 식: <code>B2/B7*100</code> (수주량 ÷ 수주량 합계)</li>
+            <li>E2에 필요한 식: <code>D2/D7*100</code> (판매금액 ÷ 판매금액 합계)</li>
+            <li>C→E는 <b>2칸 오른쪽</b> 이동이고, B→D도 2칸 오른쪽이다 → <b>열은 같이 움직여야 하므로 고정하면 안 된다</b> (②③ 탈락: $B가 붙어 E열에서도 B를 가리키게 됨)</li>
+            <li>아래로 복사할 때(C3, C4…) 분자는 B3, B4로 따라가야 하지만 <b>분모는 항상 합계 행인 7행</b>이어야 한다 → <b>행만 고정</b>: <code>B$7</code></li>
+            <li>①은 분모의 행이 고정 안 돼 아래로 복사하면 B8, B9…로 밀려 엉뚱한 값이 된다</li>
+          </ol>
+          <p><b>정리:</b> "오른쪽으로도 복사 + 아래로도 복사 + 분모 행만 고정" = <b>행 고정 혼합참조 B$7</b>. 이 유형은 "무엇이 변해야 하고 무엇이 변하면 안 되는지"를 먼저 적는 게 정답 루트다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">계리직 · 기출문제집 p.802</span></div>
+      <p class="q-body">[D1] 셀에 <code>=$A$1+$B2</code> 를 입력한 후 [D1]을 복사하여 <b>[D5]</b> 셀에 붙여넣기 했을 때의 값은? (A1 = 1, B6 = 빈칸)</p>
+      <ol class="choices">
+        <li>1</li>
+        <li>7</li>
+        <li>9</li>
+        <li>15</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 1</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>D1 → D5: 열은 그대로(D→D), <b>행만 4칸 아래로</b>(1→5)</li>
+            <li><code>$A$1</code> — 행·열 모두 $ → <b>변하지 않음</b>. 값 = <b>1</b></li>
+            <li><code>$B2</code> — 열 B만 고정, 행 2는 상대 → 4칸 내려가 <b>$B6</b></li>
+            <li>B6은 비어 있으므로 산술 연산에서 <b>0</b>으로 취급</li>
+            <li>결과 = 1 + 0 = <b>1</b></li>
+          </ol>
+          <p><b>실수 포인트:</b> <code>$B2</code>를 보고 "$가 붙었으니 안 변하겠지"라고 넘기면 틀린다. <b>$는 바로 뒤에 오는 하나만</b> 고정한다 — <code>$B2</code>에서 고정된 건 <b>B(열)</b>이고 행 번호 2는 자유롭게 움직인다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2019 계리직 · 기출문제집 p.802~803</span></div>
+      <p class="q-body">아래 시트에서 수식을 실행한 결과, <b>값이 나머지와 다른</b> 것은? (A1부터 A6 = 3, 7, 5, 3, 0, 1)</p>
+      <ol class="choices">
+        <li>=GCD(A1, A6)</li>
+        <li>=MEDIAN(A1:A6)</li>
+        <li>=MODE(A1:A6)</li>
+        <li>=POWER(A1, A6)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (GCD만 1, 나머지는 전부 3)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>GCD(A1, A6) = GCD(3, 1)</b> → 3과 1의 최대공약수 = <b>1</b></li>
+            <li><b>MEDIAN(A1:A6)</b> → 정렬하면 0, 1, 3, 3, 5, 7. 짝수 개(6개)이므로 가운데 두 값 3과 3의 평균 = <b>3</b></li>
+            <li><b>MODE(A1:A6)</b> → 가장 많이 나온 값. 3이 두 번(A1, A4) 나오고 나머지는 한 번씩 = <b>3</b></li>
+            <li><b>POWER(A1, A6) = POWER(3, 1)</b> → 3의 1제곱 = <b>3</b></li>
+          </ol>
+          <p>따라서 ②③④는 모두 3이고 <b>①만 1</b>이다.</p>
+          <p><b>주의:</b> POWER(밑, 지수) 순서를 뒤집어 POWER(1,3)=1로 계산하면 답이 두 개가 되어버린다. <b>앞이 밑, 뒤가 지수</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2023 계리직 · 기출문제집 p.803</span></div>
+      <p class="q-body">아래 수식과 결과 중 <b>옳은 것의 총 개수</b>는?</p>
+      <table>
+        <tr><th>수식</th><th>제시된 결과</th></tr>
+        <tr><td>=FACT(5)</td><td>15</td></tr>
+        <tr><td>=INT(−3.14)</td><td>−3</td></tr>
+        <tr><td>=MOD(3, 4)</td><td>1</td></tr>
+        <tr><td>=POWER(3, 3)</td><td>27</td></tr>
+        <tr><td>=PRODUCT(3, 6, 2)</td><td>36</td></tr>
+      </table>
+      <ol class="choices">
+        <li>2개</li>
+        <li>3개</li>
+        <li>4개</li>
+        <li>5개</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 2개 (POWER와 PRODUCT만 맞음)</p>
+        <div class="explain">
+          <table>
+            <tr><th>수식</th><th>제시</th><th>실제</th><th>판정</th></tr>
+            <tr><td>=FACT(5)</td><td>15</td><td>5×4×3×2×1 = <b>120</b></td><td>✘ (5+4+3+2+1=15로 착각 유도)</td></tr>
+            <tr><td>=INT(−3.14)</td><td>−3</td><td><b>−4</b></td><td>✘ (더 작은 정수로 내림)</td></tr>
+            <tr><td>=MOD(3, 4)</td><td>1</td><td>3÷4 → 몫 0, 나머지 <b>3</b></td><td>✘ (MOD(4,3)=1과 혼동 유도)</td></tr>
+            <tr><td>=POWER(3, 3)</td><td>27</td><td>3³ = <b>27</b></td><td>✔</td></tr>
+            <tr><td>=PRODUCT(3, 6, 2)</td><td>36</td><td>3×6×2 = <b>36</b></td><td>✔</td></tr>
+          </table>
+          <p><b>세 개의 함정이 모두 "비슷하지만 다른 연산"이다:</b> 팩토리얼을 <b>덧셈</b>으로, 내림을 <b>잘라내기</b>로, 나머지를 <b>순서 바꿔서</b> 계산하게 유도한다. 특히 <b>MOD는 작은 수 ÷ 큰 수일 때 나머지가 그 작은 수 자신</b>이 된다는 걸 기억해 두면 좋다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2024 계리직 · 기출문제집 p.803~804</span></div>
+      <p class="q-body">D3셀에 <code>=IF(OR(B3&lt;1%, C3&gt;=500), "합격", "재작업")</code> 을 입력하고 채우기 핸들로 D5까지 드래그했을 때 <b>D3:D5의 출력 결과</b>는?</p>
+      <table>
+        <tr><th></th><th>A (공정)</th><th>B (오차율)</th><th>C (생산량)</th><th>D (판정)</th></tr>
+        <tr><td><b>3</b></td><td>A</td><td>1.05%</td><td>495</td><td>?</td></tr>
+        <tr><td><b>4</b></td><td>B</td><td>1.10%</td><td>510</td><td>?</td></tr>
+        <tr><td><b>5</b></td><td>C</td><td>0.90%</td><td>537</td><td>?</td></tr>
+      </table>
+      <ol class="choices">
+        <li>합격, 재작업, 합격</li>
+        <li>재작업, 합격, 합격</li>
+        <li>재작업, 재작업, 합격</li>
+        <li>합격, 재작업, 재작업</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 재작업, 합격, 합격</p>
+        <div class="explain">
+          <p>OR은 <b>둘 중 하나만 참이어도 참</b>이다. 행마다 두 조건을 각각 판정한다.</p>
+          <ol class="steps">
+            <li><b>3행:</b> B3=1.05% → 1%보다 <b>크</b>므로 거짓 / C3=495 → 500보다 <b>작</b>으므로 거짓 → OR 거짓 → <b>재작업</b></li>
+            <li><b>4행:</b> B4=1.10% → 거짓 / C4=510 → 500 이상이므로 <b>참</b> → OR 참 → <b>합격</b></li>
+            <li><b>5행:</b> B5=0.90% → 1%보다 작으므로 <b>참</b> → 이 시점에 이미 OR 참 확정 → <b>합격</b></li>
+          </ol>
+          <p><b>주의:</b> 채우기 핸들로 드래그하면 B3·C3이 <b>상대참조</b>라 행마다 B4·C4, B5·C5로 자동 이동한다. 만약 $B$3처럼 절대참조였다면 세 칸 모두 같은 값(재작업)이 나왔을 것이다.</p>
+          <p><b>AND였다면?</b> 3행 거짓, 4행 거짓(B4가 거짓이므로), 5행 참 → "재작업, 재작업, 합격"이 되어 ③번이 답이 된다. 출제자가 OR/AND를 바꿔 같은 표를 재활용하기 좋은 구조다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2012 계리직 · 기출문제집 p.804</span></div>
+      <p class="q-body">Sheet2의 <b>시금치 가격</b>을 VLOOKUP으로 Sheet1에서 가져오려 한다. Sheet2의 B3 셀에 입력할 수식은? (Sheet1의 A2:D6 = 상품명·산지·생산자·가격, Sheet2의 A3 = "시금치")</p>
+      <ol class="choices">
+        <li>=VLOOKUP(시금치, Sheet1!A2:D6, 4, 0)</li>
+        <li>=VLOOKUP(시금치, A2:A6, 5, 0)</li>
+        <li>=VLOOKUP(A3, Sheet1!A2:D6, 4, 0)</li>
+        <li>=VLOOKUP(A3, Sheet1!A2:A6, 5, 0)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ =VLOOKUP(A3, Sheet1!A2:D6, 4, 0)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>검색값</b>: "시금치"라는 글자를 직접 쓰려면 <b>따옴표</b>가 필요하다(<code>"시금치"</code>). 따옴표 없이 쓴 ①②는 잘못된 수식 → <b>A3 셀을 참조</b>하는 게 정석</li>
+            <li><b>범위</b>: 가격은 Sheet1에 있으므로 <b>Sheet1!</b>을 붙여야 한다 (②는 시트 표시가 없어 Sheet2를 뒤짐)</li>
+            <li><b>열 번호</b>: 범위 A2:D6에서 가격은 <b>4번째 열</b> → 4. ④처럼 범위를 A2:A6(1개 열)으로 잡고 5를 쓰면 범위를 벗어나 오류</li>
+            <li><b>검색유형</b>: 정확히 일치하는 상품명을 찾아야 하므로 <b>0</b></li>
+          </ol>
+          <p><b>추가 팁:</b> 이 문제는 값 하나만 구하지만, <b>여러 행에 복사해 쓸 때는 범위를 절대참조</b>로 고정해야 한다 → <code>Sheet1!$A$2:$D$6</code>. 그렇지 않으면 아래로 복사할 때 범위가 통째로 밀려 내려간다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2022 계리직 · 기출문제집 p.807</span></div>
+      <p class="q-body">[A6]과 [A7]에 아래 수식을 입력했을 때 결과값을 순서대로 나타낸 것은?<br>
+      <code>[A6] =HLOOKUP(11, B1:D5, 3)</code><br>
+      <code>[A7] =VLOOKUP("나", A2:D5, 4, TRUE)</code></p>
+      <table>
+        <tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+        <tr><td><b>1</b></td><td></td><td>10</td><td>20</td><td>30</td></tr>
+        <tr><td><b>2</b></td><td>가</td><td>10원</td><td>50원</td><td>90원</td></tr>
+        <tr><td><b>3</b></td><td>나</td><td>20원</td><td>60원</td><td>100원</td></tr>
+        <tr><td><b>4</b></td><td>다</td><td>30원</td><td>70원</td><td>110원</td></tr>
+        <tr><td><b>5</b></td><td>라</td><td>40원</td><td>80원</td><td>120원</td></tr>
+      </table>
+      <ol class="choices">
+        <li>20원, 100원</li>
+        <li>20원, 120원</li>
+        <li>60원, 100원</li>
+        <li>60원, 120원</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 20원, 100원</p>
+        <div class="explain">
+          <p><b>[A6] =HLOOKUP(11, B1:D5, 3)</b></p>
+          <ol class="steps">
+            <li>범위 B1:D5의 <b>첫 행</b>은 B1:D1 = 10, 20, 30</li>
+            <li>검색유형이 <b>생략</b>됐다 → 근사값 검색(TRUE) → 11을 <b>넘지 않는 가장 큰 값</b>을 찾는다 → <b>10</b> (B열)</li>
+            <li>찾은 B열에서 <b>3번째 행</b>의 값 → B1(1행), B2(2행), <b>B3(3행) = 20원</b></li>
+          </ol>
+          <p><b>[A7] =VLOOKUP("나", A2:D5, 4, TRUE)</b></p>
+          <ol class="steps">
+            <li>범위 A2:D5의 <b>첫 열</b>은 A2:A5 = 가, 나, 다, 라</li>
+            <li>"나"를 찾으면 <b>3행</b>(A3) → 그 행은 A3:D3</li>
+            <li>A3:D3에서 <b>4번째 열</b> = D3 = <b>100원</b></li>
+          </ol>
+          <p><b>가장 많이 틀리는 지점:</b> HLOOKUP의 "3"을 <b>3번째 열</b>로 착각해 60원을 고르는 것. HLOOKUP은 가로로 찾으므로 세 번째 인수가 <b>행 번호</b>다. 그리고 행 번호는 <b>범위의 첫 행(B1)을 1행으로</b> 세므로 3번째는 B3이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2014 계리직 · 기출문제집 p.806</span></div>
+      <p class="q-body">다음 수식의 계산 결과는?<br><code>=HLOOKUP(INDEX(A2:C5, 2, 2), B7:E9, 2)</code></p>
+      <table>
+        <tr><th></th><th>A (학번)</th><th>B (과목번호)</th><th>C (성적)</th></tr>
+        <tr><td><b>2</b></td><td>100</td><td>C412</td><td>B</td></tr>
+        <tr><td><b>3</b></td><td>200</td><td>C123</td><td>F</td></tr>
+        <tr><td><b>4</b></td><td>300</td><td>C324</td><td>C</td></tr>
+        <tr><td><b>5</b></td><td>400</td><td>C312</td><td>C</td></tr>
+      </table>
+      <table>
+        <tr><th></th><th>B</th><th>C</th><th>D</th><th>E</th></tr>
+        <tr><td><b>7</b> 과목번호</td><td>C123</td><td>C312</td><td>C324</td><td>C413</td></tr>
+        <tr><td><b>8</b> 과목이름</td><td>알고리즘</td><td>자료구조</td><td>운영체제</td><td>반도체</td></tr>
+        <tr><td><b>9</b> 수강인원</td><td>90명</td><td>80명</td><td>75명</td><td>70명</td></tr>
+      </table>
+      <ol class="choices">
+        <li>80명</li>
+        <li>75명</li>
+        <li>반도체</li>
+        <li>알고리즘</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 알고리즘</p>
+        <div class="explain">
+          <p><b>안쪽 INDEX부터</b> 푼다.</p>
+          <ol class="steps">
+            <li><b>INDEX(A2:C5, 2, 2)</b> — 범위 A2:C5에서 2행 2열. 범위의 첫 행(A2행)이 1행이므로 <b>2행 = A3행</b>, 첫 열(A열)이 1열이므로 <b>2열 = B열</b> → B3 = <b>"C123"</b></li>
+            <li>수식이 <code>=HLOOKUP("C123", B7:E9, 2)</code> 로 바뀐다</li>
+            <li>범위 B7:E9의 <b>첫 행</b>(7행)에서 "C123"을 찾는다 → <b>B열</b></li>
+            <li>B열에서 <b>2번째 행</b> = B8 = <b>"알고리즘"</b> (검색유형 생략 시 정확히 일치로 동작)</li>
+          </ol>
+          <p><b>오답 유도 경로:</b> ①80명은 C열(C312)을 찾아 3행을 본 경우, ②75명은 D열 3행, ③반도체는 E열 2행이다. <b>INDEX의 좌표를 시트 기준(A1부터)으로 세면</b> 엉뚱한 셀이 나오므로, 반드시 <b>지정한 범위의 왼쪽 위 모서리를 (1,1)로</b> 세어야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2021 계리직 · 기출문제집 p.805~806</span></div>
+      <p class="q-body">수식 <code>=VLOOKUP(LARGE(C4:C11, 3), C4:F11, 4, 0)</code> 에 의해 표시될 결과는? (C열=초과/부족수량, F열=판매금액. C열 값은 위에서부터 10, 13, −5, 13, 5, 20, 8, 10이고, 두 번째 13이 있는 행의 판매금액은 2,380)</p>
+      <ol class="choices">
+        <li>58</li>
+        <li>2,380</li>
+        <li>8,700</li>
+        <li>16,500</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 2,380</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>안쪽 LARGE(C4:C11, 3)</b> — C열에서 3번째로 큰 값. 정렬하면 20, 13, 13, 10, 10, 8, 5, −5 → <b>3번째 = 13</b> (같은 값도 <b>각각 하나로 센다</b>)</li>
+            <li>수식이 <code>=VLOOKUP(13, C4:F11, 4, 0)</code> 로 바뀐다</li>
+            <li>범위 C4:F11의 <b>첫 열(C열)</b>에서 13을 찾는다 → 13이 두 개지만 VLOOKUP은 <b>위에서부터 처음 만나는 것</b>을 쓴다</li>
+            <li>그 행의 <b>4번째 열</b>(C=1, D=2, E=3, <b>F=4</b>) = 판매금액 = <b>2,380</b></li>
+          </ol>
+          <p><b>두 가지 함정:</b> ① LARGE에서 중복값을 하나로 합쳐 세면 3번째가 10이 되어 다른 답이 나온다 — <b>중복도 각각 센다.</b> ② 열 번호 4를 시트의 D열로 착각하면 안 된다. <b>범위가 C열부터 시작하므로 C가 1열</b>, 4번째는 F열이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 13</span><span class="q-src">2015 상업정보 · 기출문제집 p.808</span></div>
+      <p class="q-body">G3에 분기, G4에 지역을 입력하면 해당 매출액이 G6에 출력되도록 <b>INDEX와 MATCH만</b> 사용해 G6에 넣을 수식은? (A3:A6 = 1~4분기, B2:D2 = 유럽·미국·일본, B3:D6 = 매출 데이터)</p>
+      <ol class="choices">
+        <li>=INDEX(B3:D6, MATCH(G3,A3:A6,0), MATCH(G4,B2:D2,0))</li>
+        <li>=INDEX(A1:D6, MATCH(G3,A3:A6,0), MATCH(G4,B2:D2,0))</li>
+        <li>=INDEX(B3:D6, MATCH(G4,A3:A6,0), MATCH(G3,B2:D2,0))</li>
+        <li>=INDEX(A1:D6, MATCH(G4,B2:D2,0), MATCH(G3,A3:A6,0))</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① =INDEX(B3:D6, MATCH(G3,A3:A6,0), MATCH(G4,B2:D2,0))</p>
+        <div class="explain">
+          <p>세 가지를 차례로 확인하면 선택지가 하나씩 걸러진다.</p>
+          <ol class="steps">
+            <li><b>INDEX 범위</b>는 제목을 뺀 <b>데이터 영역만</b> → <b>B3:D6</b>. A1:D6은 제목 행·열을 포함해 좌표가 어긋난다 → <b>②④ 탈락</b></li>
+            <li><b>행 위치</b>는 분기(G3)를 분기 목록(A3:A6)에서 찾아야 한다 → <code>MATCH(G3, A3:A6, 0)</code>. ③은 G4(지역)를 분기 목록에서 찾고 있어 틀렸다 → <b>③ 탈락</b></li>
+            <li><b>열 위치</b>는 지역(G4)을 지역 목록(B2:D2)에서 찾는다 → <code>MATCH(G4, B2:D2, 0)</code></li>
+            <li>예) G3="3분기", G4="유럽" → MATCH 결과 3과 1 → INDEX(B3:D6, 3, 1) = <b>3분기 유럽 매출</b></li>
+          </ol>
+          <p><b>기억할 규칙 두 개:</b> ① INDEX 범위에 <b>제목을 넣지 않는다</b>, ② <b>행을 찾는 MATCH가 먼저, 열을 찾는 MATCH가 나중</b>(INDEX의 인수 순서가 행→열이므로).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 14</span><span class="q-src">2016 계리직 · 기출문제집 p.809</span></div>
+      <p class="q-body">3년간 <b>연이율 4%</b>로 <b>매월</b> 적립하는 <b>월 복리</b> 정기적금의 만기지급금을 구하려 한다. 셀 C2에 들어갈 수식은? (월적립액은 B2, 만기지급금은 <b>10원 단위 미만 절삭</b>)</p>
+      <ol class="choices">
+        <li>=ROUNDDOWN(FV(4%, 3*12, −B2), −1)</li>
+        <li>=ROUNDDOWN(FV(4%, 3*12, −B2), −2)</li>
+        <li>=ROUNDDOWN(FV(4%/12, 3*12, −B2), −1)</li>
+        <li>=ROUNDDOWN(FV(4%/12, 3*12, −B2), −2)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ =ROUNDDOWN(FV(4%/12, 3*12, −B2), −1)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>rate와 nper의 단위를 맞춘다</b> — nper를 <code>3*12</code>=36개월로 잡았으므로 rate도 <b>월 단위</b>여야 한다 → <code>4%/12</code>. 연이율 4%를 그대로 쓴 <b>①②는 탈락</b></li>
+            <li><b>pmt는 음수</b> — 적금은 내 통장에서 빠져나가는 돈이므로 <code>−B2</code></li>
+            <li><b>절삭 자릿수</b> — "10원 단위 미만 절삭"은 <b>1의 자리를 버린다</b>는 뜻 → num_digits = <b>−1</b>. −2는 10의 자리까지 버려 100원 단위가 되므로 <b>④ 탈락</b></li>
+          </ol>
+          <p><b>ROUNDDOWN 자릿수 정리:</b> 양수 = 소수점 아래 그 자리까지 남김 / 0 = 정수로 / <b>음수 = 소수점 왼쪽 그만큼 버림</b>(−1은 10원, −2는 100원, −3은 1000원 단위).</p>
+          <p><b>검산:</b> 예시 결과가 ₩1,145,440 처럼 <b>끝자리가 0</b>인 것을 보면 10원 단위로 절삭됐음을 알 수 있다. 100원 단위(−2)였다면 ₩1,145,400이 됐을 것이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 15</span><span class="q-src">2025 계리직 · 기출문제집 p.810</span></div>
+      <p class="q-body">다음 설명에 해당하는 것은?<br><span style="display:block;margin-top:6px;padding-left:10px;border-left:3px solid var(--border);">셀 안에 표시하는 작은 차트로, 데이터의 추세를 시각적으로 확인할 수 있다. 선(꺾은선형), 열(세로 막대형), 승패(음수 혹은 양수)의 방식으로 표현할 수 있다.</span></p>
+      <ol class="choices">
+        <li>슬라이서(slicer)</li>
+        <li>스파크라인(sparkline)</li>
+        <li>파워 쿼리(power query)</li>
+        <li>피벗 테이블(pivot table)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 스파크라인</p>
+        <div class="explain">
+          <p>결정적 단어는 <b>"셀 안에 표시하는 작은 차트"</b>다. 일반 차트는 시트 위에 떠 있는 개체지만, 스파크라인은 <b>한 셀 내부에 들어가는 미니 차트</b>라 표 옆에 나란히 붙여 추세를 보여줄 때 쓴다. 종류는 <b>선·열·승패</b> 세 가지.</p>
+          <p><b>나머지 보기 정리:</b></p>
+          <ul>
+            <li>슬라이서 — 드롭다운 대신 <b>버튼 클릭으로 필터링</b>하는 도구</li>
+            <li>파워 쿼리 — 외부 데이터를 <b>가져와 변환·정리</b>해 로드</li>
+            <li>피벗 테이블 — 데이터를 <b>재구성해 합계·평균 등 집계</b></li>
+          </ul>
+          <p>네 개 모두 "데이터를 다루는 도구"라 헷갈리지만, <b>스파크라인만 유일하게 "그림(차트)"</b>이라는 점으로 구분하면 쉽다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
-      <span class="chip">VLOOKUP</span>
-      <span class="chip">HLOOKUP</span>
-      <span class="chip">LOOKUP</span>
-      <span class="chip">MATCH</span>
-      <span class="chip">INDEX</span>
-      <span class="chip">CHOOSE</span>
-      <span class="chip">OFFSET</span>
-      <span class="chip">절대참조</span>
-      <span class="chip">상대참조</span>
-      <span class="chip">혼합참조</span>
-      <span class="chip">LEFT</span>
-      <span class="chip">RIGHT</span>
-      <span class="chip">MID</span>
-      <span class="chip">LEN</span>
-      <span class="chip">IF</span>
-      <span class="chip">OR</span>
-      <span class="chip">FV</span>
-      <span class="chip">ROUNDDOWN</span>
-      <span class="chip">스파크라인</span>
-      <span class="chip">피벗테이블</span>
+      <span class="chip">VLOOKUP</span><span class="chip">HLOOKUP</span><span class="chip">LOOKUP</span><span class="chip">MATCH</span>
+      <span class="chip">INDEX</span><span class="chip">CHOOSE</span><span class="chip">OFFSET</span><span class="chip">LARGE</span>
+      <span class="chip">검색유형</span><span class="chip">절대참조</span><span class="chip">상대참조</span><span class="chip">혼합참조</span>
+      <span class="chip">채우기핸들</span><span class="chip">시트참조(!)</span><span class="chip">LEFT</span><span class="chip">RIGHT</span>
+      <span class="chip">MID</span><span class="chip">LEN</span><span class="chip">FIND</span><span class="chip">&amp; 연결연산자</span>
+      <span class="chip">IF</span><span class="chip">OR</span><span class="chip">AND</span><span class="chip">MEDIAN</span>
+      <span class="chip">MODE</span><span class="chip">GCD</span><span class="chip">POWER</span><span class="chip">FACT</span>
+      <span class="chip">INT</span><span class="chip">MOD</span><span class="chip">PRODUCT</span><span class="chip">ROUNDDOWN</span>
+      <span class="chip">FV</span><span class="chip">셀서식</span><span class="chip">#,##0</span><span class="chip">스파크라인</span>
+      <span class="chip">슬라이서</span><span class="chip">피벗테이블</span><span class="chip">파워쿼리</span>
     </div>
   </section>
 

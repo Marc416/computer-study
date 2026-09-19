@@ -20,9 +20,19 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>컴퓨터는 0과 1밖에 모르는데, 사람은 그걸 못 읽는다</h4>
+      <p>컴퓨터 내부의 모든 데이터는 결국 <b>전기가 흐른다(1) / 안 흐른다(0)</b>의 나열일 뿐이다. 그런데 사람이 <code>10101010111100001101</code> 같은 걸 눈으로 읽고 다루기는 불가능하다. 그래서 등장한 게 <b>8진수와 16진수</b>다. 이 둘은 "2진수를 사람이 읽기 좋게 압축한 표기법"이지, 별개의 숫자 체계가 아니다.</p>
+      <p>왜 하필 8과 16인가? <b>8 = 2³, 16 = 2⁴</b>이기 때문이다. 2의 거듭제곱이라서 <b>2진수를 3개씩(또는 4개씩) 딱 잘라 묶기만 하면</b> 변환이 끝난다. 계산이 필요 없다. 반면 10진수는 2의 거듭제곱이 아니라서 2진수로 바꾸려면 나눗셈을 반복해야 한다 — 시험에서 10진수 변환 문제만 유독 귀찮은 이유가 이것이다.</p>
+      <p>그래서 이 단원의 문제는 딱 두 종류다. <b>(1) 2진 ↔ 8진 ↔ 16진</b> — 묶어서 자르기만 하면 되는 쉬운 문제. <b>(2) 10진수가 끼어드는 변환</b> — 나눗셈(정수부)·곱셈(소수부)을 해야 하는 문제. 둘을 구분해서 접근하면 실수가 확 줄어든다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>데이터 표현 단위</h3>
+    <h3>데이터 표현 단위 <span class="page-ref">📖 기출문제집 p.37~38</span></h3>
     <table>
       <tr><th>단위</th><th>크기</th><th>설명</th></tr>
       <tr><td>비트 (bit)</td><td>1자리 (0 또는 1)</td><td>정보의 최소 단위. n비트로 2ⁿ개의 데이터 표시 가능</td></tr>
@@ -30,20 +40,69 @@
       <tr><td>바이트 (byte)</td><td>8비트</td><td>문자 표현의 최소 단위, 기억용량의 기본 단위</td></tr>
       <tr><td>워드 (word)</td><td>컴퓨터마다 다름 (2/4/8바이트 등)</td><td>CPU가 한 번에 처리·접근하는 데이터 단위</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 니블은 4비트다 (2비트 아님 — 자주 나오는 오답 함정). 워드 크기는 컴퓨터 시스템마다 다를 수 있다(고정 아님).</div>
-
-    <h3>문자 코드 체계별 비트 수</h3>
     <table>
-      <tr><th>코드</th><th>비트 수</th><th>표현 가능 문자 수</th></tr>
-      <tr><td>BCD</td><td>6비트</td><td>2⁶ = 64개</td></tr>
-      <tr><td>ASCII</td><td>7비트</td><td>2⁷ = 128개</td></tr>
-      <tr><td>EBCDIC</td><td>8비트</td><td>2⁸ = 256개</td></tr>
-      <tr><td>유니코드 (Unicode)</td><td>16비트</td><td>2¹⁶개 (전 세계 문자 표현)</td></tr>
+      <tr><th>워드 종류</th><th>크기</th></tr>
+      <tr><td>하프워드 (half word)</td><td>2바이트 (16비트)</td></tr>
+      <tr><td>풀워드 (full word)</td><td>4바이트 (32비트)</td></tr>
+      <tr><td>더블워드 (double word)</td><td>8바이트 (64비트)</td></tr>
     </table>
-    <div class="analogy">비트 수 크기 순서: <b>BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</b></div>
+    <div class="tip"><b>함정 주의:</b> 니블은 <b>4비트</b>다 (2비트 아님 — 자주 나오는 오답 함정). 워드 크기는 컴퓨터 시스템마다 다를 수 있다(고정 아님).</div>
 
-    <h3>진법 변환 <span class="page-ref">📖 기출문제집 p.39~41</span></h3>
-    <p><b>2진 → 8진 → 16진</b> 상호 변환은 자릿수를 묶어서 처리하면 빠르다.</p>
+    <h3>문자 코드 체계 <span class="page-ref">📖 기출문제집 p.36~37</span></h3>
+    <table>
+      <tr><th>코드</th><th>비트 수</th><th>표현 가능 문자 수</th><th>특징</th></tr>
+      <tr><td>BCD</td><td>6비트</td><td>2⁶ = 64개</td><td>가장 오래된 코드. 영문 소문자 표현 불가</td></tr>
+      <tr><td>ASCII</td><td>7비트</td><td>2⁷ = 128개</td><td>데이터 통신·마이크로컴퓨터 표준. 실제로는 패리티 1비트를 더해 8비트로 전송</td></tr>
+      <tr><td>EBCDIC</td><td>8비트</td><td>2⁸ = 256개</td><td>IBM 대형컴퓨터용. 존 4비트 + 디지트 4비트 구성</td></tr>
+      <tr><td>유니코드 (Unicode)</td><td>16비트</td><td>2¹⁶ = 65,536개</td><td>전 세계 모든 문자(한글·한자 포함)를 하나의 체계로</td></tr>
+    </table>
+    <div class="analogy">비트 수 크기 순서: <b>BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</b> — "비·아·에·유" 순으로 커진다고 외우면 편하다.</div>
+    <div class="deep">
+      <h4>왜 유니코드가 필요했나</h4>
+      <p>ASCII는 7비트라 128자밖에 못 쓴다. 영어 알파벳·숫자·기호만으로도 빠듯한데 한글은 조합만 1만 자가 넘는다. 그래서 나라마다 자기 방식으로 한글·한자 코드를 따로 만들었고, 결과적으로 <b>같은 파일이 다른 나라 컴퓨터에서 깨지는</b> 문제가 생겼다(이게 흔히 보는 "???" 또는 "뷁" 현상이다).</p>
+      <p>유니코드는 이 혼란을 끝내려고 <b>전 세계 문자에 전 지구적으로 유일한 번호를 하나씩</b> 부여한 체계다. 16비트라서 6만 자 이상 표현 가능하다. 시험에서는 "<b>한 문자 = 2바이트</b>"라는 점이 용량 계산 문제로 자주 나온다(아래 연습문제 8번).</p>
+    </div>
+
+    <h3>진법 변환의 전체 지도 <span class="page-ref">📖 기출문제집 p.40~42</span></h3>
+    <p>진법 변환 문제는 겉보기엔 다양해 보여도 <b>경로는 딱 두 갈래</b>다. 2·8·16진수끼리는 <b>2진수를 거쳐 묶기만</b> 하면 되고, 10진수가 끼면 <b>나눗셈/곱셈</b>을 해야 한다. 아래 그림이 그 지도다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 320" role="img" aria-label="진법 변환 경로 지도: 8진수와 16진수는 2진수를 중심으로 3비트, 4비트 묶음으로 서로 변환되고, 10진수는 나눗셈과 자릿값 곱셈으로 2진수와 오간다">
+        <defs>
+          <marker id="rx1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <rect x="270" y="130" width="160" height="60" rx="10" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="350" y="156" font-size="15" text-anchor="middle" font-weight="700">2진수</text>
+        <text x="350" y="176" font-size="11" text-anchor="middle" opacity="0.75">(모든 변환의 허브)</text>
+
+        <rect x="40" y="40" width="140" height="55" rx="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="110" y="73" font-size="14" text-anchor="middle">8진수</text>
+        <line x1="180" y1="70" x2="285" y2="132" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <line x1="290" y1="140" x2="185" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <text x="185" y="112" font-size="12" font-weight="700">3비트씩 묶기</text>
+        <text x="185" y="128" font-size="10.5" opacity="0.75">(8 = 2³)</text>
+
+        <rect x="520" y="40" width="140" height="55" rx="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="590" y="73" font-size="14" text-anchor="middle">16진수</text>
+        <line x1="520" y1="70" x2="415" y2="132" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <line x1="410" y1="140" x2="515" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <text x="430" y="112" font-size="12" font-weight="700">4비트씩 묶기</text>
+        <text x="430" y="128" font-size="10.5" opacity="0.75">(16 = 2⁴)</text>
+
+        <rect x="270" y="250" width="160" height="55" rx="10" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="350" y="283" font-size="14" text-anchor="middle">10진수</text>
+        <line x1="325" y1="250" x2="325" y2="192" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <text x="130" y="228" font-size="12" font-weight="700">10 → 2 : 2로 나눈 나머지(정수부)</text>
+        <text x="130" y="244" font-size="11" opacity="0.8">／ 2를 곱한 정수부(소수부)</text>
+        <line x1="378" y1="192" x2="378" y2="250" stroke="currentColor" stroke-width="1.5" marker-end="url(#rx1)"/>
+        <text x="400" y="228" font-size="12" font-weight="700">2 → 10 : 자릿값 곱해서 더하기</text>
+
+        <text x="350" y="20" font-size="12.5" text-anchor="middle" opacity="0.85">8진 ↔ 16진은 직접 못 간다 — 반드시 2진수를 거쳐라</text>
+      </svg>
+      <figcaption>진법 변환 경로 — 2진수가 모든 변환의 중심이다. 8진↔16진 문제가 나오면 "8진 → 2진 → 16진" 두 단계로 나눠 푸는 것이 정석이다.</figcaption>
+    </figure>
+
+    <h3>① 2진 ↔ 8진 ↔ 16진 (묶어서 자르기)</h3>
     <table>
       <tr><th>변환</th><th>규칙</th></tr>
       <tr><td>2진 ↔ 4진</td><td>2진수 <b>2자리</b> = 4진수 1자리</td></tr>
@@ -51,29 +110,30 @@
       <tr><td>2진 ↔ 16진</td><td>2진수 <b>4자리</b> = 16진수 1자리</td></tr>
     </table>
     <div class="tip">
-      <b>예: 8진수 (2001)₈ → 2진수</b><br>
-      2 → 010, 0 → 000, 0 → 000, 1 → 001<br>
-      합치면 010 000 000 001 → 앞의 0 생략 → <b>10000000001</b>₂
-    </div>
-    <div class="tip">
-      <b>예: 16진수 (302)₁₆ → 2진수</b><br>
-      3 → 0011, 0 → 0000, 2 → 0010<br>
-      합치면 0011 0000 0010 → 앞의 0 생략 → <b>1100000010</b>₂
+      <b>묶는 방향이 생명이다:</b> 소수점을 기준으로 <b>정수부는 오른쪽에서 왼쪽으로</b>, <b>소수부는 왼쪽에서 오른쪽으로</b> 묶는다. 비트가 모자라면 <b>바깥쪽(정수부는 왼쪽, 소수부는 오른쪽)에 0을 채운다.</b><br>
+      틀리는 사람의 90%가 소수부를 왼쪽부터 채우다 틀린다. 예: <code>.11</code>은 <code>.1100</code>(=C)이지 <code>.0011</code>(=3)이 아니다.
     </div>
 
-    <h3>N진수 → 10진수 변환 (자릿값 곱해서 더하기)</h3>
+    <h4 style="margin:18px 0 6px;font-size:14px;">4비트 ↔ 16진수 대응표 (통째로 외워야 빠르다)</h4>
+    <table>
+      <tr><th>2진</th><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td></tr>
+      <tr><th>16진</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>2진</th><td>1000</td><td>1001</td><td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td></tr>
+      <tr><th>16진</th><td>8</td><td>9</td><td><b>A</b>(10)</td><td><b>B</b>(11)</td><td><b>C</b>(12)</td><td><b>D</b>(13)</td><td><b>E</b>(14)</td><td><b>F</b>(15)</td></tr>
+    </table>
+    <div class="analogy"><b>암기 요령:</b> 4비트의 자릿값은 왼쪽부터 <b>8-4-2-1</b>이다. <code>1011</code>이면 8+0+2+1 = 11 = B. 이 "8421"만 외우면 표를 통째로 안 외워도 즉시 계산된다.</div>
+
     <div class="tip">
-      <b>예: 16진수 (1B4.C)₁₆ → 10진수</b><br>
-      1×16² + B(11)×16¹ + 4×16⁰ + C(12)×16⁻¹<br>
-      = 256 + 176 + 4 + 0.75 = <b>436.75</b>
-    </div>
-    <div class="tip">
-      <b>예: 8진수 (13754)₈ → 10진수</b><br>
-      1×8⁴ + 3×8³ + 7×8² + 5×8¹ + 4×8⁰<br>
-      = 4096 + 1536 + 448 + 40 + 4 = <b>6124</b>
+      <b>예제: 8진수 (56.13)₈ → 16진수</b> (기출 2014 국가직)
+      <ol class="steps">
+        <li>8진수 각 자리를 <b>3비트</b>로 펼친다: 5→101, 6→110, .1→001, 3→011 ⇒ <code>101110.001011</code></li>
+        <li>정수부 <code>101110</code>을 오른쪽부터 4비트씩 묶는다 → <code>0010 1110</code> (왼쪽에 0 채움)</li>
+        <li>소수부 <code>001011</code>을 왼쪽부터 4비트씩 묶는다 → <code>0010 1100</code> (오른쪽에 0 채움)</li>
+        <li>각 묶음을 16진수로: 0010=2, 1110=E, 0010=2, 1100=C ⇒ <b>2E.2C</b></li>
+      </ol>
     </div>
 
-    <h3>10진수 → 2진수 변환 <span class="page-ref">📖 기출문제집 p.41</span></h3>
+    <h3>② 10진수 → 2진수 (나눗셈과 곱셈) <span class="page-ref">📖 기출문제집 p.39</span></h3>
     <p><b>정수부</b>는 몫이 0이 될 때까지 2로 계속 나누고 나머지를 <b>아래에서 위로(역순)</b> 읽는다. <b>소수부</b>는 2를 계속 곱해서 넘어가는 정수부를 <b>위에서 아래로(순서대로)</b> 읽는다.</p>
     <figure class="diagram">
       <svg viewBox="0 0 620 300" role="img" aria-label="45를 2진수로 바꾸는 나눗셈 반복 과정: 몫이 0이 될 때까지 2로 나누고 나머지를 아래에서 위로 읽는다">
@@ -95,19 +155,47 @@
       <figcaption>10진 정수를 2진수로 바꾸는 나눗셈 반복법 — 나머지를 아래에서 위로 읽는 이유는, 가장 나중에 나온 나머지가 2진수의 최상위 비트가 되기 때문이다.</figcaption>
     </figure>
     <div class="tip">
-      <b>합친 결과:</b> 45.1875 → 정수부 <b>101101</b>₂ + 소수부 <b>0.0011</b>₂ = <b>101101.0011</b>₂
+      <b>소수부 0.1875를 곱셈으로 푸는 전 과정</b>
+      <ol class="steps">
+        <li>0.1875 × 2 = <b>0</b>.375 → 정수부 <b>0</b></li>
+        <li>0.375 × 2 = <b>0</b>.75 → 정수부 <b>0</b></li>
+        <li>0.75 × 2 = <b>1</b>.5 → 정수부 <b>1</b> (소수부 0.5만 남기고 계속)</li>
+        <li>0.5 × 2 = <b>1</b>.0 → 정수부 <b>1</b>, 소수부가 0이 되었으므로 종료</li>
+        <li>나온 정수부를 <b>위에서 아래 순서대로</b> 읽으면 <b>0.0011</b>₂</li>
+      </ol>
+      <b>합친 결과:</b> 45.1875 → <b>101101.0011</b>₂
     </div>
+    <div class="deep">
+      <h4>왜 정수부는 역순이고 소수부는 순서대로인가</h4>
+      <p>정수부를 2로 나눌 때 <b>처음 나오는 나머지가 가장 작은 자리(2⁰)</b>다. 2진수는 왼쪽이 큰 자리이므로, 작은 자리부터 구한 것을 뒤집어야 제자리를 찾는다.</p>
+      <p>반대로 소수부는 2를 곱할 때 <b>처음 넘어온 정수부가 소수점 바로 다음 자리(2⁻¹)</b>다. 큰 자리부터 순서대로 나오므로 뒤집을 필요가 없다.</p>
+    </div>
+
+    <h3>③ N진수 → 10진수 (자릿값 곱해서 더하기)</h3>
+    <div class="tip">
+      <b>예: 16진수 (1B4.C)₁₆ → 10진수</b><br>
+      1×16² + B(11)×16¹ + 4×16⁰ + C(12)×16⁻¹<br>
+      = 256 + 176 + 4 + 0.75 = <b>436.75</b>
+    </div>
+    <div class="tip">
+      <b>예: 8진수 (13754)₈ → 10진수</b><br>
+      1×8⁴ + 3×8³ + 7×8² + 5×8¹ + 4×8⁰<br>
+      = 4096 + 1536 + 448 + 40 + 4 = <b>6124</b>
+    </div>
+    <p><b>소수부 자릿값은 음수 지수</b>가 된다: 16⁻¹ = 1/16 = 0.0625, 8⁻¹ = 0.125, 2⁻¹ = 0.5. 소수 첫째 자리가 C(12)면 12 × 0.0625 = 0.75가 되는 식이다.</p>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
-      <li>서로 다른 진법으로 표현된 값들 중 <b>실제 크기가 다른 것 찾기</b> 유형 (10진수로 통일해서 비교)</li>
-      <li>10진수 ↔ 2진수 변환 계산 문제 (정수부는 나눗셈, 소수부는 곱셈)</li>
-      <li>2진 ↔ 8진(3비트 묶음), 2진 ↔ 16진(4비트 묶음) 빠른 변환</li>
-      <li>문자 코드 체계별 비트 수 순서: BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</li>
-      <li>니블 = 4비트 (2비트 아님), 바이트 = 8비트, 워드 크기는 시스템마다 다름</li>
-      <li>N비트로 표현 가능한 정수 개수는 <b>2ⁿ개</b> (0~2ⁿ-1의 범위)</li>
+      <li>서로 다른 진법 값 중 <b>크기 비교 / 값이 다른 것 찾기</b> → 전부 <b>10진수 또는 2진수로 통일</b>해서 비교</li>
+      <li>10진수 ↔ 2진수 변환 (정수부는 나눗셈 나머지 역순, 소수부는 곱셈 정수부 순서대로)</li>
+      <li>2진 ↔ 8진(3비트 묶음), 2진 ↔ 16진(4비트 묶음) — <b>8진↔16진은 2진수를 거쳐서</b></li>
+      <li>소수부 묶기는 <b>왼쪽부터</b>, 모자라면 <b>오른쪽에 0을 채운다</b> (가장 많이 틀리는 지점)</li>
+      <li>문자 코드 비트 수: BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</li>
+      <li>니블 = 4비트, 바이트 = 8비트, 워드 크기는 시스템마다 다름</li>
+      <li>N비트로 표현 가능한 정수 개수는 <b>2ⁿ개</b> (0 ~ 2ⁿ−1). 거꾸로 "2ⁿ개를 표현하려면 n비트" 형태로도 출제</li>
+      <li>유니코드 문자 1개 = <b>2바이트</b>로 놓고 푸는 저장 용량 계산 문제</li>
     </ul>
   </section>
 
@@ -116,11 +204,220 @@
     <table>
       <tr><th>단위</th><th>비트 수</th><th>대응 관계</th></tr>
       <tr><td>니블</td><td>4비트</td><td>16진수 1자리</td></tr>
-      <tr><td>바이트</td><td>8비트</td><td>문자 1개(ASCII 등)</td></tr>
-      <tr><td>하프워드</td><td>2바이트(16비트)</td><td>-</td></tr>
-      <tr><td>풀워드</td><td>4바이트(32비트)</td><td>-</td></tr>
+      <tr><td>바이트</td><td>8비트</td><td>문자 1개(ASCII 등), 16진수 2자리</td></tr>
+      <tr><td>하프워드</td><td>2바이트(16비트)</td><td>유니코드 문자 1개</td></tr>
+      <tr><td>풀워드</td><td>4바이트(32비트)</td><td>IPv4 주소 1개</td></tr>
       <tr><td>더블워드</td><td>8바이트(64비트)</td><td>-</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>정수부 묶기</th><th>소수부 묶기</th></tr>
+      <tr><td>묶는 방향</td><td>오른쪽 → 왼쪽</td><td>왼쪽 → 오른쪽</td></tr>
+      <tr><td>0을 채우는 쪽</td><td><b>왼쪽</b> (앞)</td><td><b>오른쪽</b> (뒤)</td></tr>
+      <tr><td>예 (16진 변환)</td><td>11011 → 0001 1011 = 1B</td><td>.11 → .1100 = C</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2023 지방직 · 기출문제집 p.39</span></div>
+      <p class="q-body">10진수 <b>45.1875</b>를 2진수로 변환한 것은?</p>
+      <ol class="choices">
+        <li>101100.0011</li>
+        <li>101100.0101</li>
+        <li>101101.0011</li>
+        <li>101101.0101</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 101101.0011</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>정수부 45</b>: 2로 계속 나눈 나머지를 역순으로 → 101101 (검산: 32+8+4+1 = 45 ✓)</li>
+            <li><b>소수부 0.1875</b>: ×2 반복 → 0.375(0), 0.75(0), 1.5(<b>1</b>), 1.0(<b>1</b>) → 0011</li>
+            <li>검산: 0.125 + 0.0625 = 0.1875 ✓ (소수 셋째·넷째 자리 = 2⁻³ + 2⁻⁴)</li>
+            <li>합치면 <b>101101.0011</b></li>
+          </ol>
+          <p><b>빠른 검산법:</b> 선택지 정수부가 101100(=44)과 101101(=45)로 갈린다. 45를 만들려면 마지막 비트가 1이어야 하므로 ①②는 바로 탈락. 남은 ③④는 소수부만 비교하면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2015 서울시 · 기출문제집 p.38</span></div>
+      <p class="q-body">다음 중 값이 <b>나머지 셋과 다른 것</b>은?</p>
+      <ol class="choices">
+        <li>10진수 436.625</li>
+        <li>8진수 (664.5)₈</li>
+        <li>16진수 (1B4.C)₁₆</li>
+        <li>10진수 0.436625 × 10³</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (1B4.C)₁₆ = 436.75</p>
+        <div class="explain">
+          <p>기준값이 되는 ①과 ④부터 확인하면 빠르다.</p>
+          <ol class="steps">
+            <li>④ 0.436625 × 10³ = <b>436.625</b> → ①과 같다. 따라서 기준값은 436.625</li>
+            <li>② (664.5)₈ = 6×64 + 6×8 + 4 + 5×(1/8) = 384 + 48 + 4 + 0.625 = <b>436.625</b> ✓ 같다</li>
+            <li>③ (1B4.C)₁₆ = 1×256 + 11×16 + 4 + 12×(1/16) = 256 + 176 + 4 + <b>0.75</b> = <b>436.75</b> ✗</li>
+          </ol>
+          <p><b>포인트:</b> 정수부는 셋 다 436으로 같고 <b>소수부에서만 갈린다</b>. 8진수의 .5는 5/8 = 0.625, 16진수의 .C는 12/16 = 0.75 — 소수부 자릿값이 각각 1/8, 1/16임을 기억할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2007 국가직 · 기출문제집 p.40</span></div>
+      <p class="q-body">다음 2진수 <code>1010101110.11₂</code>을 16진수로 정확히 표현한 것은?</p>
+      <ol class="choices">
+        <li>2AE.3₁₆</li>
+        <li>AB2.C₁₆</li>
+        <li>2AE.C₁₆</li>
+        <li>AB2.3₁₆</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 2AE.C₁₆</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>정수부</b> 1010101110 (10자리)을 <b>오른쪽부터</b> 4비트씩 → <code>10|1010|1110</code>, 왼쪽에 0을 채워 <code>0010 1010 1110</code></li>
+            <li>각각 변환: 0010 = <b>2</b>, 1010 = <b>A</b>, 1110 = <b>E</b> → 정수부 = 2AE</li>
+            <li><b>소수부</b> .11을 <b>왼쪽부터</b> 4비트씩 → 2개뿐이므로 <b>오른쪽에</b> 0을 채워 <code>1100</code></li>
+            <li>1100 = <b>C</b> → 소수부 = .C</li>
+            <li>합치면 <b>2AE.C</b></li>
+          </ol>
+          <p><b>함정:</b> ①번(.3)은 소수부를 <code>0011</code>로 만든 오답 — <b>왼쪽에 0을 채워버린</b> 전형적 실수다. 소수부는 반드시 <b>오른쪽</b>에 0을 채운다. 또 ②④의 AB2는 정수부를 <b>왼쪽부터</b> 묶은 오답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2020 국가직 · 기출문제집 p.41</span></div>
+      <p class="q-body">8진수 <code>123.321</code>을 16진수로 변환한 것은?</p>
+      <ol class="choices">
+        <li>53.35</li>
+        <li>53.321</li>
+        <li>53.681</li>
+        <li>53.688</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 53.688</p>
+        <div class="explain">
+          <p>8진 → 16진은 직접 못 간다. <b>반드시 2진수를 경유</b>한다.</p>
+          <ol class="steps">
+            <li>8진수를 3비트씩 펼친다: 1→001, 2→010, 3→011 / .3→011, 2→010, 1→001<br>⇒ <code>001010011 . 011010001</code></li>
+            <li>정수부 <code>001010011</code>을 오른쪽부터 4비트씩 → <code>0101 0011</code> → <b>5</b>, <b>3</b></li>
+            <li>소수부 <code>011010001</code>을 왼쪽부터 4비트씩 → <code>0110 1000 1</code>, 마지막 묶음이 1비트뿐이므로 오른쪽에 0을 채워 <code>0110 1000 1000</code></li>
+            <li>각각 변환: 0110 = <b>6</b>, 1000 = <b>8</b>, 1000 = <b>8</b> → 소수부 = .688</li>
+            <li>합치면 <b>53.688</b></li>
+          </ol>
+          <p><b>함정:</b> ③번(53.681)은 마지막 1비트를 <code>0001</code>로 처리한 오답이다. 소수부 마지막 묶음은 <b>뒤에</b> 0을 붙여 <code>1000</code>이 되어야 한다. ②번(53.321)은 소수부를 변환하지 않고 그대로 베낀 함정.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2022 지방직 · 기출문제집 p.42</span></div>
+      <p class="q-body">16진수 <code>210</code>을 8진수로 변환한 것은?</p>
+      <ol class="choices">
+        <li>1020</li>
+        <li>2100</li>
+        <li>10210</li>
+        <li>20100</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 1020</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>16진수를 <b>4비트씩</b> 펼친다: 2→0010, 1→0001, 0→0000 ⇒ <code>001000010000</code></li>
+            <li>이제 같은 비트열을 <b>3비트씩</b> 다시 묶는다 (오른쪽부터): <code>001 000 010 000</code></li>
+            <li>각각 8진수로: 001 = <b>1</b>, 000 = <b>0</b>, 010 = <b>2</b>, 000 = <b>0</b> → <b>1020</b></li>
+          </ol>
+          <p><b>검산:</b> 210₁₆ = 2×256 + 1×16 + 0 = 528. 1020₈ = 1×512 + 0 + 2×8 + 0 = 528 ✓</p>
+          <p><b>포인트:</b> 16진 → 8진의 핵심은 "<b>4비트로 펼쳤다가 3비트로 다시 묶기</b>"다. 자릿수가 4자리로 늘어나는 게 정상이니 당황하지 말 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2024 지방직 · 기출문제집 p.44</span></div>
+      <p class="q-body">8진수 <code>543₍₈₎</code>과 10진수 <code>124₍₁₀₎</code>의 합을 8진수로 표현한 것은?</p>
+      <ol class="choices">
+        <li>626₍₈₎</li>
+        <li>637₍₈₎</li>
+        <li>726₍₈₎</li>
+        <li>737₍₈₎</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 737₍₈₎</p>
+        <div class="explain">
+          <p>진법이 다른 수끼리는 바로 더할 수 없다. <b>한쪽 진법으로 통일</b>하는 게 원칙이고, 보통 10진수가 계산하기 쉽다.</p>
+          <ol class="steps">
+            <li>543₈을 10진수로: 5×64 + 4×8 + 3×1 = 320 + 32 + 3 = <b>355</b></li>
+            <li>더하기: 355 + 124 = <b>479</b></li>
+            <li>479를 8진수로 되돌린다: 479 ÷ 8 = 59 … 7 / 59 ÷ 8 = 7 … 3 / 7 ÷ 8 = 0 … 7</li>
+            <li>나머지를 역순으로 읽어 <b>737₈</b> (검산: 7×64 + 3×8 + 7 = 448+24+7 = 479 ✓)</li>
+          </ol>
+          <p><b>함정:</b> 8진수 543을 10진수 543으로 착각하면 543+124=667 → 1233₈ 같은 엉뚱한 값이 나온다. <b>아래 첨자를 먼저 확인</b>하는 습관을 들일 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2025 지방직 · 기출문제집 p.45</span></div>
+      <p class="q-body">값이 <code>(01100000)₂</code>가 <b>아닌</b> 것은? (단, 아래 첨자는 진법, +는 덧셈, ×는 곱셈)</p>
+      <ol class="choices">
+        <li>(60)₁₆</li>
+        <li>(60)₈ + (60)₈</li>
+        <li>(00110000)₂ × (00000010)₂</li>
+        <li>(46)₁₀에 대하여 왼쪽 산술 시프트 1회</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (46)₁₀ 왼쪽 시프트 1회 = 92 (≠ 96)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>기준값: (01100000)₂ = 64 + 32 = <b>96</b></li>
+            <li>① (60)₁₆ = 6×16 + 0 = <b>96</b> ✓</li>
+            <li>② (60)₈ = 6×8 = 48 → 48 + 48 = <b>96</b> ✓</li>
+            <li>③ (00110000)₂ = 48, (00000010)₂ = 2 → 48 × 2 = <b>96</b> ✓</li>
+            <li>④ 왼쪽 시프트 1회 = ×2 이므로 46 × 2 = <b>92</b> ✗ ← 정답</li>
+          </ol>
+          <p><b>핵심 규칙:</b> <b>왼쪽 시프트 1회 = ×2, 오른쪽 시프트 1회 = ÷2</b>. 이것만 알면 ④를 바로 계산할 수 있다. 같은 이유로 ③의 "×(00000010)₂"도 사실 왼쪽 시프트 1회와 같은 연산이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2011 지방직 · 기출문제집 p.37</span></div>
+      <p class="q-body">한 페이지에 1,024개의 문자를 포함하고 512페이지로 구성된 책을 <b>1GB</b>의 저장장치에 저장할 경우, 최대 몇 권을 저장할 수 있는가? (단, <b>유니코드</b> 방식으로 문자를 표현하고 부가 정보는 고려하지 않는다)</p>
+      <ol class="choices">
+        <li>512</li>
+        <li>1,024</li>
+        <li>2,048</li>
+        <li>4,096</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 1,024권</p>
+        <div class="explain">
+          <p>유니코드는 문자 1개가 <b>16비트 = 2바이트</b>라는 게 출발점이다.</p>
+          <ol class="steps">
+            <li>1페이지 용량 = 1,024문자 × 2바이트 = 2,048바이트 = 2¹¹ B</li>
+            <li>책 1권 = 512페이지 × 2¹¹ B = 2⁹ × 2¹¹ = <b>2²⁰ B = 1MB</b></li>
+            <li>저장장치 1GB = 2³⁰ B</li>
+            <li>2³⁰ ÷ 2²⁰ = 2¹⁰ = <b>1,024권</b></li>
+          </ol>
+          <p><b>함정:</b> ASCII(1바이트)로 착각하면 2,048권(③)이 나온다. 문제에 "유니코드"라고 명시돼 있으면 반드시 <b>×2바이트</b>. 지수 계산(2¹⁰ = 1024)에 익숙해지면 암산으로도 풀린다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -130,14 +427,19 @@
       <span class="chip">니블</span>
       <span class="chip">바이트</span>
       <span class="chip">워드</span>
+      <span class="chip">하프워드</span>
+      <span class="chip">더블워드</span>
       <span class="chip">ASCII</span>
       <span class="chip">BCD</span>
       <span class="chip">EBCDIC</span>
       <span class="chip">유니코드</span>
+      <span class="chip">패리티 비트</span>
       <span class="chip">진법 변환</span>
       <span class="chip">2진수</span>
       <span class="chip">8진수</span>
       <span class="chip">16진수</span>
+      <span class="chip">자릿값</span>
+      <span class="chip">8421 코드</span>
     </div>
   </section>
 

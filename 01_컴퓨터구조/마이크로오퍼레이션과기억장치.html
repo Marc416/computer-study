@@ -20,6 +20,19 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"명령어 하나"는 사실 한 번에 실행되지 않는다</h4>
+      <p>우리는 보통 <code>ADD A, B</code> 같은 명령어 하나가 "한 방에" 실행된다고 생각한다. 하지만 CPU 입장에서는 그렇지 않다. 메모리에서 명령어를 <b>가져오고</b>, 무슨 명령인지 <b>해독하고</b>, 데이터를 레지스터로 <b>옮기고</b>, 계산하고, 결과를 <b>되돌려 쓰는</b> 여러 단계를 거쳐야 한다. 이 쪼개진 각 단계, 즉 <b>클럭 한 번에 실행되는 가장 작은 동작</b>이 마이크로 오퍼레이션이다.</p>
+      <p>그래서 시험에서 "하나의 명령어는 항상 하나의 마이크로 연산으로 실행된다"는 문장이 나오면 <b>무조건 오답</b>이다 (연습문제 1번이 정확히 이 문제다).</p>
+      <h4>기억장치는 왜 여러 층으로 나뉘어 있나 — 돈 문제다</h4>
+      <p>가장 빠른 메모리(레지스터·SRAM)로 컴퓨터 전체 메모리를 만들면 안 되나? 된다. 다만 <b>미친 듯이 비싸다.</b> 반대로 전부 하드디스크로 만들면 싸지만 CPU가 매번 수백만 클럭을 기다려야 한다.</p>
+      <p>그래서 나온 타협이 <b>계층 구조</b>다 — 자주 쓰는 소량의 데이터는 비싸고 빠른 곳에, 가끔 쓰는 대량의 데이터는 싸고 느린 곳에 둔다. 이 구조가 실제로 잘 작동하는 이유는 프로그램이 <b>지역성(locality)</b>을 갖기 때문이다(방금 쓴 데이터를 또 쓰고, 그 옆 데이터도 쓴다).</p>
+      <p>시험에서 가장 많이 나오는 <b>"평균 기억장치 접근 시간" 계산 문제</b>가 바로 이 타협이 실제로 얼마나 이득인지를 숫자로 묻는 것이다. 이 유형만 확실히 잡아도 이 단원 배점의 절반은 가져간다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념 — 마이크로 오퍼레이션과 명령어 사이클</h2>
 
     <h3>마이크로 오퍼레이션이란?</h3>
@@ -81,7 +94,30 @@
       </svg>
       <figcaption>위로 갈수록 좁고(용량 작음) 빠르고 비싸며, 아래로 갈수록 넓고(용량 큼) 느리고 저렴하다 — CPU에 가까운 계층일수록 속도를 우선하고, 멀어질수록 저장 용량을 우선한다.</figcaption>
     </figure>
-    <div class="tip">캐시기억장치의 적중률·지역성·교체 알고리즘(LRU/FIFO/LFU)·쓰기 정책(Write-Through/Write-Back) 등 상세 내용은 <b>캐시기억장치 문서</b>를 참고.</div>
+    <div class="tip">캐시기억장치의 적중률·지역성·교체 알고리즘(LRU/FIFO/LFU)·쓰기 정책(Write-Through/Write-Back) 등 상세 내용은 <b><a href="캐시기억장치.md">캐시기억장치 문서</a></b>를 참고.</div>
+
+    <h3>⭐ 평균 기억장치 접근 시간 계산 (매년 출제) <span class="page-ref">📖 기출문제집 p.125~127</span></h3>
+    <p>이 단원 계산 문제의 <b>90%가 이 하나의 공식</b>에서 나온다. 기본 아이디어는 단순하다 — <b>"적중했을 때 걸리는 시간 × 적중 확률 + 실패했을 때 걸리는 시간 × 실패 확률"</b>, 즉 가중평균이다.</p>
+    <div class="tip">
+      <b>기본 공식</b><br>
+      T<sub>평균</sub> = (적중률 × 적중 시 시간) + (실패율 × 실패 시 시간)<br>
+      단, 실패율 = 1 − 적중률
+    </div>
+    <div class="deep">
+      <h4>⚠️ 함정: "실패 시 시간"이 문제마다 다르다</h4>
+      <p>여기서 수험생이 가장 많이 틀린다. 캐시에서 실패하면 주기억장치로 가야 하는데, <b>"이미 캐시를 뒤져본 시간"을 포함하느냐 마느냐</b>가 문제 지문에 따라 다르다. 두 유형을 구분하는 법:</p>
+      <table>
+        <tr><th>유형</th><th>실패 시 시간</th><th>지문에서 알아보는 법</th></tr>
+        <tr><td><b>A. 캐시 시간 포함</b></td><td>캐시 시간 + 주기억 시간</td><td>"<b>유효 접근 시간</b>", 또는 "캐시 실패 손실(miss penalty)"이 따로 주어짐</td></tr>
+        <tr><td><b>B. 캐시 시간 무시</b></td><td>주기억 시간만</td><td>그냥 "<b>평균 접근 시간</b>"만 묻고 별도 조건 없음</td></tr>
+      </table>
+      <p><b>실전 요령:</b> 일단 계산해보고 <b>선택지에 딱 맞는 답이 있는 쪽</b>을 고르면 된다. 두 방식의 답이 둘 다 선택지에 있는 경우는 거의 없다. 아래 연습문제 3번(A유형)과 4번(B유형)을 비교해보면 차이가 확실히 보인다.</p>
+    </div>
+    <p><b>적중률을 거꾸로 구하는 문제</b>도 자주 나온다. 공식은 같고 미지수만 h로 두면 된다:</p>
+    <div class="tip">
+      T<sub>평균</sub> = T<sub>캐시</sub> × h + T<sub>주기억</sub> × (1 − h) &nbsp;→&nbsp; h에 대해 풀기<br>
+      예) 17 = 10h + 80(1−h) → 17 = 80 − 70h → <b>70h = 63 → h = 0.9 (90%)</b>
+    </div>
 
     <h3>SRAM vs DRAM</h3>
     <table>
@@ -178,7 +214,7 @@
       <tr><td>대표 CPU</td><td>x86 계열</td><td>일부 RISC, 네트워크 프로토콜</td></tr>
     </table>
 
-    <h3>디스크 접근 시간</h3>
+    <h3>디스크 구조와 접근 시간 <span class="page-ref">📖 기출문제집 p.122~123</span></h3>
     <p>접근 시간(Access Time) = <b>탐색시간(Seek Time) + 회전지연시간(Rotational Latency) + 전송시간(Transfer Time)</b></p>
     <table>
       <tr><th>용어</th><th>의미</th></tr>
@@ -186,6 +222,45 @@
       <tr><td>회전지연시간 (Latency)</td><td>디스크가 회전해 목표 섹터가 헤드 밑에 올 때까지의 시간</td></tr>
       <tr><td>전송시간 (Transfer Time)</td><td>실제 데이터를 읽거나 쓰는 시간</td></tr>
     </table>
+
+    <h4 style="margin:18px 0 6px;font-size:14px;">디스크 용량 계산 — 구조부터 이해하기</h4>
+    <p>용량 계산 문제를 풀려면 <b>용어들이 물리적으로 뭘 가리키는지</b>부터 알아야 한다. 하드디스크는 여러 장의 원판(platter)이 겹쳐 돌아가는 구조다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 260" role="img" aria-label="하드디스크 구조: 원판 위의 동심원이 트랙, 트랙을 부채꼴로 나눈 것이 섹터, 여러 원판에서 같은 번호의 트랙을 세로로 모은 것이 실린더">
+        <circle cx="140" cy="120" r="90" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="140" cy="120" r="66" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+        <circle cx="140" cy="120" r="42" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+        <circle cx="140" cy="120" r="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="140" y1="30" x2="140" y2="106" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <line x1="140" y1="134" x2="140" y2="210" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <line x1="50" y1="120" x2="126" y2="120" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <line x1="154" y1="120" x2="230" y2="120" stroke="currentColor" stroke-width="1.2" opacity="0.6"/>
+        <text x="140" y="238" font-size="12" text-anchor="middle" font-weight="700">원판 1장 (면 surface)</text>
+        <line x1="232" y1="78" x2="285" y2="60" stroke="currentColor" stroke-width="1.2"/>
+        <text x="292" y="62" font-size="11.5">트랙(track) = 동심원 하나</text>
+        <line x1="205" y1="160" x2="285" y2="180" stroke="currentColor" stroke-width="1.2"/>
+        <text x="292" y="183" font-size="11.5">섹터(sector) = 트랙을 부채꼴로 나눈 조각</text>
+        <text x="292" y="200" font-size="11" opacity="0.75">= 읽기/쓰기의 최소 단위 (보통 512B)</text>
+
+        <rect x="420" y="40" width="160" height="12" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="420" y="72" width="160" height="12" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="420" y="104" width="160" height="12" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect x="420" y="136" width="160" height="12" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="470" y1="30" x2="470" y2="158" stroke="currentColor" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="500" y="25" font-size="11.5" text-anchor="middle">원판을 여러 장 겹친 모습</text>
+        <text x="470" y="178" font-size="11.5" text-anchor="middle" font-weight="700">실린더(cylinder)</text>
+        <text x="470" y="194" font-size="11" text-anchor="middle" opacity="0.8">= 여러 면에서 같은 번호의</text>
+        <text x="470" y="209" font-size="11" text-anchor="middle" opacity="0.8">트랙을 세로로 모은 것</text>
+        <text x="470" y="232" font-size="11.5" text-anchor="middle">→ <tspan font-weight="700">실린더 개수 = 한 면의 트랙 개수</tspan></text>
+      </svg>
+      <figcaption>디스크 용량 문제의 핵심은 "실린더 개수 = 한 면의 트랙 개수"라는 관계다. 실린더는 물리적으로 새로운 저장 공간이 아니라, 여러 면에 걸쳐 같은 위치에 있는 트랙들을 묶어 부르는 이름일 뿐이다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>디스크 전체 용량 공식</b><br>
+      용량 = 실린더 수 × 면(surface) 수 × 트랙당 섹터 수 × 섹터 크기<br>
+      <span style="font-size:12.5px;opacity:0.85;">(실린더 수 = 한 면의 트랙 수이므로, "트랙 수 × 면 수 × 섹터 수 × 섹터 크기"와 같은 말이다)</span>
+    </div>
+    <p style="font-size:13.5px;">계산할 때는 <b>전부 2의 거듭제곱으로 바꿔서 지수를 더하는 것</b>이 가장 빠르다. 512 = 2⁹, 256 = 2⁸, 32768 = 2¹⁵, 4 = 2² → 지수 합 9+8+15+2 = 34 → 2³⁴ B = 2⁴ × 2³⁰ = <b>16GB</b>. 연습문제 6번이 바로 이 문제다.</p>
 
     <h3>가상기억장치 (개요)</h3>
     <ul>
@@ -231,6 +306,207 @@
       <tr><td>용도</td><td>대용량 저장</td><td>고속 코드 실행</td></tr>
       <tr><td>접근 방식</td><td>페이지 단위 순차</td><td>바이트/워드 단위 임의 접근</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요. 3~5번은 <b>매년 출제되는 계산 유형</b>이니 반드시 손으로 풀어볼 것.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2010 계리직 · 기출문제집 p.111</span></div>
+      <p class="q-body">마이크로 연산(micro-operation)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>한 개의 클럭 펄스 동안 실행되는 기본 동작이다.</li>
+        <li>마이크로 연산 수행시간을 마이크로 사이클 타임이라 부르며 CPU 속도를 나타내는 척도로 사용된다.</li>
+        <li>하나의 명령어는 항상 하나의 마이크로 연산이 동작되어 실행된다.</li>
+        <li>시프트(shift), 로드(load) 등이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ — 하나의 명령어는 <b>여러 개</b>의 마이크로 연산으로 실행된다</p>
+        <div class="explain">
+          <p>명령어 사이클은 인출(Fetch)·실행(Execute) 등의 부 사이클로 나뉘고, 그 부 사이클도 다시 여러 단계로 쪼개진다. 이 각 단계 하나하나가 마이크로 연산이다. 즉 <b>명령어 1개 : 마이크로 연산 여러 개</b>의 관계다.</p>
+          <p>예를 들어 인출 사이클만 해도 <code>MAR←PC</code> → <code>MBR←M[MAR], PC←PC+1</code> → <code>IR←MBR</code> 로 최소 3단계가 필요하다.</p>
+          <p><b>함정:</b> "항상 하나의"처럼 <b>단정적인 표현</b>이 들어간 선택지는 오답일 확률이 높다. 나머지 ①②④는 모두 마이크로 연산의 정확한 설명이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2010 계리직 · 기출문제집 p.111</span></div>
+      <p class="q-body">다음에서 ㉠과 ㉡에 들어갈 내용이 올바르게 짝지어진 것은?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">명령어를 주기억장치에서 중앙처리장치의 명령 레지스터로 가져와 해독하는 것을 ( ㉠ ) 단계라 하고, 이 단계는 마이크로 연산 ( ㉡ )으로 시작한다.</span></p>
+      <ol class="choices">
+        <li>㉠ 인출 &nbsp;/&nbsp; ㉡ MAR ← PC</li>
+        <li>㉠ 인출 &nbsp;/&nbsp; ㉡ MAR ← MBR(AD)</li>
+        <li>㉠ 실행 &nbsp;/&nbsp; ㉡ MAR ← PC</li>
+        <li>㉠ 실행 &nbsp;/&nbsp; ㉡ MAR ← MBR(AD)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① ㉠ 인출, ㉡ MAR ← PC</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>㉠ 판단: "주기억장치에서 <b>명령어를 가져와 해독</b>" → <b>인출(Fetch) 단계</b>다. 실행(Execute)은 이미 해독된 명령을 수행하는 그 다음 단계.</li>
+            <li>㉡ 판단: 인출의 첫 동작은 "<b>어디에서</b> 가져올지 주소를 정하는 것". 다음 명령어의 주소는 <b>PC</b>가 갖고 있고, 기억장치에 접근하려면 그 주소를 <b>MAR</b>에 실어야 한다 → <code>MAR ← PC</code></li>
+          </ol>
+          <p><b>함정:</b> <code>MAR ← MBR(AD)</code>는 MBR에 담긴 명령어의 <b>주소 필드(AD)</b>를 MAR로 보내는 것으로, <b>간접 사이클</b>이나 실행 사이클에서 피연산자를 가지러 갈 때 쓰는 동작이다. 인출의 <b>시작</b>이 아니다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2024 소방경채 · 기출문제집 p.126</span></div>
+      <p class="q-body">다음 조건에서 기억장치의 <b>유효 접근 시간</b>[ns]은?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">• 캐시 적중률 : 90%<br>• 캐시 메모리 접근 시간 : 30ns<br>• 주기억장치 접근 시간 : 100ns</span></p>
+      <ol class="choices">
+        <li>20</li>
+        <li>25</li>
+        <li>35</li>
+        <li>40</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 40ns</p>
+        <div class="explain">
+          <p>"<b>유효 접근 시간</b>"을 묻는 A유형 — 실패했을 때 <b>캐시를 뒤져본 시간도 포함</b>해서 계산한다.</p>
+          <ol class="steps">
+            <li>적중(90%): 캐시에서 바로 찾음 → <b>30ns</b></li>
+            <li>실패(10%): 캐시 뒤져보고(30ns) 없어서 주기억장치까지 감(100ns) → <b>30 + 100 = 130ns</b></li>
+            <li>가중평균: (0.9 × 30) + (0.1 × 130) = 27 + 13 = <b>40ns</b></li>
+          </ol>
+          <p><b>함정:</b> 캐시 접근 시간을 빼고 (0.9×30)+(0.1×100) = 37ns로 계산하면 선택지에 없다. <b>선택지에 답이 없으면 반대 유형으로 다시 계산</b>해보라는 신호다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2020 지방직 · 기출문제집 p.126</span></div>
+      <p class="q-body">캐시기억장치 접근시간이 <b>20ns</b>, 주기억장치 접근시간이 <b>150ns</b>, 캐시기억장치 적중률이 <b>80%</b>인 경우에 <b>평균 기억장치 접근시간</b>은? (단, 기억장치는 캐시와 주기억장치로만 구성된다)</p>
+      <ol class="choices">
+        <li>32ns</li>
+        <li>46ns</li>
+        <li>124ns</li>
+        <li>170ns</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 46ns</p>
+        <div class="explain">
+          <p>문제 3번과 <b>똑같아 보이지만 계산 방식이 다른</b> B유형이다. 여기서는 실패 시 <b>주기억장치 접근시간만</b> 센다.</p>
+          <ol class="steps">
+            <li>적중(80%): 0.8 × 20ns = <b>16ns</b></li>
+            <li>실패(20%): 0.2 × 150ns = <b>30ns</b> (캐시 접근 20ns는 더하지 않음)</li>
+            <li>합계: 16 + 30 = <b>46ns</b></li>
+          </ol>
+          <p><b>두 유형 구분법:</b> A유형(30+100)으로 풀면 0.8×20 + 0.2×170 = 50ns인데 <b>선택지에 50ns가 없다.</b> 반대로 B유형 46ns는 ②번에 있다 → B유형이 출제 의도. 계산해보고 <b>선택지에 맞는 쪽을 고르는 것</b>이 실전 요령이다.</p>
+          <p><b>함정:</b> ③번 124ns는 적중률과 실패율을 바꿔 (0.2×20 + 0.8×150) 계산한 오답이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2021 계리직 · 기출문제집 p.127</span></div>
+      <p class="q-body">주기억장치와 CPU 캐시 기억장치만으로 구성된 시스템에서 다음과 같이 기억장치 접근 시간이 주어질 때 이 시스템의 <b>캐시 적중률</b>(hit ratio)로 옳은 것은?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">• 주기억장치 접근 시간 : T<sub>m</sub> = 80ns<br>• CPU 캐시 기억장치 접근 시간 : T<sub>c</sub> = 10ns<br>• 기억장치 평균 접근 시간 : T<sub>a</sub> = 17ns</span></p>
+      <ol class="choices">
+        <li>80%</li>
+        <li>85%</li>
+        <li>90%</li>
+        <li>95%</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 90%</p>
+        <div class="explain">
+          <p>평균 접근 시간을 <b>거꾸로</b> 이용해 적중률을 구하는 유형. 공식은 똑같고 미지수만 h로 두면 된다.</p>
+          <ol class="steps">
+            <li>식 세우기: T<sub>a</sub> = T<sub>c</sub> × h + T<sub>m</sub> × (1 − h) → <b>17 = 10h + 80(1 − h)</b></li>
+            <li>괄호 풀기: 17 = 10h + 80 − 80h</li>
+            <li>정리: 17 = 80 − 70h → <b>70h = 63</b></li>
+            <li>h = 63 / 70 = <b>0.9 → 90%</b></li>
+          </ol>
+          <p><b>검산 습관:</b> 구한 h를 원식에 넣어 확인 — 0.9×10 + 0.1×80 = 9 + 8 = 17 ✓. 적중률 문제는 검산이 10초면 되니 반드시 할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2013 국가직 · 기출문제집 p.125~126</span></div>
+      <p class="q-body">다음 조건에서 메인 메모리와 캐시 메모리로 구성된 메모리 계층의 <b>평균 메모리 접근 시간</b>은? (단, <b>캐시 실패 손실</b>은 캐시 실패 시 소요되는 총 메모리 접근 시간에서 캐시 적중 시간을 뺀 시간이다.)<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">• 캐시 적중 시간(cache hit time) : 10ns<br>• 캐시 실패 손실(cache miss penalty) : 100ns<br>• 캐시 적중률 : 90%</span></p>
+      <ol class="choices">
+        <li>10ns</li>
+        <li>15ns</li>
+        <li>20ns</li>
+        <li>25ns</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 20ns</p>
+        <div class="explain">
+          <p>"실패 손실(miss penalty)"이라는 용어가 나오면 <b>정의를 그대로 역이용</b>하면 된다.</p>
+          <ol class="steps">
+            <li>문제가 정의해줌: 실패 손실 = (실패 시 총 시간) − (적중 시간) = 100ns</li>
+            <li>따라서 <b>실패 시 총 시간 = 100 + 10 = 110ns</b></li>
+            <li>평균 = (0.9 × 10ns) + (0.1 × 110ns) = 9 + 11 = <b>20ns</b></li>
+          </ol>
+          <p><b>함정:</b> 실패 손실 100ns를 그대로 "실패 시 총 시간"으로 착각하면 0.9×10 + 0.1×100 = 19ns가 나오는데 선택지에 없다. <b>miss penalty는 "추가로 더 걸리는 시간"이지 총 시간이 아니다.</b></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2016 계리직 · 기출문제집 p.122~123</span></div>
+      <p class="q-body">다음과 같은 특성을 갖는 하드 디스크의 <b>최대 저장 용량</b>은?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">• 실린더(cylinder) 개수 : 32,768개<br>• 면(surface) 개수 : 4개<br>• 트랙(track) 당 섹터(sector) 개수 : 256개<br>• 섹터 크기(sector size) : 512 bytes</span></p>
+      <ol class="choices">
+        <li>4GB</li>
+        <li>16GB</li>
+        <li>64GB</li>
+        <li>1TB</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 16GB</p>
+        <div class="explain">
+          <p>모든 수를 <b>2의 거듭제곱으로 바꿔 지수만 더하는 것</b>이 가장 빠르고 실수가 없다.</p>
+          <ol class="steps">
+            <li>한 트랙 용량 = 섹터 크기 × 트랙당 섹터 수 = 512 × 256 = 2⁹ × 2⁸ = 2¹⁷ B</li>
+            <li><b>실린더 개수 = 한 면의 트랙 개수</b>이므로, 한 면 용량 = 2¹⁷ × 32,768 = 2¹⁷ × 2¹⁵ = 2³² B</li>
+            <li>면이 4개이므로 전체 = 2³² × 4 = 2³² × 2² = <b>2³⁴ B</b></li>
+            <li>2³⁴ = 2⁴ × 2³⁰ = 16 × 1G = <b>16GB</b></li>
+          </ol>
+          <p><b>핵심 함정:</b> "실린더"와 "트랙"을 <b>따로 곱하면 안 된다.</b> 실린더는 여러 면의 같은 번호 트랙을 묶어 부르는 이름일 뿐, 별개의 저장 공간이 아니다. 둘 다 곱하면 답이 4배 커져 ③번 64GB가 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2008 계리직 · 기출문제집 p.142</span></div>
+      <p class="q-body">RAID(Redundant Array of Inexpensive Disks)에 대한 설명으로 <b>알맞지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>RAID-0는 디스크 스트라이핑(disk striping) 방식으로 중복 저장과 오류 검출 및 교정이 없는 방식이다.</li>
+        <li>RAID-1은 디스크 미러링(disk mirroring) 방식이며 높은 신뢰도를 갖는 방식이다.</li>
+        <li>RAID-4는 데이터를 비트 단위로 여러 디스크에 분할하여 저장하며 별도의 패리티 디스크를 사용한다.</li>
+        <li>RAID-5는 패리티 블록들을 여러 디스크에 분산 저장하는 방식이며 단일 오류 검출 및 교정이 가능한 방식이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ — RAID-4는 비트 단위가 아니라 <b>블록 단위</b>로 분할한다</p>
+        <div class="explain">
+          <p>RAID 레벨을 외울 때 <b>"분할 단위(비트냐 블록이냐)"와 "패리티 위치(전용 디스크냐 분산이냐)"</b> 두 축으로 정리하면 헷갈리지 않는다.</p>
+          <table>
+            <tr><th>레벨</th><th>분할 단위</th><th>패리티</th></tr>
+            <tr><td>RAID 2</td><td>비트</td><td>해밍코드, 패리티 디스크 여러 개</td></tr>
+            <tr><td>RAID 3</td><td><b>비트</b></td><td>전용 디스크 1개</td></tr>
+            <tr><td>RAID 4</td><td><b>블록</b></td><td>전용 디스크 1개</td></tr>
+            <tr><td>RAID 5</td><td>블록</td><td><b>여러 디스크에 분산</b></td></tr>
+          </table>
+          <p><b>구분 포인트:</b> 3과 4의 차이는 <b>오직 분할 단위</b>(비트 vs 블록), 4와 5의 차이는 <b>오직 패리티 위치</b>(전용 vs 분산)다. 이 문제는 4를 3의 설명으로 바꿔치기한 전형적인 함정이다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

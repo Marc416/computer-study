@@ -20,6 +20,18 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>CPU는 너무 빠르고, 입출력 장치는 너무 느리다</h4>
+      <p>CPU가 명령어 하나를 처리하는 데 나노초(10⁻⁹초)가 걸린다면, 하드디스크에서 데이터 하나를 읽는 데는 밀리초(10⁻³초)가 걸린다. <b>백만 배 차이</b>다. 사람으로 치면 CPU가 1초 만에 할 일을 기다리느라 <b>11일</b>을 멍하니 서 있는 셈이다.</p>
+      <p>이 낭비를 어떻게 줄일 것인가 — 그 답의 발전사가 바로 <b>I/O 제어 방식 4가지</b>다. ①CPU가 직접 다 하다가(프로그램 I/O) → ②"끝나면 알려줘" 하고 다른 일 하다가(인터럽트) → ③"메모리에 직접 갖다 놔" 하고 아예 위임하고(DMA) → ④전용 프로세서에 통째로 맡기는(채널) 순서로 발전했다. <b>뒤로 갈수록 CPU가 편해진다</b>는 흐름만 잡으면 이 단원 절반은 끝이다.</p>
+      <h4>그리고 또 하나 — CPU를 여러 개 쓰면 그만큼 빨라질까?</h4>
+      <p>안 빨라진다. 이것이 <b>암달의 법칙</b>이 말하는 바다. 아무리 코어를 늘려도 <b>병렬화가 불가능한 순차 부분</b>이 발목을 잡기 때문이다. 전체의 25%가 순차 실행이라면, 코어를 무한히 늘려도 최대 4배 이상 빨라질 수 없다.</p>
+      <p>이 단원의 계산 문제는 <b>거의 전부 암달의 법칙 하나</b>에서 나온다. 공식 하나에 변형이 3가지뿐이니 아래 연습문제 4~7번으로 그 3가지를 모두 익히면 된다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>I/O 제어 방식 4가지 (CPU 부담이 큰 순서 → 작은 순서)</h3>
@@ -141,14 +153,55 @@
       <tr><td>슈퍼파이프라인</td><td>파이프라인 한 단계를 더 잘게 쪼개 내부 클록 주파수를 높임</td><td>하드웨어</td></tr>
     </table>
 
-    <h3>암달의 법칙 (Amdahl's Law) ⭐ 계산 필수</h3>
+    <h3>암달의 법칙 (Amdahl's Law) ⭐ 계산 필수 <span class="page-ref">📖 기출문제집 p.163~165</span></h3>
     <div class="tip">
       시스템 일부를 개선했을 때 <b>전체 성능 향상의 한계</b>를 구하는 공식<br>
       전체 성능 향상 배수 = 1 / [ (1 − p) + p/s ]<br>
       (p = 개선 대상 부분이 차지하는 비율, s = 그 부분의 성능 향상 배수)
     </div>
-    <p>병렬처리 프로세서 수를 늘려도 <b>순차 실행 부분 때문에 성능 향상에 한계</b>가 있다는 것을 보여준다. (무어의 법칙과 다름 — 혼동 주의)</p>
-    <div class="analogy"><b>예시:</b> 전체 작업의 75%를 4배 빠르게 해도, 나머지 25%는 그대로이므로 → 1 / [0.25 + 0.75/4] = 약 2.28배. "부분만 빨라져도 전체가 그만큼 빨라지진 않는다"가 핵심.</div>
+    <div class="deep">
+      <h4>공식을 외우지 말고 "시간"으로 이해하라</h4>
+      <p>공식이 복잡해 보이지만, <b>전체 작업 시간을 1이라고 두고 개선 후 시간을 계산한 것</b>일 뿐이다.</p>
+      <ul>
+        <li>전체 시간 1 중에서 개선되는 부분이 p, 개선 안 되는 부분이 (1 − p)</li>
+        <li>개선 안 되는 부분 <b>(1 − p)</b>는 그대로 걸린다</li>
+        <li>개선되는 부분 p는 s배 빨라졌으니 <b>p/s</b>만 걸린다</li>
+        <li>→ 개선 후 총 시간 = <b>(1 − p) + p/s</b></li>
+        <li>성능 향상 배수 = 원래 시간 ÷ 새 시간 = <b>1 / [(1 − p) + p/s]</b></li>
+      </ul>
+      <p>즉 분모가 바로 <b>"개선 후에 남은 시간 비율"</b>이다. 이것만 이해하면 공식을 잊어버려도 그 자리에서 다시 만들 수 있다.</p>
+      <h4>왜 한계가 있나</h4>
+      <p>s를 무한대로 키워도(그 부분이 순식간에 끝나도) p/s는 0이 될 뿐, <b>(1 − p)는 절대 사라지지 않는다.</b> 따라서 최대 성능 향상은 <b>1 / (1 − p)</b>를 넘을 수 없다. 순차 부분이 25%면 아무리 코어를 늘려도 최대 4배가 천장이다. (무어의 법칙과는 전혀 다른 개념 — 혼동 주의)</p>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 660 200" role="img" aria-label="암달의 법칙 시간 막대 비교: 개선 전 전체 시간 중 병렬화 가능 부분이 개선 후 4분의 1로 줄지만 순차 부분은 그대로 남아 전체는 2.28배만 빨라진다">
+        <text x="20" y="22" font-size="12.5" font-weight="700">개선 전 (전체 시간 = 1)</text>
+        <rect x="20" y="32" width="120" height="34" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="80" y="54" font-size="12" text-anchor="middle">순차 25%</text>
+        <rect x="140" y="32" width="360" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="320" y="54" font-size="12" text-anchor="middle">병렬화 가능 75%</text>
+        <line x1="20" y1="78" x2="500" y2="78" stroke="currentColor" stroke-width="1"/>
+        <text x="260" y="93" font-size="11" text-anchor="middle" opacity="0.8">← 전체 1.0 →</text>
+
+        <text x="20" y="127" font-size="12.5" font-weight="700">개선 후 (코어 4개 → 병렬 부분만 1/4로)</text>
+        <rect x="20" y="137" width="120" height="34" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="80" y="159" font-size="12" text-anchor="middle">순차 25%</text>
+        <rect x="140" y="137" width="90" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3"/>
+        <text x="185" y="159" font-size="11.5" text-anchor="middle">18.75%</text>
+        <line x1="20" y1="183" x2="230" y2="183" stroke="currentColor" stroke-width="1"/>
+        <text x="125" y="196" font-size="11" text-anchor="middle" opacity="0.8">← 0.4375 →</text>
+        <text x="250" y="150" font-size="12">순차 부분은 <tspan font-weight="700">전혀 줄지 않는다</tspan></text>
+        <text x="250" y="170" font-size="12">→ 1 ÷ 0.4375 = <tspan font-weight="700">약 2.28배</tspan> (4배가 아님!)</text>
+      </svg>
+      <figcaption>75%를 4배 빠르게 해도 전체는 2.28배만 빨라진다 — 줄어들지 않는 순차 부분(25%)이 전체 시간의 발목을 잡기 때문이다.</figcaption>
+    </figure>
+    <p><b>문제 유형은 딱 3가지</b>다. 공식 <b>1 / [(1−p) + p/s]</b>에서 무엇을 묻느냐만 다르다:</p>
+    <table>
+      <tr><th>유형</th><th>주어지는 것</th><th>구하는 것</th><th>연습문제</th></tr>
+      <tr><td>① 정방향</td><td>p, s</td><td>전체 성능 향상 배수</td><td>4번</td></tr>
+      <tr><td>② 시간 계산</td><td>p, s, 원래 소요시간</td><td>개선 후 소요시간</td><td>5번</td></tr>
+      <tr><td>③ 역산</td><td>p, 목표 성능 향상</td><td>필요한 s (또는 n)</td><td>6·7번</td></tr>
+    </table>
 
     <h3>병렬 컴퓨터 시스템 구조</h3>
     <table>
@@ -199,6 +252,180 @@
       <tr><td>제공 대상</td><td>인프라(서버, 스토리지)</td><td>개발 플랫폼</td><td>완성 소프트웨어</td></tr>
       <tr><td>예시</td><td>서버 임대</td><td>개발 환경 임대</td><td>웹메일, ERP</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요. 4~7번은 <b>암달의 법칙 3가지 유형</b>을 전부 담았으니 반드시 손으로 풀어볼 것.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2012 국회직 · 기출문제집 p.148~149</span></div>
+      <p class="q-body">컴퓨터의 입출력 방식 중에서 <b>CPU의 부담이 작은 방식부터</b> 순서대로 나열한 것은?</p>
+      <ol class="choices">
+        <li>인터럽트 구동 I/O — DMA — 프로그램된 I/O</li>
+        <li>인터럽트 구동 I/O — 프로그램된 I/O — DMA</li>
+        <li>DMA — 프로그램된 I/O — 인터럽트 구동 I/O</li>
+        <li>DMA — 인터럽트 구동 I/O — 프로그램된 I/O</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ DMA — 인터럽트 구동 I/O — 프로그램된 I/O</p>
+        <div class="explain">
+          <p>CPU 부담이 <b>큰 순서</b>로는 프로그램 I/O &gt; 인터럽트 구동 I/O &gt; DMA &gt; 채널 순이다. 이 문제는 <b>"작은 것부터"</b>를 물었으므로 이 순서를 뒤집으면 된다.</p>
+          <ol class="steps">
+            <li><b>프로그램된 I/O</b>: CPU가 입출력 완료를 계속 확인(폴링)하며 기다림 → 부담 <b>최대</b></li>
+            <li><b>인터럽트 구동 I/O</b>: 맡겨두고 다른 일 하다가 "끝났다"는 신호를 받음 → 부담 <b>중간</b> (단, 데이터 전송 자체는 여전히 CPU가 함)</li>
+            <li><b>DMA</b>: 데이터 전송까지 DMA 제어기가 전담, CPU는 <b>시작과 끝에만</b> 관여 → 부담 <b>최소</b></li>
+          </ol>
+          <p><b>함정:</b> "작은 것부터"인지 "큰 것부터"인지를 놓치면 정반대 선택지를 고르게 된다. 문제에서 <b>순서의 방향</b>에 반드시 밑줄을 치고 시작할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">기출문제집 p.150</span></div>
+      <p class="q-body">컴퓨터 입출력 방식에서 <b>DMA</b>(Direct Memory Access)에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>DMA를 통한 데이터 전송 시 CPU의 레지스터를 거치지 않는다.</li>
+        <li>DMA 제어기와 CPU가 시스템 버스를 공유한다.</li>
+        <li>DMA 제어기에 의한 입출력이 수행되는 도중에 CPU는 다른 작업을 수행할 수 없다.</li>
+        <li>DMA를 통한 메모리 접근을 위해서는 사이클 스틸링이 필요하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ — DMA 동작 중에도 CPU는 <b>다른 작업을 수행할 수 있다</b></p>
+        <div class="explain">
+          <p>DMA의 존재 이유가 바로 "CPU를 입출력에서 해방시키는 것"이다. CPU는 DMA에 명령만 내리고 <b>곧바로 다른 프로그램을 처리</b>하며, 전송이 다 끝나면 DMA가 인터럽트로 알려준다.</p>
+          <p>나머지 선택지가 모두 맞는 이유:</p>
+          <ul>
+            <li>① 데이터가 <b>메모리 ↔ 입출력장치</b>로 직접 이동하므로 CPU 레지스터를 경유하지 않는다 (이름 그대로 Direct)</li>
+            <li>② 메모리에 접근하려면 시스템 버스를 써야 하므로 CPU와 공유한다</li>
+            <li>④ 그래서 버스가 빌 때 <b>CPU로부터 버스 사용권을 잠깐 뺏는데</b>, 이것이 사이클 스틸링(cycle stealing)이다</li>
+          </ul>
+          <p><b>핵심 정리:</b> CPU는 입출력의 <b>시작과 마지막(인터럽트 수신)에만</b> 관여한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">DMA가 데이터를 전송하는 동안 CPU와 <b>시스템 버스 사용권</b>을 두고 충돌한다. 이때 DMA가 버스를 잠시 점유하는 기법의 이름은 무엇이며, CPU와 DMA 중 버스 우선순위가 높은 쪽은?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 사이클 스틸링(cycle stealing), 우선순위는 <b>DMA가 더 높다</b></p>
+        <div class="explain">
+          <ol class="steps">
+            <li>DMA도 메모리에 접근하려면 <b>주소·데이터 버스</b>가 필요한데, 이 버스는 CPU도 쓰는 공용 자원이다</li>
+            <li>그래서 DMA는 CPU가 버스를 쓰지 않는 사이클을 <b>"훔쳐서(steal)"</b> 전송한다 → 사이클 스틸링</li>
+            <li>버스 요청이 겹치면 <b>DMA에 우선권</b>을 준다. 입출력 장치는 타이밍을 놓치면 데이터가 유실될 수 있지만, CPU는 한 사이클 늦게 처리해도 문제가 없기 때문이다</li>
+          </ol>
+          <p><b>주의:</b> 사이클 스틸링 때문에 CPU가 아주 약간 느려지긴 하지만, 프로그램 I/O처럼 <b>완전히 멈춰 기다리는 것과는 차원이 다르다.</b></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2016 서울시 · 기출문제집 p.163</span></div>
+      <p class="q-body">암달(Amdahl)의 법칙에 따라, 특정 응용프로그램의 <b>75%가 멀티코어를 이용한 병렬 수행이 가능</b>하고 나머지 <b>25%는 순차 실행만 가능</b>하다는 전제 하에, 컴퓨팅 코어의 수를 <b>4개</b>로 늘릴 때 기대할 수 있는 최대 성능 향상은 약 몇 배인가?</p>
+      <ol class="choices">
+        <li>약 1.28배</li>
+        <li>약 2.28배</li>
+        <li>약 3.28배</li>
+        <li>약 4.28배</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 약 2.28배</p>
+        <div class="explain">
+          <p><b>유형 ① 정방향</b> — p와 s를 공식에 그대로 대입하는 가장 기본 문제.</p>
+          <ol class="steps">
+            <li>값 정리: p = 0.75(병렬화 가능 비율), s = 4(코어 4개)</li>
+            <li>분모 계산: (1 − p) + p/s = 0.25 + 0.75/4 = 0.25 + 0.1875 = <b>0.4375</b></li>
+            <li>성능 향상 = 1 ÷ 0.4375 = <b>약 2.29 (≈ 2.28배)</b></li>
+          </ol>
+          <p><b>함정:</b> ④번 약 4.28배는 "코어 4개니까 4배"라고 생각한 오답이다. 암달의 법칙의 요점은 <b>정확히 그 직관이 틀렸다는 것</b> — 순차 부분 25%가 전혀 줄지 않기 때문이다.</p>
+          <p><b>참고:</b> 코어를 무한히 늘려도 최대치는 1 ÷ 0.25 = <b>4배</b>가 천장이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2023 지방직 · 기출문제집 p.163</span></div>
+      <p class="q-body">다음은 어떤 시스템의 성능 개선에 대한 내용이다. <b>성능 개선 후 프로그램 P의 실행에 걸리는 소요시간</b>은?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-size:13.5px;">• 개선 전, 특정 부분 A의 실행에 <b>30초</b>가 소요되었고, A를 포함한 전체 프로그램 P의 실행에 <b>50초</b>가 소요되었다.<br>• 시스템의 성능을 개선하여 A의 실행 속도를 <b>2배</b> 향상시켰다.<br>• 그 외 조건 변화는 없다.</span></p>
+      <ol class="choices">
+        <li>25초</li>
+        <li>30초</li>
+        <li>35초</li>
+        <li>40초</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 35초</p>
+        <div class="explain">
+          <p><b>유형 ② 시간 계산</b> — 사실 이 문제는 <b>공식 없이 푸는 게 더 빠르다.</b></p>
+          <ol class="steps">
+            <li>개선되는 부분 A: 30초 → 2배 빨라지므로 <b>15초</b></li>
+            <li>개선 안 되는 나머지: 50 − 30 = <b>20초</b> (그대로)</li>
+            <li>합계: 15 + 20 = <b>35초</b></li>
+          </ol>
+          <p><b>공식으로 검산:</b> p = 30/50 = 0.6, s = 2 → 분모 = 0.4 + 0.6/2 = 0.7 → 성능향상 = 1/0.7 배 → 새 시간 = 50 × 0.7 = <b>35초</b> ✓</p>
+          <p><b>요령:</b> "소요시간"을 묻는 문제는 <b>부분별로 시간을 직접 계산해 더하는 방식</b>이 공식 대입보다 빠르고 실수가 적다. 공식은 검산용으로만 쓰자.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2015 국회직 · 기출문제집 p.164</span></div>
+      <p class="q-body">어떤 프로그램에서 부동소수점 곱셈 연산이 전체 수행시간의 <b>70%</b>를 차지한다. 해당 프로그램의 성능을 <b>2배 향상</b>시키려면(전체 수행시간을 1/2로 단축) 부동소수점 곱셈 연산의 성능이 <b>몇 배 향상</b>되어야 하는가?</p>
+      <ol class="choices">
+        <li>1.3배</li>
+        <li>2배</li>
+        <li>3배</li>
+        <li>3.5배</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 3.5배</p>
+        <div class="explain">
+          <p><b>유형 ③ 역산</b> — 목표 성능 향상을 주고 필요한 s를 구하는 문제. 공식을 s에 대해 푼다.</p>
+          <ol class="steps">
+            <li>식 세우기: 2 = 1 / [(1 − 0.7) + 0.7/s]</li>
+            <li>양변 정리: (1 − 0.7) + 0.7/s = 1/2 = 0.5</li>
+            <li>0.3 + 0.7/s = 0.5 → <b>0.7/s = 0.2</b></li>
+            <li>s = 0.7 ÷ 0.2 = <b>3.5배</b></li>
+          </ol>
+          <p><b>검산:</b> s=3.5를 넣으면 분모 = 0.3 + 0.2 = 0.5 → 1/0.5 = 2배 ✓</p>
+          <p><b>함정:</b> ②번 2배는 "전체를 2배 만들려면 그 부분도 2배"라고 생각한 오답이다. 순차 부분(30%)이 남아 있으므로 개선 대상은 <b>2배보다 훨씬 더</b> 빨라져야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2017 하반기 지방직 · 기출문제집 p.164~165</span></div>
+      <p class="q-body">어떤 컴퓨터에서 프로그램 P를 실행할 때 실행시간 중 <b>60%</b>의 시간이 연산 A에 소요된다. 연산 A만을 <b>n배 빠르게</b> 실행하도록 성능을 향상시킨 후 프로그램 P의 실행시간이 <b>50% 감소</b>했다면, n의 값은?</p>
+      <ol class="choices">
+        <li>2</li>
+        <li>4</li>
+        <li>6</li>
+        <li>10</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ n = 6</p>
+        <div class="explain">
+          <p>유형 ③ 역산의 변형. 먼저 <b>"실행시간 50% 감소 = 성능 2배 향상"</b>이라는 말을 바꿔 읽는 것이 첫 관문이다.</p>
+          <ol class="steps">
+            <li>조건 변환: 시간이 절반으로 줄었다 → 성능 향상 배수 = <b>2</b></li>
+            <li>식 세우기: 2 = 1 / [(1 − 0.6) + 0.6/n]</li>
+            <li>정리: 0.4 + 0.6/n = 0.5 → <b>0.6/n = 0.1</b></li>
+            <li>n = 0.6 ÷ 0.1 = <b>6</b></li>
+          </ol>
+          <p><b>검산:</b> n=6 → 분모 = 0.4 + 0.1 = 0.5 → 1/0.5 = 2배 ✓ (시간 50% 감소)</p>
+          <p><b>표현 정리:</b> "시간 50% 감소" = "성능 2배", "시간 1/3로 단축" = "성능 3배". <b>시간과 성능은 역수 관계</b>라는 것만 기억하면 이 관문은 넘어간다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

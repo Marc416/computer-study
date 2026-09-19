@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"누가 누구에게 말을 걸 수 있는가"의 지도</h4>
+      <p>컴퓨터 안에는 CPU, 메모리, 키보드, 하드디스크 같은 부품이 잔뜩 들어있다. 그런데 이 부품들이 <b>아무나 아무 때나 서로 데이터를 주고받을 수 있는 게 아니다.</b> 도로(버스)는 하나뿐인데 여러 부품이 동시에 쓰려 들면 충돌하기 때문이다. 그래서 "버스를 직접 쓸 수 있는 특권층(CPU·주기억장치)"과 "중개인을 거쳐야 하는 나머지(입출력장치 → DMA·채널)"가 나뉜다.</p>
+      <p>이 단원 문제의 <b>절반 이상이 이 한 가지 구조</b>에서 나온다. "입출력장치가 시스템 버스에 직접 접근한다", "입출력장치가 CPU와 직접 데이터를 교환한다" 같은 선택지는 <b>전부 오답</b>이다. 구조도만 머릿속에 정확히 그려두면 선택지를 읽자마자 걸러낼 수 있다.</p>
+      <p>나머지 절반은 <b>성능을 숫자로 재는 법</b>이다. "이 컴퓨터가 얼마나 빠른가"를 클록 주파수·CPI·MIPS로 계산하고, "얼마나 담을 수 있나"를 KB~YB 단위로 환산한다. 둘 다 <b>공식 하나에 숫자만 갈아끼우는 계산 문제</b>라 한 번 손에 익히면 매년 공짜 점수가 된다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>컴퓨터의 5대 구성 장치 <span class="page-ref">📖 기출문제집 p.11</span></h3>
@@ -86,15 +96,21 @@
     </figure>
     <div class="tip"><b>함정 주의:</b> "입출력장치가 CPU와 직접 데이터를 교환한다"는 표현은 틀렸다 — 반드시 제어장치의 입출력 제어(DMA/채널/인터럽트)를 거쳐야 한다.</div>
 
-    <h3>컴퓨터 성능 측정 단위</h3>
+    <h3>컴퓨터 성능 측정 단위 <span class="page-ref">📖 기출문제집 p.14</span></h3>
     <table>
       <tr><th>용어</th><th>의미</th></tr>
-      <tr><td>처리량 (Throughput)</td><td>단위 시간당 처리하는 작업(또는 트랜잭션)의 양</td></tr>
-      <tr><td>응답 시간 (Response Time)</td><td>입력이 들어오고 <b>반응이 시작</b>되기까지 걸리는 시간</td></tr>
+      <tr><td>처리량 (Throughput)</td><td>단위 시간당 처리하는 작업(또는 트랜잭션)의 양. 보통 <b>안정된 상태</b>에서 측정</td></tr>
+      <tr><td>응답 시간 (Response Time)</td><td>입력이 주어지고 <b>반응이 시작</b>되기까지 걸리는 시간</td></tr>
       <tr><td>반환 시간 (Turn Around Time)</td><td>작업 제출부터 <b>최종 결과를 받기까지</b> 걸리는 전체 시간</td></tr>
       <tr><td>병목 현상 (Bottleneck)</td><td>자원이 용량/처리량의 최대 한계에 도달해 성능이 정체되는 현상</td></tr>
-      <tr><td>자원 이용도 (Utilization)</td><td>전체 시간 중 자원이 실제로 사용된 시간의 비율</td></tr>
+      <tr><td>자원 이용도 (Utilization)</td><td>전체 시간 중 자원이 실제로 사용된 시간의 백분율</td></tr>
     </table>
+    <div class="deep">
+      <h4>응답 시간과 반환 시간 — 이 둘만 확실히 구분하면 된다</h4>
+      <p>패스트푸드점에 비유하면 이렇다. <b>응답 시간</b>은 "주문하고 나서 직원이 '네, 주문 접수됐습니다'라고 <b>반응을 보이기까지</b>"의 시간이다. <b>반환 시간</b>은 "주문하고 나서 <b>햄버거를 손에 받기까지</b>"의 전체 시간이다. 당연히 반환 시간이 더 길다.</p>
+      <p>중요한 건 반환 시간에는 <b>컴퓨터가 실제로 일한 시간뿐 아니라 줄 서서 기다린 시간(대기 시간)까지 전부 포함</b>된다는 점이다. 그래서 비용 분석이나 실효 능률을 따질 때 반환 시간을 쓴다.</p>
+      <p><b>시험 함정:</b> "응답 시간은 작업이 시스템에 <b>도착한 시점부터 출력이 사용자에게 제출되는 시점까지</b>"라는 선택지가 나오면 — 이건 <b>응답 시간이 아니라 반환 시간의 정의</b>다. 아래 연습문제 3번이 정확히 이 함정이다.</p>
+    </div>
 
     <h3>처리 속도 단위</h3>
     <table>
@@ -108,28 +124,69 @@
       <b>계산 공식 (매년 출제)</b> <span class="page-ref">📖 기출문제집 p.17</span><br>
       클록 주기 = 1 / 클록 주파수<br>
       명령어 1개 실행 시간 = 클록 주기 × CPI (Cycle Per Instruction)<br>
-      전체 실행 시간 = 명령어 수 × CPI × 클록 주기
+      전체 실행 시간 = 명령어 수 × CPI × 클록 주기 = <b>명령어 수 × CPI ÷ 클록 주파수</b>
     </div>
-    <p><b>예제. 클록 주파수 2GHz, CPI=1, 명령어 100만 개 프로그램의 실행 시간은?</b></p>
+
+    <div class="deep">
+      <h4>주파수와 주기는 서로 뒤집은 관계다</h4>
+      <p><b>주파수(Hz)</b>는 "1초에 클록이 몇 번 뛰는가", <b>주기(초)</b>는 "클록 한 번에 몇 초 걸리는가"다. 2GHz라면 1초에 20억 번 뛰므로, 한 번에 걸리는 시간은 1/20억 초 = 0.5ns다. <b>둘은 항상 역수</b>이므로 문제에서 뭘 주든 즉시 뒤집어 쓸 수 있어야 한다.</p>
+      <p><b>단위 접두어를 외워두면 계산이 순식간에 끝난다:</b></p>
+      <table>
+        <tr><th>접두어</th><th>기호</th><th>크기</th><th>역수(주기)</th></tr>
+        <tr><td>기가</td><td>G</td><td>10⁹ (10억)</td><td>n (나노, 10⁻⁹초)</td></tr>
+        <tr><td>메가</td><td>M</td><td>10⁶ (백만)</td><td>μ (마이크로, 10⁻⁶초)</td></tr>
+        <tr><td>킬로</td><td>k</td><td>10³ (천)</td><td>m (밀리, 10⁻³초)</td></tr>
+      </table>
+      <p>즉 <b>GHz ↔ ns</b>, <b>MHz ↔ μs</b>, <b>kHz ↔ ms</b>가 짝이다. "1GHz = 1ns 주기"만 외워두면 2GHz는 0.5ns, 4GHz는 0.25ns로 바로 나온다.</p>
+    </div>
+
+    <p><b>예제 1. 클록 주파수 2GHz, CPI=1, 명령어 100만 개 프로그램의 실행 시간은?</b> (2012 국회)</p>
     <ol class="steps">
       <li>클록 주기 계산: 1 / 2GHz = 1 / (2×10⁹) = <b>0.5ns</b> (나노초)</li>
       <li>명령어 1개 실행 시간: 클록주기 × CPI = 0.5ns × 1 = <b>0.5ns</b></li>
       <li>전체 실행 시간: 명령어 수 × 명령어 1개 실행 시간 = 100만 × 0.5ns</li>
-      <li>= 1,000,000 × 0.5ns = 500,000ns = <b>0.5ms</b></li>
+      <li>= 1,000,000 × 0.5ns = 500,000ns = 500μs = <b>0.5ms</b></li>
     </ol>
 
-    <h3>기억 용량 단위 (2의 거듭제곱)</h3>
+    <p><b>예제 2. 클록 주파수 1GHz, 명령어 15만 개, CPI=5 인 프로그램의 CPU 시간은?</b> (2013 국가직)</p>
+    <ol class="steps">
+      <li>클록 주기: 1 / 1GHz = <b>1ns</b></li>
+      <li>명령어 1개 실행 시간: 1ns × CPI 5 = <b>5ns</b></li>
+      <li>전체: 150,000 × 5ns = 750,000ns</li>
+      <li>750,000ns = 750μs = <b>0.75ms</b></li>
+    </ol>
+
+    <p><b>예제 3. 클록 4GHz, CPI=4, 명령어 10¹⁰개일 때 실행 시간은?</b> (2021 국가직)</p>
+    <ol class="steps">
+      <li>클록 주기: 1 / 4GHz = <b>0.25ns</b></li>
+      <li>명령어 1개: 0.25ns × 4 = <b>1ns</b> (CPI와 주기가 딱 상쇄되어 1ns)</li>
+      <li>전체: 10¹⁰ × 1ns = 10¹⁰ × 10⁻⁹초 = <b>10초</b></li>
+    </ol>
+    <div class="tip"><b>거꾸로 묻는 유형도 있다:</b> "컴퓨터 A(2GHz)에서 10초 걸리던 프로그램이, 컴퓨터 B에서는 클록 사이클 수가 1.5배로 늘었지만 6초에 끝났다. B의 클록 주파수는?" → ① A의 총 사이클 수 = 2×10⁹ × 10초 = 2×10¹⁰개 ② B의 사이클 수 = 1.5배 = 3×10¹⁰개 ③ 이걸 6초에 처리했으므로 주파수 = 3×10¹⁰ ÷ 6 = 5×10⁹ = <b>5GHz</b>. 아래 연습문제 5번이 이 유형이다.</div>
+
+    <h3>기억 용량 단위 (2의 거듭제곱) <span class="page-ref">📖 기출문제집 p.15~16</span></h3>
     <table>
-      <tr><th>단위</th><th>크기</th></tr>
-      <tr><td>KB (킬로바이트)</td><td>2¹⁰ B</td></tr>
-      <tr><td>MB (메가바이트)</td><td>2²⁰ B</td></tr>
-      <tr><td>GB (기가바이트)</td><td>2³⁰ B</td></tr>
-      <tr><td>TB (테라바이트)</td><td>2⁴⁰ B</td></tr>
-      <tr><td>PB (페타바이트)</td><td>2⁵⁰ B</td></tr>
-      <tr><td>EB (엑사바이트)</td><td>2⁶⁰ B</td></tr>
-      <tr><td>ZB (제타바이트)</td><td>2⁷⁰ B</td></tr>
-      <tr><td>YB (요타바이트)</td><td>2⁸⁰ B</td></tr>
+      <tr><th>단위</th><th>크기</th><th>앞 단위의 몇 배</th></tr>
+      <tr><td>KB (킬로바이트)</td><td>2¹⁰ B</td><td>1024 × B</td></tr>
+      <tr><td>MB (메가바이트)</td><td>2²⁰ B</td><td>1024 × KB</td></tr>
+      <tr><td>GB (기가바이트)</td><td>2³⁰ B</td><td>1024 × MB</td></tr>
+      <tr><td>TB (테라바이트)</td><td>2⁴⁰ B</td><td>1024 × GB</td></tr>
+      <tr><td>PB (페타바이트)</td><td>2⁵⁰ B</td><td>1024 × TB</td></tr>
+      <tr><td>EB (엑사바이트)</td><td>2⁶⁰ B</td><td>1024 × PB</td></tr>
+      <tr><td>ZB (제타바이트)</td><td>2⁷⁰ B</td><td>1024 × EB</td></tr>
+      <tr><td>YB (요타바이트)</td><td>2⁸⁰ B</td><td>1024 × ZB</td></tr>
     </table>
+    <div class="deep">
+      <h4>외우는 법과 계산하는 법</h4>
+      <p><b>순서 암기:</b> "<b>킬</b>가 <b>메</b>가 <b>기</b>가 <b>테</b>라 <b>페</b>타 <b>엑</b>사 <b>제</b>타 <b>요</b>타" — 앞글자만 따서 <b>"킬메기테페엑제요"</b>. 한 칸 올라갈 때마다 <b>지수가 정확히 10씩</b> 늘어난다(2¹⁰ → 2²⁰ → 2³⁰ …).</p>
+      <p><b>환산 계산의 핵심:</b> 1024 = 2¹⁰ 이라는 것 하나만 쓰면 된다. 예를 들어 <code>1024² TB</code>가 몇 바이트인지 물으면:</p>
+      <ul>
+        <li>1024² = (2¹⁰)² = 2²⁰</li>
+        <li>TB = 2⁴⁰ B</li>
+        <li>둘을 곱하면 2²⁰ × 2⁴⁰ = <b>2⁶⁰ B</b> (= 1EB)</li>
+      </ul>
+      <p><b>지수가 음수여도 똑같다:</b> <code>1024⁻¹ ZB</code> = 2⁻¹⁰ × 2⁷⁰ = 2⁶⁰ B. 지수끼리 더하기만 하면 끝이다. 이 유형(연습문제 4번)은 <b>전부 2의 지수로 바꿔놓고 더하기</b>만 하면 계산 실수가 사라진다.</p>
+    </div>
 
     <h3>집적회로(IC) 집적도 분류</h3>
     <table>
@@ -170,6 +227,173 @@
       <tr><td>하드웨어</td><td>복잡</td><td>단순</td></tr>
       <tr><td>대표 예시</td><td>x86 계열</td><td>ARM, MIPS 계열</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2012 국가직 · 기출문제집 p.11</span></div>
+      <p class="q-body">컴퓨터의 주요 장치에 대한 설명으로 <b>옳은 것</b>은?</p>
+      <ol class="choices">
+        <li>입력장치는 시스템 버스를 통하여 컴퓨터 내부에서 외부로 데이터를 전송하는 장치이다.</li>
+        <li>기억장치 중 하나인 캐시기억장치는 주기억장치와 동일한 용량을 가져야 한다.</li>
+        <li>제어장치는 주기억장치에 적재된 프로그램의 명령어를 하나씩 꺼내어 해독하는 기능을 가지고 있다.</li>
+        <li>연산장치는 산술/논리 연산을 수행하는 장치로 누산기, 명령 레지스터(IR), 주소 해독기 등으로 구성된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>제어장치(CU)의 정의 그대로다 — 주기억장치에서 명령어를 <b>인출(fetch) → 해독(decode)</b>하고 제어신호를 발생시킨다.</p>
+          <ol class="steps">
+            <li><b>①은 방향이 반대.</b> 입력장치는 외부 → 내부로 보낸다. 게다가 입력장치는 <b>시스템 버스에 직접 접근할 수 없다</b>(DMA 같은 입출력 제어기를 거쳐야 함) — 이중으로 틀린 선택지.</li>
+            <li><b>②는 캐시의 존재 이유를 부정</b>한다. 캐시를 크게 하면 적중률은 오르지만 주소 해독 회로가 복잡해져 접근 시간과 비용이 늘어난다. 그래서 캐시는 <b>주기억장치보다 반드시 작다.</b></li>
+            <li><b>④는 소속 부서를 바꿔놓은 함정.</b> 누산기(AC)는 연산장치 소속이 맞지만, <b>명령 레지스터(IR)는 제어장치 소속</b>이다.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2019 지방직 · 기출문제집 p.12</span></div>
+      <p class="q-body">중앙처리장치(CPU)의 구성 요소로만 묶은 것은?<br>
+      ㄱ. PCI &nbsp;&nbsp; ㄴ. DRAM &nbsp;&nbsp; ㄷ. ALU &nbsp;&nbsp; ㄹ. 레지스터 &nbsp;&nbsp; ㅁ. 메인보드 &nbsp;&nbsp; ㅂ. 제어장치</p>
+      <ol class="choices">
+        <li>ㄱ, ㄴ, ㅁ</li>
+        <li>ㄷ, ㄹ, ㅂ</li>
+        <li>ㄹ, ㅁ, ㅂ</li>
+        <li>ㄱ, ㄷ, ㄹ, ㅂ</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② ㄷ, ㄹ, ㅂ (ALU · 레지스터 · 제어장치)</p>
+        <div class="explain">
+          <p><b>CPU = 제어장치(CU) + 연산장치(ALU) + 레지스터</b>. 이 셋만 고르면 된다.</p>
+          <ol class="steps">
+            <li><b>PCI</b>는 CPU와 <b>주변기기를 연결하는 로컬 버스 규격</b>이다. CPU 바깥에 있는 통로일 뿐 CPU의 일부가 아니다.</li>
+            <li><b>DRAM</b>은 주기억장치에 쓰이는 메모리 소자다. CPU 안에 있는 임시 저장소는 레지스터(플립플롭으로 구성)이지 DRAM이 아니다.</li>
+            <li><b>메인보드</b>는 이 모든 부품을 꽂는 <b>주기판</b>이다. CPU 소켓이 메인보드에 있을 뿐, 메인보드가 CPU 안에 있는 게 아니다.</li>
+          </ol>
+          <p><b>함정 정리:</b> CPU "안"과 CPU "에 연결된 것"을 구분하는 문제다. 버스·메모리·기판은 전부 바깥이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2010 계리직 · 기출문제집 p.14</span></div>
+      <p class="q-body">컴퓨터 시스템의 성능을 측정하는 척도에 대한 설명으로 <b>알맞지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>처리량(throughput)은 보통 안정된 상태에서 측정되며 하루에 처리되는 작업의 개수, 시간당 처리되는 온라인 처리의 개수 등으로 측정된다.</li>
+        <li>병목(bottleneck) 현상은 시스템 자원이 용량 또는 처리량에 있어서 최대 한계에 도달할 때 발생될 수 있다.</li>
+        <li>응답 시간(response time)은 주어진 작업의 수행을 위해 시스템에 도착한 시점부터 완료되어 그 작업의 출력이 사용자에게 제출되는 시점까지의 시간으로 정의된다.</li>
+        <li>자원 이용도(utilization)는 일반적으로 전체 시간에 대해 주어진 자원이 실제로 사용되는 시간의 백분율로 나타낸다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (응답 시간이 아니라 <b>반환 시간</b>의 정의다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>③이 설명하는 "도착 시점 ~ 결과 제출 시점까지 전체"는 <b>반환 시간(turn around time)</b>이다.</li>
+            <li><b>응답 시간</b>은 입력이 주어지고 <b>반응이 시작되기까지</b>의 시간 — 결과를 다 받을 때까지가 아니다.</li>
+            <li>①·②·④는 모두 교과서적 정의 그대로라 손댈 곳이 없다.</li>
+          </ol>
+          <p><b>암기 한 줄:</b> 응답 = "대답이 오기까지", 반환 = "물건을 받기까지". <b>반환이 항상 더 길다.</b></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2021 계리직 · 기출문제집 p.16</span></div>
+      <p class="q-body">클라우드 서버에 저장된 데이터 용량이 <b>1024PB</b>일 때, 이 데이터와 <b>동일한 크기가 아닌</b> 저장 용량은? (단, 1KB는 1024Byte)</p>
+      <ol class="choices">
+        <li>1024⁻¹ ZB</li>
+        <li>1024² TB</li>
+        <li>1024⁻³ YB</li>
+        <li>1024⁴ MB</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 1024⁻³ YB</p>
+        <div class="explain">
+          <p>모두 <b>2의 지수</b>로 바꿔놓고 더하면 실수가 없다. 1024 = 2¹⁰ 이므로 1024ⁿ = 2¹⁰ⁿ.</p>
+          <ol class="steps">
+            <li>기준값: 1024PB = 2¹⁰ × 2⁵⁰ = <b>2⁶⁰ B</b> (= 1EB)</li>
+            <li>① 1024⁻¹ ZB = 2⁻¹⁰ × 2⁷⁰ = <b>2⁶⁰</b> ✓ 같음</li>
+            <li>② 1024² TB = 2²⁰ × 2⁴⁰ = <b>2⁶⁰</b> ✓ 같음</li>
+            <li>③ 1024⁻³ YB = 2⁻³⁰ × 2⁸⁰ = <b>2⁵⁰</b> ✗ <b>다름</b> (2⁶⁰의 1/1024)</li>
+            <li>④ 1024⁴ MB = 2⁴⁰ × 2²⁰ = <b>2⁶⁰</b> ✓ 같음</li>
+          </ol>
+          <p><b>요령:</b> 각 단위의 지수(KB=10, MB=20, GB=30, TB=40, PB=50, EB=60, ZB=70, YB=80)를 외워두고, 거기에 10×n만 더하면 된다. ③만 50이 나온다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2018 지방직 · 기출문제집 p.18</span></div>
+      <p class="q-body">클록 주파수가 <b>2GHz</b>인 CPU를 사용하는 컴퓨터 A에서 프로그램 P를 실행하는 데 <b>10초</b>가 소요된다. 더 높은 클록 주파수의 CPU를 쓰는 컴퓨터 B에서 P를 실행하면, 소요되는 <b>클록 사이클 수는 A 대비 1.5배로 증가</b>하나 실행 시간은 <b>6초로 감소</b>한다. 컴퓨터 B의 클록 주파수는?</p>
+      <ol class="choices">
+        <li>3GHz</li>
+        <li>4GHz</li>
+        <li>5GHz</li>
+        <li>6GHz</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 5GHz</p>
+        <div class="explain">
+          <p>"실행 시간 = 총 클록 사이클 수 ÷ 클록 주파수"라는 관계 하나로 풀린다. 뒤집으면 <b>주파수 = 사이클 수 ÷ 시간</b>.</p>
+          <ol class="steps">
+            <li>A의 총 사이클 수 = 주파수 × 시간 = 2×10⁹ × 10초 = <b>2×10¹⁰개</b></li>
+            <li>B의 사이클 수 = A의 1.5배 = 2×10¹⁰ × 1.5 = <b>3×10¹⁰개</b></li>
+            <li>B는 이걸 6초에 처리 → 주파수 = 3×10¹⁰ ÷ 6 = <b>5×10⁹ Hz = 5GHz</b></li>
+          </ol>
+          <p><b>함정:</b> "시간이 10초 → 6초로 줄었으니 주파수는 10/6배겠지"라고 단순 비례로 풀면 ①번(약 3.3GHz)이 나온다. <b>사이클 수가 1.5배로 늘었다는 조건</b>을 반드시 곱해줘야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2017 국가직 · 기출문제집 p.13</span></div>
+      <p class="q-body">컴퓨터 구조에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>폰노이만이 제안한 프로그램 내장방식은 프로그램 코드와 데이터를 내부기억장치에 저장하는 방식이다.</li>
+        <li>병렬처리방식 중 하나인 SIMD는 하나의 명령어를 처리하기 위해 다수의 처리장치가 동시에 동작하는 다중처리기 방식이다.</li>
+        <li>CISC 구조는 RISC 구조에 비해 명령어의 종류가 적고 고정 명령어 형식을 취한다.</li>
+        <li>파이프라인 기법은 하나의 작업을 다수의 단계로 분할하여 시간적으로 중첩되게 실행함으로써 처리율을 높인다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (CISC와 RISC의 설명이 뒤바뀌었다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>RISC</b>(Reduced Instruction Set Computer) — 이름 그대로 <b>명령어를 줄인(Reduced)</b> 구조. 종류가 적고 길이가 고정이다.</li>
+            <li><b>CISC</b>(Complex Instruction Set Computer) — <b>복잡한(Complex)</b> 명령어를 많이 갖고, 길이도 가변이다.</li>
+            <li>따라서 "CISC가 명령어 종류가 적고 고정 형식"은 정반대 서술이다.</li>
+          </ol>
+          <p><b>암기 한 줄:</b> 이름에 답이 있다 — <b>R</b>educed = 적다, <b>C</b>omplex = 많다. 헷갈리면 풀네임을 떠올려라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">개념 확인 · 응용</span></div>
+      <p class="q-body">어떤 CPU가 <b>500MHz</b>로 동작하고, 평균 CPI가 <b>2</b>이다. 이 CPU의 <b>MIPS</b> 값은 얼마인가?</p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: 250 MIPS</p>
+        <div class="explain">
+          <p>MIPS = "초당 실행하는 명령어 수(백만 개 단위)"이므로, 먼저 <b>1초에 명령어를 몇 개 실행하는지</b>부터 구한다.</p>
+          <ol class="steps">
+            <li>1초에 뛰는 클록 수 = 500MHz = 5×10⁸ 사이클</li>
+            <li>명령어 1개당 2사이클(CPI=2)이 필요하므로, 1초에 실행 가능한 명령어 수 = 5×10⁸ ÷ 2 = <b>2.5×10⁸개</b></li>
+            <li>MIPS는 <b>백만(10⁶) 단위</b>로 환산 → 2.5×10⁸ ÷ 10⁶ = <b>250 MIPS</b></li>
+          </ol>
+          <p><b>공식으로 정리:</b> MIPS = 클록 주파수 ÷ (CPI × 10⁶). CPI가 클수록(명령어 하나에 손이 많이 갈수록) MIPS는 작아진다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

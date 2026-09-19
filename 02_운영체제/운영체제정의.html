@@ -20,10 +20,30 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"컴퓨터에 프로그램이 100개 떠 있는데 CPU는 하나다"</h4>
+      <p>컴퓨터의 자원 — CPU, 메모리, 디스크, 프린터 — 은 <b>한정되어 있는데 그것을 쓰겠다는 프로그램은 수십 개</b>다. 누구에게 CPU를 얼마나 줄지, 메모리 어디에 올릴지, 프린터를 두 프로그램이 동시에 잡으려 하면 어떻게 할지를 누군가는 정해야 한다. 그 "누군가"가 운영체제다.</p>
+      <p>그래서 운영체제를 한마디로 정의하면 <b>"자원 관리자(resource manager)"</b>다. PART 02 전체가 결국 이 한 문장의 각론이다 — 프로세스 스케줄링은 <b>CPU라는 자원</b>을 나눠주는 방법, 메모리 관리·가상메모리는 <b>메모리라는 자원</b>을, 디스크 스케줄링은 <b>디스크 헤드라는 자원</b>을 나눠주는 방법이다.</p>
+      <p>또 하나의 얼굴은 <b>"편의 제공자"</b>다. 응용 프로그램이 하드디스크에 직접 자기력을 걸어 데이터를 쓸 수는 없다. 대신 <code>파일에 쓰기</code>라고 요청하면 OS가 알아서 해준다. 이 요청 창구가 <b>시스템 호출(System Call)</b>이고, 이 단원의 구조 문제는 거의 전부 이 창구를 누가 어떤 순서로 거치는지를 묻는다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>시스템 소프트웨어 vs 운영체제 <span class="page-ref">📖 기출문제집 p.185</span></h3>
-    <p>운영체제(Windows, 유닉스, 리눅스, 안드로이드 등)는 시스템 소프트웨어에 속하며, 하드웨어와 응용 소프트웨어 사이의 매개체 역할을 한다. 컴파일러·언어번역기도 시스템 소프트웨어지만 운영체제는 아니다. 워드프로세서·MS오피스는 응용 소프트웨어다.</p>
+    <h3>시스템 소프트웨어 vs 응용 소프트웨어 <span class="page-ref">📖 기출문제집 p.185</span></h3>
+    <p>가장 자주 나오는 첫 문제 유형이 <b>"이 중 시스템 소프트웨어가 아닌 것은?"</b>이다. 구분 기준은 간단하다 — <b>컴퓨터 자체를 돌아가게 하는 것</b>이면 시스템 소프트웨어, <b>사용자의 일(문서작성·게임·계산)을 하는 것</b>이면 응용 소프트웨어다.</p>
+    <table>
+      <tr><th>구분</th><th>시스템 소프트웨어</th><th>응용 소프트웨어</th></tr>
+      <tr><td>목적</td><td>컴퓨터 <b>자체</b>를 동작·관리</td><td>사용자의 <b>업무</b>를 처리</td></tr>
+      <tr><td>하드웨어와의 거리</td><td>가까움 (직접 제어)</td><td>멂 (OS를 거쳐야 함)</td></tr>
+      <tr><td>예시</td><td>Windows, 유닉스, 리눅스, 안드로이드, iOS<br>컴파일러·어셈블러·인터프리터(언어번역)<br>링커, 로더, 디바이스 드라이버, 유틸리티</td><td>워드프로세서, 스프레드시트, 프레젠테이션<br>MS오피스, 포토샵, 웹브라우저, 게임</td></tr>
+    </table>
+    <div class="tip"><b>매년 나오는 함정 3종:</b> ① <b>워드프로세서·MS오피스·스프레드시트는 응용</b> SW다. ② <b>컴파일러는 시스템</b> SW다(언어번역 프로그램이라 헷갈리기 쉽지만, 프로그램을 돌게 만드는 도구이므로 시스템 쪽). ③ 안드로이드·iOS도 <b>운영체제</b>이므로 시스템 SW다.</div>
+
+    <h3>운영체제의 위치 — 계층 구조</h3>
+    <p>운영체제(Windows, 유닉스, 리눅스, 안드로이드 등)는 하드웨어와 응용 소프트웨어 사이의 매개체 역할을 한다. 아래 그림에서 <b>화살표가 계층을 하나도 건너뛰지 않는다</b>는 점이 핵심이다 — 응용 프로그램이 하드웨어로 직행하는 화살표는 존재하지 않는다.</p>
     <figure class="diagram">
       <svg viewBox="0 0 500 340" role="img" aria-label="컴퓨터 시스템 계층 구조: 사용자가 응용프로그램을 실행하면 시스템 호출을 통해 운영체제가 하드웨어를 제어한다">
         <defs>
@@ -52,34 +72,40 @@
       </svg>
       <figcaption>운영체제는 사용자·응용프로그램과 하드웨어 사이에서 시스템 호출을 매개로 자원을 통제하는 위치에 있다. 응용프로그램이 하드웨어에 직접 접근하지 못하는 이유가 바로 이 계층 구조다.</figcaption>
     </figure>
+    <div class="tip"><b>2025 국가직 출제:</b> "사용자나 응용 프로그램이 <b>커널을 거치지 않고</b> 하드웨어에 직접 접근할 수 있도록 제공하는 함수의 집합을 시스템 호출이라 한다" → <b>틀림</b>. 시스템 호출은 정반대로 <b>직접 접근할 수 없기 때문에</b> 커널에 대신 요청하는 창구다. "거치지 않고"라는 표현이 보이면 오답이다.</div>
 
-    <h3>정보처리 시스템의 분류 (응답시간·입력방식 기준)</h3>
+    <h3>정보처리 시스템의 분류 (응답시간·입력방식 기준) <span class="page-ref">📖 기출문제집 p.185~186</span></h3>
     <table>
-      <tr><th>종류</th><th>특징</th></tr>
-      <tr><td>일괄처리 (Batch)</td><td>작업을 모아두었다가 한꺼번에 처리. 처리량(throughput)·반환시간(turnaround time)으로 효율 평가</td></tr>
-      <tr><td>대화식 (Interactive)</td><td>터미널로 직접 명령 입력, 즉각적인 피드백 제공</td></tr>
-      <tr><td>실시간 (Real-time)</td><td>결과가 현재 결정에 즉시 영향을 주므로 매우 빠른 처리 필요</td></tr>
-      <tr><td>하이브리드 (Hybrid)</td><td>대화형 + 일괄처리 결합. 대화형 작업이 없을 때 백그라운드에서 배치 작업 수행</td></tr>
+      <tr><th>종류</th><th>특징</th><th>성능 평가 기준</th></tr>
+      <tr><td>일괄처리 (Batch)</td><td>작업을 모아두었다가 한꺼번에 처리. 초창기엔 천공카드·자기테이프, 요즘은 OMR/OCR 카드로 입력</td><td>처리량(throughput)<br>반환시간(turnaround time)</td></tr>
+      <tr><td>대화식 (Interactive)</td><td>터미널로 직접 명령 입력, 즉각적인 피드백 제공. 응답시간은 동시 접속 이용자 수에 따라 수 초~수 분</td><td>응답시간(response time)</td></tr>
+      <tr><td>실시간 (Real-time)</td><td>결과가 현재 결정에 즉시 영향을 주므로 매우 빠른 처리 필요 (예: 항공 관제, 공장 제어)</td><td>마감시간(deadline) 준수</td></tr>
+      <tr><td>하이브리드 (Hybrid)</td><td>대화형 + 일괄처리 결합. 대화형 작업이 없을 때 백그라운드에서 배치 작업 수행</td><td>둘 다</td></tr>
     </table>
-    <div class="tip"><b>분류 근거:</b> "응답 시간"과 "데이터 입력 방식"이 기준 — 고급언어 사용 여부나 버퍼링 여부가 아니다.</div>
+    <div class="tip"><b>분류 근거:</b> "<b>응답 시간</b>"과 "<b>데이터 입력 방식</b>"이 기준 — 고급언어 사용 여부, 버퍼링 수행 여부, 데이터 보호 필요성이 아니다. (2010 계리직 출제)</div>
 
-    <h3>운영체제의 목적</h3>
+    <h3>운영체제의 목적 — 4가지 <span class="page-ref">📖 기출문제집 p.186</span></h3>
     <ul class="point-list">
-      <li>처리량(Throughput) <b>향상</b></li>
+      <li>처리량(Throughput) <b>향상</b> — 단위 시간당 처리하는 작업량을 늘린다</li>
       <li>응답 시간(Response Time) <b>감소</b> (증가 X — 자주 나오는 오답 함정)</li>
-      <li>신뢰도(Reliability) <b>향상</b></li>
-      <li>사용 가능도(Availability) <b>향상</b></li>
+      <li>신뢰도(Reliability) <b>향상</b> — 주어진 작업을 정확하게 처리하는 정도</li>
+      <li>사용 가능도(Availability) <b>향상</b> — 필요할 때 즉시 쓸 수 있는 정도</li>
     </ul>
+    <div class="deep">
+      <h4>왜 하필 "응답시간만 감소"인가</h4>
+      <p>네 가지 중 <b>셋은 향상(↑), 하나만 감소(↓)</b>다. 헷갈릴 이유가 없어 보이지만 시험은 바로 이 하나를 "증가"로 바꿔 놓고 낸다. 이유를 알면 안 헷갈린다 — <b>응답시간은 "기다리는 시간"이기 때문이다.</b> 기다리는 시간이 늘어나서 좋을 리 없다.</p>
+      <p>나머지 셋은 전부 "많을수록·좋을수록 이득"인 양(量)이다. 처리량은 많이 처리할수록, 신뢰도는 정확할수록, 사용가능도는 언제든 쓸 수 있을수록 좋다. <b>"시간"이 들어간 지표만 줄이는 게 목표</b>라고 기억하면 된다.</p>
+    </div>
 
-    <h3>운영체제의 기능 분류</h3>
+    <h3>운영체제의 기능 분류 <span class="page-ref">📖 기출문제집 p.186</span></h3>
     <table>
       <tr><th>구분</th><th>내용</th></tr>
-      <tr><td><b>자원관리</b></td><td>주기억장치 관리, 보조기억장치 관리, 프로세스 관리, 입출력장치 관리, 파일 관리</td></tr>
-      <tr><td><b>시스템관리</b></td><td>시스템 보호(사용자 권한 부여), 네트워킹, 명령 해석기</td></tr>
+      <tr><td><b>자원관리</b></td><td>주기억장치 관리, 보조기억장치 관리, 프로세스 관리, 입출력(주변)장치 관리, 파일(데이터) 관리</td></tr>
+      <tr><td><b>시스템관리</b></td><td>시스템 보호(<b>사용자 권한 부여</b>), 네트워킹, 명령 해석기</td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> "사용자 권한 관리"는 자원관리가 아니라 <b>시스템관리</b>에 속한다.</div>
+    <div class="tip"><b>함정 주의:</b> "사용자 권한 관리"는 자원관리가 아니라 <b>시스템관리</b>에 속한다. 자원관리는 전부 <b>"○○장치 관리 / 프로세스·파일 관리"</b> 형태로 물리적 자원을 다루는 것들이고, 권한·보안·네트워킹은 시스템관리 쪽이라고 나눠 기억하면 된다.</div>
 
-    <h3>운영체제 구조 — 커널과 인터페이스</h3>
+    <h3>운영체제 구조 — 커널과 인터페이스 <span class="page-ref">📖 기출문제집 p.187</span></h3>
     <ul>
       <li><b>커널(Kernel)</b>: 운영체제의 핵심 기능을 모아둔 부분 (프로세스 관리, 메모리 관리 등)</li>
       <li><b>인터페이스</b>: 사용자·응용프로그램과 인접해 커널에 명령을 전달하고 실행 결과를 돌려줌</li>
@@ -87,34 +113,70 @@
       <li><b>시스템 호출(System Call)</b>: 사용자 프로그램이 하드웨어에 직접 접근할 수 없으므로, 커널 기능을 대신 요청하도록 해주는 인터페이스</li>
     </ul>
     <table>
-      <tr><th>커널 구조</th><th>특징</th></tr>
-      <tr><td>단일형 구조 커널</td><td>초창기 구조, 모듈이 거의 분리되지 않음 → 모듈 간 통신비용은 적지만 <b>유지보수·확장에는 불리</b></td></tr>
-      <tr><td>계층형 구조 커널</td><td>기능을 계층별로 분리</td></tr>
-      <tr><td>마이크로 구조 커널</td><td>핵심 기능만 커널에 남기고 나머지는 별도 프로세스로 분리</td></tr>
+      <tr><th>커널 구조</th><th>특징</th><th>장단점</th></tr>
+      <tr><td>단일형(모놀리식) 구조 커널</td><td>초창기 구조, 모듈이 거의 분리되지 않음</td><td>모듈 간 통신비용은 적지만 <b>유지보수·확장에 불리</b>, 한 부분 오류가 전체에 영향</td></tr>
+      <tr><td>계층형 구조 커널</td><td>기능을 계층별로 분리</td><td>오류 추적·유지보수가 쉬워짐, 계층 통과 비용 발생</td></tr>
+      <tr><td>마이크로 구조 커널</td><td>핵심 기능만 커널에 남기고 나머지는 별도 프로세스로 분리</td><td>안정성·확장성 높음, 프로세스 간 통신이 잦아 <b>성능 부담</b></td></tr>
     </table>
-    <div class="tip"><b>함정 주의:</b> 커널의 프로세스 관리는 CPU 배분·작업공간 배치가 핵심이며, <b>가상 메모리 제공은 메모리 관리 기능</b>에 해당한다 (프로세스 관리 아님).</div>
+    <div class="tip"><b>함정 주의:</b> 커널의 프로세스 관리는 <b>CPU 배분·작업공간 배치</b>가 핵심이며, <b>가상 메모리(실제 메모리보다 큰 가상공간) 제공은 메모리 관리 기능</b>에 해당한다. 2025 법원직에서 이 둘을 섞어 출제했다.</div>
 
-    <h3>프로세스의 종류</h3>
+    <h3>프로세스의 종류 <span class="page-ref">📖 기출문제집 p.188</span></h3>
     <table>
       <tr><th>종류</th><th>설명</th></tr>
-      <tr><td>운영체제 프로세스</td><td>시스템 관리 기능 담당, 사용자 프로세스가 다른 영역을 침범하지 못하게 감시</td></tr>
-      <tr><td>사용자 프로세스</td><td>사용자 응용프로그램을 수행</td></tr>
+      <tr><td>운영체제 프로세스</td><td>시스템 관리 기능 담당, 프로세스 실행 순서를 제어하고 사용자 프로세스가 다른 영역을 침범하지 못하게 감시</td></tr>
+      <tr><td>사용자 프로세스</td><td>사용자 응용프로그램(사용자 코드)을 수행</td></tr>
       <tr><td>병행 프로세스</td><td>여러 프로세스가 동시에 실행 중인 상태</td></tr>
       <tr><td>독립 프로세스</td><td>다른 프로세스에 영향을 주지도 받지도 않음</td></tr>
       <tr><td>협동 프로세스</td><td>다른 프로세스와 서로 영향을 주고받음 (통신·동기화 수단 필요)</td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> "여러 프로세스가 동시에 수행 상태에 있다 = 교착상태"라는 설명은 틀렸다. 동시 수행은 <b>병행 프로세스</b>이며, 교착상태는 자원을 서로 기다리며 멈춰버린 상태를 말한다.</div>
+
+    <h3>좀비 프로세스와 고아 프로세스 <span class="page-ref">📖 기출문제집 p.188~189</span></h3>
+    <p>부모 프로세스는 자식 프로세스를 만들고, 자식은 일이 끝나면 부모에게 결과를 돌려주고 종료된다. 그런데 <b>이 정상적인 순서가 깨지면</b> 두 가지 비정상 상태가 생긴다. 2025 계리직에서 타임라인 그림으로 출제됐다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="좀비 프로세스와 고아 프로세스의 차이: 자식이 먼저 종료됐는데 부모가 자원을 회수하지 않으면 좀비, 자식이 실행 중인데 부모가 먼저 종료되면 고아">
+        <text x="20" y="22" font-size="13" font-weight="700">좀비(zombie) — 자식이 먼저 끝났는데 부모가 치워주지 않음</text>
+        <line x1="40" y1="45" x2="40" y2="120" stroke="currentColor" stroke-width="1.5"/>
+        <text x="30" y="42" font-size="11.5" text-anchor="end">부모</text>
+        <line x1="40" y1="55" x2="300" y2="55" stroke="currentColor" stroke-width="3"/>
+        <text x="310" y="59" font-size="11.5">부모 계속 실행 중</text>
+
+        <line x1="90" y1="95" x2="200" y2="95" stroke="currentColor" stroke-width="3"/>
+        <text x="80" y="99" font-size="11.5" text-anchor="end">자식</text>
+        <circle cx="200" cy="95" r="4" fill="currentColor"/>
+        <text x="210" y="99" font-size="11.5">종료됐지만…</text>
+        <line x1="200" y1="95" x2="300" y2="95" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="210" y="115" font-size="11" opacity="0.8">부모가 자원을 회수하지 않아 프로세스 목록에 남음 = <tspan font-weight="700">좀비</tspan></text>
+
+        <text x="20" y="165" font-size="13" font-weight="700">고아(orphan) — 자식이 아직 일하는데 부모가 먼저 나감</text>
+        <line x1="40" y1="188" x2="40" y2="265" stroke="currentColor" stroke-width="1.5"/>
+        <text x="30" y="185" font-size="11.5" text-anchor="end">부모</text>
+        <line x1="40" y1="198" x2="180" y2="198" stroke="currentColor" stroke-width="3"/>
+        <circle cx="180" cy="198" r="4" fill="currentColor"/>
+        <text x="190" y="202" font-size="11.5">부모 먼저 종료</text>
+
+        <line x1="90" y1="238" x2="330" y2="238" stroke="currentColor" stroke-width="3"/>
+        <text x="80" y="242" font-size="11.5" text-anchor="end">자식</text>
+        <text x="340" y="242" font-size="11.5">아직 작업 수행 중</text>
+        <text x="90" y="262" font-size="11" opacity="0.8">돌려줄 부모가 사라진 채 실행됨 = <tspan font-weight="700">고아</tspan> (보통 init 프로세스가 입양)</text>
+      </svg>
+      <figcaption>누가 먼저 끝났느냐로 갈린다 — <b>자식이 먼저 끝났는데 정리가 안 됐으면 좀비</b>, <b>부모가 먼저 끝났는데 자식이 살아 있으면 고아</b>다.</figcaption>
+    </figure>
+    <div class="analogy"><b>암기:</b> 좀비는 "죽었는데 목록에 남아 돌아다니는 것", 고아는 "부모를 잃고 혼자 남은 것" — 단어 뜻 그대로다. <b>죽은 쪽이 자식이면 좀비, 죽은 쪽이 부모면 고아.</b></div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
     <ul class="point-list">
       <li>운영체제 목적: 응답시간은 <b>감소</b>가 맞음, "증가"라고 나오면 오답</li>
+      <li>시스템 SW vs 응용 SW: <b>워드·엑셀·MS오피스는 응용</b>, <b>컴파일러·OS·드라이버는 시스템</b></li>
       <li>정보처리 시스템 분류 기준 = <b>응답시간 + 데이터 입력방식</b></li>
       <li>사용자 권한 관리는 자원관리(X), <b>시스템관리(O)</b></li>
-      <li>단일형 구조 커널은 모듈 분리가 안 돼 있어 통신비용이 적은 것이지, "효율적 운영"이 장점의 핵심은 아님 (유지보수 어려움이 단점)</li>
-      <li>커널의 가상메모리 제공 = 메모리 관리 기능 (프로세스 관리 아님)</li>
-      <li>시스템 호출 = 사용자 프로그램이 하드웨어에 직접 접근 못하니 커널에 요청하는 인터페이스</li>
+      <li>시스템 호출 = 사용자 프로그램이 하드웨어에 <b>직접 접근 못하니</b> 커널에 요청하는 인터페이스 ("직접 접근하게 해준다"는 오답)</li>
+      <li>커널의 가상메모리 제공 = <b>메모리 관리</b> 기능 (프로세스 관리 아님)</li>
+      <li>단일형 구조 커널은 모듈 분리가 안 돼 통신비용이 적은 것이지, 유지보수·확장은 <b>불리</b></li>
+      <li>좀비 = 자식이 종료됐는데 목록에 남음 / 고아 = 부모가 먼저 종료</li>
+      <li>모바일 특화 OS: Android, iOS, Symbian — <b>Solaris는 서버용 유닉스</b>라 모바일 아님</li>
     </ul>
   </section>
 
@@ -123,23 +185,235 @@
     <table>
       <tr><th>구분</th><th>병행 프로세스</th><th>교착상태(Deadlock)</th></tr>
       <tr><td>의미</td><td>여러 프로세스가 <b>동시에 정상 실행</b> 중</td><td>서로 자원을 기다리며 <b>영원히 멈춤</b></td></tr>
+      <tr><td>정상 여부</td><td>정상 (오히려 바람직)</td><td>비정상 (해결 필요)</td></tr>
     </table>
     <table>
       <tr><th>구분</th><th>자원관리</th><th>시스템관리</th></tr>
       <tr><td>포함 기능</td><td>기억장치·프로세스·입출력·파일 관리</td><td>사용자 권한(보호), 네트워킹, 명령 해석기</td></tr>
     </table>
+    <table>
+      <tr><th>구분</th><th>좀비 프로세스</th><th>고아 프로세스</th></tr>
+      <tr><td>먼저 종료된 쪽</td><td><b>자식</b></td><td><b>부모</b></td></tr>
+      <tr><td>문제 상황</td><td>자식이 끝났는데 부모가 자원 회수를 안 함</td><td>자식이 실행 중인데 돌려줄 부모가 없음</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>단일형 커널</th><th>마이크로 커널</th></tr>
+      <tr><td>구조</td><td>기능이 한 덩어리</td><td>핵심만 커널, 나머지는 분리</td></tr>
+      <tr><td>통신비용</td><td>적음</td><td>많음 (프로세스 간 통신 잦음)</td></tr>
+      <tr><td>유지보수·확장</td><td>어려움</td><td>쉬움</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2008 계리직 · 기출문제집 p.185</span></div>
+      <p class="q-body">다음 중 <b>시스템 소프트웨어로 알맞지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>윈도 XP</li>
+        <li>리눅스</li>
+        <li>워드프로세서</li>
+        <li>컴파일러</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 워드프로세서</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>윈도 XP·리눅스 → <b>운영체제</b> = 시스템 소프트웨어의 핵심</li>
+            <li>컴파일러 → <b>언어 번역 프로그램</b>. 프로그램을 돌아가게 만드는 도구이므로 시스템 소프트웨어(처리 프로그램)에 속한다</li>
+            <li>워드프로세서 → 사용자의 <b>문서 작성 업무</b>를 처리 = <b>응용 소프트웨어</b></li>
+          </ol>
+          <p><b>함정:</b> ④ 컴파일러를 "프로그래밍 도구니까 응용 아닌가?" 하고 고르기 쉽다. 컴파일러·어셈블러·인터프리터·링커·로더는 전부 <b>시스템 소프트웨어</b>다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2025 소방경채 · 기출문제집 p.185</span></div>
+      <p class="q-body">〈보기〉에서 동일하거나 유사한 종류의 프로그램으로 분류된 항목 중 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>워드 프로세서, 스프레드시트, 프레젠테이션</li>
+        <li>알파고(AlphaGo), 시리(Siri), ChatGPT</li>
+        <li>파이썬, C, JAVA, 스크래치(Scratch)</li>
+        <li>유닉스, 리눅스, MS오피스, 안드로이드</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 유닉스, 리눅스, MS오피스, 안드로이드</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>①은 전부 <b>사무용 응용 소프트웨어</b> → 동일 분류 (맞음)</li>
+            <li>②는 전부 <b>인공지능 프로그램</b> → 동일 분류 (맞음)</li>
+            <li>③은 전부 <b>프로그래밍 언어</b> → 동일 분류 (맞음)</li>
+            <li>④에서 유닉스·리눅스·안드로이드는 <b>운영체제(시스템 SW)</b>인데 <b>MS오피스만 응용 SW</b> → 한 항목이 섞여 있으므로 <b>옳지 않음</b></li>
+          </ol>
+          <p><b>풀이 요령:</b> "분류가 옳지 않은 것"은 <b>한 개만 이질적인 묶음</b>을 찾는 문제다. 각 묶음에서 "얘만 성격이 다른데?" 싶은 항목이 있는지 훑으면 빠르다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2010 계리직 · 기출문제집 p.185~186</span></div>
+      <p class="q-body">운영체제는 일괄처리(batch), 대화식(interactive), 실시간(real-time) 시스템, 그리고 일괄처리와 대화식이 결합된 하이브리드(hybrid) 시스템 등으로 분류될 수 있다. 이와 같은 <b>분류 근거</b>로 가장 알맞은 것은?</p>
+      <ol class="choices">
+        <li>고급 프로그래밍 언어의 사용 여부</li>
+        <li>응답 시간과 데이터 입력 방식</li>
+        <li>버퍼링(buffering) 기능 수행 여부</li>
+        <li>데이터 보호의 필요성 여부</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 응답 시간과 데이터 입력 방식</p>
+        <div class="explain">
+          <p>네 가지 시스템의 차이를 실제로 나열해 보면 답이 보인다.</p>
+          <ol class="steps">
+            <li><b>일괄처리</b>: 카드·테이프로 <b>모아서 입력</b>(입력 방식), 응답은 나중에</li>
+            <li><b>대화식</b>: 터미널로 <b>직접 입력</b>(입력 방식), 수 초 내 <b>즉시 응답</b>(응답 시간)</li>
+            <li><b>실시간</b>: 즉시 입력, <b>즉시 응답이 필수</b>(응답 시간)</li>
+            <li>→ 네 종류를 가르는 축은 결국 <b>응답 시간 + 데이터 입력 방식</b> 두 가지다</li>
+          </ol>
+          <p><b>함정:</b> ①·③·④는 모두 "그럴듯한 기술 용어"지만 분류 기준과 무관하다. 고급언어 사용 여부나 버퍼링은 네 시스템 어디에나 적용될 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2024 지방직 · 기출문제집 p.186</span></div>
+      <p class="q-body">운영체제의 목적으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>신뢰도(reliability) 향상</li>
+        <li>처리량(throughput) 향상</li>
+        <li>응답 시간(response time) 증가</li>
+        <li>사용 가능도(availability) 향상</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 응답 시간 증가</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>운영체제의 4대 목적: 처리량 <b>향상</b>, 신뢰도 <b>향상</b>, 사용가능도 <b>향상</b>, 응답시간 <b>감소</b></li>
+            <li>응답 시간은 "사용자가 <b>기다리는 시간</b>"이므로 늘리는 게 목적일 수 없다</li>
+            <li>따라서 "증가"라고 쓴 ③이 정답(틀린 것)</li>
+          </ol>
+          <p><b>출제 패턴:</b> 이 문제는 거의 매년 <b>네 지표 중 하나의 방향만 뒤집어</b> 출제된다. "<b>시간 지표만 감소, 나머지는 전부 향상</b>"만 기억하면 3초 안에 풀린다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2023 소방경채 · 기출문제집 p.186</span></div>
+      <p class="q-body">운영체제의 기능 중 <b>자원관리로 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>메모리 관리</li>
+        <li>프로세스 관리</li>
+        <li>사용자 권한 관리</li>
+        <li>파일(데이터) 관리</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 사용자 권한 관리</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>자원관리</b>: 주기억장치·보조기억장치·프로세스·입출력장치·파일 관리 — 전부 <b>물리적 자원을 나눠주는</b> 일</li>
+            <li><b>시스템관리</b>: 시스템 보호(<b>사용자 권한 부여</b>), 네트워킹, 명령 해석기</li>
+            <li>사용자 권한 관리는 "누구에게 무엇을 허용할지"를 정하는 <b>보호·보안</b> 영역이므로 시스템관리</li>
+          </ol>
+          <p><b>구분 요령:</b> 선택지에 <b>"○○장치 관리"나 "프로세스/파일 관리"</b>가 있으면 자원관리, <b>"권한·보안·네트워크·명령어 해석"</b>이 있으면 시스템관리다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2025 국가직 · 기출문제집 p.187</span></div>
+      <p class="q-body">운영체제 구조에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>커널은 운영체제의 핵심 기능을 모아 놓은 것이다.</li>
+        <li>다양한 장치를 효율적으로 사용할 수 있는 하드웨어와의 인터페이스를 디바이스 드라이버라고 한다.</li>
+        <li>사용자 인터페이스는 커널에 명령을 전달하고, 실행 결과를 사용자와 응용 프로그램에 전달한다.</li>
+        <li>사용자나 응용 프로그램이 커널을 거치지 않고 하드웨어에 직접 접근할 수 있도록 제공하는 함수의 집합을 시스템 호출이라고 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>시스템 호출의 정의가 정확히 <b>반대로</b> 서술되어 있다.</p>
+          <ol class="steps">
+            <li>사용자 프로그램은 보안·안정성 문제로 <b>하드웨어나 중요 시스템 자원에 직접 접근할 수 없다</b></li>
+            <li>그래서 "대신 해주세요"라고 <b>커널에게 요청</b>하는 창구가 필요하다 → 그것이 시스템 호출</li>
+            <li>즉 시스템 호출은 커널을 "거치지 않게" 하는 게 아니라 <b>반드시 거치게</b> 하는 통로다</li>
+          </ol>
+          <p><b>함정 감지법:</b> 이 단원 지문에서 <b>"커널을 거치지 않고", "직접 접근"</b>이라는 표현이 보이면 거의 항상 오답이다. 계층 구조 그림에서 응용→하드웨어 직행 화살표가 없다는 것과 같은 이야기다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2012 국가직 · 기출문제집 p.188</span></div>
+      <p class="q-body">운영체제의 프로세스에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>운영체제 프로세스는 사용자 작업 처리를 위해 시스템 관리 기능을 담당하는 프로세스이다.</li>
+        <li>사용자 프로세스는 사용자 응용프로그램을 수행하는 프로세스이다.</li>
+        <li>여러 개의 프로세스들이 동시에 수행상태에 있다면 교착상태(deadlock) 프로세스라고 한다.</li>
+        <li>독립 프로세스는 한 프로세스가 시스템 안에서 다른 프로세스에게 영향을 주지 않거나 또는 다른 프로세스에 의해 영향을 받지 않는 프로세스이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>여러 프로세스가 동시에 실행되는 것은 <b>병행(concurrent) 프로세스</b>다 — 지극히 정상이고 오히려 바람직한 상태</li>
+            <li><b>교착상태</b>는 서로가 가진 자원을 기다리며 <b>아무도 진행하지 못하고 멈춘</b> 비정상 상태</li>
+            <li>"동시 실행"과 "서로 기다리며 멈춤"은 완전히 다른 개념이므로 ③이 틀렸다</li>
+          </ol>
+          <p><b>함정:</b> "동시에 여러 개"라는 표현만 보고 뭔가 문제 상황 같다고 느끼기 쉽다. 하지만 멀티태스킹 자체가 병행 프로세스이며, 교착상태는 <b>진행이 멈춰야</b> 성립한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2025 계리직 · 기출문제집 p.188~189</span></div>
+      <p class="q-body">부모 프로세스가 자식 프로세스 1·2·3을 만들었고, 다음과 같이 진행되었다. <b>고아(orphan) 프로세스</b>와 <b>좀비(zombie) 프로세스</b>를 바르게 짝지은 것은? (단, 부모 프로세스는 자식 프로세스의 종료 상태를 확인한 후 자원을 회수한다)</p>
+      <ul>
+        <li>자식 2: 시작 후 비정상 종료 → 부모가 <b>자원 회수 완료</b></li>
+        <li>자식 3: 시작 후 종료 → 부모가 <b>자원 미회수</b></li>
+        <li>자식 1: 시작 후 <b>작업 수행 중</b>인 상태에서 <b>부모 프로세스가 종료</b></li>
+      </ul>
+      <ol class="choices">
+        <li>고아 = 자식 2, 좀비 = 자식 1</li>
+        <li>고아 = 자식 3, 좀비 = 자식 1</li>
+        <li>고아 = 자식 1, 좀비 = 자식 2</li>
+        <li>고아 = 자식 1, 좀비 = 자식 3</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 고아 = 자식 1, 좀비 = 자식 3</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>고아 = 부모가 먼저 죽은 경우.</b> 자식 1은 아직 작업 수행 중인데 부모가 종료됐다 → <b>자식 1이 고아</b></li>
+            <li><b>좀비 = 자식이 끝났는데 목록에 남은 경우.</b> 자식 3은 종료됐지만 <b>부모가 자원을 회수하지 않아</b> 프로세스 목록에 남아 있다 → <b>자식 3이 좀비</b></li>
+            <li>자식 2는 비정상 종료이긴 하나 부모가 <b>자원을 회수했으므로</b> 깔끔히 정리된 상태 → 둘 다 아님</li>
+          </ol>
+          <p><b>함정:</b> 자식 2의 "<b>비정상</b> 종료"라는 말에 끌려 좀비로 고르기 쉽다. 하지만 좀비를 만드는 건 종료가 정상이냐 비정상이냐가 아니라 <b>부모가 자원을 회수했느냐</b>다. 자원 회수 여부만 보면 된다.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔑</span>기출 키워드</h2>
     <div class="keywords">
       <span class="chip">시스템소프트웨어</span>
+      <span class="chip">응용소프트웨어</span>
       <span class="chip">일괄처리</span>
       <span class="chip">대화식</span>
       <span class="chip">실시간</span>
       <span class="chip">하이브리드</span>
       <span class="chip">처리량</span>
       <span class="chip">응답시간</span>
+      <span class="chip">반환시간</span>
       <span class="chip">신뢰도</span>
       <span class="chip">사용가능도</span>
       <span class="chip">자원관리</span>
@@ -148,9 +422,13 @@
       <span class="chip">디바이스드라이버</span>
       <span class="chip">시스템호출</span>
       <span class="chip">단일형구조커널</span>
+      <span class="chip">계층형구조커널</span>
       <span class="chip">마이크로커널</span>
       <span class="chip">병행프로세스</span>
+      <span class="chip">독립프로세스</span>
       <span class="chip">협동프로세스</span>
+      <span class="chip">좀비프로세스</span>
+      <span class="chip">고아프로세스</span>
     </div>
   </section>
 

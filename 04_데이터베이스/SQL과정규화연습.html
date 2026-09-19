@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL과 정규화 문제풀이 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">04. 데이터베이스</a> / SQL과 정규화 문제풀이</div>
+  <h1 class="page-title">SQL과 정규화 문제풀이</h1>
+  <p class="page-subtitle">DDL·DML·DCL 구분 · SELECT 결과 세기 · 함수종속과 정규형 판별 · PART 05. 데이터베이스론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>SQL 문제는 <b>명령어를 DDL/DML/DCL로 분류</b>하거나 <b>결과 투플 수를 세는</b> 두 유형이 대부분이다.</p>
+    <p>정규형 판별은 <b>"부분종속 있으면 1NF, 없으면 2NF, 이행종속까지 없으면 3NF"</b> 순서로 위에서 아래로 훑으면 끝난다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>SQL — 명령어의 "소속"을 묻는 이유</h4>
+      <p>SQL 명령어는 하는 일에 따라 세 부류로 나뉜다. <b>테이블 구조 자체를 만들고 고치는</b> 명령(DDL), <b>그 안의 데이터를 넣고 빼고 찾는</b> 명령(DML), <b>누가 쓸 수 있는지 권한을 통제하는</b> 명령(DCL)이다. 시험이 이 분류를 집요하게 묻는 이유는, 실무에서 <b>권한을 이 단위로 부여</b>하기 때문이다 — 예를 들어 일반 사용자에게는 DML만 허용하고 DDL은 막아야 테이블이 함부로 삭제되지 않는다.</p>
+      <p>분류만 알면 끝나는 게 아니라 <b>함정이 하나 더</b> 있다. 명령어 이름만 보고 짐작하면 틀리는 경우가 있는데, 대표적으로 <b>DELETE와 DROP</b>이다. DELETE는 <b>행을 지우는 DML</b>이고, DROP은 <b>테이블 자체를 지우는 DDL</b>이다. 이름이 비슷해 보여도 소속이 완전히 다르다.</p>
+      <h4>정규화 — 왜 테이블을 쪼개는가</h4>
+      <p>한 테이블에 모든 걸 몰아넣으면 편할 것 같지만, <b>이상 현상(anomaly)</b>이라는 세 가지 사고가 터진다. 데이터가 중복 저장되니 <b>일부만 고치면 값이 어긋나고</b>(수정 이상), <b>엉뚱한 정보 없이는 새 정보를 못 넣고</b>(삽입 이상), <b>하나 지우려다 멀쩡한 정보까지 날아간다</b>(삭제 이상).</p>
+      <p>정규화는 이 문제를 <b>속성 간의 종속 관계를 분석해 릴레이션을 여러 개로 분해</b>함으로써 해결한다. 여기서 <b>핵심 단어는 "분해"</b>다 — 시험에 "정규화는 릴레이션을 <b>병합</b>하는 과정"이라고 나오면 무조건 오답이다.</p>
+      <p>정규형 판별 문제는 겁먹기 쉽지만, <b>기본키를 확인하고 → 부분종속 찾고 → 이행종속 찾는</b> 3단계 절차를 그대로 따라가면 기계적으로 답이 나온다. 아래에서 그 절차를 그림과 함께 익힌다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📝</span>주요 개념 — SQL 명령어 분류</h2>
+
+    <h3>DDL · DML · DCL · TCL <span class="page-ref">📖 기출문제집 p.579~581</span></h3>
+    <table>
+      <tr><th>분류</th><th>정식 명칭</th><th>명령어</th><th>하는 일</th></tr>
+      <tr><td><b>DDL</b></td><td>데이터 정의어<br>(Data Definition Language)</td><td><b>CREATE, ALTER, DROP, RENAME, TRUNCATE</b></td><td>테이블·스키마 <b>구조</b>를 정의·변경·삭제</td></tr>
+      <tr><td><b>DML</b></td><td>데이터 조작어<br>(Data Manipulation Language)</td><td><b>SELECT, INSERT, UPDATE, DELETE</b></td><td>테이블 안의 <b>데이터</b>를 검색·삽입·수정·삭제</td></tr>
+      <tr><td><b>DCL</b></td><td>데이터 제어어<br>(Data Control Language)</td><td><b>GRANT, REVOKE</b></td><td>사용자 <b>권한</b> 부여·회수</td></tr>
+      <tr><td><b>TCL</b></td><td>트랜잭션 제어어<br>(Transaction Control Language)</td><td><b>COMMIT, ROLLBACK, CHECKPOINT</b></td><td>트랜잭션 확정·취소·복귀지점 설정</td></tr>
+    </table>
+    <div class="tip"><b>TCL은 DCL에 포함되나?</b> 엄밀히는 대상이 달라 별개 개념이지만, <b>"제어"라는 공통점 때문에 DCL의 일부로 분류하기도 한다.</b> 그래서 시험에서 COMMIT을 DCL로 분류한 선택지가 <b>정답</b>이 되는 경우가 있다(2019 계리직). 3분류로 묻는 문제면 COMMIT은 DCL 쪽으로 보면 된다.</div>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="SQL 명령어 분류도: DDL은 테이블 구조를 다루고 DML은 테이블 안의 데이터를 다루며 DCL은 사용자 권한을 다룬다">
+        <defs>
+          <marker id="sq1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="255" y="95" width="190" height="115" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="255" y="95" width="190" height="30" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="350" y="115" font-size="12" text-anchor="middle" font-weight="700">테이블 (구조)</text>
+        <text x="350" y="150" font-size="11.5" text-anchor="middle">행 1 — 데이터</text>
+        <text x="350" y="175" font-size="11.5" text-anchor="middle">행 2 — 데이터</text>
+        <text x="350" y="200" font-size="11.5" text-anchor="middle">행 3 — 데이터</text>
+
+        <rect x="30" y="30" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="120" y="52" font-size="13" text-anchor="middle" font-weight="700">DDL (정의어)</text>
+        <text x="120" y="72" font-size="11" text-anchor="middle">CREATE · ALTER</text>
+        <text x="120" y="89" font-size="11" text-anchor="middle">DROP · RENAME</text>
+        <line x1="212" y1="80" x2="290" y2="108" stroke="currentColor" stroke-width="1.5" marker-end="url(#sq1)"/>
+        <text x="240" y="82" font-size="10" opacity="0.85">구조를 조작</text>
+
+        <rect x="30" y="160" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="120" y="182" font-size="13" text-anchor="middle" font-weight="700">DML (조작어)</text>
+        <text x="120" y="202" font-size="11" text-anchor="middle">SELECT · INSERT</text>
+        <text x="120" y="219" font-size="11" text-anchor="middle">UPDATE · DELETE</text>
+        <line x1="212" y1="180" x2="251" y2="172" stroke="currentColor" stroke-width="1.5" marker-end="url(#sq1)"/>
+        <text x="228" y="200" font-size="10" opacity="0.85">내용을 조작</text>
+
+        <rect x="490" y="30" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <text x="580" y="52" font-size="13" text-anchor="middle" font-weight="700">DCL (제어어)</text>
+        <text x="580" y="72" font-size="11" text-anchor="middle">GRANT · REVOKE</text>
+        <text x="580" y="89" font-size="11" text-anchor="middle">(권한 부여 / 회수)</text>
+        <line x1="488" y1="80" x2="452" y2="105" stroke="currentColor" stroke-width="1.5" marker-end="url(#sq1)"/>
+        <text x="470" y="105" font-size="10" text-anchor="middle" opacity="0.85">접근을 통제</text>
+
+        <rect x="490" y="160" width="180" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="5 4"/>
+        <text x="580" y="182" font-size="13" text-anchor="middle" font-weight="700">TCL (트랜잭션)</text>
+        <text x="580" y="202" font-size="11" text-anchor="middle">COMMIT · ROLLBACK</text>
+        <text x="580" y="219" font-size="10.5" text-anchor="middle" opacity="0.8">DCL로 묶기도 함</text>
+      </svg>
+      <figcaption>DDL은 <b>테이블이라는 그릇 자체</b>를, DML은 <b>그릇 안의 내용물</b>을, DCL은 <b>누가 그릇에 접근할 수 있는지</b>를 다룬다. 이 그림 하나로 분류 문제는 정리된다.</figcaption>
+    </figure>
+    <div class="deep">
+      <h4>이름이 헷갈리는 짝들 — 반드시 구별</h4>
+      <ul>
+        <li><b>DELETE(DML)</b> vs <b>DROP(DDL)</b>: DELETE는 <b>행</b>을 지우고 테이블은 남는다. DROP은 <b>테이블 자체</b>를 없앤다</li>
+        <li><b>DELETE</b> vs <b>TRUNCATE(DDL)</b>: 둘 다 데이터를 비우지만 TRUNCATE는 <b>구조만 남기고 전부</b> 삭제하며 되돌리기 어렵다</li>
+        <li><b>ALTER TABLE ... DROP COLUMN</b> vs <b>DROP TABLE</b>: 앞은 <b>열 하나</b>를 지우는 것, 뒤는 <b>테이블 전체</b>를 지우는 것. 테이블을 지우려고 <code>ALTER TABLE 배송업체 DROP;</code>이라고 쓰면 <b>틀린 문법</b>이다 (2019 서울시 출제)</li>
+        <li><b>RENAME</b>은 테이블 <b>이름을 바꾸는 DDL</b>이다 (데이터를 건드리지 않으므로 DML이 아님)</li>
+      </ul>
+    </div>
+
+    <h3>SELECT 문의 구조와 필수·선택 절</h3>
+    <table>
+      <tr><th>절</th><th>역할</th><th>필수 여부</th></tr>
+      <tr><td>SELECT</td><td>출력할 <b>열</b> 지정 (관계대수의 π)</td><td><b>필수</b></td></tr>
+      <tr><td>FROM</td><td>대상 <b>테이블</b> 지정</td><td><b>필수</b></td></tr>
+      <tr><td>WHERE</td><td><b>행 조건</b> (관계대수의 σ)</td><td>선택</td></tr>
+      <tr><td>GROUP BY</td><td>지정한 열의 값이 같은 것끼리 <b>묶기</b></td><td>선택</td></tr>
+      <tr><td>HAVING</td><td><b>그룹</b>에 대한 조건 (GROUP BY와 함께만 사용)</td><td>선택</td></tr>
+      <tr><td>ORDER BY</td><td>결과 <b>정렬</b> (ASC 오름차순 / DESC 내림차순)</td><td>선택</td></tr>
+    </table>
+    <div class="tip"><b>WHERE vs HAVING:</b> WHERE는 <b>그룹으로 묶기 전에 개별 행</b>을 거르고, HAVING은 <b>묶은 뒤 그룹 단위</b>로 거른다. "평균 나이가 30 미만인 취미만 출력"처럼 <b>집계 함수(avg, count 등)에 대한 조건</b>은 반드시 HAVING에 써야 한다.</div>
+    <div class="tip"><b>중복 처리:</b> SQL의 SELECT는 <b>기본적으로 중복을 허용</b>한다. 중복을 없애려면 <code>SELECT DISTINCT</code>를 써야 한다. 관계대수의 π가 자동으로 중복을 제거하는 것과 <b>정반대</b>이므로 결과 투플 수를 세는 문제에서 반드시 확인할 것.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧩</span>주요 개념 — 정규화</h2>
+
+    <h3>이상 현상(Anomaly) 3종 <span class="page-ref">📖 기출문제집 p.561~562</span></h3>
+    <table>
+      <tr><th>이상</th><th>무슨 일이 벌어지나</th></tr>
+      <tr><td><b>수정 이상</b></td><td>반복 저장된 데이터 중 <b>일부만 고치면</b> 값이 서로 어긋나 불일치 발생</td></tr>
+      <tr><td><b>삽입 이상</b></td><td><b>불필요한 정보를 함께 넣지 않고는</b> 원하는 정보를 저장할 수 없음</td></tr>
+      <tr><td><b>삭제 이상</b></td><td><b>유용한 정보까지 함께 삭제되지 않고는</b> 원하는 정보를 지울 수 없음</td></tr>
+    </table>
+    <div class="analogy"><b>예시 하나로 셋 다 이해하기:</b> [학번, 이름, 학과, 학과사무실] 한 테이블에 다 넣었다고 하자. ① 학과사무실이 바뀌면 그 학과 학생 <b>전원의 행</b>을 고쳐야 하는데 일부만 고치면 불일치 → <b>수정 이상</b>. ② 아직 학생이 없는 신설 학과의 사무실 정보를 넣으려면 <b>가짜 학생</b>을 만들어야 함 → <b>삽입 이상</b>. ③ 어떤 학과의 마지막 학생을 지우면 <b>그 학과 사무실 정보까지</b> 사라짐 → <b>삭제 이상</b>.</div>
+
+    <h3>함수 종속(Functional Dependency)</h3>
+    <p><b>A → B</b>는 "A값이 정해지면 B값도 하나로 정해진다"는 뜻이고, "B는 A에 <b>함수적으로 종속</b>된다"고 읽는다. 정규형 판별은 결국 <b>어떤 종류의 종속이 남아 있는지</b>를 보는 일이다.</p>
+    <table>
+      <tr><th>종속 종류</th><th>정의</th><th>예시 (기본키 = {A, B})</th></tr>
+      <tr><td><b>완전 함수 종속</b></td><td>기본키 <b>전체</b>에 종속 (일부만으로는 결정 안 됨)</td><td>{A, B} → C</td></tr>
+      <tr><td><b>부분 함수 종속</b></td><td>기본키의 <b>일부분</b>만으로도 결정됨</td><td>A → C (A는 기본키의 일부)</td></tr>
+      <tr><td><b>이행 함수 종속</b></td><td>A → B 이고 B → C 이면 A → C 가 간접적으로 성립</td><td>A → B, B → C</td></tr>
+    </table>
+
+    <h3>정규형 단계와 판별 절차</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="정규형 단계 사다리: 1정규형에서 부분함수종속을 제거하면 2정규형, 이행함수종속을 제거하면 3정규형, 결정자가 후보키가 아닌 종속을 제거하면 BCNF가 된다">
+        <defs>
+          <marker id="nf1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="40" y="235" width="200" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="140" y="255" font-size="13" text-anchor="middle" font-weight="700">비정규 릴레이션</text>
+        <text x="140" y="272" font-size="10.5" text-anchor="middle" opacity="0.8">값이 원자값이 아님</text>
+
+        <line x1="245" y1="250" x2="300" y2="250" stroke="currentColor" stroke-width="1.5" marker-end="url(#nf1)"/>
+        <text x="420" y="246" font-size="11.5">도메인이 <tspan font-weight="700">원자값</tspan>만 갖도록</text>
+        <text x="420" y="264" font-size="11.5" opacity="0.85">(한 칸에 값 하나)</text>
+
+        <rect x="40" y="175" width="200" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="140" y="203" font-size="13" text-anchor="middle" font-weight="700">제1정규형 (1NF)</text>
+        <line x1="245" y1="190" x2="300" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#nf1)"/>
+        <text x="420" y="186" font-size="11.5"><tspan font-weight="700">부분 함수 종속</tspan> 제거</text>
+        <text x="420" y="204" font-size="11.5" opacity="0.85">(기본키 일부에만 딸린 속성 분리)</text>
+
+        <rect x="40" y="115" width="200" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="140" y="143" font-size="13" text-anchor="middle" font-weight="700">제2정규형 (2NF)</text>
+        <line x1="245" y1="130" x2="300" y2="130" stroke="currentColor" stroke-width="1.5" marker-end="url(#nf1)"/>
+        <text x="420" y="126" font-size="11.5"><tspan font-weight="700">이행 함수 종속</tspan> 제거</text>
+        <text x="420" y="144" font-size="11.5" opacity="0.85">(A→B→C 사슬 끊기)</text>
+
+        <rect x="40" y="55" width="200" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="140" y="83" font-size="13" text-anchor="middle" font-weight="700">제3정규형 (3NF)</text>
+        <line x1="245" y1="70" x2="300" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#nf1)"/>
+        <text x="420" y="66" font-size="11.5">모든 <tspan font-weight="700">결정자가 후보키</tspan>가 되도록</text>
+        <text x="420" y="84" font-size="11.5" opacity="0.85">(후보키가 아닌 결정자 제거)</text>
+
+        <rect x="40" y="10" width="200" height="35" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="140" y="33" font-size="13" text-anchor="middle" font-weight="700">BCNF</text>
+      </svg>
+      <figcaption>정규형 사다리 — 아래에서 위로 올라갈 때마다 특정 종류의 종속을 하나씩 제거한다. <b>정규화의 일차 목표는 제3정규형 획득</b>이며, 3NF에 남은 중복까지 없앤 것이 BCNF다.</figcaption>
+    </figure>
+    <div class="deep">
+      <h4>정규형 판별 3단계 — 문제 푸는 순서 그대로</h4>
+      <ol class="steps">
+        <li><b>기본키를 확인한다.</b> 복합키({A,B})인지 단일키(A)인지가 출발점이다</li>
+        <li><b>부분 함수 종속이 있는가?</b> 기본키가 {A,B}인데 <b>A → C</b>처럼 <b>키의 일부만으로</b> 결정되는 속성이 있으면 → <b>1NF까지만</b> 만족 (2NF 실패)</li>
+        <li><b>이행 함수 종속이 있는가?</b> 부분종속은 없는데 <b>A → B, B → C</b> 사슬이 있으면 → <b>2NF까지만</b> 만족 (3NF 실패)</li>
+        <li>둘 다 없으면 <b>3NF</b>. 여기서 <b>모든 결정자가 후보키</b>이기까지 하면 <b>BCNF</b></li>
+      </ol>
+      <p><b>결정적 한 줄:</b> <b>이행종속이 있더라도 부분종속이 먼저 발견되면 그 릴레이션은 1정규형</b>이다. 정규형은 <b>낮은 단계부터 차례로 만족</b>해야 하므로, 아래 단계에서 걸리면 위 단계는 볼 필요도 없다. 2019 지방직·2014 계리직 문제가 정확히 이 논리를 물었다.</p>
+    </div>
+    <div class="tip"><b>정규화의 대가(代價):</b> 정규화를 많이 하면 릴레이션이 여러 개로 쪼개지므로 <b>조인이 늘어나 검색(질의 처리) 시간은 증가</b>한다. 그래서 성능이 중요한 경우 일부러 합치는 <b>반정규화(역정규화)</b>를 하기도 한다. "정규화하면 검색 성능이 향상된다"는 선택지는 오답이다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li><b>DDL = CREATE·ALTER·DROP·RENAME·TRUNCATE</b>, <b>DML = SELECT·INSERT·UPDATE·DELETE</b>, <b>DCL = GRANT·REVOKE</b></li>
+      <li><b>DELETE는 DML(행 삭제), DROP은 DDL(테이블 삭제)</b> — 최다 함정</li>
+      <li>테이블 삭제는 <code>DROP TABLE 이름;</code> — <code>ALTER TABLE 이름 DROP;</code>은 잘못된 문법</li>
+      <li>SELECT문에서 <b>SELECT·FROM은 필수, WHERE는 선택</b></li>
+      <li><b>SELECT는 중복 허용</b> → 결과 투플 수 = 원본 행 수, <b>DISTINCT</b>를 써야 중복 제거</li>
+      <li>집계 함수 조건은 <b>WHERE가 아니라 HAVING</b></li>
+      <li>정규화는 릴레이션을 <b>분해</b>하는 과정 (병합 아님), 고려 대상은 <b>속성 간 관계</b>(튜플 간 관계 아님)</li>
+      <li>정규형 판별: <b>부분종속 → 1NF / 이행종속 → 2NF / 둘 다 없음 → 3NF</b></li>
+      <li>정규화를 진행하면 <b>검색 시간은 오히려 증가</b>할 수 있다</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>DELETE</th><th>DROP</th><th>TRUNCATE</th></tr>
+      <tr><td>분류</td><td><b>DML</b></td><td><b>DDL</b></td><td><b>DDL</b></td></tr>
+      <tr><td>지우는 것</td><td>조건에 맞는 <b>행</b></td><td><b>테이블 자체</b></td><td>테이블의 <b>모든 행</b></td></tr>
+      <tr><td>구조는?</td><td>남음</td><td><b>사라짐</b></td><td>남음</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>WHERE</th><th>HAVING</th></tr>
+      <tr><td>거르는 시점</td><td>그룹으로 묶기 <b>전</b></td><td>그룹으로 묶은 <b>후</b></td></tr>
+      <tr><td>대상</td><td>개별 행</td><td>그룹</td></tr>
+      <tr><td>집계함수 사용</td><td>불가</td><td><b>가능</b></td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>부분 함수 종속</th><th>이행 함수 종속</th></tr>
+      <tr><td>형태</td><td>키 {A,B} 중 <b>A만으로</b> C 결정</td><td>A → B → C <b>사슬</b></td></tr>
+      <tr><td>제거하면</td><td>1NF → <b>2NF</b></td><td>2NF → <b>3NF</b></td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2024 지방직 · 기출문제집 p.579</span></div>
+      <p class="q-body">DDL(Data Definition Language) 명령어에 <b>해당하지 않는</b> 것은?</p>
+      <ol class="choices">
+        <li>ALTER</li>
+        <li>DROP</li>
+        <li>SELECT</li>
+        <li>CREATE</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ SELECT</p>
+        <div class="explain">
+          <p>SELECT는 테이블에서 조건에 맞는 데이터를 <b>검색</b>하는 명령이므로 <b>DML</b>이다. ALTER·DROP·CREATE는 모두 테이블 <b>구조</b>를 다루는 DDL.</p>
+          <p><b>즉시 판별법:</b> 그 명령을 실행했을 때 <b>테이블의 모양(스키마)이 바뀌는가</b>를 자문해라. 바뀌면 DDL, 안에 든 데이터만 바뀌면 DML이다. SELECT는 아무것도 바꾸지 않고 읽기만 하므로 DML(조작어)로 분류된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2019 계리직 · 기출문제집 p.580</span></div>
+      <p class="q-body">SQL의 명령을 DDL, DML, DCL로 구분할 경우, 이를 <b>바르게 짝지은</b> 것은?</p>
+      <table>
+        <tr><th></th><th>DDL</th><th>DML</th><th>DCL</th></tr>
+        <tr><td>①</td><td>RENAME</td><td>SELECT</td><td>COMMIT</td></tr>
+        <tr><td>②</td><td>UPDATE</td><td>SELECT</td><td>GRANT</td></tr>
+        <tr><td>③</td><td>RENAME</td><td>ALTER</td><td>COMMIT</td></tr>
+        <tr><td>④</td><td>UPDATE</td><td>ALTER</td><td>GRANT</td></tr>
+      </table>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>RENAME</b>은 테이블 이름을 바꾸므로 <b>DDL</b> ✓ → DDL 자리에 UPDATE가 온 ②·④ 소거</li>
+            <li><b>SELECT</b>는 데이터 검색이므로 <b>DML</b> ✓ → DML 자리에 ALTER(DDL)가 온 ③ 소거</li>
+            <li>남은 ①에서 <b>COMMIT</b>은 엄밀히 TCL이지만, <b>제어 기능이라는 공통점 때문에 DCL의 일부로 분류</b>하기도 하므로 3분류 문제에서는 DCL 자리에 올 수 있다</li>
+          </ol>
+          <p><b>주의:</b> COMMIT을 보고 "이건 TCL인데?"라며 ①을 배제하면 안 된다. <b>3분류로만 묻는 문제에서는 TCL을 DCL에 포함</b>시키는 것이 관례다. 다른 선택지들이 명백히 틀렸다면 남은 것을 답으로 고르는 소거법이 안전하다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2017 하반기 국가직 · 기출문제집 p.581</span></div>
+      <p class="q-body">관계형 데이터베이스 언어인 SQL에 대한 설명으로 <b>옳은</b> 것은?</p>
+      <ol class="choices">
+        <li>데이터 정의어(DDL)를 이용하여 데이터를 검색한다.</li>
+        <li>데이터 조작어(DML)를 이용하여 권한을 부여하거나 취소한다.</li>
+        <li>DELETE 문은 테이블을 삭제하는 데 사용한다.</li>
+        <li>SELECT 문에서 FROM 절은 필수 항목이고, WHERE 절은 선택 항목이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>①</b> 데이터 <b>검색</b>은 DDL이 아니라 <b>DML</b>(SELECT)의 역할 → 틀림</li>
+            <li><b>②</b> <b>권한 부여·취소</b>는 DML이 아니라 <b>DCL</b>(GRANT/REVOKE) → 틀림</li>
+            <li><b>③</b> DELETE는 <b>행</b>을 삭제한다. <b>테이블 삭제는 DROP</b> → 틀림</li>
+            <li><b>④</b> SELECT와 FROM은 없으면 문장이 성립하지 않는 <b>필수</b>, WHERE는 조건이 없으면 생략 가능한 <b>선택</b> → <b>옳음</b></li>
+          </ol>
+          <p><b>세 가지 함정이 한 문제에:</b> ①②③은 각각 <b>DDL↔DML 혼동</b>, <b>DML↔DCL 혼동</b>, <b>DELETE↔DROP 혼동</b>이다. 이 세 쌍만 확실히 구분하면 SQL 분류 문제는 대부분 처리된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2019 서울시 · 기출문제집 p.582</span></div>
+      <p class="q-body">판매 데이터베이스에 대한 다음 SQL문 중 가장 <b>옳지 않은</b> 것은?<br>
+      <span style="font-size:12.5px;color:var(--text-dim);">고객(<u>고객아이디</u>, 고객이름, 나이, 등급, 직업, 적립금) / 주문(<u>주문번호</u>, 주문제품, 주문고객, 수량, 배송지, 주문일자) / 배송업체(<u>업체번호</u>, 업체명, 주소, 전화번호)</span></p>
+      <ol class="choices">
+        <li>고객 테이블에 가입날짜를 추가 — <code>ALTER TABLE 고객 ADD 가입날짜 DATE;</code></li>
+        <li>주문 테이블에서 배송지를 삭제 — <code>ALTER TABLE 주문 DROP COLUMN 배송지;</code></li>
+        <li>고객 테이블에 18세 이상 제약조건 추가 — <code>ALTER TABLE 고객 ADD CONSTRAINT CHK_AGE CHECK(나이 &gt;= 18);</code></li>
+        <li>배송업체 테이블을 삭제 — <code>ALTER TABLE 배송업체 DROP;</code></li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>테이블 <b>전체</b>를 삭제하려면 <code>DROP TABLE 배송업체;</code>라고 써야 한다. <b>ALTER TABLE은 이미 존재하는 테이블의 "구조 일부"를 바꾸는</b> 명령이라, 테이블 자체를 없애는 데 쓸 수 없다.</p>
+          <ol class="steps">
+            <li>①은 <b>열 추가</b> → ALTER TABLE ... ADD ✓</li>
+            <li>②는 <b>열 삭제</b> → ALTER TABLE ... DROP COLUMN ✓ (COLUMN을 명시했다는 점에 주목)</li>
+            <li>③은 <b>제약조건 추가</b> → ALTER TABLE ... ADD CONSTRAINT ✓</li>
+            <li>④는 <b>테이블 삭제</b>인데 ALTER를 썼다 → ✗</li>
+          </ol>
+          <p><b>구별 한 줄:</b> <b>테이블 안의 무언가를 바꾸면 ALTER, 테이블 자체를 없애면 DROP TABLE.</b> ②번의 <code>DROP COLUMN</code>과 ④번의 <code>DROP</code>이 비슷해 보여 헷갈리게 만든 문제다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2007 국가직 7급 · 기출문제집 p.582</span></div>
+      <p class="q-body">학생(STUDENT) 테이블에 <b>영문학과 50명, 법학과 100명, 수학과 50명</b>의 정보가 저장되어 있다. 다음 세 SQL문의 실행 결과 <b>투플 수</b>는 각각 얼마인가?<br>
+      <span style="display:block;margin-top:6px;padding:8px 12px;background:var(--surface-2);border-radius:6px;font-family:monospace;font-size:12.5px;line-height:1.9;">
+      ㉠ SELECT DEPT FROM STUDENT;<br>
+      ㉡ SELECT DISTINCT DEPT FROM STUDENT;<br>
+      ㉢ SELECT NAME FROM STUDENT WHERE DEPT = '영문학과';</span></p>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답: ㉠ 200, ㉡ 3, ㉢ 50</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>㉠</b> 전체 학생의 학과를 검색한다. 학생 수는 50+100+50 = <b>200명</b>이고, <b>SELECT는 중복을 허용</b>하므로 같은 학과명이 반복 출력된다 → <b>200</b></li>
+            <li><b>㉡</b> <b>DISTINCT</b>가 붙었으므로 중복 학과명이 제거된다. 학과는 영문·법학·수학 <b>3개</b> → <b>3</b></li>
+            <li><b>㉢</b> 영문학과 학생의 <b>이름</b>을 검색한다. 동명이인이 있어도 DISTINCT가 없으므로 그대로 출력 → 영문학과 학생 수인 <b>50</b></li>
+          </ol>
+          <p><b>이 문제의 교훈:</b> SQL 결과 투플 수 문제는 <b>DISTINCT의 유무</b>만 확인하면 된다. 없으면 <b>조건에 맞는 행 수 그대로</b>, 있으면 <b>서로 다른 값의 개수</b>다. ㉢에서 "이름이니까 중복을 빼야지"라고 생각하면 틀린다 — 문법에 DISTINCT가 없으면 DBMS는 중복을 제거하지 않는다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2016 지방직 · 기출문제집 p.562~563</span></div>
+      <p class="q-body">관계형 데이터베이스 설계에서의 정규화에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>질의처리 성능 향상을 위해 비효율적인 릴레이션들을 병합하는 과정이다.</li>
+        <li>데이터 중복을 감소시켜 저장 공간의 효율성을 향상시킨다.</li>
+        <li>삽입, 삭제, 수정 시 발생할 수 있는 이상(anomaly) 현상을 제거한다.</li>
+        <li>정규형에는 1NF, 2NF, 3NF, BCNF, 4NF, 5NF 등이 있다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>정규화는 애트리뷰트 간의 <b>종속 관계를 분석해 여러 릴레이션으로 분해</b>하는 과정이다. <b>병합</b>이 아니라 <b>분해</b>다.</p>
+          <p>게다가 방향도 반대다 — 정규화를 진행하면 릴레이션이 여러 개로 쪼개져 <b>조인이 늘어나므로 검색(질의 처리) 시간은 일반적으로 증가</b>한다. 즉 ①번은 "병합"이라는 단어와 "성능 향상"이라는 목적 <b>두 군데 모두</b> 틀렸다.</p>
+          <div class="tip" style="margin-top:8px;"><b>참고 — 반정규화:</b> 실무에서 조회 성능이 절실하면 일부러 테이블을 합치기도 하는데, 이것을 <b>반정규화(역정규화)</b>라 부른다. ①번 문장은 정규화가 아니라 반정규화의 설명에 가깝다.</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2010 계리직 · 기출문제집 p.562</span></div>
+      <p class="q-body">데이터베이스 릴레이션을 정규화할 때 고려해야 할 사항과 <b>가장 관련이 없는</b> 것은?</p>
+      <ol class="choices">
+        <li>원하지 않는 데이터의 중복을 제거한다.</li>
+        <li>원하지 않는 데이터의 종속을 제거한다.</li>
+        <li>한 릴레이션 내의 <b>속성들</b> 간의 관계를 고려한다.</li>
+        <li>한 릴레이션 내의 <b>튜플들</b> 간의 관계를 고려한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>정규화는 <b>속성(열) 사이의 함수적 종속 관계</b>를 분석하는 작업이다. <b>튜플(행)끼리의 관계는 고려 대상이 아니다.</b></p>
+          <p><b>왜 그런가:</b> 함수 종속 A → B는 "A라는 <b>속성</b>의 값이 B라는 <b>속성</b>의 값을 결정한다"는 진술이다. 행과 행 사이에는 애초에 이런 결정 관계를 정의하지 않는다(릴레이션의 특성상 <b>튜플 간에는 순서도 관계도 없다</b>).</p>
+          <p><b>선택지 대조:</b> ③번(속성들 간)과 ④번(튜플들 간)이 <b>한 글자만 다르게</b> 나란히 배치된 전형적인 함정이다. 이런 쌍이 보이면 둘 중 하나가 답이라고 보면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2019 지방직 · 기출문제집 p.565</span></div>
+      <p class="q-body">릴레이션 R = {A, B, C, D, E}가 함수적 종속성 <b>{A, B} → D</b>, <b>A → C</b>, <b>{A, B} → E</b>를 만족할 때, R이 속할 수 있는 <b>가장 높은 차수의 정규형</b>은? (단, 기본키는 복합속성 {A, B}이고, 모든 속성값은 원자값이다)</p>
+      <ol class="choices">
+        <li>제1정규형</li>
+        <li>제2정규형</li>
+        <li>제3정규형</li>
+        <li>보이스/코드 정규형</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 제1정규형</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>1NF 확인:</b> 모든 속성값이 원자값이라고 주어졌으므로 1NF는 만족 ✓</li>
+            <li><b>2NF 확인 (부분종속 찾기):</b> 기본키가 <b>{A, B}</b>인데, 종속성 중 <b>A → C</b>가 있다. A는 <b>기본키의 일부</b>이므로 이것은 <b>부분 함수 종속</b>이다 → <b>2NF 실패</b></li>
+            <li>2NF를 만족하지 못하므로 3NF·BCNF는 볼 필요도 없다 → 가장 높은 정규형은 <b>1NF</b></li>
+          </ol>
+          <p><b>풀이 요령:</b> 복합키({A,B})가 주어지면 <b>가장 먼저 "키의 일부만 왼쪽에 있는 종속"이 있는지</b> 훑어라. <code>A → ○</code> 또는 <code>B → ○</code> 형태가 하나라도 보이면 그 즉시 <b>답은 1NF</b>로 확정된다. 다른 종속을 분석할 필요가 없어 10초 만에 풀린다.</p>
+          <p><b>함정:</b> "이행종속은 없으니 3NF 아닌가?"라고 생각하면 틀린다. 정규형은 <b>아래 단계를 먼저 통과해야</b> 위 단계를 논할 수 있다. 부분종속에서 걸리면 거기서 끝이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2018 교육청 · 기출문제집 p.565</span></div>
+      <p class="q-body">릴레이션 스키마 R(A, B, C, D, E, F)에서 함수적 종속이 <b>{(A,B) → C, B → D, A → E, E → F}</b>일 때, <b>제3정규형을 만족하도록</b> R을 분해한 것으로 옳은 것은? (R의 기본키는 (A, B))</p>
+      <ol class="choices">
+        <li>R1(A,B,C,D) / R2(A,E) / R3(E,F)</li>
+        <li>R1(A,B,C) / R2(B,D) / R3(A,E,F)</li>
+        <li>R1(A,B,C) / R2(B,D) / R3(A,E) / R4(E,F)</li>
+        <li>R1(A,C) / R2(B,C) / R3(B,D) / R4(A,E,F)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ R1(A,B,C) / R2(B,D) / R3(A,E) / R4(E,F)</p>
+        <div class="explain">
+          <p>종속을 하나씩 보며 <b>문제가 되는 것을 떼어내는</b> 방식으로 푼다.</p>
+          <ol class="steps">
+            <li><b>(A,B) → C</b>: 기본키 전체가 결정하므로 <b>완전 함수 종속 — 정상</b>. 이건 남긴다 → <b>R1(A, B, C)</b></li>
+            <li><b>B → D</b>: 키의 일부(B)가 D를 결정 → <b>부분 종속</b>. 분리해야 2NF → <b>R2(B, D)</b></li>
+            <li><b>A → E</b>: 역시 키의 일부(A)가 E를 결정 → <b>부분 종속</b>. 분리 → <b>R3(A, E)</b></li>
+            <li><b>E → F</b>: E는 키가 아닌 속성인데 F를 결정한다. A → E → F 사슬이 되므로 <b>이행 종속</b>. 3NF를 만족하려면 <b>따로 떼어내야</b> 한다 → <b>R4(E, F)</b></li>
+          </ol>
+          <p><b>오답이 틀린 이유:</b></p>
+          <ul>
+            <li><b>①</b> R1에 D가 남아 있어 <b>B → D 부분종속이 그대로</b>다</li>
+            <li><b>②</b> R3(A,E,F) 안에 <b>A → E → F 이행종속이 살아 있다</b> → 3NF 아님</li>
+            <li><b>④</b> R4(A,E,F)에 이행종속이 남아 있고, R1(A,C)·R2(B,C)로 쪼갠 것은 <b>(A,B) → C라는 원래 종속을 표현하지 못한다</b>(정보 손실)</li>
+          </ul>
+          <p><b>핵심 감각:</b> 분해 결과의 각 릴레이션에서 <b>"키가 아닌 속성이 다른 비키 속성을 결정하고 있지 않은지"</b>를 확인하면 3NF 위반을 잡아낼 수 있다. ②·④처럼 <b>(A, E, F)가 한 덩어리로 남아 있으면 거의 항상 오답</b>이다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2015 서울시 · 기출문제집 p.565~566</span></div>
+      <p class="q-body">스키마 R(A, B, C, D)가 함수적 종속 <b>{A → B, A → C}</b>를 가질 때, 다음 중 <b>BCNF 정규형</b>을 만족하는 분해는?</p>
+      <ol class="choices">
+        <li>S(A, B, C, D)</li>
+        <li>S(A, B)와 T(A, C, D)</li>
+        <li>S(A, C)와 T(A, B, D)</li>
+        <li>S(A, B, C)와 T(A, D)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ S(A, B, C)와 T(A, D)</p>
+        <div class="explain">
+          <p>BCNF의 조건은 <b>"모든 결정자(→의 왼쪽)가 후보키여야 한다"</b>이다. 각 분해에서 이 조건을 검사한다.</p>
+          <ol class="steps">
+            <li><b>①</b> S(A,B,C,D): A는 B·C는 결정하지만 <b>D는 결정하지 못하므로</b> 후보키는 (A,D)다. 그런데 결정자 A는 후보키가 아니다 → <b>BCNF 아님</b></li>
+            <li><b>②</b> S(A,B)는 A가 키이므로 OK. 그러나 T(A,C,D)에서 A → C가 성립하는데 T의 키는 (A,D)이므로 <b>A는 후보키가 아니다</b> → BCNF 아님</li>
+            <li><b>③</b> S(A,C)는 OK. 그러나 T(A,B,D)에서 A → B가 성립하고 키는 (A,D) → 같은 이유로 <b>BCNF 아님</b></li>
+            <li><b>④</b> S(A,B,C): A → B, A → C가 성립하고 <b>A가 이 릴레이션의 키</b>다 → BCNF ✓ / T(A,D): 자명하지 않은 종속이 없고 (A,D)가 키다 → BCNF ✓ → <b>둘 다 만족</b></li>
+          </ol>
+          <p><b>감각적으로 보는 법:</b> <b>A가 결정하는 속성들(B, C)은 A와 함께 한 테이블에</b> 모으고, A가 결정하지 못하는 D는 <b>따로</b> 빼내면 된다. 즉 "같은 결정자에 딸린 것끼리 모아라"가 요령이다. ②·③처럼 <b>A가 결정하는 속성 하나와 결정하지 못하는 D를 같은 테이블에 섞으면</b> 반드시 위반이 생긴다.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>이어서 볼 문서</h2>
+    <p>SQL 명령어의 상세 문법은 <a href="SQL_분류.md">SQL 분류</a>, 정규화 단계별 개념 설명은 <a href="정규화.md">정규화</a>, 관계대수와의 대응 관계는 <a href="관계대수트리.html">관계대수 연산과 결과 릴레이션</a> 문서를 참고.</p>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">DDL</span>
+      <span class="chip">DML</span>
+      <span class="chip">DCL</span>
+      <span class="chip">TCL</span>
+      <span class="chip">CREATE</span>
+      <span class="chip">ALTER</span>
+      <span class="chip">DROP</span>
+      <span class="chip">RENAME</span>
+      <span class="chip">GRANT·REVOKE</span>
+      <span class="chip">COMMIT·ROLLBACK</span>
+      <span class="chip">DISTINCT</span>
+      <span class="chip">WHERE·HAVING</span>
+      <span class="chip">GROUP BY</span>
+      <span class="chip">이상현상</span>
+      <span class="chip">함수종속</span>
+      <span class="chip">부분함수종속</span>
+      <span class="chip">이행함수종속</span>
+      <span class="chip">1NF</span>
+      <span class="chip">2NF</span>
+      <span class="chip">3NF</span>
+      <span class="chip">BCNF</span>
+      <span class="chip">반정규화</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -11,206 +11,697 @@
 
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">11. 군무원 기출문제</a> / 2021년</div>
   <h1 class="page-title">2021년 군무원 기출문제</h1>
-  <p class="page-subtitle">25문항 · 이미 배운 개념의 복습용 — 새 개념만 간단히 추가 설명 · 기출문제집 p.859~869</p>
+  <p class="page-subtitle">25문항 전체 · 먼저 풀고 해설을 펼쳐 채점하세요 · 기출문제집 p.859~869</p>
 
   <div class="summary-box">
-    <span class="tag">핵심 요약</span>
-    <p>컴퓨터구조·운영체제·네트워크 기본 개념 재확인 위주. C++ 스트림 포맷팅, Java 문자열 함수처럼 <b>코드 실행결과 추적 문제</b>가 이 회차의 특징.</p>
+    <span class="tag">풀이 방법</span>
+    <p>각 문제의 <b>지문과 선택지만 보고 먼저 답을 고른 뒤</b>, "해설 보기"를 눌러 채점하세요.</p>
+    <p>해설에는 <b>정답 · 풀이 과정 · 오답 선택지가 틀린 이유 · 관련 개념 문서 링크</b>가 들어 있습니다.</p>
   </div>
+
+  <section class="block">
+    <h2><span class="emoji">📊</span>2021년 출제 경향</h2>
+    <div class="deep">
+      <h4>한눈에 보는 분포</h4>
+      <p><b>운영체제 7 · 네트워크 6 · 컴퓨터구조 5 · DB 2 · 프로그래밍언어 2 · 신기술·약어 2 · 정보보안 1</b>문항. 2022년보다 <b>운영체제 비중이 눈에 띄게 높다.</b></p>
+      <p><b>계산 문제가 거의 없다</b> — 8진수→16진수 변환(Q19)과 코드 실행 결과 추적(Q24·Q25) 정도뿐이고, 나머지 22문항은 <b>용어의 정의를 정확히 아는지</b>만 묻는다. 즉 이 해는 <b>"개념 한 줄 정의 암기"로 승부가 나는 회차</b>였다.</p>
+      <p><b>약어 문제가 2개</b>(Q2 클라우드 IaaS/PaaS/SaaS, Q14 SNS/UCC/ERP/AR) 나온 것이 특징이다. 군무원 시험은 이렇게 <b>영어 약어 풀이를 직접 묻는 문제</b>가 매년 1~2개씩 고정 출제되므로, 약어는 철자까지 외워두는 편이 안전하다.</p>
+      <p><b>가장 잘 틀리는 3문항</b>: Q6(비동기 인터럽트 — 동기/비동기 구분 기준을 모르면 못 품), Q7(임계구역 — "효율을 높인다"는 말에 낚임), Q24(C++ 출력 서식 — width/precision/fill 세 개를 동시에 적용해야 함).</p>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">🖥️</span>컴퓨터구조</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q1. SRAM은 DRAM보다 속도가 느리다? <span class="page-ref">p.859</span></p>
-      <p class="a">정답 ③(틀린 설명) — SRAM이 DRAM보다 <b>빠르다</b>(그래서 캐시로 쓰임). 대신 더 비싸고 집적도가 낮음</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">마이크로오퍼레이션과 기억장치</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2021 군무원 · 기출문제집 p.859</span></div>
+      <p class="q-body"><b>SRAM</b>(Static RAM)과 <b>DRAM</b>(Dynamic RAM)에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>SRAM은 캐시(cache) 메모리로 사용된다.</li>
+        <li>DRAM은 메인(main) 메모리로 사용된다.</li>
+        <li>SRAM은 DRAM에 비해 속도가 느리다.</li>
+        <li>동일 크기의 메모리인 경우, SRAM이 DRAM에 비해 가격이 비싸다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (SRAM이 DRAM보다 <b>빠르다</b>)</p>
+        <div class="explain">
+          <p>논리적으로 따져보면 ③이 틀렸다는 걸 바로 알 수 있다 — <b>①에서 SRAM을 캐시로 쓴다고 했는데, 캐시는 "빠른 메모리"를 쓰는 자리다.</b> 느린 메모리를 캐시로 쓸 이유가 없다.</p>
+          <table>
+            <tr><th>구분</th><th>SRAM</th><th>DRAM</th></tr>
+            <tr><td>저장 소자</td><td><b>플립플롭</b> (회로)</td><td><b>축전기</b> (전하)</td></tr>
+            <tr><td>재충전(refresh)</td><td>불필요</td><td><b>필요</b> (전하가 새어나감)</td></tr>
+            <tr><td>속도</td><td><b>빠름</b></td><td>느림</td></tr>
+            <tr><td>가격·집적도</td><td>비쌈 / 집적도 낮음</td><td>쌈 / 집적도 높음</td></tr>
+            <tr><td>용도</td><td><b>캐시</b></td><td><b>주기억장치</b></td></tr>
+          </table>
+          <p>💡 <b>핵심 논리:</b> DRAM은 축전기에 저장해서 주기적으로 <b>재충전(refresh)하느라 시간을 뺏긴다</b> → 그래서 느리다. SRAM은 회로가 값을 붙들고 있어 재충전이 필요 없다 → 빠르지만 회로가 복잡해 비싸고 집적도가 낮다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">마이크로오퍼레이션과 기억장치</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q4. CPU-메인메모리 속도차 완화를 위해 그 사이에 두는 메모리는? <span class="page-ref">p.859</span></p>
-      <p class="a">정답 ③ 캐시(Cache)</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2021 군무원 · 기출문제집 p.860</span></div>
+      <p class="q-body">CPU와 메인 메모리의 <b>속도 차이 때문에 발생하는 명령어 처리 성능 저하</b>를 방지하기 위하여, CPU와 메인 메모리 사이에 설치하는 메모리로 옳은 것은?</p>
+      <ol class="choices">
+        <li>레지스터(register)</li>
+        <li>ROM(Read Only Memory)</li>
+        <li>캐시(cache)</li>
+        <li>I/O 버퍼(buffer)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 캐시(cache)</p>
+        <div class="explain">
+          <p>"<b>CPU와 주기억장치 사이</b>"라는 위치 표현이 나오면 답은 거의 항상 <b>캐시</b>다.</p>
+          <ul>
+            <li><b>레지스터</b>: CPU <b>내부</b>에 있는 최상위 저장소 — "사이"가 아니라 CPU 안쪽</li>
+            <li><b>ROM</b>: 비휘발성 읽기전용 메모리(BIOS 저장용) — 속도 완충과 무관</li>
+            <li><b>I/O 버퍼</b>: CPU와 <b>입출력장치</b> 사이의 속도 차를 완충 — 대상이 메모리가 아님</li>
+          </ul>
+          <p>💡 <b>비슷한 개념 구분:</b> "속도 차를 메운다"는 개념은 여러 곳에 나온다. <b>캐시</b>는 CPU↔메모리, <b>버퍼</b>는 CPU↔입출력장치, <b>스풀(SPOOL)</b>은 CPU↔프린터(디스크를 버퍼로 씀). 어느 두 장치 사이인지로 구분하면 된다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q18. 그래픽·사운드를 동시에 전송하는 포트는? <span class="page-ref">p.865</span></p>
-      <p class="a">정답 ③ HDMI — 디지털 음향·영상을 케이블 하나로 전송</p>
-      <p class="memo">❌ D-SUB·DVI는 영상 전용, USB는 범용 인터페이스(영상+음향 겸용 아님)</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 18</span><span class="q-src">2021 군무원 · 기출문제집 p.864</span></div>
+      <p class="q-body"><b>그래픽과 사운드를 동시에</b> 모니터나 TV로 전송할 수 있는 포트 연결 단자로 적절한 것은?</p>
+      <ol class="choices">
+        <li>D-SUB</li>
+        <li>DVI</li>
+        <li>HDMI</li>
+        <li>USB</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ HDMI</p>
+        <div class="explain">
+          <p><b>HDMI</b>(High Definition Multimedia Interface)는 이름 그대로 <b>멀티미디어</b> 인터페이스로, <b>영상과 음향을 케이블 하나로</b> 전송한다.</p>
+          <table>
+            <tr><th>단자</th><th>전송 내용</th><th>신호</th></tr>
+            <tr><td>D-SUB (VGA)</td><td>영상만</td><td><b>아날로그</b></td></tr>
+            <tr><td>DVI</td><td><b>영상만</b> (음향 X)</td><td>디지털</td></tr>
+            <tr><td><b>HDMI</b></td><td><b>영상 + 음향</b></td><td>디지털</td></tr>
+            <tr><td>USB</td><td>범용 데이터</td><td>디지털</td></tr>
+          </table>
+          <p><b>함정:</b> ② DVI는 HDMI와 똑같이 디지털 영상을 보내지만 <b>소리는 전송하지 못한다</b>. "동시에"라는 단어가 DVI를 걸러내는 열쇠다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/컴퓨터인터페이스와멀티미디어.html">컴퓨터 인터페이스와 멀티미디어</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q19. 8진수 5526을 16진수로 변환하면? <span class="page-ref">p.865</span></p>
-      <p class="a">정답 ① B56</p>
-      <div class="tip" style="margin-top:8px;">
-        <b>8진수 → 16진수는 곧바로 안 되고 2진수를 거쳐야 한다</b>
-        <ol class="steps">
-          <li>8진수 한 자리 → 2진수 3자리: 5=101, 5=101, 2=010, 6=110 → 101 101 010 110</li>
-          <li>2진수를 <b>4자리씩 묶어</b> 재배열: 1011 0101 0110</li>
-          <li>4자리씩 16진수로 변환: 1011=B, 0101=5, 0110=6</li>
-          <li>결과: <b>B56</b></li>
-        </ol>
-      </div>
-      <p class="memo">💡 관련: <a href="../03_네트워크/../01_컴퓨터구조/데이터표현과진법.html">데이터표현과 진법</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 19</span><span class="q-src">2021 군무원 · 기출문제집 p.864~865</span></div>
+      <p class="q-body">8진수 <code>5526</code>을 <b>16진수로 변환</b>한 값으로 적절한 것은?</p>
+      <ol class="choices">
+        <li>B56</li>
+        <li>A56</li>
+        <li>B46</li>
+        <li>A57</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① B56</p>
+        <div class="explain">
+          <p>8진수와 16진수는 직접 변환하지 않는다. <b>반드시 2진수를 거쳐 간다</b>(8=2³, 16=2⁴라 묶는 단위가 다르기 때문).</p>
+          <ol class="steps">
+            <li><b>8진수 → 2진수</b>: 한 자리를 <b>3비트</b>씩 펼친다<br>5 → 101, 5 → 101, 2 → 010, 6 → 110<br>→ <code>101 101 010 110</code></li>
+            <li>이어붙이면 <code>101101010110</code> (12비트)</li>
+            <li><b>2진수 → 16진수</b>: <b>오른쪽부터 4비트</b>씩 다시 묶는다<br><code>1011</code> | <code>0101</code> | <code>0110</code></li>
+            <li>1011₂ = 11 = <b>B</b>, 0101₂ = <b>5</b>, 0110₂ = <b>6</b> → <b>B56</b></li>
+          </ol>
+          <p><b>함정:</b> ② A56은 1011(=B)을 1010(=A)으로 잘못 읽은 경우다. <b>3비트씩 펼치고 → 4비트씩 다시 묶는다</b>는 두 단계를 정확히 지키는 것이 전부다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/데이터표현과진법.html">데이터표현과 진법</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 22</span><span class="q-src">2021 군무원 · 기출문제집 p.867</span></div>
+      <p class="q-body"><b>입출력 명령어를 전담해서 처리</b>하는 장치로 적절한 것은?</p>
+      <ol class="choices">
+        <li>CPU(Central Processing Unit)</li>
+        <li>GPU(Graphics Processing Unit)</li>
+        <li>DMA(Direct Memory Access) 프로세서</li>
+        <li>벡터 프로세서(Vector Processor)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ DMA 프로세서</p>
+        <div class="explain">
+          <p>DMA는 CPU의 명령을 받아 <b>입출력 전송과 그에 필요한 메모리 접근을 CPU 대신 수행</b>한다. 덕분에 CPU는 전송이 진행되는 동안 다른 일을 할 수 있다.</p>
+          <ul>
+            <li><b>CPU</b>: 전체 연산·제어를 담당하지만 <b>입출력 "전담"은 아니다</b> (전담시키면 오히려 비효율)</li>
+            <li><b>GPU</b>: 그래픽·병렬 연산 전용 프로세서</li>
+            <li><b>벡터 프로세서</b>: 배열 데이터를 한 번에 처리하는 연산 장치 (SIMD 계열)</li>
+          </ul>
+          <p>💡 <b>같이 외울 것:</b> 입출력 제어 방식은 <b>프로그램에 의한 I/O → 인터럽트 구동 I/O → DMA → 채널</b> 순으로 발전했고, 뒤로 갈수록 <b>CPU의 개입이 줄어든다.</b> 채널(Channel)은 DMA보다 더 발전해 아예 자체 입출력 명령어를 실행한다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🧵</span>운영체제</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q3. 프로세스를 LWP, 스레드를 HWP라 부른다? <span class="page-ref">p.859~860</span></p>
-      <p class="a">정답 ④(틀린 설명) — 반대다. <b>스레드=LWP(경량), 프로세스=HWP(중량)</b></p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/프로세스와스레드.html">프로세스와 스레드</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2021 군무원 · 기출문제집 p.859</span></div>
+      <p class="q-body"><b>다중 스레드</b>(thread)에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>문맥교환(context switching) 효율성이 프로세스 간에 이루어지는 것보다는 스레드 간에 이루어지는 것이 좋다.</li>
+        <li>다중처리환경에서 한 프로세스 내의 다중 스레드 단위로 병렬실행이 용이하다.</li>
+        <li>한 프로세스 내의 다중 스레드들은 그 프로세스에 할당된 자원(전역자원)을 공유하기 때문에 효율적이다.</li>
+        <li>통상적으로 프로세스를 LWP(Light Weight Process)라 하고, 스레드를 HWP(Heavy Weight Process)라고 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (<b>스레드</b>가 LWP, <b>프로세스</b>가 HWP — 완전히 반대로 서술됨)</p>
+        <div class="explain">
+          <p>이름의 뜻부터 생각하면 헷갈릴 일이 없다. <b>Light Weight = 가볍다</b>. 둘 중 무엇이 가벼운가?</p>
+          <ul>
+            <li><b>프로세스</b>: 코드·데이터·힙·스택 + PCB까지 <b>모든 자원을 독자적으로</b> 보유 → <b>무겁다(HWP)</b></li>
+            <li><b>스레드</b>: 코드·데이터·힙은 <b>공유</b>하고 <b>스택과 레지스터만</b> 따로 가짐 → <b>가볍다(LWP)</b></li>
+          </ul>
+          <p>①②③이 맞는 이유도 전부 이 하나에서 나온다 — 공유하는 게 많으니 <b>문맥교환 시 갈아끼울 것이 적어 빠르고</b>(①), 같은 자원을 쓰니 <b>협업·병렬화가 쉽고</b>(②③) 효율적이다.</p>
+          <p>💡 관련: <a href="../02_운영체제/프로세스와스레드.html">프로세스와 스레드</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q5. 프로세스 정보를 담는 구조체는? <span class="page-ref">p.860</span></p>
-      <p class="a">정답 ② PCB(Process Control Block)</p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/프로세스와스레드.html">프로세스와 스레드</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2021 군무원 · 기출문제집 p.860</span></div>
+      <p class="q-body">운영체제가 프로세스를 생성하여 종료할 때까지 <b>프로세스에 관련된 모든 정보를 담아 유지관리하는 구조체</b>로 옳은 것은?</p>
+      <ol class="choices">
+        <li>FCB(File Control Block)</li>
+        <li>PCB(Process Control Block)</li>
+        <li>UCB(User Control Block)</li>
+        <li>ACB(Access Control Block)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② PCB (Process Control Block)</p>
+        <div class="explain">
+          <p><b>PCB는 프로세스의 주민등록증</b>이다. 프로세스가 <b>생성될 때 함께 만들어지고, 종료될 때 함께 삭제</b>된다.</p>
+          <p><b>PCB에 담기는 정보:</b></p>
+          <ul>
+            <li>프로세스 식별자(PID)와 <b>현재 상태</b>(준비·실행·대기 등)</li>
+            <li><b>프로그램 카운터</b>(다음에 실행할 명령어 주소)와 각종 <b>레지스터 값</b> — 문맥교환 때 여기에 저장했다가 복원한다</li>
+            <li>스케줄링 우선순위, 할당된 메모리·입출력 자원 정보, 부모/자식 프로세스 정보</li>
+          </ul>
+          <p><b>함정:</b> ① FCB는 <b>파일</b> 관리용 제어 블록으로, 이름이 비슷해 가장 많이 걸린다. "Process"인지 "File"인지만 확인하면 된다.</p>
+          <p>💡 관련: <a href="../02_운영체제/프로세스와스레드.html">프로세스와 스레드</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q6. 비동기 인터럽트에 해당하는 것은? <span class="page-ref">p.860</span></p>
-      <p class="a">정답 ④ 타임슬라이스를 모두 사용했을 때 발생하는 인터럽트(타이머 기반)</p>
-      <p class="memo">❌ 0으로 나누기, system call 요청은 실행 중인 명령어 자체가 원인인 <b>동기(synchronous) 인터럽트</b> — 헷갈리지 말 것</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2021 군무원 · 기출문제집 p.860</span></div>
+      <p class="q-body"><b>비동기 인터럽트</b>(interrupt)에 해당하는 것은?</p>
+      <ol class="choices">
+        <li>실행 중인 프로세스가 원인인 인터럽트</li>
+        <li>실행 중인 프로세스가 0으로 나누는 명령어를 실행할 경우 발생하는 인터럽트</li>
+        <li>실행 중인 프로세스 명령어가 시스템 호출(system call)을 요구할 경우 발생하는 인터럽트</li>
+        <li>다중프로그래밍 환경에서 프로세스에 규정된 실행시간(time slice)을 모두 사용했을 경우 발생하는 인터럽트</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (타이머 만료 = <b>외부 요인</b>에 의한 비동기 인터럽트)</p>
+        <div class="explain">
+          <p><b>구분 기준 한 줄: "지금 실행 중인 명령어가 원인인가, 바깥에서 끼어든 것인가?"</b></p>
+          <table>
+            <tr><th>구분</th><th>동기(내부·예외)</th><th>비동기(외부)</th></tr>
+            <tr><td>원인</td><td><b>실행 중인 명령어 자체</b></td><td><b>CPU 바깥의 사건</b></td></tr>
+            <tr><td>발생 시점</td><td>특정 명령어에서 <b>반드시</b> 재현됨</td><td>언제 올지 <b>예측 불가</b></td></tr>
+            <tr><td>예시</td><td>0으로 나누기, 오버플로, 잘못된 명령어, <b>시스템 호출</b></td><td><b>타이머 만료</b>, 키보드·디스크 I/O 완료, 전원 이상</td></tr>
+          </table>
+          <p>①②③은 모두 "<b>실행 중인 프로세스가</b>~"로 시작한다 → 전부 내부(동기) 요인이다. ④만 <b>타이머라는 하드웨어가 바깥에서 시간을 재다가 끼어드는</b> 것이므로 비동기다.</p>
+          <p>💡 <b>암기팁:</b> 선택지에 "실행 중인 프로세스가/명령어가"라는 말이 붙어 있으면 <b>동기</b>, 타이머·입출력·전원처럼 <b>장치 이름</b>이 나오면 <b>비동기</b>다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/명령어와인터럽트.html">명령어와 인터럽트</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q7. 임계구역은 다수 프로세스가 동시에 병렬 실행하도록 허용하는 영역이다? <span class="page-ref">p.861</span></p>
-      <p class="a">정답 ②(틀린 설명) — 임계구역은 <b>한 번에 하나의 프로세스만</b> 들어갈 수 있게 막는 영역 (동시 병렬실행 금지가 핵심)</p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/임계영역과교착상태.html">임계영역과 교착상태</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2021 군무원 · 기출문제집 p.861</span></div>
+      <p class="q-body"><b>임계구역</b>(critical region)에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>하나의 프로세스만 사용해야 임계구역 내의 자원의 무결성을 보장할 수 있다.</li>
+        <li>동시에 다수의 프로세스가 병렬적으로 실행할 수 있도록 하여 실행 효율성을 높일 수 있는 영역이다.</li>
+        <li>임계구역을 정의하기 위해서는 상호배제(mutual exclusion) 기법이 필요하다.</li>
+        <li>세마포어(P(s), V(s))는 임계구역 내에 하나의 프로세스만 허용하도록 하는 용도로 사용하는 기술이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (임계구역은 <b>병렬 실행을 막는</b> 영역이다)</p>
+        <div class="explain">
+          <p>임계구역의 존재 이유는 <b>"동시에 못 들어가게 하려고"</b>다. ②는 목적을 정반대로 서술했다.</p>
+          <ol class="steps">
+            <li>둘 이상이 동시에 쓰면 값이 깨지는 자원 = <b>임계자원</b> (예: 공유 변수, 공용 파일)</li>
+            <li>프로그램에서 그 자원을 건드리는 코드 구간 = <b>임계구역</b></li>
+            <li>한 프로세스가 임계구역에 들어가면 나머지는 <b>모두 진입 금지</b> → 이 구간만큼은 <b>직렬로만</b> 처리된다</li>
+            <li>이를 강제하는 원칙이 <b>상호배제</b>, 구현 도구가 <b>세마포어·뮤텍스</b></li>
+          </ol>
+          <p>즉 임계구역은 <b>성능을 희생해서 정확성을 지키는</b> 장치다. "효율성을 높인다"는 말이 나오면 일단 의심할 것.</p>
+          <p>💡 관련: <a href="../02_운영체제/임계영역과교착상태.html">임계영역과 교착상태</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q16. 하드웨어와 사용자를 연결하는 순서는? <span class="page-ref">p.864</span></p>
-      <p class="a">정답 ① 하드웨어 → 운영체제 → 응용프로그램 → 사용자</p>
-      <p class="memo">💡 관련: <a href="../02_운영체제/운영체제정의.html">운영체제 정의</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 15</span><span class="q-src">2021 군무원 · 기출문제집 p.864</span></div>
+      <p class="q-body"><b>시스템 소프트웨어</b>에 해당하지 <b>않는</b> 것은?</p>
+      <ol class="choices">
+        <li>Windows</li>
+        <li>Microsoft Office</li>
+        <li>Compiler</li>
+        <li>Operating System</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② Microsoft Office (응용 소프트웨어)</p>
+        <div class="explain">
+          <p><b>구분 기준: "컴퓨터를 돌아가게 하는 것"인가, "사용자의 일을 해주는 것"인가.</b></p>
+          <table>
+            <tr><th>시스템 소프트웨어</th><th>응용 소프트웨어</th></tr>
+            <tr><td>운영체제(Windows, Linux, UNIX)</td><td>워드프로세서, <b>MS Office</b></td></tr>
+            <tr><td>언어번역기(<b>컴파일러</b>, 어셈블러, 인터프리터)</td><td>스프레드시트(엑셀)</td></tr>
+            <tr><td>링커, 로더, 장치 드라이버, 유틸리티</td><td>웹브라우저, 게임, 그래픽 편집기</td></tr>
+          </table>
+          <p><b>함정:</b> ③ 컴파일러는 "프로그램 만드는 도구"라 응용처럼 느껴지지만, <b>하드웨어가 이해할 기계어를 만들어주는 시스템 소프트웨어</b>다. 링커·로더도 마찬가지다.</p>
+          <p>💡 관련: <a href="../01_컴퓨터구조/소프트웨어와컴퓨터분류.html">소프트웨어와 컴퓨터분류</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q17. CPU 2개 이상을 탑재해 동시 처리하는 방식은? <span class="page-ref">p.864</span></p>
-      <p class="a">정답 ② 다중처리(Multiprocessing) — CPU가 여러 개, 주기억장치는 1개 공유</p>
-      <p class="memo">❌ 다중프로그래밍은 CPU 1개로 여러 프로그램을 <b>번갈아</b> 처리하는 것 — CPU 개수 차이로 구분</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 16</span><span class="q-src">2021 군무원 · 기출문제집 p.864</span></div>
+      <p class="q-body"><b>하드웨어와 사용자를 연결하는 순서</b>로 적절한 것은?</p>
+      <ol class="choices">
+        <li>하드웨어 → 운영체제 → 응용 프로그램 → 사용자</li>
+        <li>하드웨어 → 응용 프로그램 → 운영체제 → 사용자</li>
+        <li>운영체제 → 하드웨어 → 응용 프로그램 → 사용자</li>
+        <li>하드웨어 → 사용자 → 운영체제 → 응용 프로그램</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 하드웨어 → 운영체제 → 응용 프로그램 → 사용자</p>
+        <div class="explain">
+          <p><b>운영체제는 하드웨어와 응용 프로그램 사이에 끼어 있는 중간 관리자</b>다. 응용 프로그램은 하드웨어를 직접 만지지 않고, 반드시 <b>운영체제에게 부탁(시스템 호출)</b>한다.</p>
+          <ol class="steps">
+            <li><b>하드웨어</b> — CPU·메모리·디스크 (가장 안쪽)</li>
+            <li><b>운영체제</b> — 하드웨어를 대신 관리하고 자원을 나눠줌</li>
+            <li><b>응용 프로그램</b> — OS가 제공하는 기능을 빌려 사용자의 일을 처리</li>
+            <li><b>사용자</b> — 가장 바깥 (응용 프로그램을 통해 컴퓨터를 씀)</li>
+          </ol>
+          <p>💡 이 계층 구조를 <b>양파 껍질</b>로 그려보면 외우기 쉽다. 안쪽일수록 하드웨어에 가깝고, 바깥일수록 사람에 가깝다.</p>
+          <p>💡 관련: <a href="../02_운영체제/운영체제정의.html">운영체제 정의</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 17</span><span class="q-src">2021 군무원 · 기출문제집 p.864~865</span></div>
+      <p class="q-body">컴퓨터에 <b>2개 이상의 CPU를 탑재하여 동시에 처리</b>하는 운영체제의 작업 처리 방법으로 적절한 것은?</p>
+      <ol class="choices">
+        <li>일괄 처리</li>
+        <li>다중 처리(Multi-processing)</li>
+        <li>실시간 처리</li>
+        <li>다중 프로그래밍(Multi-programming)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 다중 처리</p>
+        <div class="explain">
+          <p>④ 다중 프로그래밍과의 구분이 이 문제의 전부다. <b>기준은 "CPU가 몇 개인가"</b>다.</p>
+          <table>
+            <tr><th>구분</th><th>CPU 개수</th><th>동작</th></tr>
+            <tr><td><b>다중 프로그래밍</b></td><td><b>1개</b></td><td>한 CPU가 여러 프로그램을 <b>번갈아</b> 처리 (동시처럼 보일 뿐)</td></tr>
+            <tr><td><b>다중 처리</b></td><td><b>2개 이상</b></td><td>여러 CPU가 <b>진짜 동시에</b> 처리</td></tr>
+          </table>
+          <p><b>함정:</b> 이름이 비슷해 헷갈리지만 <b>"다중 처리(processing)"의 "처리"는 프로세서(processor)를 뜻한다</b>고 생각하면 구분된다 — 프로세서가 여러 개인 것.</p>
+          <p>💡 관련: <a href="../02_운영체제/운영체제정의.html">운영체제 정의</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🌐</span>네트워크</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q9. 인터넷 표준을 개발·검토하는 국제 작업그룹은? <span class="page-ref">p.861~862</span></p>
-      <p class="a">정답 ① IETF(Internet Engineering Task Force) — IAB 산하, TCP/IP 표준 제정</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2021 군무원 · 기출문제집 p.861</span></div>
+      <p class="q-body"><b>인터넷 표준규격을 개발하고 검토</b>하는 역할을 하는 국제 인터넷 작업그룹으로 적절한 것은?</p>
+      <ol class="choices">
+        <li>IETF(Internet Engineering Task Force)</li>
+        <li>IAB(Internet Architecture Board)</li>
+        <li>ISOC(Internet Society)</li>
+        <li>IRTF(Internet Research Task Force)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① IETF</p>
+        <div class="explain">
+          <p>네 기구가 전부 실재하기 때문에 <b>역할 차이</b>를 알아야 한다.</p>
+          <table>
+            <tr><th>기구</th><th>역할</th></tr>
+            <tr><td><b>IETF</b></td><td>인터넷 <b>표준을 실제로 개발·제정</b>하는 실무 조직 (RFC 문서 발간)</td></tr>
+            <tr><td>IAB</td><td>IETF 상위의 <b>아키텍처 감독</b> 위원회</td></tr>
+            <tr><td>ISOC</td><td>인터넷 전반을 지원하는 <b>상위 국제 협회</b></td></tr>
+            <tr><td>IRTF</td><td>표준화 이전 단계의 <b>장기 연구</b> 조직</td></tr>
+          </table>
+          <p>💡 <b>구분 힌트:</b> <b>E</b>ngineering(공학·실무) = <b>표준 제정</b>, <b>R</b>esearch(연구) = 미래 연구, <b>B</b>oard(위원회) = 감독, <b>Soc</b>iety(협회) = 후원·운영.</p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q10. 시간을 쪼개 나눠쓰는 다중접속 방식을 ADMA라 부른다? <span class="page-ref">p.862</span></p>
-      <p class="a">정답 ②(틀린 설명) — 시간을 쪼개는 방식은 <b>TDMA</b>다 (ADMA는 없는 용어)</p>
-      <p class="memo">💡 다중접속 3형제: <b>FDMA</b>(주파수 분할) · <b>TDMA</b>(시간 분할) · <b>CDMA</b>(코드로 구분, 한국이 세계 최초 상용화)</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2021 군무원 · 기출문제집 p.862</span></div>
+      <p class="q-body"><b>다중 접속 기술</b>에 대한 설명으로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>전체 대역폭을 잘게 쪼개 사용자에게 나누어 주는 방식으로, 초기 아날로그 방식에서 사용하던 것을 FDMA라고 한다.</li>
+        <li>하나의 채널을 여러 사람이 나누어 쓰는 방식으로, 시간을 쪼개 나눠 쓰는 방식을 ADMA라고 한다.</li>
+        <li>CDMA는 한국이 세계 최초로 상용화하였다.</li>
+        <li>한 채널을 여러 사람이 나누어 쓰되, 보내는 데이터를 코드의 형태로 바꾸어 사용하는 방식을 CDMA라고 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (시간을 쪼개는 방식은 <b>TDMA</b>, ADMA라는 용어는 없다)</p>
+        <div class="explain">
+          <p>다중 접속 방식은 <b>"무엇을 쪼개서 나눠 쓰는가"</b>로 이름이 정해진다.</p>
+          <table>
+            <tr><th>방식</th><th>쪼개는 대상</th><th>비유</th></tr>
+            <tr><td><b>F</b>DMA</td><td><b>주파수</b>(Frequency)</td><td>라디오 채널을 주파수별로 나눔</td></tr>
+            <tr><td><b>T</b>DMA</td><td><b>시간</b>(Time)</td><td>한 사람씩 시간을 정해 순서대로 말함</td></tr>
+            <tr><td><b>C</b>DMA</td><td><b>코드</b>(Code)</td><td>각자 다른 언어로 동시에 말함 — 자기 코드만 알아들음</td></tr>
+          </table>
+          <p>앞 글자가 곧 답이다: <b>F</b>requency / <b>T</b>ime / <b>C</b>ode. "ADMA"는 아예 존재하지 않는 용어라 이 자리에 들어갈 수 없다.</p>
+          <p>💡 관련: <a href="../03_네트워크/다중화방식과데이터교환.html">다중화방식과 데이터교환</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q11. 300GHz~400THz로 벽을 통과 못해 폐쇄공간에서 쓰는 주파수는? <span class="page-ref">p.862</span></p>
-      <p class="a">정답 ③ 적외선파(IrDA) — 지향성이 강하고 장애물에 쉽게 막힘</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2021 군무원 · 기출문제집 p.862</span></div>
+      <p class="q-body">주파수가 <b>300GHz ~ 400THz</b>로 높기 때문에 <b>벽을 통과할 수 없어 폐쇄된 공간에서 사용</b>하는 주파수 명칭으로 알맞은 것은?</p>
+      <ol class="choices">
+        <li>마이크로파</li>
+        <li>라디오파</li>
+        <li>적외선파</li>
+        <li>음성파</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 적외선파(Infrared)</p>
+        <div class="explain">
+          <p>핵심 단서는 <b>"벽을 통과할 수 없다"</b>이다. 주파수가 높을수록(파장이 짧을수록) <b>직진성이 강하고 장애물을 못 뚫는다.</b></p>
+          <table>
+            <tr><th>전파</th><th>주파수</th><th>특성</th></tr>
+            <tr><td>라디오파</td><td>낮음</td><td>장애물 통과 잘 함, 장거리 (AM/FM 방송)</td></tr>
+            <tr><td>마이크로파</td><td>중간(GHz대)</td><td>직진성 있음, 위성·이동통신</td></tr>
+            <tr><td><b>적외선</b></td><td><b>300GHz~400THz</b></td><td><b>벽 통과 불가</b> → 같은 방 안에서만 (TV 리모컨, IrDA)</td></tr>
+          </table>
+          <p>💡 <b>실생활 확인:</b> TV 리모컨(적외선)은 옆방에서 누르면 안 되지만, 와이파이(마이크로파)는 벽 너머에서도 잡힌다. 이 차이가 바로 주파수 차이다.</p>
+          <p>적외선의 장점은 송수신기가 <b>단순하고 저렴</b>하다는 것이고, 단점은 <b>전송속도가 낮고 쉽게 차단</b>된다는 것이다.</p>
+          <p>💡 관련: <a href="../03_네트워크/데이터전송방식과신호해석.html">데이터 전송방식과 신호해석</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q13. 사설 IP 주소에 대한 옳은 설명은? <span class="page-ref">p.863</span></p>
-      <p class="a">정답 ④ 하나의 NAT 장비로 구축한 LAN 내에서 임의로 할당하는 주소</p>
-      <p class="memo">❌ 사설 IP는 전세계 유일하지 않고, ICANN이 관리하는 건 <b>공인 IP</b>다 — 헷갈리지 말 것. 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 13</span><span class="q-src">2021 군무원 · 기출문제집 p.863</span></div>
+      <p class="q-body">IP 주소는 공인(public) IP와 사설(private) IP로 분류한다. <b>사설 IP 주소</b>에 대한 설명으로 <b>옳은 것</b>은?</p>
+      <ol class="choices">
+        <li>전 세계적으로 중복이 없는 유일한 IP 주소이다.</li>
+        <li>특정한 하나의 NAT 방식 공유기/라우터에 유일하게 할당되는 하나의 IP 주소이다.</li>
+        <li>세계적으로는 ICANN이, 국내는 한국인터넷진흥원이 관리하는 IP 주소이다.</li>
+        <li>하나의 NAT 장비로 구축한 LAN 영역 내에서 임의적으로 할당하는 유일한 IP 주소이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>사설 IP의 정의는 <b>"내부 네트워크 안에서만 유일하면 되는 주소"</b>다. 밖으로 나갈 때는 <b>NAT</b>가 공인 IP로 바꿔준다.</p>
+          <ul>
+            <li>① <b>전 세계에서 유일</b> → 공인 IP의 설명 ✗</li>
+            <li>② 공유기에 <b>할당되는 하나의 주소</b> → 그건 공유기가 받는 <b>공인 IP</b> ✗</li>
+            <li>③ ICANN·KISA가 관리 → 공인 IP의 관리 체계 ✗ (사설 IP는 누구 허락 없이 내부에서 임의로 씀)</li>
+            <li>④ <b>LAN 안에서 임의로 할당, 그 안에서만 유일</b> → 사설 IP의 정확한 설명 ✓</li>
+          </ul>
+          <p>💡 <b>이해 포인트:</b> 우리 집 공유기 아래 192.168.0.2와 옆집 공유기 아래 192.168.0.2는 <b>동시에 존재해도 문제없다</b> — 각자의 LAN 안에서만 유일하면 되기 때문. 이게 사설 IP가 IPv4 주소 고갈을 늦춘 원리다.</p>
+          <p>💡 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q20. LAN 구성 형태에 프레임 릴레이 방식도 포함된다? <span class="page-ref">p.865~866</span></p>
-      <p class="a">정답 ②(틀린 설명) — LAN 토폴로지는 <b>버스형·링형·스타형</b> 3가지뿐. 프레임 릴레이는 WAN 프로토콜이지 토폴로지가 아님</p>
-      <p class="memo">💡 관련: <a href="../03_네트워크/LAN과매체접근방식.html">LAN과 매체접근방식</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 20</span><span class="q-src">2021 군무원 · 기출문제집 p.865~866</span></div>
+      <p class="q-body">다음 중 설명이 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>모뎀은 변조와 복조를 할 수 있는 기기이다.</li>
+        <li>LAN의 구성 형태로는 버스형, 링형, 스타형, 프레임 릴레이 방식이 있다.</li>
+        <li>스타형 랜 구성 형식은 중앙 제어 노드를 중심으로 각 노드들이 점 대 점 형태로 연결되는데 각 노드들 간의 직접적인 연결은 없다.</li>
+        <li>반이중 통신은 통신하는 두 데이터 단말장치가 시간적으로 교대로 데이터를 교환하는 방식의 통신이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (<b>프레임 릴레이는 LAN 토폴로지가 아니다</b>)</p>
+        <div class="explain">
+          <p>LAN의 <b>토폴로지(물리적 구성 형태)</b>는 <b>버스형·링형·성(스타)형</b> 세 가지가 기본이다(확장하면 트리형·메쉬형).</p>
+          <p><b>프레임 릴레이</b>는 토폴로지가 아니라 <b>WAN에서 쓰는 패킷 교환 프로토콜</b>이다 — X.25의 통계적 다중화 효율과 회선교환의 고속성을 결합한 방식으로, <b>가변 길이 프레임</b>을 쓴다. 범주 자체가 다른 것을 끼워 넣은 전형적인 오답이다.</p>
+          <p>나머지는 모두 맞는 설명이다.</p>
+          <ul>
+            <li>① 모뎀 = <b>Mo</b>dulator(변조) + <b>Dem</b>odulator(복조) ✓</li>
+            <li>③ 스타형은 중앙 허브를 거쳐야만 통신하므로 <b>노드 간 직접 연결이 없다</b> ✓ (중앙이 고장나면 전체 마비)</li>
+            <li>④ 반이중 = 양방향 가능하지만 <b>동시에는 불가</b>, 교대로 (무전기) ✓</li>
+          </ul>
+          <p>💡 관련: <a href="../03_네트워크/LAN과매체접근방식.html">LAN과 매체접근방식</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q22. 입출력 명령어를 전담 처리하는 장치는? <span class="page-ref">p.867</span></p>
-      <p class="a">정답 ③ DMA 프로세서 — CPU 대신 입출력의 메모리 접근을 전담</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
-    </div>
-
-    <div class="wrong-card">
-      <p class="q">Q23. 데이터 전송 전에 미리 경로를 설정하는 교환 방식은? <span class="page-ref">p.867</span></p>
-      <p class="a">정답 ① 회선 교환 네트워크 — 연결이 끝날 때까지 같은 경로를 계속 점유</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 23</span><span class="q-src">2021 군무원 · 기출문제집 p.867</span></div>
+      <p class="q-body">네트워크 교환 방식 중 <b>데이터를 전송하기 전에 연결 경로를 미리 설정</b>하는 방식에 해당하는 것은?</p>
+      <ol class="choices">
+        <li>회선 교환 네트워크</li>
+        <li>패킷 교환 네트워크</li>
+        <li>메시지 교환 네트워크</li>
+        <li>데이터그램 교환 네트워크</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 회선 교환 네트워크</p>
+        <div class="explain">
+          <p><b>"미리 경로를 설정한다(연결형)"</b>는 표현은 회선교환의 정의 그 자체다. 전화를 거는 것과 같다 — 통화가 연결된 뒤에야 말을 시작하고, 끊을 때까지 그 길을 독점한다.</p>
+          <table>
+            <tr><th>방식</th><th>경로 설정</th><th>특징</th></tr>
+            <tr><td><b>회선 교환</b></td><td><b>전송 전에 미리 설정</b>, 끝까지 유지</td><td>지연 적음, 대역폭 독점, 실시간에 적합</td></tr>
+            <tr><td>패킷 교환 (가상회선)</td><td>논리적 경로를 미리 설정</td><td>같은 경로로 순서대로 전달</td></tr>
+            <tr><td>패킷 교환 (<b>데이터그램</b>)</td><td><b>설정 없음</b></td><td>패킷마다 다른 경로, 순서 뒤바뀔 수 있음</td></tr>
+            <tr><td>메시지 교환</td><td>설정 없음</td><td>메시지 전체를 저장 후 전달(store-and-forward)</td></tr>
+          </table>
+          <p><b>함정:</b> ④ 데이터그램은 이름과 달리 <b>경로를 미리 정하지 않는</b> 대표적인 비연결형 방식이다 (IP가 이 방식).</p>
+          <p>💡 관련: <a href="../03_네트워크/다중화방식과데이터교환.html">다중화방식과 데이터교환</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🔐</span>정보보안</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q21. 컴퓨터 한 대에서 대량 데이터를 보내 서버를 마비시키는 걸 디도스라 한다? <span class="page-ref">p.866~867</span></p>
-      <p class="a">정답 ①(틀린 설명) — 컴퓨터 <b>한 대</b>에서 하면 DoS, 좀비PC <b>여러 대</b>로 하면 DDoS</p>
-      <p class="memo">💡 매크로 바이러스(문서파일 첨부형)·랜섬웨어(파일 암호화 후 금품 요구)와 구분해서 암기</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 21</span><span class="q-src">2021 군무원 · 기출문제집 p.866</span></div>
+      <p class="q-body">다음 중 설명이 <b>가장 옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>컴퓨터 한 대에서 엄청난 양의 데이터를 서버로 보냄으로써 다른 사람이 서버를 이용하지 못하게 하는 해킹 방법을 디도스(DDoS) 공격이라고 한다.</li>
+        <li>엑셀, 워드, 파워포인트 같은 데이터 파일에 포함해서 배포되는 악성 소프트웨어를 매크로 바이러스라고 한다.</li>
+        <li>컴퓨터 속의 자료를 없애거나 시스템을 정지하려고 만든 파괴적인 소프트웨어를 컴퓨터 바이러스라고 한다.</li>
+        <li>감염되면 컴퓨터 내 모든 파일에 암호가 걸려 돈을 받은 후에만 암호를 풀어주는 악성 소프트웨어를 랜섬웨어라고 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (<b>한 대</b>에서 하는 공격은 DDoS가 아니라 <b>DoS</b>)</p>
+        <div class="explain">
+          <p>차이는 딱 하나, <b>공격에 동원된 컴퓨터가 몇 대인가</b>이다. 앞에 붙은 <b>D 하나(Distributed, 분산)</b>가 그 뜻이다.</p>
+          <table>
+            <tr><th>구분</th><th>공격자 컴퓨터</th><th>설명</th></tr>
+            <tr><td><b>DoS</b> (Denial of Service)</td><td><b>1대</b></td><td>한 대에서 대량 트래픽을 보내 서비스를 마비시킴</td></tr>
+            <tr><td><b>DDoS</b> (Distributed DoS)</td><td><b>여러 대</b></td><td><b>좀비 PC</b>를 감염시켜 동시에 공격 — 훨씬 강력하고 차단이 어려움</td></tr>
+          </table>
+          <p>두 공격 모두 훼손하는 보안 요소는 <b>가용성(Availability)</b>이다 — 데이터를 훔치거나 바꾸는 게 아니라 <b>못 쓰게 만드는</b> 공격이다.</p>
+          <p>②③④는 모두 맞는 설명이다. <b>랜섬웨어</b>(ransom=몸값), <b>매크로 바이러스</b>(문서 파일의 매크로 기능을 악용)는 용어와 정의를 그대로 외워두면 된다.</p>
+          <p>💡 관련: <a href="../06_정보보안/암호화와정보보안.html">암호화와 정보보안</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">🗄️</span>데이터베이스</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q8. 특정 레코드 접근시간이 가장 빠른 파일 방식은? <span class="page-ref">p.861</span></p>
-      <p class="a">정답 ③ DAM(Direct Access Method) — 주소를 바로 계산해 접근, 순차탐색 없음</p>
-      <p class="memo">💡 관련: <a href="../04_데이터베이스/파일구조.md">파일구조</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2021 군무원 · 기출문제집 p.861</span></div>
+      <p class="q-body">다음 파일들 중 <b>특정 레코드 접근시간이 가장 빠른 것</b>은?</p>
+      <ol class="choices">
+        <li>SAM(Sequential Access Method) 파일</li>
+        <li>ISAM(Indexed Sequential Access Method) 파일</li>
+        <li>DAM(Direct Access Method) 파일</li>
+        <li>SDAM(Semi Disk Access Method) 파일</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ DAM (직접 접근 파일)</p>
+        <div class="explain">
+          <p><b>DAM은 키 값을 주소로 "계산"해서 곧바로 그 자리로 간다</b>(해싱과 같은 원리). 중간 과정이 없으니 가장 빠르다.</p>
+          <table>
+            <tr><th>파일 구조</th><th>찾는 방법</th><th>속도</th></tr>
+            <tr><td>SAM (순차)</td><td>앞에서부터 <b>하나씩 훑음</b></td><td>가장 느림 (일괄처리에 적합)</td></tr>
+            <tr><td>ISAM (색인순차)</td><td><b>색인</b>을 먼저 보고 해당 구역으로 점프</td><td>중간</td></tr>
+            <tr><td><b>DAM (직접)</b></td><td>주소를 <b>계산</b>해 바로 접근</td><td><b>가장 빠름</b></td></tr>
+          </table>
+          <p>💡 <b>비유:</b> SAM은 책을 1쪽부터 넘겨가며 찾기, ISAM은 목차를 보고 해당 장으로 간 뒤 그 안에서 찾기, DAM은 "137쪽"이라고 계산해서 바로 펴기.</p>
+          <p>④ SDAM은 실제로 쓰이지 않는 가짜 선택지다.</p>
+          <p>💡 관련: <a href="../04_데이터베이스/파일구조.md">파일구조</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q12. 데이터 구조 변경 시 관련 프로그램만 고치면 되게 하는 DBMS의 장점은? <span class="page-ref">p.862~863</span></p>
-      <p class="a">정답 ③ 데이터 독립성(Data Independence) — 파일시스템은 구조 변경 시 <b>모든</b> 프로그램을 고쳐야 하지만, DBMS는 그럴 필요 없음</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2021 군무원 · 기출문제집 p.863</span></div>
+      <p class="q-body">아래 지문이 설명하는 <b>DBMS의 장점</b>에 해당하는 것은?</p>
+      <div class="tip" style="margin:8px 0;">파일시스템은 파일을 구성하는 레코드 구조가 변경되면 이 파일을 사용하는 <b>모든 프로그램이 변경</b>되어야 한다. 하지만 DBMS는 데이터 구조가 변경되어도 <b>변경된 데이터 항목을 사용하는 프로그램만</b> 변경되고 나머지는 변경될 필요가 없어, 프로그램 유지보수 비용을 현격히 줄일 수 있다.</div>
+      <ol class="choices">
+        <li>보안성(Security)</li>
+        <li>다중접근성(Multi Access)</li>
+        <li>데이터 독립성(Data Independence)</li>
+        <li>구조적 접근성(Structured Access)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 데이터 독립성</p>
+        <div class="explain">
+          <p><b>데이터 독립성 = "데이터베이스 구조를 바꿔도 응용 프로그램은 그대로 둘 수 있는 능력"</b>이다. 이것이 DBMS가 존재하는 <b>궁극적인 목적</b>이라고까지 표현된다.</p>
+          <table>
+            <tr><th>구분</th><th>내용</th></tr>
+            <tr><td><b>논리적 독립성</b></td><td>개념 스키마(전체 구조)가 바뀌어도 <b>외부 스키마·응용프로그램</b>은 영향 없음</td></tr>
+            <tr><td><b>물리적 독립성</b></td><td>저장 장치·접근 방법이 바뀌어도 <b>논리적 구조</b>는 영향 없음</td></tr>
+          </table>
+          <p>반대 개념인 <b>데이터 종속성</b>이 파일시스템의 대표적 단점이다 — 저장 구조를 조금만 바꿔도 관련된 프로그램을 전부 수정해야 했다.</p>
+          <p>💡 관련: <a href="../04_데이터베이스/데이터베이스_특징.md">데이터베이스 특징</a>, <a href="../04_데이터베이스/3단계_스키마_구조.md">3단계 스키마 구조</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">☁️</span>신기술 / 일반상식</h2>
+    <h2><span class="emoji">☁️</span>신기술 / 약어</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q2. 클라우드 서비스 종류가 아닌 것은? <span class="page-ref">p.859</span></p>
-      <p class="a">정답 ④ OaaS(존재하지 않는 용어) — 실제는 <b>IaaS·PaaS·SaaS</b> 3종</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2021 군무원 · 기출문제집 p.859</span></div>
+      <p class="q-body"><b>클라우드 컴퓨팅</b> 환경에서 제공되는 서비스로 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>IaaS(Infrastructure as a Service)</li>
+        <li>PaaS(Platform as a Service)</li>
+        <li>SaaS(Software as a Service)</li>
+        <li>OaaS(Operation as a Service)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ OaaS (존재하지 않는 용어)</p>
+        <div class="explain">
+          <p>클라우드 서비스 3대 모델은 <b>IaaS · PaaS · SaaS</b>다. <b>제공자가 어디까지 관리해주느냐</b>로 구분된다.</p>
+          <table>
+            <tr><th>모델</th><th>제공 범위</th><th>예시</th></tr>
+            <tr><td><b>IaaS</b></td><td>서버·스토리지·네트워크 등 <b>인프라만</b> 빌려줌 (OS부터는 내가 관리)</td><td>AWS EC2</td></tr>
+            <tr><td><b>PaaS</b></td><td>개발·실행 <b>플랫폼</b>까지 제공 (나는 코드만 올림)</td><td>Google App Engine</td></tr>
+            <tr><td><b>SaaS</b></td><td><b>완성된 소프트웨어</b>를 바로 사용</td><td>Gmail, MS 365</td></tr>
+          </table>
+          <p>💡 <b>암기법:</b> <b>I → P → S 순서로 제공 범위가 넓어진다</b>(내가 할 일이 줄어든다). 피자에 비유하면 IaaS는 반죽 재료, PaaS는 완성된 도우, SaaS는 배달된 피자.</p>
+          <p>💡 관련: <a href="../09_신기술동향/정보기술동향.html">정보기술 동향</a></p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q14. 약자 표현이 옳지 않은 것은? <span class="page-ref">p.863~864</span></p>
-      <p class="a">정답 ③ SNS — Social Networking <b>System</b>이 아니라 Social Network <b>Service</b>가 맞음</p>
-    </div>
-
-    <div class="wrong-card">
-      <p class="q">Q15. 시스템 소프트웨어가 아닌 것은? <span class="page-ref">p.864</span></p>
-      <p class="a">정답 ② Microsoft Office — 이건 <b>응용 소프트웨어</b>. Windows·Compiler·OS는 시스템 소프트웨어</p>
-      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/소프트웨어와컴퓨터분류.html">소프트웨어와 컴퓨터분류</a></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 14</span><span class="q-src">2021 군무원 · 기출문제집 p.863</span></div>
+      <p class="q-body"><b>약자의 표현</b>으로 가장 <b>옳지 않은 것</b>은?</p>
+      <ol class="choices">
+        <li>UCC — User Created Content</li>
+        <li>ERP — Enterprise Resource Planning</li>
+        <li>SNS — Social Networking System</li>
+        <li>AR — Augmented Reality</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (SNS = Social Network <b>Service</b>)</p>
+        <div class="explain">
+          <p>SNS의 S는 <b>System</b>이 아니라 <b>Service</b>다. 공통 관심사를 가진 사람들의 <b>관계망 구축을 지원하는 온라인 서비스</b>를 뜻한다.</p>
+          <table>
+            <tr><th>약어</th><th>정확한 풀이</th><th>뜻</th></tr>
+            <tr><td>UCC</td><td>User Created Content</td><td>사용자 제작 콘텐츠</td></tr>
+            <tr><td>ERP</td><td>Enterprise Resource Planning</td><td>전사적 자원관리</td></tr>
+            <tr><td><b>SNS</b></td><td><b>Social Network Service</b></td><td>사회관계망 서비스</td></tr>
+            <tr><td>AR</td><td>Augmented Reality</td><td>증강현실 (현실 위에 정보를 덧씌움)</td></tr>
+          </table>
+          <p>💡 <b>같이 외울 것:</b> <b>VR</b>(Virtual Reality, 가상현실 — 완전히 가상 세계), <b>MR</b>(Mixed Reality, 혼합현실), <b>XR</b>(eXtended Reality, 이들을 아우르는 확장현실).</p>
+          <p>💡 관련: <a href="../09_신기술동향/정보기술동향.html">정보기술 동향</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
     <h2><span class="emoji">💻</span>프로그래밍언어</h2>
 
-    <div class="wrong-card">
-      <p class="q">Q24. C++ 스트림 포맷(width(10)·precision(4)·fill('*'))으로 3.14159265 출력하면? <span class="page-ref">p.868</span></p>
-      <p class="a">정답 ② *****3142</p>
-      <div class="tip" style="margin-top:8px;">
-        <ol class="steps">
-          <li><code>precision(4)</code>: 유효숫자 4자리로 반올림 → 3.14159265 → <b>3.142</b> (소수점 포함 4자리 유효숫자)</li>
-          <li>이걸 문자로 이으면 "3.142"지만 소수점을 뺀 표현으로 정리하면 <b>3142</b> 형태로 처리됨</li>
-          <li><code>width(10)</code>: 전체 출력 폭을 10칸으로 고정</li>
-          <li><code>fill('*')</code>: 남는 칸을 <b>왼쪽에</b> '*'로 채움(기본 정렬은 오른쪽 정렬) → *****3142 (5개 * + 4142... 실제 5개 * + "3142" 4자리 = 총 9자리인데 표기상 10칸 우측정렬)</li>
-        </ol>
-      </div>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 24</span><span class="q-src">2021 군무원 · 기출문제집 p.868</span></div>
+      <p class="q-body">다음 <b>C++</b> 프로그램의 실행 결과는? <span style="font-size:12px;color:var(--text-dim);">(원문 선택지 일부가 스캔 손상되어 주관식으로 재구성)</span></p>
+      <div class="tip" style="margin:8px 0;"><code>ostream &amp;set(ostream &amp;stream) {<br>&nbsp;&nbsp;stream.width(10);<br>&nbsp;&nbsp;stream.precision(4);<br>&nbsp;&nbsp;stream.fill('*');<br>&nbsp;&nbsp;return stream;<br>}<br>main() {<br>&nbsp;&nbsp;cout &lt;&lt; set &lt;&lt; 3.14159265;<br>}</code></div>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 <code>*****3.142</code></p>
+        <div class="explain">
+          <p>출력 서식 함수 <b>세 개를 순서대로</b> 적용하면 된다.</p>
+          <ol class="steps">
+            <li><b>precision(4)</b> — 유효숫자를 <b>4자리</b>로 제한하고 <b>반올림</b>한다: 3.14159265 → <b>3.142</b> (3.141이 아님에 주의!)</li>
+            <li><b>width(10)</b> — 출력 전체 너비를 <b>10칸</b>으로 잡는다. "3.142"는 5칸이므로 <b>5칸이 남는다</b></li>
+            <li><b>fill('*')</b> — 남는 칸을 <b>*</b>로 채운다. 기본 정렬은 <b>오른쪽</b>이므로 별이 <b>앞쪽</b>에 붙는다</li>
+            <li>결과: <code>*****3.142</code> (별 5개 + 5글자 = 정확히 10칸)</li>
+          </ol>
+          <p><b>함정 두 가지:</b> ① precision을 <b>소수점 이하 자릿수</b>로 착각하면 3.1416이 나온다 — 기본 모드에서는 <b>유효숫자 전체</b> 개수다. ② 반올림을 빼먹고 잘라내면 3.141이 된다.</p>
+        </div>
+      </details>
     </div>
 
-    <div class="wrong-card">
-      <p class="q">Q25. Java의 concat·substring·indexOf 조합 실행결과는? <span class="page-ref">p.868~869</span></p>
-      <p class="a">정답 ③ B1: Hello!!23242, B2: 2, B3: 8</p>
-      <div class="tip" style="margin-top:8px;">
-        <ol class="steps">
-          <li><code>A1="23242", A2="Hello!!"</code></li>
-          <li><code>B1 = A2.concat(A1)</code> → "Hello!!" + "23242" = <b>"Hello!!23242"</b></li>
-          <li><code>B2 = A1.substring(4)</code> → "23242"의 인덱스 4부터 끝까지 → <b>"2"</b></li>
-          <li><code>B3 = B1.indexOf("3")</code> → "Hello!!23242"에서 '3'은 인덱스 <b>8</b>번째(0부터 세어서) → toString하면 "8"</li>
-        </ol>
-      </div>
-      <p class="memo">💡 관련: <a href="../08_프로그래밍언어/C언어_배열과문자열.md">배열과 문자열</a> (C 기준 문서지만 인덱스 세는 방식은 동일)</p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 25</span><span class="q-src">2021 군무원 · 기출문제집 p.868~869</span></div>
+      <p class="q-body">다음 <b>Java</b> 프로그램의 실행 결과로 가장 옳은 것은?</p>
+      <div class="tip" style="margin:8px 0;"><code>String A1 = "23242";<br>String A2 = "Hello!!";<br>String B1 = A2.concat(A1);<br>String B2 = A1.substring(4);<br>String B3 = Integer.toString(B1.indexOf("3"));<br>System.out.println("B1: " + B1);<br>System.out.println("B2: " + B2);<br>System.out.println("B3: " + B3);</code></div>
+      <ol class="choices">
+        <li>B1: 23242Hello!!, B2: 4, B3: 8</li>
+        <li>B1: 23242Hello!!, B2: 2, B3: 7</li>
+        <li>B1: Hello!!23242, B2: 2, B3: 8</li>
+        <li>B1: Hello!!23242, B2: 4, B3: 7</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ B1: Hello!!23242, B2: 2, B3: 8</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>B1 = A2.concat(A1)</b> — <b>A2 뒤에 A1을 붙인다</b>(순서 주의!) → <code>"Hello!!" + "23242"</code> = <b>Hello!!23242</b><br>→ ①②는 순서가 반대라 여기서 탈락</li>
+            <li><b>B2 = A1.substring(4)</b> — "23242"에서 <b>인덱스 4번부터 끝까지</b>. 인덱스는 0부터: 2(0) 3(1) 2(2) 4(3) <b>2(4)</b> → <b>"2"</b><br>→ ④는 여기서 탈락 (4는 인덱스이지 값이 아님)</li>
+            <li><b>B3 = B1.indexOf("3")</b> — "Hello!!23242"에서 문자 '3'이 <b>처음 나오는 위치</b>:<br>H(0) e(1) l(2) l(3) o(4) !(5) !(6) 2(7) <b>3(8)</b> → <b>8</b></li>
+            <li><code>Integer.toString(8)</code>으로 문자열 "8"로 변환해 출력</li>
+          </ol>
+          <p>💡 <b>메서드 정리:</b> <code>concat</code>(뒤에 이어붙임) · <code>substring(n)</code>(n번째부터 끝까지) · <code>indexOf</code>(처음 나온 위치, 없으면 -1) · <code>Integer.toString</code>(숫자→문자열). <b>모든 인덱스는 0부터</b> 센다는 것이 모든 함정의 출발점이다.</p>
+          <p>💡 관련: <a href="../08_프로그래밍언어/JAVA기초와객체지향.html">JAVA 기초와 객체지향</a></p>
+        </div>
+      </details>
     </div>
   </section>
 

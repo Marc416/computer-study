@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>"일부러 불편하게 만든" 자료구조가 왜 필요한가</h4>
+      <p>스택과 큐는 배열이나 리스트보다 <b>기능이 적다.</b> 아무 위치나 건드릴 수 있는 배열과 달리, 스택은 맨 위만, 큐는 양 끝만 만질 수 있다. 그런데 이 <b>제약이 곧 장점</b>이다. 접근 지점이 하나로 고정되니 삽입·삭제가 <b>항상 O(1)</b>로 끝나고, 무엇보다 <b>"나중에 한 일을 먼저 되돌린다"(스택)</b>, <b>"먼저 온 것을 먼저 처리한다"(큐)</b>는 현실의 규칙을 그대로 표현할 수 있다.</p>
+      <p>실제로 컴퓨터 안에서 이 둘은 도처에 쓰인다. 함수를 호출하면 복귀 주소가 <b>스택</b>에 쌓이고(그래서 나중에 호출한 함수가 먼저 끝난다), 프린터 대기열과 CPU 스케줄링 대기열은 <b>큐</b>다. Ctrl+Z(실행 취소)는 스택, 웹 서버의 요청 처리 순서는 큐다.</p>
+      <p>시험에서 이 단원의 <b>최대 배점</b>은 <b>후위표기법(postfix)</b>이다. 우리가 쓰는 <code>2+3*4</code> 같은 수식은 사람에게는 자연스럽지만 컴퓨터에게는 괄호와 우선순위를 계속 따져야 해서 불편하다. 그래서 컴파일러는 이것을 <b>괄호도 우선순위도 필요 없는 후위표기(234*+)</b>로 바꾼 뒤 <b>스택 하나만으로</b> 계산한다. 변환 문제와 계산 문제가 거의 매년 나오므로, 아래 요령을 손으로 익혀두면 확실한 득점원이 된다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>스택 (Stack) — LIFO <span class="page-ref">📖 기출문제집 p.445</span></h3>
@@ -84,6 +94,100 @@
       <figcaption>배열 인덱스가 5([5]) 다음에 다시 0([0])으로 돌아가도록 나머지 연산(mod)을 쓰면, 앞쪽에 생긴 빈 칸도 재사용할 수 있다.</figcaption>
     </figure>
     <div class="tip"><b>가득 참 vs 비어있음 구분 함정:</b> 단순 큐에서는 front==rear일 때 "비었다"와 "가득 찼다"를 구분 못 하는 문제가 생긴다. 그래서 원형 큐는 보통 <b>자리 하나를 비워두고</b> "rear+1 == front(mod n)"이면 가득 찬 것으로 판단한다.</div>
+
+    <h3>데크 (Deque, Double-Ended Queue)</h3>
+    <p>양쪽 끝에서 <b>삽입과 삭제가 모두</b> 가능한 자료구조다. 스택으로도, 큐로도 쓸 수 있는 만능 형태라고 생각하면 된다.</p>
+    <table>
+      <tr><th>자료구조</th><th>삽입 위치</th><th>삭제 위치</th><th>한 줄 정리</th></tr>
+      <tr><td><b>스택</b></td><td>한쪽 끝(top)</td><td>같은 쪽 끝(top)</td><td>한쪽에서만 넣고 뺀다 (LIFO)</td></tr>
+      <tr><td><b>큐</b></td><td>rear (뒤)</td><td>front (앞)</td><td>넣는 곳과 빼는 곳이 반대 (FIFO)</td></tr>
+      <tr><td><b>데크</b></td><td><b>양쪽 끝 모두</b></td><td><b>양쪽 끝 모두</b></td><td>양쪽 어디서든 넣고 뺀다</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "데크는 삽입과 삭제를 한쪽 끝에서만 수행한다" → ❌ 틀림(그건 스택). 데크(Double-<b>Ended</b> Queue)는 이름 그대로 <b>양쪽 끝(double-ended)</b>을 다 쓴다. <span class="page-ref">📖 기출문제집 p.467</span></div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧮</span>후위표기법 (Postfix) — 이 단원 최대 배점</h2>
+    <p>수식을 쓰는 방법은 <b>연산자를 어디에 두느냐</b>에 따라 세 가지다. 피연산자(A, B)의 순서는 <b>세 방식 모두 똑같고, 연산자 위치만 움직인다</b>는 점이 모든 변환 문제의 열쇠다.</p>
+    <table>
+      <tr><th>표기법</th><th>연산자 위치</th><th>A+B의 표현</th><th>특징</th></tr>
+      <tr><td><b>전위(Prefix)</b></td><td>피연산자 <b>앞</b></td><td><code>+AB</code></td><td>연산자-피연산자-피연산자</td></tr>
+      <tr><td><b>중위(Infix)</b></td><td>피연산자 <b>사이</b></td><td><code>A+B</code></td><td>사람이 쓰는 방식, 괄호·우선순위 필요</td></tr>
+      <tr><td><b>후위(Postfix)</b></td><td>피연산자 <b>뒤</b></td><td><code>AB+</code></td><td>괄호 불필요, 컴퓨터가 스택으로 바로 계산</td></tr>
+    </table>
+
+    <div class="deep">
+      <h4>중위 → 후위 변환: "괄호 치고 연산자를 오른쪽으로 밀어내기"</h4>
+      <p>가장 실수 없는 방법은 <b>①연산 순서대로 괄호를 전부 친 다음 ②각 괄호의 연산자를 그 괄호의 닫는 쪽으로 옮기고 ③괄호를 지우는</b> 3단계다.</p>
+      <p>예: <code>A + B * C</code> → ① 우선순위대로 괄호: <code>(A + (B * C))</code> → ② 연산자를 각 괄호 끝으로: <code>(A (B C *) +)</code> → ③ 괄호 제거: <b><code>ABC*+</code></b></p>
+      <p><b>핵심 원칙 두 가지</b> — ① <b>피연산자 순서는 절대 안 바뀐다</b>(A B C 그대로), ② <b>연산자는 계산되는 순서대로 등장한다</b>(먼저 계산할 *가 앞, 나중에 계산할 +가 뒤).</p>
+      <p>이 두 가지만 알면 <b>선택지를 보고 빠르게 소거</b>할 수 있다. 피연산자 순서가 원본과 다른 선택지는 즉시 탈락이고, 남은 것 중 연산자 순서가 우선순위와 맞는 것을 고르면 된다.</p>
+    </div>
+
+    <p><b>변환 예제: <code>(8 − 2*3) / 2 + 6*3 / 2</code> 를 후위표기로</b> <span class="page-ref">📖 기출문제집 p.455</span></p>
+    <ol class="steps">
+      <li>괄호 안의 <code>2*3</code>을 먼저 변환 → <code>23*</code></li>
+      <li>괄호 안의 <code>8 − (23*)</code> 변환 → <code>823*−</code></li>
+      <li>그것을 <code>/2</code> → <code>823*−2/</code></li>
+      <li>오른쪽 항의 <code>6*3</code> 변환 → <code>63*</code></li>
+      <li>그것을 <code>/2</code> → <code>63*2/</code></li>
+      <li>마지막으로 두 덩어리를 <code>+</code>로 묶기 → <b><code>823*−2/63*2/+</code></b></li>
+    </ol>
+
+    <div class="deep">
+      <h4>후위 → 전위 변환: 연산자를 왼쪽으로 옮기기만 하면 된다</h4>
+      <p>후위식 <code>ABC*D/+E−</code>를 전위로 바꾸려면, <b>안쪽부터 "피연산자-피연산자-연산자" 묶음을 찾아 연산자를 앞으로 빼내고, 그 묶음을 하나의 피연산자로 취급</b>하며 반복한다.</p>
+      <ol class="steps">
+        <li><code>BC*</code> 발견 → <code>*BC</code> (이제 이 덩어리를 ⓧ라 하자)</li>
+        <li><code>ⓧD/</code> → <code>/ⓧD</code> = <code>/*BCD</code> (덩어리 ⓨ)</li>
+        <li><code>Aⓨ+</code> → <code>+Aⓨ</code> = <code>+A/*BCD</code> (덩어리 ⓩ)</li>
+        <li><code>ⓩE−</code> → <code>−ⓩE</code> = <b><code>−+A/*BCDE</code></b></li>
+      </ol>
+      <p>여기서도 <b>피연산자 순서 A B C D E는 끝까지 그대로</b>다. 전위·후위 변환 문제에서 선택지의 알파벳 순서가 뒤바뀐 것들은 전부 오답이다.</p>
+    </div>
+
+    <p><b>후위식 계산: 스택으로 기계처럼 처리하기</b> <span class="page-ref">📖 기출문제집 p.458</span></p>
+    <p>규칙은 딱 두 줄이다 — <b>숫자를 만나면 스택에 push</b>, <b>연산자를 만나면 스택에서 2개를 pop해 계산하고 결과를 다시 push</b>. (뺄셈·나눗셈은 <b>먼저 꺼낸 값이 뒤쪽 피연산자</b>라는 점에 주의!)</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 240" role="img" aria-label="후위식 4 5 + 2 3 곱하기 빼기를 스택으로 계산하는 과정에서 스택 상태가 단계별로 변하는 모습">
+        <text x="360" y="18" font-size="13" text-anchor="middle" font-weight="700">후위식 &nbsp;4 &nbsp;5 &nbsp;+ &nbsp;2 &nbsp;3 &nbsp;* &nbsp;− &nbsp;의 계산</text>
+
+        <text x="55" y="45" font-size="11.5" text-anchor="middle">4 push</text>
+        <rect x="25" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="55" y="179" font-size="12" text-anchor="middle">4</text>
+
+        <text x="150" y="45" font-size="11.5" text-anchor="middle">5 push</text>
+        <rect x="120" y="132" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="150" y="151" font-size="12" text-anchor="middle">5</text>
+        <rect x="120" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="150" y="179" font-size="12" text-anchor="middle">4</text>
+
+        <text x="245" y="45" font-size="11.5" text-anchor="middle">+ 계산</text>
+        <text x="245" y="62" font-size="10" text-anchor="middle" opacity="0.7">4+5</text>
+        <rect x="215" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="2"/><text x="245" y="179" font-size="12" text-anchor="middle" font-weight="700">9</text>
+
+        <text x="340" y="45" font-size="11.5" text-anchor="middle">2 push</text>
+        <rect x="310" y="132" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="340" y="151" font-size="12" text-anchor="middle">2</text>
+        <rect x="310" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="340" y="179" font-size="12" text-anchor="middle">9</text>
+
+        <text x="435" y="45" font-size="11.5" text-anchor="middle">3 push</text>
+        <rect x="405" y="104" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="435" y="123" font-size="12" text-anchor="middle">3</text>
+        <rect x="405" y="132" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="435" y="151" font-size="12" text-anchor="middle">2</text>
+        <rect x="405" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="435" y="179" font-size="12" text-anchor="middle">9</text>
+
+        <text x="530" y="45" font-size="11.5" text-anchor="middle">* 계산</text>
+        <text x="530" y="62" font-size="10" text-anchor="middle" opacity="0.7">2*3</text>
+        <rect x="500" y="132" width="60" height="28" fill="none" stroke="currentColor" stroke-width="2"/><text x="530" y="151" font-size="12" text-anchor="middle" font-weight="700">6</text>
+        <rect x="500" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="530" y="179" font-size="12" text-anchor="middle">9</text>
+
+        <text x="640" y="45" font-size="11.5" text-anchor="middle">− 계산</text>
+        <text x="640" y="62" font-size="10" text-anchor="middle" opacity="0.7">9−6</text>
+        <rect x="610" y="160" width="60" height="28" fill="none" stroke="currentColor" stroke-width="2.5"/><text x="640" y="179" font-size="13" text-anchor="middle" font-weight="700">3</text>
+        <text x="640" y="208" font-size="11" text-anchor="middle" font-weight="700">최종 답</text>
+
+        <line x1="20" y1="196" x2="700" y2="196" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <text x="20" y="225" font-size="11" opacity="0.8">각 단계의 top 값: 4 → 5 → 9 → 2 → 3 → 6 → 3 &nbsp;(시험에서 "top 원소의 변화"를 묻는 유형이 그대로 이것이다)</text>
+      </svg>
+      <figcaption>후위식 계산은 스택 하나로 끝난다 — 숫자는 쌓고, 연산자를 만나면 위에서 2개를 꺼내 계산한 뒤 결과를 다시 쌓는다.</figcaption>
+    </figure>
+    <div class="tip"><b>뺄셈·나눗셈 순서 함정:</b> <code>9 6 −</code> 에서 pop하면 <b>6이 먼저</b> 나오고 9가 나중에 나온다. 하지만 계산은 <b>나중에 꺼낸 것 − 먼저 꺼낸 것 = 9 − 6 = 3</b>이다. 순서를 뒤집어 6−9=−3으로 계산하는 것이 가장 흔한 실수다.</div>
   </section>
 
   <section class="block">
@@ -94,6 +198,11 @@
       <li>스택·큐 모두 배열/연결리스트로 둘 다 구현 가능, 삽입·삭제의 시간복잡도는 O(1)</li>
       <li>원형 큐를 쓰는 이유: 배열 기반 큐에서 <b>앞쪽 빈 공간 낭비</b>를 없애기 위해</li>
       <li>0-주소 명령어(스택 계산) 문제는 <a href="../01_컴퓨터구조/CPU와명령어처리.html">CPU와 명령어처리 문서</a>에 계산 예제 있음</li>
+      <li><b>중위 → 후위 변환</b>은 거의 매년 출제 — 피연산자 순서는 그대로, 연산자는 계산 순서대로 뒤에 붙는다</li>
+      <li><b>후위식 계산</b>은 스택으로: 숫자는 push, 연산자는 2개 pop 후 계산해 다시 push</li>
+      <li>뺄셈·나눗셈에서 <b>나중에 꺼낸 값이 앞</b>(9 6 − 는 9−6) — 순서 뒤집는 실수 주의</li>
+      <li>데크(Deque)는 <b>양쪽 끝 모두</b> 삽입·삭제 가능 ("한쪽 끝만"은 스택)</li>
+      <li>"스택으로 구현 불가능한 것" → <b>은행 대기열·BFS</b>(둘 다 큐)</li>
     </ul>
   </section>
 
@@ -105,6 +214,211 @@
       <tr><td>삽입·삭제 위치</td><td>같은 쪽 (top)</td><td>다른 쪽 (rear에 삽입, front에서 삭제)</td></tr>
       <tr><td>대표 활용</td><td>함수 호출, 재귀, DFS</td><td>스케줄링, 스풀링, BFS</td></tr>
     </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2017 국회 · 기출문제집 p.455</span></div>
+      <p class="q-body">중위 표기법으로 된 다음 식의 <b>후위 표기법</b>으로 옳은 것은?<br><code>(8 − 2*3) / 2 + 6*3 / 2</code></p>
+      <ol class="choices">
+        <li>823*−2/63*2/+</li>
+        <li>23*8−2/63*2/+</li>
+        <li>82−3*2/6+3*2/</li>
+        <li>823*−2/63*2+/</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 823*−2/63*2/+</p>
+        <div class="explain">
+          <p><b>먼저 소거법:</b> 피연산자 순서는 원본과 같아야 한다. 원본 숫자 순서는 <b>8, 2, 3, 2, 6, 3, 2</b>이다. ②번은 <code>23*8</code>로 시작해 순서가 바뀌었으므로 즉시 탈락.</p>
+          <ol class="steps">
+            <li>괄호 안 <code>2*3</code> → <code>23*</code></li>
+            <li><code>8 − (23*)</code> → <code>823*−</code></li>
+            <li><code>… / 2</code> → <code>823*−2/</code></li>
+            <li><code>6*3</code> → <code>63*</code>, 이어서 <code>/2</code> → <code>63*2/</code></li>
+            <li>두 덩어리를 <code>+</code>로 결합 → <b>823*−2/63*2/+</b></li>
+          </ol>
+          <p><b>함정:</b> ④번은 마지막 두 연산자가 <code>2+/</code>로 뒤바뀌어 있다. 오른쪽 항은 "(6*3)을 2로 <b>나눈</b> 뒤" 더하는 것이므로 <code>/</code>가 <code>+</code>보다 먼저 와야 한다. <b>연산자 등장 순서 = 실제 계산 순서</b>임을 이용해 마지막 글자부터 확인하면 빠르다(가장 마지막에 계산되는 연산자가 맨 끝에 온다).</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2020 국회 · 기출문제집 p.456</span></div>
+      <p class="q-body">다음 중위 표기법 식의 <b>후위 표기법</b>으로 옳은 것은?<br><code>( 7 + 6 / 2 ) / 2 + 9 * 4 / 3</code></p>
+      <ol class="choices">
+        <li>6/2+7/29*4/3+</li>
+        <li>62/7+2/943*/+</li>
+        <li>76/2+2/94*3/+</li>
+        <li>762/+2/94*3/+</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 762/+2/94*3/+</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>괄호 안에서 <code>6/2</code>가 먼저 → <code>62/</code></li>
+            <li>괄호 안 <code>7 + (62/)</code> → <code>762/+</code></li>
+            <li>괄호 전체를 <code>/2</code> → <code>762/+2/</code></li>
+            <li>오른쪽 <code>9*4</code> → <code>94*</code>, 이어서 <code>/3</code> → <code>94*3/</code></li>
+            <li><code>+</code>로 결합 → <b>762/+2/94*3/+</b></li>
+          </ol>
+          <p><b>함정:</b> ③번(<code>76/2+…</code>)은 괄호 안에서 <b>7과 6을 먼저 묶어버린</b> 오답이다. 괄호 안이라도 <b>*, / 가 +, − 보다 우선</b>이므로 <code>6/2</code>를 먼저 처리해야 한다. 괄호가 있다고 무조건 왼쪽부터 묶으면 안 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2018 서울시 · 기출문제집 p.457</span></div>
+      <p class="q-body">중위 표기법으로 표현된 다음 수식을 <b>후위 표기법</b>으로 옳게 표현한 것은?<br><code>a + (b*c − d)*(e − f*g) − h</code></p>
+      <ol class="choices">
+        <li>ab*cd+efg*−*−h</li>
+        <li>abc*d+ef*g−*−h</li>
+        <li>abcd+−efg*+*−h−</li>
+        <li>abc*d−efg*−*+h−</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ abc*d−efg*−*+h−</p>
+        <div class="explain">
+          <p>괄호가 둘 있으니 <b>각 괄호를 따로 변환한 뒤 조립</b>하는 것이 정석이다.</p>
+          <ol class="steps">
+            <li>첫 괄호 <code>(b*c − d)</code> → <code>bc*</code> 후 <code>−d</code> → <b>bc*d−</b></li>
+            <li>둘째 괄호 <code>(e − f*g)</code> → <code>fg*</code> 후 <code>e−</code> → <b>efg*−</b></li>
+            <li>두 괄호를 <code>*</code>로 곱함 → <code>bc*d− efg*− *</code></li>
+            <li><code>a +</code> 결합 → <code>a bc*d−efg*−* +</code> = <code>abc*d−efg*−*+</code></li>
+            <li>마지막 <code>− h</code> → <b>abc*d−efg*−*+h−</b></li>
+          </ol>
+          <p><b>함정:</b> ②번은 첫 괄호를 <code>abc*d+</code>로 써서 <b>−를 +로 잘못 옮겼고</b>, 둘째 괄호도 <code>ef*g−</code>로 <b>곱셈 대상이 뒤바뀌어</b> 있다(f*g를 먼저 묶어야 하는데 e*f를 묶음). 괄호 내부를 하나씩 따로 완성한 뒤 조립하면 이런 실수를 피할 수 있다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2017 하반기 국가직 · 기출문제집 p.457</span></div>
+      <p class="q-body">다음 <b>후위(postfix)</b> 표기식을 <b>전위(prefix)</b> 표기식으로 바꾼 것은? (단, +, −, *, /는 연산자이고 A, B, C, D, E는 피연산자)<br><code>ABC*D/+E−</code></p>
+      <ol class="choices">
+        <li>−+A*/BCDE</li>
+        <li>−/*+ABCDE</li>
+        <li>+/*−ABCDE</li>
+        <li>−+A/*BCDE</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ −+A/*BCDE</p>
+        <div class="explain">
+          <p>후위식을 안쪽부터 "피연산자-피연산자-연산자" 묶음으로 찾아 <b>연산자를 앞으로 빼내며</b> 진행한다.</p>
+          <ol class="steps">
+            <li><code>BC*</code> → <code>*BC</code></li>
+            <li><code>(*BC) D /</code> → <code>/*BCD</code></li>
+            <li><code>A (/*BCD) +</code> → <code>+A/*BCD</code></li>
+            <li><code>(+A/*BCD) E −</code> → <b><code>−+A/*BCDE</code></b></li>
+          </ol>
+          <p><b>빠른 확인법:</b> 네 선택지 모두 피연산자 순서가 ABCDE로 같으므로 <b>연산자 배열만</b> 비교하면 된다. 정답의 연산자 순서는 <code>− + A / *</code> — 가장 나중에 계산되는 <code>−</code>가 <b>맨 앞</b>에 오는 것이 전위표기의 특징이다(후위와 정확히 반대).</p>
+          <p><b>함정:</b> ①번(<code>−+A*/BCDE</code>)은 <code>*</code>와 <code>/</code>의 순서만 살짝 바뀐 오답이다. <code>BC</code>를 먼저 곱하므로 <code>*</code>가 <code>BC</code> 바로 앞에 붙어야 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2010 계리직 · 기출문제집 p.458</span></div>
+      <p class="q-body">후위 형식으로 표기된 다음 수식을 스택으로 처리할 때, <b>스택의 탑(TOP) 원소의 값</b>을 올바르게 나열한 것은?<br><code>4 5 + 2 3 * −</code></p>
+      <ol class="choices">
+        <li>4, 5, 2, 3, 6, −1, 3</li>
+        <li>4, 5, 9, 2, 3, 6, −3</li>
+        <li>4, 5, 9, 2, 18, 3, 16</li>
+        <li>4, 5, 9, 2, 3, 6, 3</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 4, 5, 9, 2, 3, 6, 3</p>
+        <div class="explain">
+          <p>토큰을 <b>하나씩 처리할 때마다 맨 위 값이 무엇인지</b> 적어나가면 된다.</p>
+          <ol class="steps">
+            <li><code>4</code> push → 스택 [4], top = <b>4</b></li>
+            <li><code>5</code> push → [4,5], top = <b>5</b></li>
+            <li><code>+</code> → 5와 4를 꺼내 4+5=9 push → [9], top = <b>9</b></li>
+            <li><code>2</code> push → [9,2], top = <b>2</b></li>
+            <li><code>3</code> push → [9,2,3], top = <b>3</b></li>
+            <li><code>*</code> → 3과 2를 꺼내 2*3=6 push → [9,6], top = <b>6</b></li>
+            <li><code>−</code> → 6과 9를 꺼내 <b>9−6=3</b> push → [3], top = <b>3</b></li>
+          </ol>
+          <p><b>함정:</b> ②번의 마지막 값 <b>−3</b>은 뺄셈 순서를 뒤집어 <b>6−9</b>로 계산한 오답이다. pop은 6이 먼저 나오지만, 계산은 <b>나중에 꺼낸 9가 앞</b>에 온다. 뺄셈·나눗셈에서 이 순서를 놓치면 부호나 값이 완전히 달라진다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2019 국가직 · 기출문제집 p.459</span></div>
+      <p class="q-body">다음 <b>전위(prefix)</b> 표기식의 계산 결과는?<br><code>+ − 5 4 × 4 7</code></p>
+      <ol class="choices">
+        <li>−19</li>
+        <li>7</li>
+        <li>28</li>
+        <li>29</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 29</p>
+        <div class="explain">
+          <p>전위식은 <b>"연산자-피연산자-피연산자" 묶음</b>을 찾아 계산하고, 그 결과를 다시 하나의 피연산자로 취급한다. <b>오른쪽 끝에서부터</b> 보는 것이 편하다.</p>
+          <ol class="steps">
+            <li>오른쪽 끝의 묶음 <code>× 4 7</code> → 4 × 7 = <b>28</b></li>
+            <li>그 앞 묶음 <code>− 5 4</code> → 5 − 4 = <b>1</b></li>
+            <li>남은 것은 <code>+ (1) (28)</code> → 1 + 28 = <b>29</b></li>
+          </ol>
+          <p><b>함정:</b> ③번 28은 마지막 덧셈을 빠뜨린 값, ②번 7은 <code>−5 4</code>와 <code>×4 7</code>의 숫자를 잘못 짝지은 경우다. 전위식은 연산자가 앞에 몰려 있어 <b>어느 숫자 둘이 짝인지</b> 헷갈리기 쉬우니, 반드시 <b>오른쪽부터 "연산자+숫자2개" 덩어리</b>를 찾아 지워나가며 풀어라.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2025 국가직 · 기출문제집 p.445</span></div>
+      <p class="q-body">스택을 이용하여 구현할 수 있는 것이 <b>아닌</b> 것은?</p>
+      <ol class="choices">
+        <li>괄호 매칭</li>
+        <li>진법 변환</li>
+        <li>후위표현 연산</li>
+        <li>은행 대기열</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 은행 대기열</p>
+        <div class="explain">
+          <p>은행 대기열은 <b>먼저 온 사람이 먼저 처리되는 FIFO</b>이므로 <b>큐(Queue)</b>로 구현한다. 스택으로 만들면 나중에 온 사람이 먼저 처리되는 불합리가 생긴다.</p>
+          <p>나머지는 모두 <b>"가장 최근 것을 먼저 되돌려야 하는" LIFO 성질</b>을 쓴다:</p>
+          <ul>
+            <li><b>괄호 매칭:</b> 여는 괄호를 쌓아두고, 닫는 괄호가 나오면 <b>가장 최근에 열린 괄호</b>와 짝을 맞춰야 한다</li>
+            <li><b>진법 변환:</b> 나눗셈의 나머지가 <b>나온 순서의 반대로</b> 읽혀야 하므로 스택에 쌓았다 꺼낸다</li>
+            <li><b>후위표현 연산:</b> 피연산자를 쌓아두고 연산자를 만나면 <b>맨 위 2개</b>를 꺼내 계산한다</li>
+          </ul>
+          <p><b>유사 기출:</b> "스택을 사용하는 예로 옳지 않은 것은?" → 정답은 <b>트리의 너비 우선 탐색(BFS)</b>. BFS는 큐, <b>DFS는 스택</b>이라는 짝을 반드시 기억할 것.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2018 국가직 · 기출문제집 p.467</span></div>
+      <p class="q-body">자료구조에 대한 설명으로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>데크는 삽입과 삭제를 한쪽 끝에서만 수행한다.</li>
+        <li>연결리스트로 구현된 스택은 그 크기가 가변적이다.</li>
+        <li>배열로 구현된 스택은 구현이 간단하지만 그 크기가 고정적이다.</li>
+        <li>원형연결리스트는 한 노드에서 다른 모든 노드로 접근이 가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 데크는 삽입과 삭제를 한쪽 끝에서만 수행한다 (틀린 설명)</p>
+        <div class="explain">
+          <p>데크(<b>Deque = Double-Ended Queue</b>)는 이름 그대로 <b>양쪽 끝 모두에서</b> 삽입·삭제가 가능하다. "한쪽 끝에서만"은 <b>스택</b>의 설명이다.</p>
+          <p>나머지는 모두 옳다 — ② 연결리스트 기반 스택은 노드를 계속 붙일 수 있어 <b>크기 제한이 없고</b>, ③ 배열 기반 스택은 <b>선언한 크기를 넘을 수 없으며</b>(오버플로 발생), ④ 원형연결리스트는 고리가 닫혀 있어 <b>어디서든 전체 순회</b>가 가능하다.</p>
+          <p><b>세 줄 정리:</b> 스택 = 한쪽만 / 큐 = 양쪽인데 넣는 곳·빼는 곳이 각각 고정 / 데크 = 양쪽 모두 자유.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">
@@ -126,6 +440,16 @@
       <span class="chip">DFS</span>
       <span class="chip">BFS</span>
       <span class="chip">스풀링</span>
+      <span class="chip">데크</span>
+      <span class="chip">Deque</span>
+      <span class="chip">중위표기</span>
+      <span class="chip">전위표기</span>
+      <span class="chip">후위표기</span>
+      <span class="chip">postfix</span>
+      <span class="chip">prefix</span>
+      <span class="chip">infix</span>
+      <span class="chip">괄호매칭</span>
+      <span class="chip">진법변환</span>
     </div>
   </section>
 

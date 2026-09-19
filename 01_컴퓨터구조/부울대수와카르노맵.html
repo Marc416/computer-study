@@ -20,6 +20,16 @@
   </div>
 
   <section class="block">
+    <h2><span class="emoji">🎯</span>이 단원을 왜 배우나</h2>
+    <div class="deep">
+      <h4>논리식 한 글자가 곧 전선 한 가닥, 게이트 한 개다</h4>
+      <p>논리식 <code>AB + AB' + A'B</code>를 그대로 회로로 만들면 AND 게이트 3개, OR 게이트 2개, NOT 게이트 2개가 필요하다. 그런데 이걸 간략화하면 <code>A + B</code> — <b>OR 게이트 딱 1개</b>로 끝난다. 똑같이 동작하는데 <b>부품이 7개에서 1개로</b> 줄어든 것이다.</p>
+      <p>실제 CPU에는 수십억 개의 게이트가 들어간다. 게이트 하나를 줄이면 <b>비용·전력·발열이 줄고 속도는 빨라진다.</b> 그래서 논리식 간략화는 단순한 수학 퍼즐이 아니라 <b>하드웨어 설계의 핵심 기술</b>이다. 이 단원이 시험에 매년 나오는 이유이기도 하다.</p>
+      <p>간략화 방법은 두 가지다. <b>부울대수</b>는 법칙을 하나씩 적용해 식을 줄이는 방식으로, 정확하지만 어디서 멈춰야 할지 판단이 어렵다. <b>카르노맵</b>은 표에 그려놓고 눈으로 묶는 방식으로, <b>변수 4개까지는 압도적으로 빠르고 실수가 적다.</b> 시험에서는 상황에 따라 골라 쓰되, <b>선택지를 역으로 대입해 보는 것</b>이 가장 빠를 때도 많다.</p>
+    </div>
+  </section>
+
+  <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
     <h3>부울대수 기본 법칙 <span class="page-ref">📖 기출문제집 p.71</span></h3>
@@ -29,12 +39,24 @@
       <tr><td>지배법칙</td><td>A + 1 = 1, A · 0 = 0</td></tr>
       <tr><td>동일법칙</td><td>A + A = A, A · A = A</td></tr>
       <tr><td>보수법칙</td><td>A + A' = 1, A · A' = 0</td></tr>
-      <tr><td>분배법칙</td><td>A(B+C) = AB+AC, A+BC = (A+B)(A+C)</td></tr>
+      <tr><td>분배법칙</td><td>A(B+C) = AB+AC, <b>A+BC = (A+B)(A+C)</b></td></tr>
       <tr><td>흡수법칙</td><td>A + AB = A, A(A+B) = A</td></tr>
       <tr><td>드모르간 법칙</td><td>(A+B)' = A'B', (AB)' = A'+B'</td></tr>
     </table>
+    <div class="tip"><b>가장 중요한 법칙 두 개:</b> ① <b>A + A' = 1</b> (보수법칙) — 변수를 통째로 소거하는 유일한 수단. ② <b>A + BC = (A+B)(A+C)</b> (OR에 대한 분배법칙) — 일반 수학에는 없는 형태라 낯설지만, 간략화 문제의 마지막 단계에서 거의 항상 등장한다.</div>
 
-    <h3>대수적 간략화 예제 (기출)</h3>
+    <div class="deep">
+      <h4>외우기 힘든 세 가지를 직관으로 이해하기</h4>
+      <p><b>① 흡수법칙 A + AB = A</b><br>
+      "A이거나, (A이면서 B)" — 뒤쪽은 이미 A에 포함된다. <b>A만 참이면 전체가 참</b>이므로 B는 결과에 아무 영향이 없다. 큰 집합이 작은 집합을 삼켜버리는 것이라 "흡수"다.</p>
+      <p><b>② A + A'B = A + B</b> (흡수법칙과 헷갈리는 형태)<br>
+      여기선 뒤쪽이 <b>A'</b>B라 A에 포함되지 않는다. A가 참이면 전체 참, A가 거짓이면 A'=1이므로 결과는 B에 달렸다. 즉 <b>"A거나 B"</b>. 증명은 분배법칙으로: A + A'B = (A+A')(A+B) = 1·(A+B) = A+B.<br>
+      <b>구분법:</b> 뒤 항에 <b>A'가 붙었으면 A+B</b>, 그냥 <b>A면 A</b>로 흡수. 시험에 둘 다 나온다.</p>
+      <p><b>③ A + BC = (A+B)(A+C)</b><br>
+      우변을 전개하면 AA + AC + AB + BC = A + AC + AB + BC = A(1+C+B) + BC = A + BC ✓. 일반 숫자 계산과 달리 <b>OR도 AND에 대해 분배된다</b>는 점이 부울대수의 특징이다.</p>
+    </div>
+
+    <h3>대수적 간략화 예제 (기출) <span class="page-ref">📖 기출문제집 p.71~74</span></h3>
     <div class="tip">
       <b>예제 1</b>: AB + AB' + A'B<br>
       = A(B+B') + A'B = A + A'B = (A+A')(A+B) = <b>A + B</b>
@@ -48,6 +70,16 @@
       = (AB+AB'+A'B')C = (A+A'B')C = (A+A')(A+B')C = <b>AC + B'C</b>
     </div>
     <div class="analogy"><b>풀이 팁:</b> 공통 문자를 묶어 인수분해 → 보수법칙(X+X'=1)으로 소거 → 분배법칙으로 재정리. "같은 항이 두 번 곱해지면 지운다"는 흡수법칙을 가장 많이 쓴다.</div>
+
+    <div class="deep">
+      <h4>"나머지 셋과 다른 것 찾기" 유형을 30초에 푸는 법</h4>
+      <p>이 유형은 보기 4개를 <b>전부 간략화</b>해야 하는 것처럼 보이지만, 실전에서는 요령이 있다. 보기들이 대개 <b>A 또는 A+B 둘 중 하나</b>로 수렴하므로, 각 보기에서 <b>A'(보수)가 등장하는지</b>만 먼저 훑어라.</p>
+      <ul>
+        <li><code>A(A+B)</code>, <code>AB'+A</code>, <code>(A+B)(A+B')</code> → A'가 없다 → 전부 <b>A</b>로 흡수됨</li>
+        <li><code>A + A'B</code> → A'가 있다 → <b>A+B</b>로 확장됨 ← 혼자 다름</li>
+      </ul>
+      <p>물론 항상 통하는 건 아니니 최종 확인은 필요하지만, <b>어느 것이 수상한지 먼저 찍고 그것만 검산</b>하면 시간이 크게 절약된다.</p>
+    </div>
 
     <h3>카르노맵(K-map)이란? <span class="page-ref">📖 기출문제집 p.77~78</span></h3>
     <ul>
@@ -137,6 +169,252 @@
       <li>모든 1을 포함할 때까지 묶음을 OR로 연결</li>
       <li>Don't Care(X)는 묶음을 더 크게 만들 수 있을 때만 1로 사용, 아니면 무시</li>
     </ol>
+
+    <div class="deep">
+      <h4>묶음 크기와 남는 변수 개수의 관계 — 이것만 알면 검산이 된다</h4>
+      <p>4변수 카르노맵에서 묶음 크기에 따라 <b>몇 개의 변수가 살아남는지가 정해져 있다.</b></p>
+      <table>
+        <tr><th>묶음 크기</th><th>사라지는 변수</th><th>남는 변수 개수 (4변수 기준)</th></tr>
+        <tr><td>1칸</td><td>0개</td><td>4개 (예: AB'CD)</td></tr>
+        <tr><td>2칸</td><td>1개</td><td>3개 (예: AB'C)</td></tr>
+        <tr><td>4칸</td><td>2개</td><td><b>2개</b> (예: BD)</td></tr>
+        <tr><td>8칸</td><td>3개</td><td><b>1개</b> (예: A')</td></tr>
+      </table>
+      <p>그래서 답이 <code>A' + BD + B'D'</code>라면 "8칸 묶음 1개 + 4칸 묶음 2개"로 만들어졌다는 뜻이다. <b>선택지를 보고 역으로 묶음 크기를 추측</b>하면 어디를 묶어야 하는지가 먼저 보인다.</p>
+      <p><b>묶을 때 지켜야 할 규칙:</b> ① 크기는 반드시 <b>2ⁿ</b>(1, 2, 4, 8, 16)개. 3칸·6칸 묶음은 없다. ② 반드시 <b>직사각형</b> 모양(L자 불가). ③ <b>겹쳐도 된다</b> — 이미 다른 묶음에 들어간 1을 또 묶어 더 크게 만들 수 있다. ④ 표의 <b>상하·좌우 끝은 서로 이어져 있다</b>(원통/도넛처럼).</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">✏️</span>연습문제</h2>
+    <p style="font-size:13.5px;color:var(--text-dim);margin-top:-4px;">먼저 스스로 풀어본 뒤 "해설 보기"를 눌러 확인하세요.</p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2018 계리직 · 기출문제집 p.71</span></div>
+      <p class="q-body">불 대수(Boolean Algebra)에 대한 최소화로 <b>옳지 않은</b> 것은?</p>
+      <ol class="choices">
+        <li>A(A + B) = A</li>
+        <li>A + A'B = A + B</li>
+        <li>A(A' + B) = AB</li>
+        <li>AB + AB' + A'B = A</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (AB + AB' + A'B = A + B 이므로 틀림)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>④ AB + AB' + A'B = A(B+B') + A'B = A·1 + A'B = <b>A + A'B</b></li>
+            <li>여기서 멈추면 안 된다. A + A'B = (A+A')(A+B) = <b>A + B</b> ≠ A</li>
+            <li>① A(A+B) = AA + AB = A + AB = A(1+B) = <b>A</b> ✓ (흡수법칙)</li>
+            <li>② A + A'B = <b>A + B</b> ✓ (위와 동일한 변형)</li>
+            <li>③ A(A'+B) = AA' + AB = 0 + AB = <b>AB</b> ✓</li>
+          </ol>
+          <p><b>이 문제의 핵심:</b> ④는 <b>중간 단계(A + A'B)에서 멈추면 A로 착각</b>하게 만드는 함정이다. A' 항이 남아 있으면 아직 끝난 게 아니라는 신호다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2016 국가직 · 기출문제집 p.72</span></div>
+      <p class="q-body">나머지 셋과 <b>다른</b> 부울 함수를 표현하는 것은?</p>
+      <ol class="choices">
+        <li>F = A + A'B</li>
+        <li>F = A(A + B)</li>
+        <li>F = AB' + A</li>
+        <li>F = (A + B)(A + B')</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① (①만 A+B, 나머지는 전부 A)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>① A + A'B = (A+A')(A+B) = <b>A + B</b> ← 혼자 다름</li>
+            <li>② A(A + B) = AA + AB = A + AB = A(1+B) = <b>A</b></li>
+            <li>③ AB' + A = A(B' + 1) = A·1 = <b>A</b></li>
+            <li>④ (A + B)(A + B') = AA + AB' + AB + BB' = A + AB' + AB + 0 = A(1+B'+B) = <b>A</b></li>
+          </ol>
+          <p><b>30초 풀이:</b> 보기 중 <b>A'가 등장하는 것은 ①뿐</b>이다. A'가 있으면 A에 흡수되지 않고 식이 확장되므로, 계산 전에 ①을 의심하고 그것만 검산하면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2023 지방직 · 기출문제집 p.72</span></div>
+      <p class="q-body">부울 변수 X, Y, Z에 대한 등식으로 <b>옳지 않은</b> 것은? (· 은 AND, + 는 OR, ' 는 NOT)</p>
+      <ol class="choices">
+        <li>X + (Y · Z) = (X + Y) · (X + Z)</li>
+        <li>X · (X + Y) = X · X + Y</li>
+        <li>(X + Y) + Z = X + (Y + Z)</li>
+        <li>(X + Y)' = X' · Y'</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (X·(X+Y) = X 이지 X·X + Y 가 아니다)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>② 좌변: X·(X+Y) = XX + XY = X + XY = X(1+Y) = <b>X</b></li>
+            <li>② 우변: X·X + Y = X + Y</li>
+            <li>X ≠ X + Y 이므로 <b>등식이 성립하지 않는다</b> → 정답</li>
+            <li>① 은 OR에 대한 <b>분배법칙</b> ✓</li>
+            <li>③ 은 <b>결합법칙</b> ✓ (OR끼리는 순서·묶음 자유)</li>
+            <li>④ 는 <b>드모르간 법칙</b> ✓</li>
+          </ol>
+          <p><b>함정 구조:</b> ②는 분배를 <b>잘못 적용</b>한 형태다. X·(X+Y)를 전개하면 XX + X<b>Y</b>이지 XX + Y가 아니다 — 괄호를 풀 때 <b>바깥 항을 각 항에 모두 곱해야</b> 한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2018 교육청 · 기출문제집 p.72</span></div>
+      <p class="q-body">부울 대수식 <b>A + B·C</b> 와 진리값이 <b>다른</b> 것은?</p>
+      <ol class="choices">
+        <li>(A + B) · (A + C)</li>
+        <li>B·C + A·(A + B)</li>
+        <li>A + A·C + B·C</li>
+        <li>A + B·(B + C)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ (A + B·(B+C) = A + B)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>④ B(B+C) = BB + BC = B + BC = B(1+C) = <b>B</b> → 전체는 <b>A + B</b> ≠ A + BC</li>
+            <li>① (A+B)(A+C) = <b>A + BC</b> ✓ (분배법칙 그 자체)</li>
+            <li>② A(A+B) = A 이므로 BC + A = <b>A + BC</b> ✓</li>
+            <li>③ A + AC + BC = A(1+C) + BC = <b>A + BC</b> ✓</li>
+          </ol>
+          <p><b>포인트:</b> ④에서 <b>B(B+C)가 B로 흡수</b>되면서 C가 통째로 사라지는 것이 핵심이다. B와 C가 AND로 묶여 있어야 하는데, ④는 B만 남아 <b>C 없이도 참이 되는</b> 더 느슨한 식이 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2011 국가직 · 기출문제집 p.73</span></div>
+      <p class="q-body">다음 부울 함수식 F를 간략화한 결과로 옳은 것은?<br><code>F = ABC + ABC' + AB'C + AB'C' + A'B'C + A'B'C'</code></p>
+      <ol class="choices">
+        <li>F = A' + B</li>
+        <li>F = A + B'</li>
+        <li>F = A'B</li>
+        <li>F = AB'</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② F = A + B'</p>
+        <div class="explain">
+          <p>항이 6개나 되지만 <b>C와 C'가 짝지어 나오는 구조</b>를 발견하면 순식간에 줄어든다.</p>
+          <ol class="steps">
+            <li>C끼리 짝지어 묶기: AB(C+C') + AB'(C+C') + A'B'(C+C')</li>
+            <li>C + C' = 1 이므로: AB + AB' + A'B'</li>
+            <li>앞 두 항 묶기: A(B+B') + A'B' = A + A'B'</li>
+            <li>분배법칙: A + A'B' = (A+A')(A+B') = 1·(A+B') = <b>A + B'</b></li>
+          </ol>
+          <p><b>카르노맵으로 검산:</b> 1이 되는 minterm 6개 중 A=1인 4칸(ABC, ABC', AB'C, AB'C')이 <b>4칸 묶음 → A</b>, B=0인 4칸(AB'C, AB'C', A'B'C, A'B'C')이 <b>4칸 묶음 → B'</b>. 합치면 A + B' ✓ 두 방법이 일치한다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2013 국가직 · 기출문제집 p.74</span></div>
+      <p class="q-body">다음 부울 함수식 F를 간략화한 결과로 옳은 것은?<br><code>F = ABC + AB'C + A'B'C</code></p>
+      <ol class="choices">
+        <li>F = AC + B'C</li>
+        <li>F = AC + BC'</li>
+        <li>F = A'C + B'C</li>
+        <li>F = A'C + BC</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① F = AC + B'C</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>모든 항에 <b>C가 공통</b>이므로 먼저 빼낸다: (AB + AB' + A'B')·C</li>
+            <li>괄호 안: A(B+B') + A'B' = A + A'B'</li>
+            <li>분배법칙: A + A'B' = (A+A')(A+B') = A + B'</li>
+            <li>다시 C를 곱하면: (A + B')C = <b>AC + B'C</b></li>
+          </ol>
+          <p><b>빠른 확인법:</b> 원래 식의 모든 항이 <code>…C</code>로 끝난다 → <b>C가 0이면 F도 반드시 0</b>이다. 따라서 답에도 모든 항에 C가 있어야 한다. ②(BC')와 ④는 C'가 섞여 있어 이 조건을 위반 → 즉시 탈락. 남은 ①③ 중 A' 여부만 확인하면 된다.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2012 계리직 · 기출문제집 p.71</span></div>
+      <p class="q-body">다음 논리 연산식을 간략화하면 어떤 게이트 하나로 표현되는가?<br><code>(A + B)(A + B')(A' + B)</code></p>
+      <ol class="choices">
+        <li>A와 B의 OR 회로</li>
+        <li>A와 B의 NAND 회로</li>
+        <li>A와 B의 AND 회로</li>
+        <li>A와 B의 XOR 회로</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ AND 회로 (F = AB)</p>
+        <div class="explain">
+          <ol class="steps">
+            <li>앞의 두 괄호부터 전개: (A+B)(A+B') = AA + AB' + AB + BB'</li>
+            <li>AA = A, BB' = 0 → A + AB' + AB = A(1 + B' + B) = <b>A</b></li>
+            <li>남은 것과 곱하기: A(A' + B) = AA' + AB = 0 + AB = <b>AB</b></li>
+            <li>AB는 A와 B의 <b>논리곱(AND)</b> → ③</li>
+          </ol>
+          <p><b>검산(진리표로 확인):</b> A=1,B=1일 때만 세 괄호가 모두 1이 된다. A=1,B=0이면 (A'+B) = 0+0 = 0, A=0,B=1이면 (A+B') = 0+0 = 0 → 확실히 AND ✓</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2008 국가직 · 기출문제집 p.76</span></div>
+      <p class="q-body">다음 카르노맵을 간략화한 결과를 논리식으로 올바르게 표현한 것은?</p>
+      <figure class="diagram">
+        <svg viewBox="0 0 520 300" role="img" aria-label="4변수 카르노맵: AB행 00과 01은 모두 1, AB행 11은 CD가 01과 11일 때 1, AB행 10은 CD가 00과 10일 때 1">
+          <text x="100" y="24" font-size="12" text-anchor="middle" opacity="0.8">CD →</text>
+          <text x="110" y="46" font-size="12" text-anchor="middle">00</text>
+          <text x="180" y="46" font-size="12" text-anchor="middle">01</text>
+          <text x="250" y="46" font-size="12" text-anchor="middle">11</text>
+          <text x="320" y="46" font-size="12" text-anchor="middle">10</text>
+          <text x="66" y="72" font-size="12" text-anchor="end">AB ↓</text>
+          <text x="66" y="100" font-size="12" text-anchor="end">00</text>
+          <text x="66" y="155" font-size="12" text-anchor="end">01</text>
+          <text x="66" y="210" font-size="12" text-anchor="end">11</text>
+          <text x="66" y="265" font-size="12" text-anchor="end">10</text>
+          <g fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="75" y="55" width="70" height="55"/><rect x="145" y="55" width="70" height="55"/><rect x="215" y="55" width="70" height="55"/><rect x="285" y="55" width="70" height="55"/>
+            <rect x="75" y="110" width="70" height="55"/><rect x="145" y="110" width="70" height="55"/><rect x="215" y="110" width="70" height="55"/><rect x="285" y="110" width="70" height="55"/>
+            <rect x="75" y="165" width="70" height="55"/><rect x="145" y="165" width="70" height="55"/><rect x="215" y="165" width="70" height="55"/><rect x="285" y="165" width="70" height="55"/>
+            <rect x="75" y="220" width="70" height="55"/><rect x="145" y="220" width="70" height="55"/><rect x="215" y="220" width="70" height="55"/><rect x="285" y="220" width="70" height="55"/>
+          </g>
+          <g font-size="15" text-anchor="middle">
+            <text x="110" y="90">1</text><text x="180" y="90">1</text><text x="250" y="90">1</text><text x="320" y="90">1</text>
+            <text x="110" y="145">1</text><text x="180" y="145">1</text><text x="250" y="145">1</text><text x="320" y="145">1</text>
+            <text x="110" y="200">0</text><text x="180" y="200">1</text><text x="250" y="200">1</text><text x="320" y="200">0</text>
+            <text x="110" y="255">1</text><text x="180" y="255">0</text><text x="250" y="255">0</text><text x="320" y="255">1</text>
+          </g>
+          <text x="380" y="90" font-size="11.5" opacity="0.8">← A = 0인 두 행은</text>
+          <text x="380" y="106" font-size="11.5" opacity="0.8">　 전부 1</text>
+        </svg>
+        <figcaption>문제에 주어진 4변수 카르노맵 — 먼저 "전부 1인 큰 영역"부터 찾는 것이 정석이다.</figcaption>
+      </figure>
+      <ol class="choices">
+        <li>A' + BD + B'D'</li>
+        <li>A + BD + B'D'</li>
+        <li>D + AB + B'D'</li>
+        <li>D' + AB + B'D'</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① A' + BD + B'D'</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>8칸 묶음 먼저:</b> AB = 00, 01 두 행(=A가 0인 영역) 8칸이 전부 1 → 변하는 B·C·D는 버리고 <b>A'</b>만 남는다</li>
+            <li><b>남은 1 찾기:</b> AB=11 행의 CD=01, 11 두 칸과, AB=10 행의 CD=00, 10 두 칸이 아직 안 덮였다</li>
+            <li><b>BD 묶음:</b> AB=01·11 행 × CD=01·11 열의 4칸을 묶는다(위쪽 행과 겹쳐도 무방) → 공통은 B=1, D=1 → <b>BD</b></li>
+            <li><b>B'D' 묶음:</b> AB=00·10 행 × CD=00·10 열의 네 귀퉁이 4칸을 묶는다(표의 상하·좌우가 이어짐) → 공통은 B=0, D=0 → <b>B'D'</b></li>
+            <li>세 묶음을 OR: <b>A' + BD + B'D'</b></li>
+          </ol>
+          <p><b>선택지로 검산하기:</b> AB=10, CD=00 칸(=A·B'C'D')이 1이다. ②처럼 <b>A</b>가 답에 있으면 A=1인 AB=11 행의 CD=00 칸도 1이어야 하는데 실제로는 0 → ② 탈락. 이런 식으로 <b>0인 칸 하나를 골라 선택지를 대입</b>하면 계산 없이 걸러낼 수 있다.</p>
+          <p><b>포인트:</b> 이 문제처럼 <b>한 변수가 0인 절반이 통째로 1</b>인 패턴은 매우 흔하다. 카르노맵을 받으면 <b>"통째로 1인 행/열이 있나"</b>부터 확인하는 습관을 들일 것.</p>
+        </div>
+      </details>
+    </div>
   </section>
 
   <section class="block">

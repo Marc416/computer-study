@@ -10,154 +10,779 @@
 <div class="page">
   <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">군무원 기출문제</a> / 2024년</div>
   <h1 class="page-title">2024년 군무원 - 컴퓨터일반</h1>
-  <p class="page-subtitle">25문항 · 기출문제집 p.824~834 · 주제별로 묶어서 복습</p>
+  <p class="page-subtitle">25문항 · 기출문제집 p.824~834 · 먼저 풀고 해설로 채점하기</p>
+
+  <div class="summary-box">
+    <span class="tag">사용법</span>
+    <p>각 문제의 <b>지문과 선택지만 보고 먼저 답을 골라라.</b> 그 다음 "해설 보기"를 눌러 채점한다.</p>
+    <p>틀린 문제는 해설 끝의 <b>관련 문서 링크</b>를 눌러 개념부터 다시 보는 것이 가장 빠른 복습법이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">📊</span>2024년 출제 경향</h2>
+    <div class="deep">
+      <h4>영역별 출제 분포 (총 25문항)</h4>
+      <ul>
+        <li><b>데이터베이스·자료구조 6문항</b> — 후위 표기법, 이진트리 성질, 빅오 순서, 선택 정렬 코드까지 <b>자료구조 비중이 특히 크다.</b></li>
+        <li><b>컴퓨터구조 5문항</b> — EPROM, 문자 인코딩 비트 수, 플립플롭, 캐시용 메모리, 진법 변환.</li>
+        <li><b>운영체제 5문항</b> — 스케줄링 2문항(개념+계산), chmod 권한, 디스크 할당, 페이징 주소 비트 계산.</li>
+        <li><b>네트워크·정보보안 5문항</b> — 무선랜 규격, 공개키 암호, TCP/IP 계층, HDLC, 다중화.</li>
+        <li><b>소프트웨어공학 2문항</b>, <b>프로그래밍 1문항</b>, <b>신기술 1문항</b>(하이퍼바이저).</li>
+      </ul>
+      <p><b>난이도 특징:</b> 2025년과 달리 <b>직접 계산해야 답이 나오는 문제가 4개</b>(Q13 선점 SJF 평균 반환시간, Q15 페이징 비트 수, Q18 후위 표기 변환, Q23 진법 변환)로 늘었다. 암기만으로는 부족하고 <b>손으로 풀어보는 연습</b>이 필요한 해였다.</p>
+      <p>또 하나의 특징은 <b>"숫자를 바꿔 쓴 함정"</b>이다. Q9(아스키 7비트 vs 8비트, EBCDIC 8비트 vs 7비트, BCD 6비트 vs 5비트)가 대표적 — 비트 수를 한 칸씩 어긋나게 써놓았다. <b>코드체계별 비트 수는 반드시 정확히</b> 외워야 한다.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">💻</span>컴퓨터구조</h2>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 5</span><span class="q-src">2024 군무원 · 기출문제집 p.825</span></div>
+      <p class="q-body">EPROM(Erasable Programmable ROM)에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>비휘발성 메모리이다.</li>
+        <li>데이터 갱신 횟수의 제한이 없다.</li>
+        <li>데이터를 갱신하려면 저장되어 있는 데이터를 지워야 한다.</li>
+        <li>플래시 메모리는 EPROM의 한 종류이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 갱신 횟수 제한이 없다 (→ 실제로는 제한이 있다)</p>
+        <div class="explain">
+          <p>EPROM·EEPROM·플래시 메모리는 모두 <b>지우고 다시 쓰는 횟수에 물리적 한계</b>가 있다. 전하를 가두는 절연막이 쓰기를 반복할수록 열화되기 때문이다. SSD에 수명(TBW)이 있는 이유가 바로 이것이다.</p>
+          <p><b>나머지가 참인 이유</b></p>
+          <ul>
+            <li>① ROM 계열이므로 전원이 꺼져도 유지된다 → <b>비휘발성</b> ✓</li>
+            <li>③ 플래시는 <b>덮어쓰기가 안 되고 반드시 지우기(erase)를 먼저</b> 해야 한다 ✓</li>
+            <li>④ 플래시 메모리는 EEPROM/EPROM 계열의 발전형이다 ✓</li>
+          </ul>
+          <p><b>ROM 계열 정리:</b> Mask ROM(공장에서 고정) → PROM(사용자가 <b>1회만</b> 기록) → EPROM(<b>자외선</b>으로 지움) → EEPROM(<b>전기적</b>으로 지움) → 플래시(EEPROM을 <b>블록 단위</b>로 지우도록 개선)</p>
+          <p>📚 <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">01_컴퓨터구조 · 마이크로오퍼레이션과 기억장치</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 9</span><span class="q-src">2024 군무원 · 기출문제집 p.827</span></div>
+      <p class="q-body">문자 인코딩 방법에 대한 설명으로 가장 적절한 것은?</p>
+      <ol class="choices">
+        <li>아스키(ASCII) 코드는 8비트로 구성되어 2⁸(=256)개의 문자 표현이 가능하다.</li>
+        <li>EBCDIC는 7비트로 구성되어 2⁷(=128)개의 문자 표현이 가능하다.</li>
+        <li>BCD 코드는 5비트로 구성되어 2⁵(=32)개의 문자 표현이 가능하다.</li>
+        <li>유니코드(Unicode)는 16비트로 구성되어 2¹⁶(=65,536)개의 문자 표현이 가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 유니코드 16비트 = 65,536자</p>
+        <div class="explain">
+          <p>비트 수를 <b>한 칸씩 어긋나게</b> 써놓은 전형적 숫자 함정이다. 정확한 표는 이렇다:</p>
+          <table>
+            <tr><th>코드</th><th>비트 수</th><th>표현 가능 문자</th><th>구조</th></tr>
+            <tr><td>BCD</td><td><b>6비트</b></td><td>2⁶ = 64자</td><td>존 2 + 디지트 4 (→ ③이 5비트라 했으니 오답)</td></tr>
+            <tr><td>ASCII</td><td><b>7비트</b></td><td>2⁷ = 128자</td><td>존 3 + 디지트 4 (→ ①이 8비트라 했으니 오답)</td></tr>
+            <tr><td>EBCDIC</td><td><b>8비트</b></td><td>2⁸ = 256자</td><td>존 4 + 디지트 4 (→ ②가 7비트라 했으니 오답)</td></tr>
+            <tr><td>Unicode</td><td><b>16비트</b></td><td>2¹⁶ = 65,536자</td><td>전 세계 문자 통합 ✅</td></tr>
+          </table>
+          <p><b>암기법:</b> <b>6 → 7 → 8 → 16</b> 순서로 커진다. "BCD(6) 아스키(7) EBCDIC(8) 유니코드(16)" 를 숫자 순서 그대로 외우면 절대 안 헷갈린다.</p>
+          <p><b>주의:</b> "확장 아스키 8비트(256자)"라는 표현도 있지만, <b>시험에서 그냥 "아스키"라고 하면 7비트/128자</b>가 정답이다.</p>
+          <p>📚 <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터 표현과 진법</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 10</span><span class="q-src">2024 군무원 · 기출문제집 p.827</span></div>
+      <p class="q-body">논리회로에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>반가산기(half adder)는 두 개의 입력과 두 개의 출력으로 합(sum)과 자리올림(carry)을 얻는다.</li>
+        <li>멀티플렉서(multiplexer)는 여러 개의 입력 중 하나만 출력에 전달해준다.</li>
+        <li>T 플립플롭(flip-flop)은 입력 신호가 0이면 출력 상태가 반전된다.</li>
+        <li>D 플립플롭(flip-flop)은 입력 신호가 0이면 출력 상태가 0이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (T 플립플롭은 입력이 0이면 <b>유지</b>, 1이면 반전)</p>
+        <div class="explain">
+          <p><b>T는 Toggle(뒤집기)의 T</b>다. 입력 T에 <b>1을 넣어야 뒤집히고</b>, 0을 넣으면 하던 대로 유지한다. ③은 이 조건을 반대로 써놓았다.</p>
+          <table>
+            <tr><th>플립플롭</th><th>입력 0일 때</th><th>입력 1일 때</th></tr>
+            <tr><td><b>T</b> (Toggle)</td><td><b>이전 상태 유지</b></td><td><b>반전(Q → Q')</b></td></tr>
+            <tr><td><b>D</b> (Data/Delay)</td><td>출력 0</td><td>출력 1 (입력을 그대로 전달)</td></tr>
+          </table>
+          <p><b>나머지가 참인 이유:</b> ① 반가산기는 입력 A·B 2개 → 출력 S·C 2개 ✓ ② MUX는 여러 입력 중 선택선으로 고른 하나만 통과 ✓ ④ D 플립플롭은 입력값을 그대로 저장하므로 0 넣으면 0 ✓</p>
+          <p>📚 <a href="../01_컴퓨터구조/논리회로.html">01_컴퓨터구조 · 조합논리회로와 순서논리회로</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 11</span><span class="q-src">2024 군무원 · 기출문제집 p.828</span></div>
+      <p class="q-body">캐시 메모리로 사용되는 것으로 가장 적절한 것은?</p>
+      <ol class="choices">
+        <li>SRAM(Static RAM)</li>
+        <li>DRAM(Dynamic RAM)</li>
+        <li>PRAM(Phase-change RAM)</li>
+        <li>MRAM(Magnetic RAM)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① SRAM</p>
+        <div class="explain">
+          <p>캐시는 <b>CPU 속도를 따라잡아야</b> 하므로 무조건 빠른 쪽인 SRAM을 쓴다.</p>
+          <table>
+            <tr><th>구분</th><th>SRAM</th><th>DRAM</th></tr>
+            <tr><td>저장 소자</td><td><b>플립플롭</b> (회로)</td><td><b>커패시터</b> (전하)</td></tr>
+            <tr><td>재충전(refresh)</td><td>불필요</td><td><b>필요</b> (전하가 새기 때문)</td></tr>
+            <tr><td>속도 / 가격</td><td>빠름 / 비쌈</td><td>느림 / 쌈</td></tr>
+            <tr><td>집적도</td><td>낮음</td><td>높음 (대용량 유리)</td></tr>
+            <tr><td>용도</td><td><b>캐시</b></td><td><b>주기억장치</b></td></tr>
+          </table>
+          <p>③ PRAM·④ MRAM은 차세대 <b>비휘발성</b> 메모리 후보로, 현재 캐시 용도로는 쓰이지 않는다.</p>
+          <p>📚 <a href="../01_컴퓨터구조/캐시기억장치.md">01_컴퓨터구조 · 캐시 기억장치</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 23</span><span class="q-src">2024 군무원 · 기출문제집 p.833</span></div>
+      <p class="q-body">2진수 <code>10101001.11000011</code> 을 16진수로 표현한 것으로 옳은 것은?</p>
+      <ol class="choices">
+        <li>A9.B3</li>
+        <li>A9.C3</li>
+        <li>A7.B3</li>
+        <li>A7.C3</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② A9.C3</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><b>소수점을 기준으로</b> 4비트씩 묶는다. 정수부는 소수점에서 <b>왼쪽으로</b>, 소수부는 <b>오른쪽으로</b> 묶는 것이 원칙이다.<br><code>1010 1001 . 1100 0011</code></li>
+            <li>정수부: <code>1010</code> = 8+2 = 10 = <b>A</b>, <code>1001</code> = 8+1 = <b>9</b></li>
+            <li>소수부: <code>1100</code> = 8+4 = 12 = <b>C</b>, <code>0011</code> = 2+1 = <b>3</b></li>
+            <li>결과: <b>A9.C3</b></li>
+          </ol>
+          <p><b>함정:</b> ①의 B3, ③④의 A7은 <b>4비트 묶음을 잘못 계산</b>한 값이다. 1100을 B(1011)로 착각하거나, 1001을 7(0111)로 착각한 경우.</p>
+          <p><b>실수 방지 팁:</b> 4비트 자리값을 <b>8-4-2-1</b>로 적어두고 1인 자리만 더하면 절대 틀리지 않는다. 1100 → 8+4 = 12 = C.</p>
+          <p>📚 <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터 표현과 진법</a></p>
+        </div>
+      </details>
+    </div>
+  </section>
 
   <section class="block">
     <h2><span class="emoji">🖥️</span>운영체제</h2>
-    <div class="wrong-card">
-      <p class="q">❌ Q1. 프로세스 스케줄링 방법 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ② — FCFS는 "평균 대기시간 최적화"가 아니다. 먼저 온 프로세스 실행시간이 길면 뒤 프로세스가 오래 기다림(호위효과)</p>
-      <p class="memo">💡 평균 대기시간을 <b>최적화하는 건 SJF</b> — FCFS는 그냥 "온 순서대로"일 뿐 최적화 개념이 없음 → <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 1</span><span class="q-src">2024 군무원 · 기출문제집 p.824</span></div>
+      <p class="q-body">운영체제의 프로세스 스케줄링 방법에 대한 설명 중 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>라운드 로빈(Round Robin) 스케줄링은 여러 프로세스를 일정 순서에 따라 단위시간씩 실행시킨다.</li>
+        <li>FCFS(First Come First Serve) 스케줄링은 프로세스의 평균 대기 시간을 최적화하는 실행 방법이다.</li>
+        <li>우선순위 스케줄링은 프로세스별 등급에 따라 높은 순위를 먼저 실행시킨다.</li>
+        <li>다단계 큐 스케줄링은 상위 단계 큐의 프로세스를 하위 단계 큐의 프로세스보다 먼저 실행시킨다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>FCFS는 그냥 <b>도착한 순서대로</b> 처리할 뿐, 평균 대기시간을 최적화하지 않는다. 오히려 <b>호위 효과(Convoy Effect)</b> 때문에 평균 대기시간이 나빠지기 쉽다.</p>
+          <p><b>호위 효과란:</b> 실행시간이 아주 긴 프로세스가 먼저 도착하면, 뒤에 온 짧은 프로세스들이 전부 그 뒤에서 하염없이 기다린다. 마트에서 카트 가득 채운 사람 뒤에 껌 하나 든 사람이 줄 선 상황과 같다.</p>
+          <p><b>그럼 평균 대기시간을 최소화하는 것은?</b> → <b>SJF(Shortest Job First)</b>다. 짧은 작업부터 처리하면 평균 대기시간이 수학적으로 최소가 된다는 것이 증명되어 있다. "평균 대기시간 최적"이라는 표현이 나오면 <b>SJF</b>를 떠올려야 한다.</p>
+          <p>📚 <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q6. chmod 640 sample 명령어 설명 중 옳은 것은?</p>
-      <p class="a">✅ 정답 ③ — 그룹에 속한 사용자는 읽기(4)만 가능 (6=rw-, 4=r--, 0=---)</p>
-      <p class="memo">💡 8진수 한 자리 = r(4)+w(2)+x(1) 조합, 소유자/그룹/나머지 순서 — <b>chmod 계산은 반드시 3자리를 각각 분해</b> → <a href="../02_운영체제/운영체제실무.html">02_운영체제 · 운영체제 실무</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 13</span><span class="q-src">2024 군무원 · 기출문제집 p.829 · <b>계산 문제</b></span></div>
+      <p class="q-body">프로세스의 반환시간은 프로세스의 도착부터 종료까지 걸린 시간이다. 다음 프로세스들을 <b>선점식 SJF</b>로 스케줄링할 때, 프로세스의 <b>평균 반환시간</b>으로 옳은 것은?</p>
+      <table>
+        <tr><th>프로세스</th><th>도착시간</th><th>실행시간(ms)</th></tr>
+        <tr><td>1</td><td>0.0</td><td>7</td></tr>
+        <tr><td>2</td><td>1.0</td><td>3</td></tr>
+        <tr><td>3</td><td>5.0</td><td>2</td></tr>
+        <tr><td>4</td><td>7.0</td><td>4</td></tr>
+      </table>
+      <ol class="choices">
+        <li>6.25</li>
+        <li>6.75</li>
+        <li>6.5</li>
+        <li>6.35</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① 6.25</p>
+        <div class="explain">
+          <p><b>선점식 SJF = SRTF(Shortest Remaining Time First)</b>. 새 프로세스가 도착할 때마다 <b>"지금 돌고 있는 것의 남은 시간"과 "새로 온 것의 실행시간"을 비교</b>해 짧은 쪽에 CPU를 준다.</p>
+          <ol class="steps">
+            <li><b>t=0</b> — P1만 있으므로 P1 실행 시작 (남은 7)</li>
+            <li><b>t=1</b> — P2 도착(3). P1 남은 시간 6 &gt; 3 → <b>P1을 밀어내고 P2 실행</b></li>
+            <li><b>t=4</b> — P2 완료. 대기 중인 건 P1(남은 6)뿐 → P1 재개</li>
+            <li><b>t=5</b> — P3 도착(2). P1 남은 5 &gt; 2 → <b>또 P1을 밀어내고 P3 실행</b></li>
+            <li><b>t=7</b> — P3 완료. 동시에 P4 도착(4). P1 남은 5 vs P4 4 → <b>P4 실행</b></li>
+            <li><b>t=11</b> — P4 완료. 남은 건 P1뿐 → P1이 남은 5를 채우고 <b>t=16에 완료</b></li>
+          </ol>
+          <p><b>반환시간 = 완료시각 − 도착시각</b></p>
+          <table>
+            <tr><th>프로세스</th><th>도착</th><th>완료</th><th>반환시간</th></tr>
+            <tr><td>P1</td><td>0</td><td>16</td><td>16 − 0 = <b>16</b></td></tr>
+            <tr><td>P2</td><td>1</td><td>4</td><td>4 − 1 = <b>3</b></td></tr>
+            <tr><td>P3</td><td>5</td><td>7</td><td>7 − 5 = <b>2</b></td></tr>
+            <tr><td>P4</td><td>7</td><td>11</td><td>11 − 7 = <b>4</b></td></tr>
+          </table>
+          <p>평균 = (16 + 3 + 2 + 4) ÷ 4 = 25 ÷ 4 = <b>6.25</b></p>
+          <p><b>실수 포인트 2가지</b></p>
+          <ul>
+            <li><b>반환시간과 대기시간을 혼동하지 말 것.</b> 반환시간 = 도착~완료 전체, 대기시간 = 반환시간 − 실행시간.</li>
+            <li>선점이 일어나면 밀려난 프로세스의 <b>남은 시간을 반드시 갱신</b>해 적어둘 것. 머릿속으로만 하면 거의 틀린다 — 타임라인을 종이에 그려라.</li>
+          </ul>
+          <p>📚 <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">🧮 Q13. 도착시간·실행시간이 주어진 4개 프로세스를 선점형 SJF로 스케줄링할 때 평균 반환시간은?</p>
-      <p class="a">✅ 정답 ① 6.25 — (16+3+2+4)/4 = 6.25초. 새 프로세스 도착마다 실행시간을 비교해 더 짧은 쪽으로 즉시 교체하는 게 핵심</p>
-      <p class="memo">💡 선점형 SJF는 <b>매 도착 시점마다 "지금 남은 시간 vs 새로 온 프로세스 시간"을 비교</b>해서 다시 스케줄링 → <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 15</span><span class="q-src">2024 군무원 · 기출문제집 p.830 · <b>계산 문제</b></span></div>
+      <p class="q-body">페이징 기법을 사용하는 <b>64비트 컴퓨터</b>에서 <b>페이지 크기가 4,096바이트</b>일 때, 논리주소를 구성하는 <b>페이지 번호의 비트 수</b>와 <b>페이지 변위(offset)의 비트 수</b>로 올바른 것은?</p>
+      <ol class="choices">
+        <li>40, 24</li>
+        <li>12, 52</li>
+        <li>42, 12</li>
+        <li>52, 12</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 페이지 번호 52비트, 변위 12비트</p>
+        <div class="explain">
+          <p>논리주소는 <b>[페이지 번호 | 변위]</b> 두 부분으로 쪼개진다. 변위는 "한 페이지 안에서 몇 번째 바이트인지"를 가리키므로, <b>페이지 크기를 전부 가리킬 수 있는 비트 수</b>가 필요하다.</p>
+          <ol class="steps">
+            <li>페이지 크기 4,096바이트 = 2<sup>12</sup> → 한 페이지 안의 모든 바이트를 가리키려면 <b>변위 = 12비트</b></li>
+            <li>전체 논리주소가 64비트이므로 나머지가 페이지 번호</li>
+            <li>페이지 번호 = 64 − 12 = <b>52비트</b></li>
+          </ol>
+          <p><b>검산:</b> 페이지 번호 52비트 → 2<sup>52</sup>개의 페이지. 2<sup>52</sup> × 2<sup>12</sup>바이트 = 2<sup>64</sup>바이트 = 64비트 주소공간 전체 ✓</p>
+          <p><b>공식 한 줄:</b> <code>변위 비트 = log₂(페이지 크기)</code>, <code>페이지 번호 비트 = 전체 주소 비트 − 변위 비트</code></p>
+          <p><b>함정:</b> ②(12, 52)는 <b>둘의 순서를 바꾼</b> 오답이다. 문제가 "페이지 번호, 변위" 순으로 물었는지 확인하는 습관이 필요하다.</p>
+          <p>📚 <a href="../02_운영체제/가상메모리.html">02_운영체제 · 가상 메모리</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q14. 외부 단편화가 없고 순차·직접 접근이 모두 가능한 디스크 할당 방식은?</p>
-      <p class="a">✅ 정답 ④ 색인(index) 할당 — 연결 할당도 외부단편화는 없지만 직접접근이 안 됨</p>
-      <p class="memo">💡 "외부단편화 없음"만 보면 연결/색인 둘 다 후보, <b>"직접 접근 가능"까지 봐야 색인 할당</b>으로 좁혀짐 → <a href="../02_운영체제/디스크스케줄링과할당기법.html">02_운영체제 · 디스크 스케줄링과 할당기법</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 6</span><span class="q-src">2024 군무원 · 기출문제집 p.826</span></div>
+      <p class="q-body">파일의 허가권을 설정하는 리눅스 명령어에 대한 설명으로 가장 적절한 것은?</p>
+      <pre style="background:var(--code-bg);padding:10px 12px;border-radius:8px;font-size:13px;">chmod 640 sample</pre>
+      <ol class="choices">
+        <li>chmod 명령어는 루트 사용자만이 사용할 수 있다.</li>
+        <li>sample 파일의 소유자는 읽기, 쓰기, 실행하기가 가능하다.</li>
+        <li>sample 파일의 그룹에 속한 사용자는 읽기만 가능하다.</li>
+        <li>sample 파일의 모든 사용자는 읽기가 가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>권한 숫자는 <b>소유자 / 그룹 / 나머지</b> 세 자리이고, 각 자리는 <b>r(4) + w(2) + x(1)</b>의 합이다.</p>
+          <ol class="steps">
+            <li><b>6</b> = 4 + 2 = <code>rw-</code> → 소유자: 읽기 + 쓰기 (<b>실행 불가</b>)</li>
+            <li><b>4</b> = 4 = <code>r--</code> → 그룹: <b>읽기만</b> ✅</li>
+            <li><b>0</b> = <code>---</code> → 나머지(other): <b>아무 권한 없음</b></li>
+          </ol>
+          <p><b>오답 정리</b></p>
+          <ul>
+            <li>① chmod는 <b>루트와 파일 소유자</b>가 쓸 수 있다.</li>
+            <li>② 소유자는 6(rw-)이므로 <b>실행 권한이 없다.</b> 7(rwx)이어야 가능.</li>
+            <li>④ 마지막 자리가 0이므로 <b>나머지 사용자는 읽기조차 불가</b>하다.</li>
+          </ul>
+          <p><b>암기:</b> 4=읽기(r), 2=쓰기(w), 1=실행(x). 7=rwx, 6=rw-, 5=r-x, 4=r--</p>
+          <p>📚 <a href="../02_운영체제/운영체제실무.html">02_운영체제 · 운영체제 실무</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">🧮 Q15. 64비트 컴퓨터, 페이지 크기 4096B일 때 페이지번호·오프셋 비트 수는?</p>
-      <p class="a">✅ 정답 ④ 52, 12 — 오프셋=log₂(4096)=12비트, 페이지번호=64−12=52비트</p>
-      <p class="memo">💡 <b>페이지 크기가 오프셋 비트 수를 결정</b>하고, 전체 주소비트에서 오프셋을 뺀 나머지가 페이지번호 비트 → <a href="../02_운영체제/가상메모리.html">02_운영체제 · 가상메모리</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 14</span><span class="q-src">2024 군무원 · 기출문제집 p.829</span></div>
+      <p class="q-body">파일의 디스크 공간 할당 방법 중 다음 설명에 해당하는 것으로 가장 적절한 것은?</p>
+      <div class="tip">• 순차 접근과 직접 접근이 모두 가능하다<br>• 외부 단편화 문제가 없다</div>
+      <ol class="choices">
+        <li>연속 할당</li>
+        <li>연결 할당</li>
+        <li>고정 할당</li>
+        <li>색인(index) 할당</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ 색인 할당</p>
+        <div class="explain">
+          <p>두 조건을 <b>차례로 걸러내면</b> 답이 하나로 좁혀진다.</p>
+          <ol class="steps">
+            <li><b>"외부 단편화 없음"</b>으로 거르기 → 연속 할당은 파일을 통째로 이어 붙여야 하므로 외부 단편화가 생긴다. <b>① 탈락.</b> 남는 것은 연결 할당·색인 할당.</li>
+            <li><b>"직접 접근 가능"</b>으로 거르기 → 연결 할당은 포인터를 따라 처음부터 하나씩 따라가야 하므로 <b>순차 접근만</b> 가능하다. <b>② 탈락.</b></li>
+            <li>남은 <b>색인 할당</b>이 정답. 인덱스 블록에 "이 파일의 블록들이 어디 있는지" 목록을 모아두므로, 목록의 n번째를 바로 찾아가면 된다 → <b>직접 접근 가능</b>.</li>
+          </ol>
+          <table>
+            <tr><th>방식</th><th>순차</th><th>직접</th><th>외부 단편화</th></tr>
+            <tr><td>연속 할당</td><td>O</td><td>O</td><td><b>발생</b></td></tr>
+            <tr><td>연결 할당</td><td>O</td><td><b>X</b></td><td>없음</td></tr>
+            <tr><td><b>색인 할당</b></td><td>O</td><td>O</td><td>없음</td></tr>
+          </table>
+          <p>※ ③ "고정 할당"은 디스크 공간 할당 기법 목록에 없는 <b>가짜 선택지</b>다.</p>
+          <p>📚 <a href="../02_운영체제/디스크스케줄링과할당기법.html">02_운영체제 · 디스크 스케줄링과 할당기법</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🌐</span>네트워크 / 정보보안</h2>
-    <div class="wrong-card">
-      <p class="q">❌ Q2. 2.4GHz와 5GHz를 모두 지원하는 무선 규격은?</p>
-      <p class="a">✅ 정답 ③ 802.11n — a는 5GHz만, g는 2.4GHz만, ac는 5GHz만</p>
-      <p class="memo">💡 802.11 규격별 대역폭 암기: <b>n만 듀얼밴드(2.4+5GHz)</b> 지원 → <a href="../03_네트워크/index.html">03_네트워크</a></p>
+    <h2><span class="emoji">🌐</span>네트워크 · 정보보안</h2>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 2</span><span class="q-src">2024 군무원 · 기출문제집 p.824</span></div>
+      <p class="q-body">무선 전송 규격 중 <b>2.4GHz와 5GHz 주파수 대역을 모두 지원</b>하는 것은?</p>
+      <ol class="choices">
+        <li>802.11a</li>
+        <li>802.11g</li>
+        <li>802.11n</li>
+        <li>802.11ac</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 802.11n</p>
+        <div class="explain">
+          <table>
+            <tr><th>규격</th><th>주파수</th><th>최대 속도</th></tr>
+            <tr><td>802.11a</td><td>5GHz</td><td>54Mbps</td></tr>
+            <tr><td>802.11b</td><td>2.4GHz</td><td>11Mbps</td></tr>
+            <tr><td>802.11g</td><td>2.4GHz</td><td>54Mbps</td></tr>
+            <tr><td><b>802.11n</b></td><td><b>2.4GHz + 5GHz 둘 다</b></td><td>600Mbps</td></tr>
+            <tr><td>802.11ac</td><td>5GHz</td><td>6.9Gbps</td></tr>
+          </table>
+          <p><b>암기:</b> 알파벳 순서가 아니라 <b>n만 유일하게 듀얼 밴드</b>라고 기억하면 된다. (그 뒤 802.11ax/Wi-Fi 6부터 다시 듀얼 밴드가 된다.)</p>
+          <p><b>배경 지식:</b> 2.4GHz는 <b>멀리 가지만 느리고 간섭이 많고</b>, 5GHz는 <b>빠르지만 벽을 잘 못 뚫는다.</b> 그래서 요즘 공유기는 두 대역을 동시에 쏜다.</p>
+          <p>📚 <a href="../03_네트워크/LAN과매체접근방식.html">03_네트워크 · LAN과 매체접근방식</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q3. 암호화 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ③ — "공개키 암호화는 개인키로 원문 복호화가 불가능하다"가 틀림 → 실제로는 <b>개인키로 복호화 가능</b></p>
-      <p class="memo">💡 공개키 암호화: <b>공개키로 암호화 → 개인키로 복호화</b>가 정석 흐름 → <a href="../06_정보보안/index.html">06_정보보안 · 암호화</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 3</span><span class="q-src">2024 군무원 · 기출문제집 p.825</span></div>
+      <p class="q-body">암호화에 관련된 설명 중 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>단방향 암호화는 암호화된 결과로부터 원문을 복호화하는 용도로 사용하지 않는다.</li>
+        <li>대칭키 암호화는 키를 가진 경우 원문 복호화가 가능하다.</li>
+        <li>공개키 암호화는 개인키를 이용한 원문 복호화가 불가능하다.</li>
+        <li>공개키 암호화 기법은 비밀번호 없는 SSH(Secure Shell) 접속에 응용된다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③</p>
+        <div class="explain">
+          <p>공개키 암호화의 동작은 정확히 그 반대다 — <b>공개키로 잠그고, 개인키로 연다.</b></p>
+          <ol class="steps">
+            <li>보내는 사람이 <b>수신자의 공개키</b>로 암호화한다 (공개키는 누구나 알 수 있음)</li>
+            <li>받는 사람이 <b>자기 개인키</b>로 복호화한다 (개인키는 본인만 보관)</li>
+            <li>공개키로 잠근 것은 <b>짝이 되는 개인키로만</b> 열리므로, 개인키를 가진 수신자만 읽을 수 있다</li>
+          </ol>
+          <p><b>방향을 거꾸로 쓰면 무엇이 되나:</b> 개인키로 잠그고 공개키로 여는 방식은 "누구나 열 수 있으니" 기밀성은 없지만, <b>"그 개인키 주인이 보낸 게 확실하다"</b>는 증명이 된다 → 이것이 <b>전자서명</b>이다.</p>
+          <p>④가 참인 이유: SSH 키 인증은 서버에 공개키를 등록해두고 개인키로 신원을 증명하는 방식이라 <b>비밀번호 없이</b> 접속할 수 있다.</p>
+          <p>📚 <a href="../06_정보보안/암호화와정보보안.html">06_정보보안 · 암호화와 정보보안</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q7. TCP/IP 통신 방식 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ④ — "IP가 TCP보다 상위 계층"이라는 설명이 틀림. <b>IP(인터넷 계층)는 TCP(전송 계층)보다 하위</b></p>
-      <p class="memo">💡 계층 순서(위→아래): 응용 - 전송(TCP/UDP) - 인터넷(IP) - 네트워크접근 → <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">03_네트워크 · TCP/IP 응용·전송계층</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 7</span><span class="q-src">2024 군무원 · 기출문제집 p.826</span></div>
+      <p class="q-body">TCP/IP 통신 방식에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>TCP는 연결 생성, 데이터 전송, 연결 종료의 세 단계 절차로 진행된다.</li>
+        <li>데이터그램(Datagram) 방식은 목적지까지 고정된 경로 없이 패킷 단위로 전송하는 방식이다.</li>
+        <li>가상 회선(Virtual Circuit)과 데이터그램 방식은 전송 계층의 프로토콜이다.</li>
+        <li>IP는 TCP보다 상위에 위치하여 패킷의 전송에 대응하는 계층이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>계층 순서가 완전히 반대다. <b>IP(인터넷 계층)는 TCP(전송 계층)보다 아래</b>에 있다.</p>
+          <table>
+            <tr><th>TCP/IP 계층</th><th>프로토콜</th><th>위치</th></tr>
+            <tr><td>응용</td><td>HTTP, FTP, DNS</td><td>위</td></tr>
+            <tr><td>전송</td><td><b>TCP</b>, UDP</td><td>↕</td></tr>
+            <tr><td>인터넷</td><td><b>IP</b>, ARP, ICMP</td><td>아래</td></tr>
+            <tr><td>네트워크 접속</td><td>Ethernet</td><td>맨 아래</td></tr>
+          </table>
+          <p><b>이름으로 기억하기:</b> "<b>TCP/IP</b>"라고 쓰는 순서 그대로 <b>TCP가 위, IP가 아래</b>다. 데이터를 보낼 때 TCP가 세그먼트로 쪼개면 IP가 그걸 받아 패킷에 담아 길을 찾는다.</p>
+          <p><b>참고:</b> ③은 엄밀히 따지면 가상회선·데이터그램은 <b>교환(스위칭) 방식</b>에 가까운 개념이라 표현이 느슨하지만, ④처럼 <b>명백히 틀린 선택지</b>가 있으므로 답은 ④다. 이런 경우 "더 확실히 틀린 것"을 고르는 것이 원칙.</p>
+          <p>📚 <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">03_네트워크 · TCP/IP 응용·전송계층</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q16. HDLC(데이터링크 계층 프로토콜) 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ① — HDLC는 바이트 단위가 아니라 <b>비트(블록) 단위</b>로 전송하는 동기 방식</p>
-      <p class="memo">💡 바이트 단위 동기 방식은 BSC 같은 다른 프로토콜 — HDLC의 정체성은 <b>비트 지향</b> → <a href="../03_네트워크/데이터링크제어와흐름제어.html">03_네트워크 · 데이터링크제어와 흐름제어</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 16</span><span class="q-src">2024 군무원 · 기출문제집 p.830</span></div>
+      <p class="q-body">데이터 링크 계층의 프로토콜인 HDLC(High-level Data Link Control)에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>바이트 단위로 전송하는 동기 방식이다.</li>
+        <li>전이중(full duplex) 방식을 사용한다.</li>
+        <li>비트 스터핑(bit stuffing) 기능으로 투명성을 제공한다.</li>
+        <li>HDLC 프레임의 플래그는 프레임 시작과 끝을 나타내며 동기화에 사용한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p>HDLC는 <b>비트 지향(bit-oriented) 프로토콜</b>로 <b>블록(비트열) 단위</b>로 전송한다. 바이트 단위가 아니다.</p>
+          <p><b>③번이 힌트다:</b> "비트 스터핑"을 쓴다는 것 자체가 HDLC가 <b>비트 단위로 데이터를 다룬다</b>는 증거다. ①과 ③이 서로 모순되므로, 둘 중 하나가 틀렸다는 걸 눈치챌 수 있다.</p>
+          <p><b>비트 스터핑이란:</b> HDLC의 플래그는 <code>01111110</code>(1이 6개)이다. 만약 데이터 안에 우연히 1이 6개 연속으로 나오면 수신 측이 "프레임 끝!"으로 오해한다. 그래서 송신 측은 <b>1이 5개 연속되면 강제로 0을 하나 끼워 넣고</b>, 수신 측은 그 0을 빼낸다. 덕분에 어떤 데이터든 안전하게 실어 보낼 수 있다 → 이것이 <b>투명성(transparency)</b>이다.</p>
+          <p>📚 <a href="../03_네트워크/데이터링크제어와흐름제어.html">03_네트워크 · 데이터링크 제어와 흐름제어</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q17. 다중화(Multiplexing) 방식 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ③ — "ATDM(비동기 시분할)에서 시간 슬롯 낭비 발생"이 틀림. 그 현상은 <b>STDM(동기 시분할)</b>에서 생김</p>
-      <p class="memo">💡 STDM=고정 슬롯 할당(낭비 O), ATDM=필요한 채널에만 동적 할당(낭비 X) — 이름이 비슷해서 자주 뒤바뀜 → <a href="../03_네트워크/index.html">03_네트워크</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 17</span><span class="q-src">2024 군무원 · 기출문제집 p.830</span></div>
+      <p class="q-body">정보 전송의 다중화(multiplexing)에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>주파수 분할 다중화(FDM)는 정보를 같은 시간에 전송하기 위해 별도의 주파수 채널을 설정해야 하고, 채널 간 상호 간섭을 막기 위해 보호 대역이 필요하다.</li>
+        <li>동기식 시분할 다중화(STDM)는 전송로 대역폭을 시간 슬롯으로 나눈 채널에 할당하여 여러 채널이 전송로의 시간을 분할하여 사용한다.</li>
+        <li>비동기식 시분할 다중화(ATDM)는 STDM과 유사한 방법이지만, 전송 요구가 없을 때는 시간 슬롯 낭비가 발생한다.</li>
+        <li>코드분할 다중화(CDMA)는 대역확산 기법을 사용한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (시간 슬롯 낭비는 ATDM이 아니라 <b>STDM</b>의 문제)</p>
+        <div class="explain">
+          <p>두 시분할 방식의 차이는 <b>"자리를 미리 정해두느냐, 그때그때 주느냐"</b>다.</p>
+          <table>
+            <tr><th>구분</th><th>동기식 STDM</th><th>비동기식 ATDM(통계적 TDM)</th></tr>
+            <tr><td>슬롯 배정</td><td><b>미리 고정 배정</b></td><td><b>보낼 게 있는 채널에만</b> 동적 배정</td></tr>
+            <tr><td>빈 슬롯</td><td><b>낭비 발생</b> (자리 비워둠)</td><td>낭비 없음</td></tr>
+            <tr><td>비유</td><td>지정좌석제 (결석해도 자리 비움)</td><td>자유석 (온 사람만 앉음)</td></tr>
+            <tr><td>주소 정보</td><td>불필요 (순서로 구분)</td><td><b>필요</b> (누구 데이터인지 표시해야 함)</td></tr>
+          </table>
+          <p>③은 <b>STDM의 단점을 ATDM 것이라고 뒤집어씌운</b> 문장이다. 오히려 ATDM은 그 낭비를 없애려고 만든 방식이다.</p>
+          <p>📚 <a href="../03_네트워크/다중화방식과데이터교환.html">03_네트워크 · 다중화방식과 데이터교환</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🔧</span>컴퓨터구조</h2>
-    <div class="wrong-card">
-      <p class="q">❌ Q5. EPROM에 대한 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ② — "데이터 갱신 횟수에 제한이 없다"가 틀림. EPROM도 <b>갱신 횟수 제한이 있다</b></p>
-      <p class="memo">💡 EPROM은 자외선으로 지우고 다시 쓸 수 있지만 <b>무한정 반복은 불가능</b> → <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">01_컴퓨터구조 · 마이크로오퍼레이션과 기억장치</a></p>
+    <h2><span class="emoji">🗄️</span>데이터베이스 · 자료구조</h2>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 8</span><span class="q-src">2024 군무원 · 기출문제집 p.826</span></div>
+      <p class="q-body">다음 데이터베이스 모델링에 대한 설명으로 가장 적절한 것은?</p>
+      <div class="tip">국방전자는 배터리를 이용하는 다양한 전자제품을 생산하고 있다. 각 제품이 동작하는 전압은 배터리 사용 개수에 따라 달라지므로, 제품의 동작 전압 규격은 배터리 연결로 만들어지는 특정 전압값으로만 가능하다. 제품과 동작 전압을 데이터베이스화할 때 <b>전압값이 가질 수 있는 제한 조건</b>을 정의하는 것이다.</div>
+      <ol class="choices">
+        <li>시스템 카탈로그(System Catalog)</li>
+        <li>도메인(Domain)</li>
+        <li>일반 집합 연산자</li>
+        <li>엔터티(Entity)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② 도메인(Domain)</p>
+        <div class="explain">
+          <p><b>도메인 = 하나의 속성이 가질 수 있는 값들의 집합(= 허용 범위)</b>이다. 지문의 "전압값이 가질 수 있는 제한 조건"이 정확히 도메인의 정의다.</p>
+          <p>예를 들어 "동작전압" 속성의 도메인을 {1.5V, 3.0V, 4.5V, 9.0V}로 정의해두면, DBMS가 <b>7.2V 같은 엉뚱한 값이 들어오는 것을 자동으로 거부</b>한다. 이것이 도메인 무결성(domain integrity)이다.</p>
+          <p><b>오답 정리</b></p>
+          <ul>
+            <li>① <b>시스템 카탈로그</b>는 "DB에 어떤 테이블·속성·인덱스가 있는지"를 기록한 <b>메타데이터 저장소</b>(= 데이터 사전)다. 값의 제약 조건 자체는 아니다.</li>
+            <li>③ <b>일반 집합 연산자</b>는 합집합·교집합·차집합·카티션프로덕트 등 <b>관계대수의 연산</b>이다.</li>
+            <li>④ <b>엔터티</b>는 "제품", "배터리" 같은 <b>개체 그 자체</b>다.</li>
+          </ul>
+          <p>📚 <a href="../04_데이터베이스/릴레이션_특성.md">04_데이터베이스 · 릴레이션 특성</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q9. 문자 인코딩 방법 설명 중 옳은 것은?</p>
-      <p class="a">✅ 정답 ④ — 유니코드는 16비트로 2¹⁶(65,536)개 문자 표현 가능</p>
-      <p class="memo">💡 비트 수 암기: <b>ASCII 7비트, EBCDIC 8비트, BCD 6비트, 유니코드 16비트</b> — 서로 바꿔 내는 게 단골 함정 → <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터표현과 진법</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 22</span><span class="q-src">2024 군무원 · 기출문제집 p.832</span></div>
+      <p class="q-body">SQL에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>SQL은 비절차적 언어이며 다른 언어에 삽입되어 내장 SQL로도 사용 가능하다.</li>
+        <li>SQL 뷰(view)는 하나 이상의 테이블로부터 만들어진 가상 테이블이다.</li>
+        <li>SQL ALTER 문을 사용하여 테이블을 변경할 수 있다.</li>
+        <li>SQL 뷰가 정의된 기본 테이블이 변경되어도 뷰는 변경되지 않는다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④</p>
+        <div class="explain">
+          <p>뷰는 <b>실제 데이터를 갖지 않는 가상 테이블</b>이다. 기본 테이블을 바라보는 "창문"일 뿐이라, <b>창문이 바라보던 대상이 사라지면 창문도 함께 사라진다.</b></p>
+          <p>따라서 기본 테이블이 <b>제거(DROP)되면 그 위에 정의된 뷰도 자동으로 제거</b>되고, 기본 테이블의 데이터가 바뀌면 뷰를 조회할 때 <b>바뀐 내용이 그대로 보인다.</b></p>
+          <p><b>뷰의 다른 중요 특징 (함께 외울 것)</b></p>
+          <ul>
+            <li>뷰는 <b>ALTER 문으로 변경할 수 없다</b> — 고치려면 DROP 후 다시 CREATE 해야 한다.</li>
+            <li>뷰를 통한 <b>삽입·삭제·갱신에는 제약</b>이 따른다 (집계함수·DISTINCT·GROUP BY가 포함된 뷰는 갱신 불가).</li>
+            <li>장점: <b>보안</b>(필요한 열만 노출), <b>논리적 독립성</b>, <b>질의 단순화</b>.</li>
+          </ul>
+          <p>📚 <a href="../04_데이터베이스/SQL_분류.md">04_데이터베이스 · SQL 분류</a> · <a href="../04_데이터베이스/뷰(View).md">뷰(View)</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q10. 논리회로(반가산기/멀티플렉서/플립플롭) 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ③ — "T 플립플롭은 입력이 0이면 반전"이 틀림. <b>입력이 1일 때 반전</b>, 0이면 이전 상태 유지</p>
-      <p class="memo">💡 T=Toggle, T=1이면 매번 뒤집힘 — <b>0과 1의 동작이 반대로 나오면 오답</b> → <a href="../01_컴퓨터구조/논리회로.html">01_컴퓨터구조 · 논리회로</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 18</span><span class="q-src">2024 군무원 · 기출문제집 p.831 · <b>계산 문제</b></span></div>
+      <p class="q-body">다음 수식을 <b>후위 표기법</b>으로 변환했을 때 가장 적절한 것은?</p>
+      <pre style="background:var(--code-bg);padding:10px 12px;border-radius:8px;font-size:13px;">100 - 20 * 5 + 2</pre>
+      <ol class="choices">
+        <li>100 20 5 2 * - +</li>
+        <li>100 20 5 * 2 - +</li>
+        <li>100 20 5 * - 2 +</li>
+        <li>100 20 5 * - + 2</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ 100 20 5 * - 2 +</p>
+        <div class="explain">
+          <p><b>가장 확실한 방법: 괄호를 다 친 뒤 연산자를 괄호 뒤로 빼기</b></p>
+          <ol class="steps">
+            <li><b>우선순위대로 괄호를 완전히 친다.</b> *가 먼저, 그다음 -와 +는 왼쪽부터:<br><code>((100 - (20 * 5)) + 2)</code></li>
+            <li><b>가장 안쪽 괄호부터</b> 연산자를 피연산자 뒤로 보낸다:<br><code>(20 * 5)</code> → <code>20 5 *</code></li>
+            <li>그다음 괄호: <code>(100 - [20 5 *])</code> → <code>100 20 5 * -</code></li>
+            <li>마지막 괄호: <code>([100 20 5 * -] + 2)</code> → <code><b>100 20 5 * - 2 +</b></code></li>
+          </ol>
+          <p><b>검산법:</b> 후위 표기식을 스택으로 계산해 원래 값과 맞는지 본다. 100 - 100 + 2 = 2 여야 한다.<br>
+          <code>100</code> 넣고 <code>20</code> 넣고 <code>5</code> 넣음 → <code>*</code> 만나면 위 2개(20,5) 꺼내 100 넣음 → 스택 [100, 100] → <code>-</code> 만나면 100-100=0 → <code>2</code> 넣음 → <code>+</code> 만나면 0+2 = <b>2</b> ✓</p>
+          <p><b>함정:</b> ④(… - + 2)처럼 <b>연산자가 마지막 피연산자보다 앞에 오는</b> 형태는 후위 표기법상 성립할 수 없다. 후위식은 반드시 <b>연산자로 끝난다.</b></p>
+          <p>📚 <a href="../07_자료구조_알고리즘/스택과큐.html">07_자료구조·알고리즘 · 스택과 큐</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q11. 캐시 메모리로 사용되는 것은?</p>
-      <p class="a">✅ 정답 ① SRAM — DRAM은 주기억장치용</p>
-      <p class="memo">💡 "빠르지만 비싼 SRAM=캐시", "느리지만 저렴한 DRAM=주기억장치" → <a href="../01_컴퓨터구조/캐시기억장치.md">01_컴퓨터구조 · 캐시기억장치</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 20</span><span class="q-src">2024 군무원 · 기출문제집 p.831</span></div>
+      <p class="q-body">이진 트리(binary tree)에 대한 설명으로 가장 적절하지 <b>않은</b> 것은? (단, 트리의 최상위 레벨이 <b>깊이 1</b>이다.)</p>
+      <ol class="choices">
+        <li>n개의 노드를 가진 이진 트리는 n−1개의 간선을 갖는다.</li>
+        <li>레벨 a에서의 최대 노드 수는 2<sup>a−1</sup>개이다.</li>
+        <li>n개의 노드를 가진 이진 트리의 깊이는 최대 n−1이다.</li>
+        <li>깊이가 d인 이진 트리의 노드 수는 최대 2<sup>d</sup>−1개이다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ③ (최대 깊이는 n−1이 아니라 <b>n</b>)</p>
+        <div class="explain">
+          <p><b>최상위 레벨이 깊이 1</b>이라는 단서가 핵심이다. 노드가 한 줄로 쭉 늘어선 <b>편향 트리(skewed tree)</b>가 가장 깊은 경우인데, 이때 노드 n개면 깊이도 그대로 <b>n</b>이다.</p>
+          <p><b>직접 세어보기:</b> 노드 3개가 일직선(A→B→C)이면, A는 깊이 1, B는 깊이 2, C는 깊이 3 → 깊이 = 3 = n ✓ (n−1 = 2가 아니다)</p>
+          <p><b>나머지 공식 검증 (n=3, 완전이진트리 기준)</b></p>
+          <ul>
+            <li>① 간선 수 = n−1: 노드 3개면 간선 2개 ✓ (트리는 항상 이 성질을 가진다 — 루트를 뺀 모든 노드가 부모로 가는 간선 1개씩 갖기 때문)</li>
+            <li>② 레벨 a의 최대 노드 = 2<sup>a−1</sup>: 레벨1 → 2⁰=1(루트), 레벨2 → 2¹=2, 레벨3 → 2²=4 ✓</li>
+            <li>④ 깊이 d 트리의 최대 노드 = 2<sup>d</sup>−1: d=3 → 2³−1 = 7 (1+2+4) ✓</li>
+          </ul>
+          <p><b>주의:</b> "최상위 레벨을 0으로 둔다"는 다른 교재도 있다. 그 경우 공식이 전부 한 칸씩 달라지므로 <b>문제의 단서를 반드시 먼저 확인</b>해야 한다.</p>
+          <p>📚 <a href="../07_자료구조_알고리즘/트리와이진트리.html">07_자료구조·알고리즘 · 트리와 이진트리</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">🧮 Q23. 2진수 10101001.11000011을 16진수로 변환하면?</p>
-      <p class="a">✅ 정답 ② A9.C3 — 4비트씩 묶기: 1010=A, 1001=9, 1100=C, 0011=3</p>
-      <p class="memo">💡 2진→16진 변환은 <b>소수점 기준으로 좌우 양쪽에서 4비트씩</b> 끊어서 각각 16진수로 변환 → <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터표현과 진법</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 21</span><span class="q-src">2024 군무원 · 기출문제집 p.832</span></div>
+      <p class="q-body">빅오(big-O) 표기법의 실행시간 크기를 <b>작은 것부터 큰 순서</b>로 비교한 것으로 가장 적절한 것은?</p>
+      <ol class="choices">
+        <li>O(1) &lt; O(log n) &lt; O(n) &lt; O(n²) &lt; O(2ⁿ)</li>
+        <li>O(log n) &lt; O(1) &lt; O(n) &lt; O(n²) &lt; O(2ⁿ)</li>
+        <li>O(1) &lt; O(log n) &lt; O(n) &lt; O(2ⁿ) &lt; O(n²)</li>
+        <li>O(log n) &lt; O(1) &lt; O(n) &lt; O(2ⁿ) &lt; O(n²)</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ①</p>
+        <div class="explain">
+          <p><b>두 가지만 확인하면 바로 걸러진다.</b></p>
+          <ol class="steps">
+            <li><b>O(1)이 가장 작다</b> — 입력 크기와 무관하게 상수 시간이므로 무엇보다 빠르다. ②④는 O(log n)을 O(1)보다 앞에 뒀으므로 <b>탈락</b>.</li>
+            <li><b>지수 O(2ⁿ)가 다항식 O(n²)보다 크다</b> — n이 조금만 커져도 2ⁿ가 압도적으로 폭증한다. ③은 반대로 썼으므로 <b>탈락</b>.</li>
+            <li>남은 것은 ① ✓</li>
+          </ol>
+          <p><b>n=10으로 검산:</b> O(1)=1, O(log n)≈3, O(n)=10, O(n²)=100, O(2ⁿ)=1,024 → 순서 확인 ✓<br>
+          <b>n=20이면?</b> n²=400인데 2ⁿ=1,048,576 — <b>지수가 얼마나 무서운지</b> 체감된다.</p>
+          <p><b>전체 순서 암기:</b><br>O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!)</p>
+          <p>📚 <a href="../07_자료구조_알고리즘/자료구조와알고리즘개요.html">07_자료구조·알고리즘 · 자료구조와 알고리즘 개요</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 25</span><span class="q-src">2024 군무원 · 기출문제집 p.834</span></div>
+      <p class="q-body">다음은 <b>선택 정렬</b>을 구현한 C 프로그램이다. 배열 arr의 값을 <b>오름차순</b>으로 출력하려고 할 때, <code>/* 공란 */</code> 에 채워져야 할 코드로 가장 적절한 것은?</p>
+      <pre style="background:var(--code-bg);padding:10px 12px;border-radius:8px;font-size:13px;overflow-x:auto;">int arr[5] = {10, 5, 8, 3, 7};
+int temp, min;
+
+for (int i = 0; i &lt; 5; i++) {
+    min = i;
+
+    /* 공란 */
+
+    temp = arr[i];
+    arr[i] = arr[min];
+    arr[min] = temp;
+}</pre>
+      <ol class="choices">
+        <li>for (int j = 1; j &lt; 5; j++) if (arr[j] &gt; arr[min]) min = j;</li>
+        <li>for (int j = 1; j &lt; 5; j++) if (arr[j] &lt; arr[min]) min = j;</li>
+        <li>for (int j = i; j &lt; 5; j++) if (arr[j] &gt; arr[min]) min = j;</li>
+        <li>for (int j = i; j &lt; 5; j++) if (arr[j] &lt; arr[min]) min = j;</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ④ <code>for (int j = i; j &lt; 5; j++) if (arr[j] &lt; arr[min]) min = j;</code></p>
+        <div class="explain">
+          <p>선택 정렬은 <b>"아직 정렬 안 된 구간에서 최솟값을 찾아 맨 앞과 교환"</b>을 반복한다. 선택지가 두 축으로 갈리므로 하나씩 결정하면 된다.</p>
+          <ol class="steps">
+            <li><b>축 1 — 탐색 시작점: <code>j = 1</code> vs <code>j = i</code></b><br>
+            i번째 회차에서는 앞의 0 ~ i−1 구간이 <b>이미 정렬 완료</b>되어 있다. 거기를 다시 뒤지면 이미 제자리를 찾은 값이 또 끌려나온다. 따라서 <b><code>j = i</code></b>부터 탐색해야 한다 → ①② 탈락.</li>
+            <li><b>축 2 — 비교 방향: <code>&gt;</code> vs <code>&lt;</code></b><br>
+            오름차순이므로 <b>최솟값</b>을 찾아 앞으로 보내야 한다. "지금까지의 최솟값(arr[min])보다 <b>작은</b> 값을 만나면 min을 갱신" → <b><code>&lt;</code></b> → ③ 탈락.</li>
+            <li>남은 것은 <b>④</b></li>
+          </ol>
+          <p><b>실제 동작 추적</b> (arr = {10, 5, 8, 3, 7})</p>
+          <table>
+            <tr><th>회차 i</th><th>탐색 구간</th><th>찾은 최솟값</th><th>교환 후 배열</th></tr>
+            <tr><td>0</td><td>arr[0..4]</td><td>3 (인덱스 3)</td><td>{<b>3</b>, 5, 8, 10, 7}</td></tr>
+            <tr><td>1</td><td>arr[1..4]</td><td>5 (제자리)</td><td>{3, <b>5</b>, 8, 10, 7}</td></tr>
+            <tr><td>2</td><td>arr[2..4]</td><td>7 (인덱스 4)</td><td>{3, 5, <b>7</b>, 10, 8}</td></tr>
+            <tr><td>3</td><td>arr[3..4]</td><td>8 (인덱스 4)</td><td>{3, 5, 7, <b>8</b>, 10}</td></tr>
+            <tr><td>4</td><td>arr[4..4]</td><td>10 (제자리)</td><td>{3, 5, 7, 8, <b>10</b>}</td></tr>
+          </table>
+          <p><b>내림차순으로 바꾸려면?</b> 부등호만 <code>&gt;</code>로 뒤집으면 된다(최댓값을 앞으로 보냄). 즉 ③번 코드는 <b>j 시작점만 고치면</b> 내림차순 정렬이 된다.</p>
+          <p>📚 <a href="../07_자료구조_알고리즘/정렬알고리즘.html">07_자료구조·알고리즘 · 정렬 알고리즘</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🗄️</span>데이터베이스 / 자료구조 / 소프트웨어공학</h2>
-    <div class="wrong-card">
-      <p class="q">❌ Q8. 애트리뷰트가 가질 수 있는 값의 범위를 정의하는 개념은?</p>
-      <p class="a">✅ 정답 ② 도메인(Domain) — 하나의 애트리뷰트가 취할 수 있는 원자값들의 집합</p>
-      <p class="memo">💡 값의 <b>제약조건(무엇이 유효한 값인가)</b>을 묻는 문제엔 도메인 → <a href="../04_데이터베이스/index.html">04_데이터베이스</a></p>
+    <h2><span class="emoji">🛠️</span>소프트웨어공학</h2>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 19</span><span class="q-src">2024 군무원 · 기출문제집 p.831</span></div>
+      <p class="q-body">UML(Unified Modeling Language) 다이어그램에 대한 설명 중 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>Class 다이어그램은 클래스 내부의 내용과 클래스 사이의 연관관계를 이용하여 시스템의 구조를 정의한다.</li>
+        <li>State 다이어그램은 객체의 동적 행위를 모형화하기 위해 객체 간의 메시지 처리를 시간적 흐름으로 표현한다.</li>
+        <li>Use Case 다이어그램은 사용자(actor) 관점에서 시스템의 기능과 상호작용을 표현한다.</li>
+        <li>Component 다이어그램은 시스템을 구성하는 컴포넌트와 상호작용을 표현한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (설명은 State가 아니라 <b>Sequence</b> 다이어그램의 것)</p>
+        <div class="explain">
+          <p>"객체 간의 <b>메시지</b>를 <b>시간적 흐름</b>으로"라는 표현이 나오면 무조건 <b>Sequence 다이어그램</b>이다.</p>
+          <table>
+            <tr><th>다이어그램</th><th>표현하는 것</th><th>생김새</th></tr>
+            <tr><td><b>Sequence</b></td><td>객체 간 <b>메시지를 시간 순서대로</b></td><td>세로 생명선 + 가로 화살표</td></tr>
+            <tr><td><b>State</b> (상태)</td><td>객체 <b>하나</b>가 이벤트에 따라 <b>상태를 바꿔가는</b> 과정</td><td>둥근 상태 박스 + 전이 화살표</td></tr>
+            <tr><td>Class</td><td>클래스 구조와 관계 (정적)</td><td>3칸 박스(이름/속성/메서드)</td></tr>
+            <tr><td>Use Case</td><td>사용자 관점의 기능</td><td>사람 모양 액터 + 타원</td></tr>
+          </table>
+          <p><b>큰 분류로 기억하기:</b> UML은 <b>구조(정적) 다이어그램</b>(Class, Object, Component, Deployment)과 <b>행위(동적) 다이어그램</b>(Use Case, Sequence, State, Activity, Communication)으로 나뉜다.</p>
+          <p>📚 <a href="../05_소프트웨어공학/객체지향과UML.html">05_소프트웨어공학 · 객체지향과 UML</a></p>
+        </div>
+      </details>
     </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q22. SQL 뷰(View)에 대한 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ④ — "기본 테이블이 변경돼도 뷰는 변경 안 된다"가 틀림. 기본 테이블이 바뀌면 <b>뷰도 자동으로 영향받는다</b></p>
-      <p class="memo">💡 뷰는 <b>가상 테이블</b>(실제 데이터를 저장하지 않고 질의만 저장) — 원본이 바뀌면 뷰 결과도 그대로 바뀜 → <a href="../04_데이터베이스/뷰(View).md">04_데이터베이스 · 뷰(View)</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">🧮 Q18. 중위 표기식 "100 − 20 * 5 + 2"를 후위 표기법으로 바꾸면?</p>
-      <p class="a">✅ 정답 ③ 100 20 5 * − 2 + — 연산자 우선순위(* 먼저)대로 안쪽부터 후위로 변환</p>
-      <p class="memo">💡 후위표기 변환은 <b>우선순위 높은 연산부터 괄호치듯 묶어서 안→밖으로</b> 변환 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q19. UML 다이어그램 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ② — "State 다이어그램이 객체 간 메시지를 시간 흐름으로 표현"은 틀림. 그건 <b>Sequence 다이어그램</b> 설명. State는 <b>객체 하나의 내부 상태 변화</b>를 표현</p>
-      <p class="memo">💡 "여러 객체 간 순서"=Sequence, "객체 하나의 상태 변화"=State — 이름이 비슷한 다이어그램끼리 설명이 자주 뒤바뀜 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q20. 이진 트리 성질 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ③ — "n개 노드의 깊이는 최대 n−1"이 틀림. 한 줄로 쭉 이어진 트리(사향 트리)면 <b>깊이가 최대 n</b></p>
-      <p class="memo">💡 n개의 노드는 항상 <b>n−1개의 간선</b>을 갖지만, 깊이는 트리 모양에 따라 1(균형)~n(사향)까지 다양 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q21. 빅오 표기법 실행시간 크기 비교로 옳은 것은?</p>
-      <p class="a">✅ 정답 ① O(1) &lt; O(log n) &lt; O(n) &lt; O(n²) &lt; O(2ⁿ)</p>
-      <p class="memo">💡 순서 암기: <b>상수 &lt; 로그 &lt; 선형 &lt; 다항(n²) &lt; 지수(2ⁿ)</b> — 지수함수가 항상 최악 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">❌ Q24. 응집도(Cohesion)/결합도(Coupling) 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ② — 응집도는 "모듈 간"이 아니라 <b>모듈 내부 요소들 사이</b>의 연관 정도를 뜻함 (모듈 간 얘기는 결합도)</p>
-      <p class="memo">💡 <b>"응집도=모듈 안, 결합도=모듈 사이"</b> — 이 둘을 헷갈리면 문장이 통째로 틀려짐 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 24</span><span class="q-src">2024 군무원 · 기출문제집 p.833</span></div>
+      <p class="q-body">소프트웨어 모듈 설계의 평가에 대한 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>모듈의 결합도(coupling)는 모듈들이 서로 관련되거나 연결된 정도를 의미하며 낮을수록 좋다.</li>
+        <li>모듈의 응집도(cohesion)는 <b>모듈 간에</b> 기능적인 연관 정도를 의미하며 높을수록 좋다.</li>
+        <li>어떤 모듈이 다른 모듈을 호출하며 데이터를 넘겨주는 경우 이 모듈 간에 제어 결합도를 가진다고 한다.</li>
+        <li>모듈 내 모든 요소가 한 가지 기능을 수행하기 위해 구성되는 경우 이들 요소는 기능적 응집도로 묶여있다고 한다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ② (응집도는 "모듈 간"이 아니라 <b>"모듈 내"</b>의 연관 정도)</p>
+        <div class="explain">
+          <p>단어 하나만 바꿔놓은 함정이다. <b>응집도는 모듈 <u>안쪽</u>, 결합도는 모듈 <u>사이</u></b> — 이 구분이 전부다. ②는 "높을수록 좋다"는 맞지만 <b>"모듈 간에"</b>가 틀렸다.</p>
+          <p><b>응집도 (낮음 → 높음, 높을수록 좋음)</b><br>
+          우연적 &lt; 논리적 &lt; 시간적 &lt; 절차적 &lt; 교환적 &lt; 순차적 &lt; <b>기능적</b></p>
+          <p><b>결합도 (낮음 → 높음, 낮을수록 좋음)</b><br>
+          <b>자료</b> &lt; 스탬프 &lt; 제어 &lt; 외부 &lt; 공통 &lt; 내용</p>
+          <p><b>③에 대한 보충 (헷갈릴 수 있는 부분):</b> 엄밀히 말하면 <b>순수한 데이터만</b> 넘기는 것은 <b>자료 결합도(data coupling)</b>이고, <b>제어 결합도</b>는 "이렇게 동작하라"는 <b>플래그·제어신호</b>를 넘길 때를 말한다. ③의 서술도 정확하다고 보기 어렵지만, 출제자가 의도한 <b>명백한 오답은 ②</b>다.</p>
+          <p>📚 <a href="../05_소프트웨어공학/요구분석과설계.html">05_소프트웨어공학 · 요구분석과 설계</a></p>
+        </div>
+      </details>
     </div>
   </section>
 
   <section class="block">
-    <h2><span class="emoji">🐍</span>프로그래밍 언어</h2>
-    <div class="wrong-card">
-      <p class="q">🧮 Q12. 파이썬 try/except/else/finally 실행 결과는?</p>
-      <p class="a">✅ 정답 ① 값 에러 / 마칩니다. — "89점"은 int()로 변환 불가 → ValueError 발생 → except 블록 실행 → finally는 항상 실행</p>
-      <p class="memo">💡 <b>finally는 예외 발생 여부와 상관없이 항상 실행</b>된다는 것이 핵심 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
-    </div>
-    <div class="wrong-card">
-      <p class="q">🧮 Q25. 선택 정렬(selection sort) C코드 빈칸에 들어갈 코드는?</p>
-      <p class="a">✅ 정답 ④ — <code>for(j=i; j&lt;5; j++) if(arr[j]&lt;arr[min]) min=j;</code></p>
-      <p class="memo">💡 선택정렬은 <b>남은 범위(j=i부터)에서 최솟값의 인덱스</b>를 찾아 현재 위치와 교환 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
-    </div>
-  </section>
+    <h2><span class="emoji">⌨️</span>프로그래밍 · 신기술</h2>
 
-  <section class="block">
-    <h2><span class="emoji">🆕</span>신기술</h2>
-    <div class="wrong-card">
-      <p class="q">❌ Q4. 하이퍼바이저/KVM 설명 중 옳지 않은 것은?</p>
-      <p class="a">✅ 정답 ② — "KVM의 게스트 OS는 리눅스로 제한"이 틀림. <b>게스트 OS 종류에 제한 없음</b>(Windows 등도 가능)</p>
-      <p class="memo">💡 하이퍼바이저는 가상머신을 동작시키는 기반 SW, KVM은 리눅스 커널에 통합됐을 뿐 <b>게스트까지 리눅스로 제한하지는 않음</b></p>
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 12</span><span class="q-src">2024 군무원 · 기출문제집 p.828</span></div>
+      <p class="q-body">다음 python 프로그램의 실행 결과로 옳은 것은?</p>
+      <pre style="background:var(--code-bg);padding:10px 12px;border-radius:8px;font-size:13px;overflow-x:auto;">str = "89점"
+try:
+    score = int(str)
+except ValueError:
+    print("값 에러")
+except TypeError:
+    print("타입 에러")
+else:
+    print(score)
+finally:
+    print("마칩니다.")</pre>
+      <ol class="choices">
+        <li>값 에러 / 마칩니다.</li>
+        <li>타입 에러 / 마칩니다.</li>
+        <li>89</li>
+        <li>89 / 마칩니다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ① "값 에러" 출력 후 "마칩니다." 출력</p>
+        <div class="explain">
+          <ol class="steps">
+            <li><code>int("89점")</code> — 문자열 타입을 넘긴 것 자체는 문제없지만, <b>내용에 "점"이라는 숫자가 아닌 글자</b>가 섞여 있어 변환에 실패한다</li>
+            <li>타입은 맞는데 <b>값이 부적절</b> → <b>ValueError</b> 발생 → <code>except ValueError</code> 블록 실행 → <b>"값 에러"</b> 출력</li>
+            <li>예외가 발생했으므로 <code>else</code> 블록(정상일 때만 실행)은 <b>건너뛴다</b></li>
+            <li><code>finally</code>는 <b>예외가 나든 안 나든 무조건</b> 실행 → <b>"마칩니다."</b> 출력</li>
+          </ol>
+          <p><b>ValueError vs TypeError 구분 — 시험 단골</b></p>
+          <table>
+            <tr><th>예외</th><th>언제 발생</th><th>예시</th></tr>
+            <tr><td><b>ValueError</b></td><td>타입은 맞는데 <b>값</b>이 부적절</td><td><code>int("89점")</code>, <code>int("abc")</code></td></tr>
+            <tr><td><b>TypeError</b></td><td><b>타입</b> 자체가 잘못됨</td><td><code>"3" + 5</code>, <code>len(5)</code></td></tr>
+          </table>
+          <p><b>try 구문 4형제 정리:</b> <code>try</code>(시도) → <code>except</code>(예외 시) → <code>else</code>(<b>예외가 없을 때만</b>) → <code>finally</code>(<b>항상</b>)</p>
+          <p>📚 <a href="../08_프로그래밍언어/Python기초.html">08_프로그래밍언어 · Python 기초</a></p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz">
+      <div class="q-head"><span class="q-no">문제 4</span><span class="q-src">2024 군무원 · 기출문제집 p.825</span></div>
+      <p class="q-body">하이퍼바이저(Hypervisor)에 관련된 설명으로 가장 적절하지 <b>않은</b> 것은?</p>
+      <ol class="choices">
+        <li>가상머신을 동작시키기 위한 기반 소프트웨어이다.</li>
+        <li>KVM(Kernel-based Virtual Machine)은 리눅스 커널에 통합된 하이퍼바이저로, 가상머신의 게스트(Guest) 운영체제는 리눅스로 제한된다.</li>
+        <li>가상머신이 사용하는 하드웨어 자원을 관리, 할당한다.</li>
+        <li>한 하이퍼바이저 위에서 각기 다른 운영체제의 가상머신 병행 실행이 가능하다.</li>
+      </ol>
+      <details>
+        <summary>해설 보기</summary>
+        <p class="answer">정답 ②</p>
+        <div class="explain">
+          <p>KVM은 <b>리눅스 커널에 내장된 하이퍼바이저</b>일 뿐, 그 위에서 돌아가는 <b>게스트 OS는 제한이 없다.</b> KVM 위에 Windows, BSD, 다른 리눅스 배포판 등 무엇이든 올릴 수 있다.</p>
+          <p>④번이 힌트다 — "각기 다른 운영체제의 가상머신 병행 실행 가능"이 하이퍼바이저의 <b>존재 이유</b>인데, ②가 그걸 부정하고 있으니 서로 모순된다.</p>
+          <p><b>하이퍼바이저 두 종류 (자주 출제)</b></p>
+          <table>
+            <tr><th>구분</th><th>Type 1 (네이티브/베어메탈)</th><th>Type 2 (호스티드)</th></tr>
+            <tr><td>설치 위치</td><td><b>하드웨어 위에 직접</b></td><td><b>호스트 OS 위에</b></td></tr>
+            <tr><td>성능</td><td>빠름 (중간 계층 없음)</td><td>상대적으로 느림</td></tr>
+            <tr><td>용도</td><td>서버·데이터센터</td><td>개인 PC 테스트용</td></tr>
+            <tr><td>예시</td><td>Xen, VMware ESXi, <b>KVM</b></td><td>VirtualBox, VMware Workstation</td></tr>
+          </table>
+          <p>📚 <a href="../09_신기술동향/정보기술동향.html">09_신기술동향 · 정보기술 동향</a></p>
+        </div>
+      </details>
     </div>
   </section>
 </div>
