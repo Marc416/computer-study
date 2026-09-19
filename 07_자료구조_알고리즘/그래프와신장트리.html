@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>그래프 순회와 최소비용 신장트리 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">07. 자료구조/알고리즘</a> / 그래프 순회와 최소비용 신장트리</div>
+  <h1 class="page-title">그래프 순회와 최소비용 신장트리</h1>
+  <p class="page-subtitle">BFS·DFS, 크루스컬(Kruskal) 알고리즘 · PART 04. 자료구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>BFS(너비우선탐색)는 <b>큐(Queue)</b>로 "가까운 곳부터 옆으로 넓게", DFS(깊이우선탐색)는 <b>스택(Stack)</b>으로 "한 방향으로 끝까지 파고들기"다.</p>
+    <p>최소비용 신장트리는 모든 정점을 <b>사이클 없이</b> 가장 싼 비용으로 연결하는 것 — 크루스컬은 <b>간선을 싼 순서로 정렬</b>해서 하나씩 골라 담는다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 그래프 기초</h2>
+
+    <h3>그래프 용어</h3>
+    <table>
+      <tr><th>용어</th><th>의미</th></tr>
+      <tr><td>정점 (Vertex)</td><td>그래프의 점 하나하나 (노드)</td></tr>
+      <tr><td>간선 (Edge)</td><td>정점과 정점을 잇는 선</td></tr>
+      <tr><td>차수 (Degree)</td><td>한 정점에 연결된 간선의 개수</td></tr>
+      <tr><td>진입차수 / 진출차수</td><td>방향그래프에서 <b>들어오는</b> 간선 수 / <b>나가는</b> 간선 수 (방향 없는 그래프엔 이 구분이 없음)</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "정점의 수를 차수라고 한다" → ❌ 틀림. 차수는 <b>한 정점에 연결된 간선의 개수</b>다. 정점의 수는 그냥 정점 수.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🕸️</span>주요 개념 — 그래프 순회 (BFS vs DFS) <span class="page-ref">📖 기출문제집 p.483~484</span></h2>
+    <p>아래 그래프(정점 A~F)를 예로 들어보자. "누구부터 방문할지 헷갈리면 안 되는" 시험 포인트: <b>인접한 정점이 여러 개면 알파벳(번호) 순서대로</b> 고른다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 480 320" role="img" aria-label="정점 A,B,C,D,E,F로 이루어진 그래프. A-B, A-F, B-C, B-F, C-F, D-F, D-E, E-F 간선으로 연결되어 있다">
+        <defs>
+          <marker id="gA" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><polygon points="0,0 6,2.5 0,5" fill="currentColor"/></marker>
+        </defs>
+        <line x1="80" y1="60" x2="260" y2="40" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="80" y1="60" x2="240" y2="200" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="260" y1="40" x2="360" y2="120" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="260" y1="40" x2="240" y2="200" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="360" y1="120" x2="240" y2="200" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="240" y1="200" x2="160" y2="280" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="240" y1="200" x2="360" y2="270" stroke="currentColor" stroke-width="1.3"/>
+        <line x1="160" y1="280" x2="360" y2="270" stroke="currentColor" stroke-width="1.3"/>
+
+        <circle cx="80" cy="60" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="80" y="66" font-size="15" text-anchor="middle" font-weight="700">A</text>
+        <circle cx="260" cy="40" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="260" y="46" font-size="15" text-anchor="middle" font-weight="700">B</text>
+        <circle cx="360" cy="120" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="360" y="126" font-size="15" text-anchor="middle" font-weight="700">C</text>
+        <circle cx="160" cy="280" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="160" y="286" font-size="15" text-anchor="middle" font-weight="700">D</text>
+        <circle cx="360" cy="270" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="360" y="276" font-size="15" text-anchor="middle" font-weight="700">E</text>
+        <circle cx="240" cy="200" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="240" y="206" font-size="15" text-anchor="middle" font-weight="700">F</text>
+      </svg>
+      <figcaption>예제 그래프 — F가 A,B,C,D,E 전부와 연결된 "허브" 역할이라는 점이 이 문제의 핵심이다. (기출문제집 p.484 그래프를 재구성)</figcaption>
+    </figure>
+
+    <p><b>A에서 출발할 때 방문 순서 비교:</b></p>
+    <table>
+      <tr><th>탐색법</th><th>방문 순서</th><th>왜 이 순서인가</th></tr>
+      <tr><td><b>BFS</b> (큐, 가까운 곳부터)</td><td>A → B → F → C → D → E</td><td>A의 이웃(B,F)을 먼저 큐에 다 넣고, 그 다음 B의 새 이웃(C), 그 다음 F의 새 이웃(D,E) 순으로 "한 칸씩 넓게" 방문</td></tr>
+      <tr><td><b>DFS</b> (스택, 한 방향으로 끝까지)</td><td>A → B → C → D → E → F</td><td>A→B로 간 뒤 B의 이웃 중 안 가본 곳(C)으로 계속 파고들고, C→D→E까지 막다른 길에 몰릴 때까지 직진, 마지막에 F</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> BFS = 동심원을 그리며 퍼지는 물결(가까운 순서대로), DFS = 미로에서 한쪽 벽만 짚고 끝까지 가보는 것(막히면 되돌아옴)</div>
+    <div class="tip"><b>구현 방법 암기:</b> <b>BFS = 큐(Queue)</b>를 쓴다 (먼저 발견한 걸 먼저 방문, FIFO). <b>DFS = 스택(Stack)</b>을 쓴다 (재귀 호출도 결국 스택 구조라 DFS와 같은 원리).</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌲</span>주요 개념 — 최소비용 신장트리(Kruskal 알고리즘) <span class="page-ref">📖 기출문제집 p.489~490</span></h2>
+    <p><b>신장트리(Spanning Tree)</b>: 그래프의 모든 정점을 포함하면서 <b>사이클이 없는</b> 부분 그래프. 정점이 n개면 간선은 항상 <b>n−1개</b>다.</p>
+    <p><b>크루스컬(Kruskal) 알고리즘의 동작 원리:</b> ① 모든 간선을 <b>가중치 오름차순</b>으로 정렬 → ② 가장 싼 간선부터 하나씩 보면서, <b>사이클이 생기지 않으면</b> 선택하고 <b>사이클이 생기면</b> 버린다 → ③ 간선을 (정점 수−1)개 선택하면 종료.</p>
+
+    <p>실제 기출 예제(정점 6개, 아래는 선택 과정을 정리한 것 — 원본 그림의 정점 배치는 재구성):</p>
+    <ol class="steps">
+      <li>모든 간선을 가중치 오름차순 정렬: 2, 3, 4, 5, 6, 8, 9, ...</li>
+      <li>가중치 <b>2</b>인 간선 선택 → 사이클 없음 → 채택 (누적 비용 2)</li>
+      <li>가중치 <b>3</b>인 간선 선택 → 사이클 없음 → 채택 (누적 비용 5)</li>
+      <li>가중치 <b>4</b>인 간선 선택 → 사이클 없음 → 채택 (누적 비용 9)</li>
+      <li>가중치 <b>5</b>인 간선 검토 → 이미 연결된 두 정점을 또 잇는다 → <b>사이클 발생 → 버림</b></li>
+      <li>가중치 <b>6</b>인 간선 선택 → 사이클 없음 → 채택 (누적 비용 15)</li>
+      <li>가중치 <b>8</b>인 간선 검토 → <b>사이클 발생 → 버림</b></li>
+      <li>가중치 <b>9</b>인 간선 선택 → 사이클 없음 → 채택 (누적 비용 <b>24</b>) → 정점 6개, 간선 5개 완성! 종료</li>
+    </ol>
+    <div class="tip"><b>검산:</b> 채택된 간선 5개의 가중치 합 = 2+3+4+6+9 = <b>24</b> → 문제에서 "최소비용 신장트리의 비용은 24"라는 선택지가 정답이 되는 이유.</div>
+
+    <h3>크루스컬 시간복잡도</h3>
+    <p>간선 수를 n이라 하면: <b>간선 정렬 O(n log n)</b> + <b>사이클 검사하며 n−1개 선택 O(n)</b> = 전체 <b>O(n log n)</b>.</p>
+    <div class="tip"><b>함정 주의:</b> "크루스컬 알고리즘의 시간복잡도는 O(n²)이다" → ❌ 틀림. 간선 정렬이 지배적이라 <b>O(n log n)</b>이 맞다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>차수(degree) = 정점의 개수가 아니라 <b>한 정점에 연결된 간선 수</b></li>
+      <li>여러 이웃 중 방문 순서는 <b>알파벳(번호) 순</b> — 문제에 명시된 규칙 꼭 확인</li>
+      <li>BFS = 큐(Queue) 사용, DFS = 스택(Stack)/재귀 사용 — 자료구조 짝 암기 필수</li>
+      <li>신장트리의 간선 수 = <b>정점 수 − 1</b> (그래프가 아무리 복잡해도 이 공식은 항상 성립)</li>
+      <li>크루스컬: 가중치 오름차순 정렬 후 <b>사이클 생기면 무조건 버림</b></li>
+      <li>크루스컬 시간복잡도는 <b>O(n log n)</b> (간선 정렬이 병목)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>BFS</th><th>DFS</th></tr>
+      <tr><td>사용 자료구조</td><td>큐 (Queue)</td><td>스택 (Stack) / 재귀</td></tr>
+      <tr><td>탐색 방식</td><td>가까운 정점부터 넓게</td><td>한 방향으로 깊게 파고든 뒤 되돌아옴</td></tr>
+      <tr><td>최단경로 보장</td><td>O (간선 가중치가 동일할 때)</td><td>X</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>크루스컬 (Kruskal)</th><th>프림 (Prim)</th></tr>
+      <tr><td>선택 기준</td><td><b>전체 간선</b> 중 가장 싼 것부터, 사이클만 피하며 선택</td><td><b>이미 선택된 정점</b>과 연결된 간선 중 가장 싼 것 선택 (트리를 계속 확장)</td></tr>
+      <tr><td>적합한 그래프</td><td>간선이 적은(희소) 그래프</td><td>간선이 많은(밀집) 그래프</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">정점</span>
+      <span class="chip">간선</span>
+      <span class="chip">차수</span>
+      <span class="chip">BFS</span>
+      <span class="chip">DFS</span>
+      <span class="chip">큐</span>
+      <span class="chip">스택</span>
+      <span class="chip">신장트리</span>
+      <span class="chip">최소비용 신장트리</span>
+      <span class="chip">Kruskal</span>
+      <span class="chip">Prim</span>
+      <span class="chip">사이클</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>객체지향과 UML | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 객체지향과 UML</div>
+  <h1 class="page-title">객체지향과 UML</h1>
+  <p class="page-subtitle">캡슐화·상속·다형성·추상화 / UML 다이어그램 분류 · PART 06. 소프트웨어공학</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>객체지향의 4대 특징은 <b>캡슐화, 상속, 다형성, 추상화</b>다. 각각 "숨긴다", "물려받는다", "다르게 반응한다", "중요한 것만 남긴다"로 외운다.</p>
+    <p>UML은 <b>방법론이 아니라 그림 표기법</b>이다. 시스템의 "생김새(구조)"를 그리면 <b>구조 다이어그램</b>, "움직임(동작)"을 그리면 <b>행위 다이어그램</b>이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 객체지향 4대 특징</h2>
+
+    <table>
+      <tr><th>특징</th><th>정의</th><th>쉬운 설명</th></tr>
+      <tr><td><b>캡슐화</b> (Encapsulation)</td><td>데이터와 처리 방법(메서드)을 하나로 묶고, 외부에는 필요한 인터페이스만 드러냄</td><td>리모컨 버튼(인터페이스)만 보이고, 내부 회로(구현)는 케이스 안에 숨겨져 있음</td></tr>
+      <tr><td><b>상속</b> (Inheritance)</td><td>상위 클래스(부모)의 속성·메서드를 하위 클래스(자식)가 그대로 물려받음</td><td>"동물" 클래스를 만들어두면 "강아지", "고양이"가 이름·나이 속성을 다시 안 만들어도 됨</td></tr>
+      <tr><td><b>다형성</b> (Polymorphism)</td><td>같은 이름의 메서드가 <b>클래스마다 다르게 동작</b>함 (오버라이딩/오버로딩으로 구현)</td><td>"소리내기()"를 강아지는 "멍멍", 고양이는 "야옹"으로 각자 다르게 구현</td></tr>
+      <tr><td><b>추상화</b> (Abstraction)</td><td>객체의 불필요한 세부사항을 제거하고 <b>중요한 속성만</b> 클래스로 뽑아냄</td><td>실제 강아지는 특징이 무수히 많지만, 프로그램에는 "이름·나이·소리내기"만 클래스로 정의</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "재귀용법(Recursion)"은 객체지향의 특징이 <b>아니다</b> — 함정 선택지로 자주 나온다. 객체지향 4대 특징은 캡슐화·상속·다형성·추상화 뿐.</div>
+
+    <h3>실제 코드로 보는 상속과 다형성</h3>
+    <p>말로만 들으면 추상적이니, 실제 클래스 구조로 그려보자. <b>Animal</b>이라는 부모 클래스를 <b>Dog</b>, <b>Cat</b>이 상속받고, 각자 <code>makeSound()</code>라는 같은 이름의 메서드를 자기만의 방식으로 <b>오버라이딩(재정의)</b>한다 — 이게 다형성이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 600 340" role="img" aria-label="UML 클래스 다이어그램: Animal 부모 클래스를 Dog와 Cat 자식 클래스가 상속받고, makeSound 메서드를 각자 다르게 재정의한다">
+        <defs>
+          <marker id="inh" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto"><polygon points="0,0 10,5 0,10" fill="none" stroke="currentColor" stroke-width="1.3"/></marker>
+        </defs>
+        <rect x="200" y="20" width="200" height="100" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="200" y1="50" x2="400" y2="50" stroke="currentColor" stroke-width="1"/>
+        <line x1="200" y1="80" x2="400" y2="80" stroke="currentColor" stroke-width="1"/>
+        <text x="300" y="40" font-size="13.5" text-anchor="middle" font-weight="700">Animal</text>
+        <text x="210" y="68" font-size="11.5">- name : String</text>
+        <text x="210" y="98" font-size="11.5">+ makeSound() : void</text>
+
+        <line x1="140" y1="220" x2="290" y2="122" stroke="currentColor" stroke-width="1.3" marker-end="url(#inh)"/>
+        <line x1="460" y1="220" x2="310" y2="122" stroke="currentColor" stroke-width="1.3" marker-end="url(#inh)"/>
+        <text x="150" y="175" font-size="11" opacity="0.75">상속(extends)</text>
+        <text x="410" y="175" font-size="11" opacity="0.75">상속(extends)</text>
+
+        <rect x="40" y="220" width="200" height="100" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="40" y1="250" x2="240" y2="250" stroke="currentColor" stroke-width="1"/>
+        <line x1="40" y1="280" x2="240" y2="280" stroke="currentColor" stroke-width="1"/>
+        <text x="140" y="240" font-size="13.5" text-anchor="middle" font-weight="700">Dog</text>
+        <text x="50" y="268" font-size="11.5">(상속받은 속성 그대로)</text>
+        <text x="50" y="298" font-size="11.5" font-weight="700">+ makeSound() → "멍멍"</text>
+
+        <rect x="360" y="220" width="200" height="100" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="360" y1="250" x2="560" y2="250" stroke="currentColor" stroke-width="1"/>
+        <line x1="360" y1="280" x2="560" y2="280" stroke="currentColor" stroke-width="1"/>
+        <text x="460" y="240" font-size="13.5" text-anchor="middle" font-weight="700">Cat</text>
+        <text x="370" y="268" font-size="11.5">(상속받은 속성 그대로)</text>
+        <text x="370" y="298" font-size="11.5" font-weight="700">+ makeSound() → "야옹"</text>
+      </svg>
+      <figcaption>클래스 다이어그램(구조 다이어그램) — Dog와 Cat은 Animal의 name 속성을 <b>상속</b>받아 재사용하고, makeSound() 메서드는 각자 <b>오버라이딩</b>해서 다르게 동작시킨다(다형성). 이렇게 상위 클래스의 공통 부분만 남기고 세부는 하위 클래스에 맡기는 것 자체가 <b>추상화</b>의 결과이기도 하다.</figcaption>
+    </figure>
+
+    <h3>클래스 사이의 관계 <span class="page-ref">📖 기출문제집 p.638</span></h3>
+    <table>
+      <tr><th>관계</th><th>의미</th><th>예시</th></tr>
+      <tr><td>연관 (Association)</td><td>한 객체가 다른 객체의 서비스를 사용</td><td>학생 — 강의를 수강한다</td></tr>
+      <tr><td>집합 (Aggregation)</td><td>전체-부분 관계지만, <b>부분이 전체 없이도 독립적으로 존재</b> 가능</td><td>학과 — 학생 (학과가 없어져도 학생은 존재)</td></tr>
+      <tr><td>합성 (Composition)</td><td>전체-부분 관계이면서, <b>부분이 전체에 종속</b>되어 함께 소멸</td><td>자동차 — 엔진 (자동차가 폐차되면 엔진도 폐기)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗺️</span>주요 개념 — UML 다이어그램 분류 <span class="page-ref">📖 기출문제집 p.647~648</span></h2>
+    <p>UML은 <b>"생김새를 그리는가, 움직임을 그리는가"</b>로 크게 둘로 나뉜다. 시험에는 특정 다이어그램이 구조냐 행위냐를 구분하는 문제가 자주 나온다.</p>
+    <table>
+      <tr><th>분류</th><th>포함 다이어그램</th><th>공통점</th></tr>
+      <tr><td><b>구조 다이어그램</b><br>(Structural)</td><td>클래스, 객체, 컴포지트 구조, 배치(deployment), 컴포넌트, 패키지</td><td>시스템이 <b>어떻게 생겼는지(정적)</b>를 그림</td></tr>
+      <tr><td><b>행위 다이어그램</b><br>(Behavioral)</td><td>액티비티, 유스케이스, 상태머신(state machine), <b>상호작용 다이어그램</b>(시퀀스·커뮤니케이션·타이밍·인터랙션오버뷰)</td><td>시스템이 <b>어떻게 동작하는지(동적)</b>를 그림</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> 시퀀스 다이어그램은 "행위 다이어그램"의 하위 항목인 "상호작용 다이어그램"에 속한다 — 구조 다이어그램이 아니다. 반대로 클래스·패키지·배치 다이어그램은 전부 구조 다이어그램이다.</div>
+
+    <h3>대표 예시 — 시퀀스 다이어그램으로 "동작" 그려보기</h3>
+    <p>시퀀스 다이어그램은 <b>시간 흐름에 따라 객체들이 주고받는 메시지</b>를 그린다. 아래는 "고객이 주문하면 결제가 처리되는" 흐름이다 — 세로 점선이 각 객체의 생명선(lifeline), 화살표가 메시지다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 300" role="img" aria-label="UML 시퀀스 다이어그램: 고객 객체가 주문 객체에 주문요청을 보내고, 주문 객체가 결제 객체에 결제요청을 보낸 뒤 결과가 역순으로 반환된다">
+        <defs>
+          <marker id="msg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="30" y="20" width="120" height="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="90" y="43" font-size="12.5" text-anchor="middle">고객 : Customer</text>
+        <line x1="90" y1="55" x2="90" y2="270" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+
+        <rect x="255" y="20" width="120" height="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="315" y="43" font-size="12.5" text-anchor="middle">주문 : Order</text>
+        <line x1="315" y1="55" x2="315" y2="270" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+
+        <rect x="470" y="20" width="120" height="35" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="530" y="43" font-size="12.5" text-anchor="middle">결제 : Payment</text>
+        <line x1="530" y1="55" x2="530" y2="270" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3"/>
+
+        <line x1="90" y1="90" x2="315" y2="90" stroke="currentColor" stroke-width="1.3" marker-end="url(#msg)"/>
+        <text x="200" y="84" font-size="11.5" text-anchor="middle">1: 주문하기()</text>
+
+        <line x1="315" y1="130" x2="530" y2="130" stroke="currentColor" stroke-width="1.3" marker-end="url(#msg)"/>
+        <text x="420" y="124" font-size="11.5" text-anchor="middle">2: 결제요청()</text>
+
+        <line x1="530" y1="170" x2="317" y2="170" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#msg)"/>
+        <text x="420" y="164" font-size="11.5" text-anchor="middle">3: 결제완료(return)</text>
+
+        <line x1="315" y1="210" x2="92" y2="210" stroke="currentColor" stroke-width="1.3" stroke-dasharray="5 3" marker-end="url(#msg)"/>
+        <text x="200" y="204" font-size="11.5" text-anchor="middle">4: 주문완료(return)</text>
+      </svg>
+      <figcaption>시퀀스 다이어그램(행위 다이어그램) — 실선 화살표는 요청, 점선 화살표는 반환(return)을 나타낸다. "누가 누구에게 어떤 순서로 메시지를 보내는가"가 핵심이라 구조가 아니라 <b>동작</b>을 표현하는 다이어그램으로 분류된다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>객체지향 4대 특징: 캡슐화·상속·다형성·추상화 (재귀용법은 함정 오답)</li>
+      <li>"상위 클래스 속성을 물려받음" → 상속, "인터페이스만 노출·내부 은닉" → 캡슐화, "같은 메시지에 다르게 반응" → 다형성, "불필요한 세부사항 제거" → 추상화 — 지문 매칭 문제 반복 출제</li>
+      <li>UML은 방법론이 아니라 <b>표기법(그래픽 언어)</b>이라는 점 — "UML은 방법론이다"는 오답</li>
+      <li>구조 다이어그램(클래스·객체·배치·컴포넌트·패키지) vs 행위 다이어그램(액티비티·유스케이스·상태머신·시퀀스 등) 구분</li>
+      <li>시퀀스 다이어그램 = 시간 흐름에 따른 객체 간 메시지 교환 → 행위(상호작용) 다이어그램</li>
+      <li>집합(Aggregation) vs 합성(Composition): 부분이 전체 없이 독립 존재 가능한지 여부로 구분</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>집합 (Aggregation)</th><th>합성 (Composition)</th></tr>
+      <tr><td>전체 소멸 시 부분은?</td><td>독립적으로 계속 존재</td><td>함께 소멸</td></tr>
+      <tr><td>예시</td><td>학과 — 학생</td><td>자동차 — 엔진</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>구조 다이어그램</th><th>행위 다이어그램</th></tr>
+      <tr><td>표현 대상</td><td>정적 구조(생김새)</td><td>동적 동작(움직임)</td></tr>
+      <tr><td>대표 예</td><td>클래스, 패키지, 배치</td><td>시퀀스, 유스케이스, 상태머신</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">캡슐화</span>
+      <span class="chip">상속</span>
+      <span class="chip">다형성</span>
+      <span class="chip">추상화</span>
+      <span class="chip">오버라이딩</span>
+      <span class="chip">오버로딩</span>
+      <span class="chip">인스턴스</span>
+      <span class="chip">연관</span>
+      <span class="chip">집합</span>
+      <span class="chip">합성</span>
+      <span class="chip">UML</span>
+      <span class="chip">구조다이어그램</span>
+      <span class="chip">행위다이어그램</span>
+      <span class="chip">클래스다이어그램</span>
+      <span class="chip">시퀀스다이어그램</span>
+      <span class="chip">유스케이스다이어그램</span>
+      <span class="chip">상태머신다이어그램</span>
+      <span class="chip">액티비티다이어그램</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

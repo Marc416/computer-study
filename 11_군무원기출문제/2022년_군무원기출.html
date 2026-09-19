@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2022 군무원 기출 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">11. 군무원 기출문제</a> / 2022년</div>
+  <h1 class="page-title">2022년 군무원 기출문제</h1>
+  <p class="page-subtitle">25문항 · 이미 배운 개념의 복습용 — 새 개념만 간단히 추가 설명 · 기출문제집 p.847~858</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>대부분 컴퓨터구조·운영체제·네트워크·DB·프로그래밍언어에서 이미 다룬 개념의 재확인 문제. <b>비식별화(k-익명성 등)</b>, <b>디자인패턴</b>, <b>암달의 법칙</b>은 이 회차에서 처음 나오는 새 개념.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">🖥️</span>컴퓨터구조 / 논리회로</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q1. 2진수 11010010의 1의 보수를 16진수로? <span class="page-ref">p.847</span></p>
+      <p class="a">정답 ① 2D₁₆ — 비트 반전(1↔0) 후 4비트씩 묶어 16진수로 변환</p>
+      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/보수와실수표현.html">보수와 실수표현</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q2. 멀티플렉서·디멀티플렉서는 순차회로다? <span class="page-ref">p.847</span></p>
+      <p class="a">정답 ④(틀린 설명) — 멀티플렉서·디멀티플렉서는 <b>조합논리회로</b>다</p>
+      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/논리회로.html">조합논리회로와 순서논리회로</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q15. 멀티코어 CPU에서 각 코어는 독립된 캐시를 가질 수 없다? <span class="page-ref">p.853</span></p>
+      <p class="a">정답 ③(틀린 설명) — 각 코어는 <b>독립된 캐시</b>를 가질 수 있다(L1은 보통 코어 전용)</p>
+      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/캐시기억장치.md">캐시기억장치</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q17. 캐시에서 교체 기법이 불필요하지만 효율이 낮을 수 있는 사상 방식은? <span class="page-ref">p.854</span></p>
+      <p class="a">정답 ② 직접 사상(Direct Mapping) — 주소가 정해진 한 곳에만 매핑되어 교체 정책 자체가 필요 없음</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q18. 실시간 복구가 가능하고 중요 파일 저장용으로 쓰이는 RAID 방식은? <span class="page-ref">p.854</span></p>
+      <p class="a">정답 ② RAID 1(미러링) — 모든 데이터를 그대로 복사 저장</p>
+      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">마이크로오퍼레이션과 기억장치</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧵</span>운영체제</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q12. DMA는 메모리 간 복사(메모리↔메모리 전송)에는 쓸 수 없다? <span class="page-ref">p.852</span></p>
+      <p class="a">정답 ④(틀린 설명) — DMA는 메모리↔I/O뿐 아니라 <b>메모리↔메모리 복사에도 사용 가능</b></p>
+      <p class="memo">💡 관련: <a href="../01_컴퓨터구조/입출력장치와병렬처리.html">입출력장치와 병렬처리</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q14. 100초 프로그램의 40%가 순차실행, 60%를 4개 프로세서로 병렬화하면 최단 시간은? <span class="page-ref">p.853</span></p>
+      <p class="a">정답 ② 55초</p>
+      <div class="tip" style="margin-top:8px;">
+        <b>암달의 법칙(Amdahl's Law)</b> — 병렬화해도 <b>순차 실행 구간은 그대로 병목</b>이 된다는 법칙
+        <ol class="steps">
+          <li>향상 배수 = 1 / (순차비율 + 병렬비율/프로세서수) = 1 / (0.4 + 0.6/4) = 1 / 0.55</li>
+          <li>= 약 1.818배 향상</li>
+          <li>새로운 시간 = 100초 / 1.818 ≈ <b>55초</b> (100 × 0.55 = 55로 계산해도 동일)</li>
+        </ol>
+        💡 <b>암기팁:</b> "아무리 코어를 늘려도 순차 구간(40%)은 절대 안 줄어든다" — 그래서 무한대로 늘려도 최소 100×0.4=40초보다는 빨라질 수 없음
+      </div>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q16. 프로세스들이 서로의 자원을 무한정 기다리며 진행이 멈추는 상태는? <span class="page-ref">p.854</span></p>
+      <p class="a">정답 ① deadlock(교착상태)</p>
+      <p class="memo">💡 관련: <a href="../02_운영체제/임계영역과교착상태.html">임계영역과 교착상태</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q20. 운영체제 발달과정 순서는? <span class="page-ref">p.855</span></p>
+      <p class="a">정답 ② 일괄처리 → 시분할 → 다중모드 → 분산처리</p>
+      <p class="memo">❌ 헷갈리는 포인트: 다중모드 시스템은 일괄·시분할·실시간·다중처리를 <b>모두 포함하는 통합 단계</b>라 시분할보다 뒤에 온다</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q21. 4K/15K/10K/5K/20K 빈 공간에 5K 프로그램을 최초·최적·최악 적합으로 각각 배치하면? <span class="page-ref">p.855</span></p>
+      <p class="a">정답 ③ 최초적합=2번(15K), 최적적합=4번(5K, 딱 맞음), 최악적합=5번(20K, 가장 큼)</p>
+      <p class="memo">💡 관련: <a href="../02_운영체제/기억장치관리정책.html">기억장치 관리정책</a> — 최초=순서대로 첫 번째로 들어가는 곳, 최적=남는 공간이 가장 적은 곳, 최악=남는 공간이 가장 큰 곳</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>네트워크</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q5. 802.11a/b/g/n 중 전송속도가 가장 느린 것은? <span class="page-ref">p.849</span></p>
+      <p class="a">정답 ① 802.11b (11Mbps, DSSS 방식) — a/g는 54Mbps, n은 600Mbps</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q6. 255.255.255.0은 A클래스 서브넷 마스크다? <span class="page-ref">p.849</span></p>
+      <p class="a">정답 ②(틀린 설명) — 255.255.255.0은 <b>C클래스</b>의 기본 서브넷 마스크. A클래스 기본값은 255.0.0.0</p>
+      <p class="memo">💡 관련: <a href="../03_네트워크/IP주소체계와서브넷팅.html">IP 주소체계와 서브넷팅</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q13. HTTP는 네트워크 계층 프로토콜이다? <span class="page-ref">p.853</span></p>
+      <p class="a">정답 ①(틀린 설명) — HTTP는 <b>응용 계층</b> 프로토콜</p>
+      <p class="memo">💡 관련: <a href="../03_네트워크/OSI7계층.html">OSI 7계층</a>, <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">TCP/IP 응용·전송계층</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q22. 회선교환 방식은 처리속도가 다른 통신기기 간에도 정보전송이 가능하다? <span class="page-ref">p.856</span></p>
+      <p class="a">정답 ②(틀린 설명) — 회선교환은 <b>고정 대역폭·고정 경로</b>라 속도 변환이 불가능. 이건 패킷교환의 장점</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q23. B클래스 사설 IP 호스트 범위는 172.15.0.1~172.30.255.254다? <span class="page-ref">p.856</span></p>
+      <p class="a">정답 ④(틀린 설명) — B클래스 사설 IP 대역은 <b>172.16.0.0~172.31.255.255</b> (172.15가 아니라 172.16부터)</p>
+      <p class="memo">💡 사설 IP 3대역: A(10.x), B(172.16~172.31.x), C(192.168.x) — 통째로 암기</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔐</span>정보보안 <span style="font-size:12px;font-weight:400;color:var(--text-dim)">(새 개념)</span></h2>
+
+    <div class="wrong-card">
+      <p class="q">Q7. 개인정보 비식별화 — k-익명성/l-다양성/t-근접성 중 옳지 않은 설명은? <span class="page-ref">p.850</span></p>
+      <p class="a">정답 ④(틀린 설명) — 개인정보보호법상 <b>동의 없이도</b> 통계작성·과학적연구·공익적기록보존 목적이면 가명정보 활용 가능</p>
+      <div class="tip" style="margin-top:8px;">
+        <b>비식별화 3단계 (처음 보는 개념이면 이렇게 암기)</b>
+        <ul>
+          <li><b>k-익명성</b>: 같은 값이 <b>최소 k개</b> 존재하게 만들어서 "이게 누구 정보인지" 특정 못하게 함</li>
+          <li><b>l-다양성</b>: k-익명성만으로는 그룹 안 값이 전부 같으면(동질성 공격) 뚫리므로, 그룹 안에 <b>서로 다른 민감정보가 최소 l개</b> 있게 함</li>
+          <li><b>t-근접성</b>: l-다양성도 그룹별 분포가 전체와 너무 다르면(쏠림 공격) 뚫리므로, <b>그룹 분포를 전체 분포와 비슷하게</b> 맞춤</li>
+        </ul>
+        💡 <b>암기팁:</b> k(개수)→l(다양성)→t(분포유사성) 순서로 점점 더 정교하게 보완해가는 3단계
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🏗️</span>소프트웨어공학</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q8. 디자인패턴은 소스/기계코드로 바로 전환되는 완성된 설계를 제공한다? <span class="page-ref">p.850</span></p>
+      <p class="a">정답 ③(틀린 설명) — 디자인패턴은 <b>구조적 문제 해결 방안(템플릿)</b>이지, 코드로 바로 변환되는 완성품이 아니다</p>
+      <p class="memo">💡 디자인패턴 3분류: 생성(Creational)·구조(Structural)·행위(Behavioral) 패턴. 어댑터 패턴 = 서로 다른 인터페이스를 호환되게 변환</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q9. 객체지향 프로그래밍은 절차지향보다 실행 속도가 빠르다? <span class="page-ref">p.851</span></p>
+      <p class="a">정답 ④(틀린 설명) — 캡슐화·격리구조 때문에 절차지향보다 <b>실행 속도는 느리다</b> (대신 재사용성·유지보수성이 좋음)</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗄️</span>데이터베이스</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q10. DBMS의 필수 기능이 아닌 것은? <span class="page-ref">p.851</span></p>
+      <p class="a">정답 ① 이식(migration) 기능 — DBMS 필수 3기능은 <b>정의·조작·제어</b></p>
+      <p class="memo">💡 관련: <a href="../04_데이터베이스/데이터베이스_특징.md">데이터베이스 특징</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q11. 데이터 중복성 문제 중 옳지 않은 설명은? <span class="page-ref">p.852</span></p>
+      <p class="a">정답 ④(틀린 설명) — 무결성 문제는 "제어의 분산" 때문이 아니라, <b>중복된 값 간 불일치</b>로 인해 발생</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q25. 관계 데이터모델 용어 설명 중 옳은 것은? <span class="page-ref">p.857~858</span></p>
+      <p class="a">정답 ① 도메인 = 하나의 속성이 가질 수 있는 값들의 집합</p>
+      <p class="memo">❌ 자주 뒤바뀌는 함정: 차수(Degree)=<b>속성(열) 개수</b>, 카디널리티(Cardinality)=<b>튜플(행) 개수</b> — 문제는 이걸 서로 바꿔서 오답을 만듦. 관련: <a href="../04_데이터베이스/릴레이션_특성.md">릴레이션 특성</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">💻</span>프로그래밍언어</h2>
+
+    <div class="wrong-card">
+      <p class="q">Q3. 0부터 n까지 합을 구하는 C 반복문 빈칸은? <span class="page-ref">p.848</span></p>
+      <p class="a">정답 ③ <code>for (int i=0; i&lt;=n; i++) result = result + i;</code> — n을 <b>포함</b>해야 하므로 조건은 <code>i&lt;=n</code></p>
+      <p class="memo">💡 관련: <a href="../08_프로그래밍언어/C언어_함정모음.md">C언어 함정모음</a></p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q4. Java에서 컴파일 오류를 일으키는 코드는? <span class="page-ref">p.848</span></p>
+      <p class="a">정답 ③ <code>static CS cs = new C();</code> — 자식 타입 변수에 <b>부모 클래스 객체는 대입 불가</b> (반대는 가능: 부모 타입 = 자식 객체 OK)</p>
+    </div>
+
+    <div class="wrong-card">
+      <p class="q">Q19. <code>list=[1,2,3,4,5,6]; print(list[-2:-4:-1])</code> 결과는? <span class="page-ref">p.855</span></p>
+      <p class="a">정답 ② [5, 4] — 뒤에서 2번째(5)부터 시작해 -1씩(역방향) 이동하며 뒤에서 4번째(4) <b>전까지</b> 출력</p>
+      <p class="memo">💡 파이썬 슬라이싱 <code>[start:stop:step]</code>에서 step이 음수면 역방향, stop 인덱스는 결과에 <b>포함 안 됨</b></p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

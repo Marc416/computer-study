@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소프트웨어 생명주기 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 소프트웨어 생명주기</div>
+  <h1 class="page-title">소프트웨어 생명주기 (SDLC)</h1>
+  <p class="page-subtitle">개발 모델별 흐름 시각화 · PART 06. 소프트웨어공학</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>SDLC(Software Development Life Cycle) 표준 순서는 <b>계획 → 분석 → 설계 → 구현 → 테스트 → 유지보수</b>다.</p>
+    <p>각 개발 모델(폭포수·프로토타입·나선형·애자일)은 이 6단계를 <b>"어떤 순서/반복 방식으로 밟느냐"</b>가 다를 뿐이다. 모델별 키워드·비교표는 이미 <a href="개발방법론.md">개발방법론</a> 문서에 자세히 있으니, 여기서는 그 흐름을 눈으로 보는 데 집중한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>SDLC 6단계 순서 확인 문제 <span class="page-ref">📖 기출문제집 p.606~607</span></h3>
+    <p>시험은 순서를 살짝 뒤섞어서 "옳은 것은?" 형태로 자주 낸다. 실제 기출 선택지 예시:</p>
+    <ol class="steps">
+      <li>① 계획 — 분석 — 설계 — 구현 — 테스트 — 유지보수 <b>← 정답</b></li>
+      <li>② 분석 — 계획 — 설계 — 구현 — 테스트 — 유지보수 (계획·분석 순서가 바뀜 → 오답)</li>
+      <li>③ 분석 — 계획 — 설계 — 테스트 — 구현 — 유지보수 (테스트·구현 순서가 바뀜 → 오답)</li>
+      <li>④ 계획 — 설계 — 분석 — 구현 — 테스트 — 유지보수 (설계·분석 순서가 바뀜 → 오답)</li>
+    </ol>
+    <div class="analogy"><b>암기 순서:</b> "계획 없이 분석 못하고, 분석 없이 설계 못하고, 설계 없이 못 만들고(구현), 만든 건 테스트하고, 다 끝나도 고쳐야(유지보수) 한다" — 당연한 흐름이라 순서 자체는 상식적으로 유추 가능.</div>
+
+    <h3>4대 모델의 흐름 비교 (한눈에 보기)</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 780 520" role="img" aria-label="폭포수, 프로토타입, 나선형, 애자일 네 가지 개발 모델의 진행 흐름을 위에서 아래로 비교한 그림. 폭포수는 일직선, 프로토타입은 평가 후 되돌아가는 루프, 나선형은 매 반복마다 커지는 나선, 애자일은 짧은 스프린트의 반복">
+        <defs>
+          <marker id="sl1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <text x="20" y="20" font-size="13" font-weight="700">① 폭포수(Waterfall) — 한 방향으로만 진행</text>
+        <g font-size="11" text-anchor="middle">
+          <rect x="20" y="35" width="100" height="35" fill="none" stroke="currentColor"/><text x="70" y="57">계획</text>
+          <line x1="120" y1="52" x2="150" y2="52" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="150" y="35" width="100" height="35" fill="none" stroke="currentColor"/><text x="200" y="57">분석</text>
+          <line x1="250" y1="52" x2="280" y2="52" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="280" y="35" width="100" height="35" fill="none" stroke="currentColor"/><text x="330" y="57">설계</text>
+          <line x1="380" y1="52" x2="410" y2="52" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="410" y="35" width="100" height="35" fill="none" stroke="currentColor"/><text x="460" y="57">구현</text>
+          <line x1="510" y1="52" x2="540" y2="52" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="540" y="35" width="100" height="35" fill="none" stroke="currentColor"/><text x="590" y="57">테스트</text>
+          <line x1="640" y1="52" x2="670" y2="52" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="670" y="35" width="90" height="35" fill="none" stroke="currentColor"/><text x="715" y="57">유지보수</text>
+        </g>
+        <text x="20" y="90" font-size="10.5" opacity="0.75">되돌아가는 화살표 없음 — 결과물을 보려면 끝까지 가야 한다</text>
+
+        <text x="20" y="130" font-size="13" font-weight="700">② 프로토타입 — 시제품을 만들어보고 되돌아감</text>
+        <g font-size="11" text-anchor="middle">
+          <rect x="20" y="145" width="110" height="35" fill="none" stroke="currentColor"/><text x="75" y="167">요구분석</text>
+          <line x1="130" y1="162" x2="160" y2="162" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="160" y="145" width="110" height="35" fill="none" stroke="currentColor"/><text x="215" y="167">시제품 개발</text>
+          <line x1="270" y1="162" x2="300" y2="162" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="300" y="145" width="110" height="35" fill="none" stroke="currentColor"/><text x="355" y="167">고객 평가</text>
+          <line x1="410" y1="162" x2="440" y2="162" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="440" y="145" width="110" height="35" fill="none" stroke="currentColor"/><text x="495" y="167">완제품 생산</text>
+        </g>
+        <path d="M 355,180 Q 355,210 215,210 Q 215,210 215,180" fill="none" stroke="currentColor" stroke-dasharray="4 3" marker-end="url(#sl1)"/>
+        <text x="285" y="225" font-size="10.5" text-anchor="middle" opacity="0.75">만족할 때까지 "개발↔평가"를 반복(점선 루프)</text>
+
+        <text x="20" y="265" font-size="13" font-weight="700">③ 나선형(Spiral) — 매 바퀴마다 위험분석하며 커짐</text>
+        <g transform="translate(160,340)">
+          <path d="M 0,0 m -10,0 a 10,10 0 1,1 20,0 a 10,10 0 1,1 -20,0" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/>
+          <path d="M 0,0 m -35,0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+          <path d="M 0,0 m -65,0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#sl1)"/>
+        </g>
+        <g font-size="10.5">
+          <text x="230" y="300">① 계획 수립</text>
+          <text x="230" y="320">② 위험 분석 ⭐(핵심 키워드)</text>
+          <text x="230" y="340">③ 개발 및 검증</text>
+          <text x="230" y="360">④ 고객 평가 → 다시 ①로, 바퀴가 커질수록 완성도↑</text>
+        </g>
+
+        <text x="20" y="410" font-size="13" font-weight="700">④ 애자일(Agile) — 짧은 스프린트를 계속 반복</text>
+        <g font-size="10.5" text-anchor="middle">
+          <rect x="20" y="425" width="80" height="70" rx="6" fill="none" stroke="currentColor"/>
+          <text x="60" y="450">스프린트1</text><text x="60" y="465">계획·개발</text><text x="60" y="480">·테스트</text>
+          <line x1="100" y1="460" x2="130" y2="460" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="130" y="425" width="80" height="70" rx="6" fill="none" stroke="currentColor"/>
+          <text x="170" y="450">스프린트2</text><text x="170" y="465">고객 피드백</text><text x="170" y="480">반영</text>
+          <line x1="210" y1="460" x2="240" y2="460" stroke="currentColor" marker-end="url(#sl1)"/>
+          <rect x="240" y="425" width="80" height="70" rx="6" fill="none" stroke="currentColor"/>
+          <text x="280" y="450">스프린트3</text><text x="280" y="465">계속 반복</text>
+          <text x="330" y="460" text-anchor="start" font-size="16">→ ⋯</text>
+        </g>
+        <text x="20" y="515" font-size="10.5" opacity="0.75">각 스프린트마다 "동작하는 결과물"을 만들어 바로 고객에게 보여준다 — 문서보다 결과물 우선</text>
+      </svg>
+      <figcaption>네 가지 SDLC 모델의 실제 흐름 — 폭포수만 유일하게 "되돌아가는 화살표"가 없다는 점이 시험에서 제일 많이 활용되는 차이다.</figcaption>
+    </figure>
+
+    <div class="tip"><b>모델별 키워드·세부 비교표(코코모, XP 실천법, V-모델 대응관계 등)는 이미 정리되어 있음:</b> <a href="개발방법론.md">→ 개발방법론 문서 보기</a></div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>SDLC 표준 순서: <b>계획 → 분석 → 설계 → 구현 → 테스트 → 유지보수</b> (순서 뒤섞은 오답 선택지 주의)</li>
+      <li>폭포수 모델은 <b>되돌아가는 흐름이 없다</b> — 유일하게 "일직선"인 모델</li>
+      <li>나선형 모델의 핵심 키워드는 <b>위험 분석(Risk Analysis)</b> — 매 반복(나선 한 바퀴)마다 수행</li>
+      <li>프로토타입 모델은 "시제품 → 평가 → 재개발" 루프가 있다는 것이 폭포수와의 결정적 차이</li>
+      <li>애자일은 <b>문서보다 동작하는 소프트웨어</b>, 짧은 주기(스프린트) 반복이 핵심</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>되돌아가기</th><th>결과물을 보는 시점</th><th>핵심 키워드</th></tr>
+      <tr><td>폭포수</td><td>없음</td><td>맨 마지막에</td><td>순차적, 산출물</td></tr>
+      <tr><td>프로토타입</td><td>평가 후 재개발</td><td>시제품 단계에서 일찍</td><td>시제품, 피드백</td></tr>
+      <tr><td>나선형</td><td>매 나선마다</td><td>반복할 때마다 점점</td><td>위험 분석</td></tr>
+      <tr><td>애자일</td><td>매 스프린트마다</td><td>매 스프린트 종료 시</td><td>동작하는 SW, 고객 소통</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">SDLC</span>
+      <span class="chip">계획</span>
+      <span class="chip">분석</span>
+      <span class="chip">설계</span>
+      <span class="chip">구현</span>
+      <span class="chip">테스트</span>
+      <span class="chip">유지보수</span>
+      <span class="chip">폭포수모델</span>
+      <span class="chip">프로토타입모델</span>
+      <span class="chip">나선형모델</span>
+      <span class="chip">위험분석</span>
+      <span class="chip">애자일</span>
+      <span class="chip">스프린트</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

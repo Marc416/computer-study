@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인터네트워킹 장비 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / 인터네트워킹 장비</div>
+  <h1 class="page-title">인터네트워킹 장비</h1>
+  <p class="page-subtitle">리피터·허브·브리지·스위치·라우터·게이트웨이 · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>네트워크 장비는 <b>OSI 7계층 중 어느 계층에서 동작하는지</b>로 구분한다 — 이것만 외우면 문제의 80%는 풀린다.</p>
+    <p><b>1계층: 리피터·허브 / 2계층: 브리지·스위치 / 3계층: 라우터 / 4계층 이상: 게이트웨이</b></p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>OSI 계층별 장비 매핑 <span class="page-ref">📖 기출문제집 p.291~293</span></h3>
+    <p>왜 계층으로 장비를 구분할까? <b>장비가 신호의 어떤 부분까지 "이해"하는지</b>가 다르기 때문이다. 리피터는 전기신호만 알고, 브리지는 MAC 주소를 읽을 줄 알고, 라우터는 IP 주소를 이해하고 경로를 계산할 줄 안다 — 계층이 올라갈수록 장비가 "똑똑해진다."</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 420" role="img" aria-label="OSI 계층이 올라갈수록 리피터, 브리지, 라우터, 게이트웨이 순으로 더 상위 정보를 이해하는 장비가 대응된다는 것을 보여주는 계층형 다이어그램">
+        <rect x="180" y="10" width="280" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="35" font-size="13" text-anchor="middle" font-weight="700">4계층 이상 (전송~응용)</text>
+        <text x="320" y="55" font-size="11" text-anchor="middle" opacity="0.8">포트, 프로토콜, 데이터 내용까지 이해</text>
+        <line x1="470" y1="40" x2="560" y2="40" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="560" y="15" width="70" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="595" y="45" font-size="12" text-anchor="middle" font-weight="700">게이트웨이</text>
+
+        <rect x="180" y="100" width="280" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="125" font-size="13" text-anchor="middle" font-weight="700">3계층 (네트워크)</text>
+        <text x="320" y="145" font-size="11" text-anchor="middle" opacity="0.8">IP 주소를 읽고 최적 경로 계산</text>
+        <line x1="470" y1="130" x2="560" y2="130" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="560" y="105" width="70" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="595" y="135" font-size="12" text-anchor="middle" font-weight="700">라우터</text>
+
+        <rect x="180" y="190" width="280" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="215" font-size="13" text-anchor="middle" font-weight="700">2계층 (데이터링크)</text>
+        <text x="320" y="235" font-size="11" text-anchor="middle" opacity="0.8">MAC 주소를 읽고 필터링</text>
+        <line x1="470" y1="220" x2="560" y2="220" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="560" y="195" width="70" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="595" y="216" font-size="12" text-anchor="middle" font-weight="700">브리지</text>
+        <text x="595" y="232" font-size="12" text-anchor="middle" font-weight="700">스위치</text>
+
+        <rect x="180" y="280" width="280" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="305" font-size="13" text-anchor="middle" font-weight="700">1계층 (물리)</text>
+        <text x="320" y="325" font-size="11" text-anchor="middle" opacity="0.8">전기신호만 증폭·중계, 주소 개념 없음</text>
+        <line x1="470" y1="310" x2="560" y2="310" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="560" y="285" width="70" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="595" y="306" font-size="12" text-anchor="middle" font-weight="700">리피터</text>
+        <text x="595" y="322" font-size="12" text-anchor="middle" font-weight="700">더미허브</text>
+
+        <text x="320" y="385" font-size="12" text-anchor="middle" opacity="0.8">↑ 계층이 올라갈수록 장비가 더 많은 정보를 "이해"하고 판단한다</text>
+      </svg>
+      <figcaption>OSI 계층과 인터네트워킹 장비의 대응 관계 — 시험에 가장 많이 나오는 표를 그림으로 옮긴 것.</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>장비</th><th>OSI 계층</th><th>하는 일</th><th>모르는 것</th></tr>
+      <tr><td><b>리피터 (Repeater)</b></td><td>1계층 (물리)</td><td>약해진 신호를 <b>증폭·재생</b>해서 전송거리 확장</td><td>주소 개념 자체가 없음 (그냥 신호 증폭기)</td></tr>
+      <tr><td><b>더미허브 (Dummy Hub)</b></td><td>1계층 (물리)</td><td>여러 포트로 신호를 <b>그대로 복사해 전체에 전달</b></td><td>목적지 구분 못 함 (전부 다 뿌림)</td></tr>
+      <tr><td><b>브리지 (Bridge)</b></td><td>2계층 (데이터링크)</td><td><b>MAC 주소</b>를 보고 필요한 트래픽만 통과(필터링), LAN 2개를 연결</td><td>IP 주소, 경로 최적화는 모름</td></tr>
+      <tr><td><b>스위치 (Switch)</b></td><td>2계층 (데이터링크)</td><td>브리지의 다중 포트 버전, 포트별로 MAC 주소 학습 후 전달</td><td>IP 기반 라우팅 못 함</td></tr>
+      <tr><td><b>라우터 (Router)</b></td><td>3계층 (네트워크)</td><td><b>IP 주소</b>를 보고 라우팅 테이블로 <b>최적 경로 계산</b></td><td>응용프로그램·프로토콜 종류는 모름</td></tr>
+      <tr><td><b>게이트웨이 (Gateway)</b></td><td>4계층 이상 (전송~응용)</td><td>서로 <b>다른 프로토콜</b>을 쓰는 네트워크를 연결, <b>프로토콜 변환</b> 수행</td><td>-</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의 모음</b><br>
+      • "리피터가 LAN 두 개를 연결해 하나로 만든다" → ❌ 그건 <b>브리지</b>의 역할. 리피터는 단순 증폭기.<br>
+      • "게이트웨이는 데이터링크 계층에서만 동작한다" → ❌ 게이트웨이는 <b>여러 계층(전송~응용)</b>에서 동작하며 프로토콜을 변환한다.<br>
+      • "모뎀은 신호증폭 장치다" → ❌ 모뎀은 <b>디지털↔아날로그 신호 변환</b> 장치.<br>
+      • "브리지는 목적지 주소와 무관하게 무조건 전달한다" → ❌ 브리지는 목적지 MAC 주소를 <b>필터링해서</b> 판단 후 전달한다.
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>1계층=리피터/허브, 2계층=브리지/스위치, 3계층=라우터, 4계층이상=게이트웨이 — 순서로 암기</li>
+      <li>"OSI 계층과 장비를 짝짓는" 문제가 거의 매년 출제됨</li>
+      <li>브리지·스위치는 <b>MAC(물리) 주소</b> 기준, 라우터는 <b>IP(논리) 주소</b> 기준으로 동작한다는 차이</li>
+      <li>게이트웨이 = 서로 다른 프로토콜 네트워크를 연결 + 프로토콜 변환 (라우터와 혼동 주의)</li>
+      <li>더미허브는 물리계층에서 신호를 단순 중계·복사, 스위칭허브는 MAC 학습 기능 있음</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>브리지/스위치</th><th>라우터</th></tr>
+      <tr><td>계층</td><td>2계층 (데이터링크)</td><td>3계층 (네트워크)</td></tr>
+      <tr><td>기준 주소</td><td>MAC 주소</td><td>IP 주소</td></tr>
+      <tr><td>기능</td><td>필터링, LAN 연결</td><td>경로 계산(라우팅)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>라우터</th><th>게이트웨이</th></tr>
+      <tr><td>연결 대상</td><td>같은 프로토콜의 네트워크</td><td>다른 프로토콜의 네트워크</td></tr>
+      <tr><td>핵심 기능</td><td>최적 경로 선택</td><td>프로토콜 변환</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">리피터</span>
+      <span class="chip">더미허브</span>
+      <span class="chip">브리지</span>
+      <span class="chip">스위치</span>
+      <span class="chip">라우터</span>
+      <span class="chip">게이트웨이</span>
+      <span class="chip">MAC주소</span>
+      <span class="chip">IP주소</span>
+      <span class="chip">필터링</span>
+      <span class="chip">라우팅테이블</span>
+      <span class="chip">프로토콜변환</span>
+      <span class="chip">모뎀</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

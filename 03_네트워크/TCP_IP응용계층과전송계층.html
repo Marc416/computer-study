@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCP/IP 응용계층과 전송계층 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / TCP/IP 응용계층과 전송계층</div>
+  <h1 class="page-title">TCP/IP 응용계층과 전송계층</h1>
+  <p class="page-subtitle">TCP/IP 4계층 모델, 응용계층 프로토콜, TCP 3-way handshake, TCP vs UDP · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>TCP/IP는 OSI 7계층을 실무용으로 <b>4계층(네트워크접속·인터넷·전송·응용)</b>으로 단순화한 것이다.</p>
+    <p><b>TCP</b> = 연결지향·신뢰성 (전화 통화처럼 먼저 연결하고 확인하며 주고받음), <b>UDP</b> = 비연결·빠름 (엽서처럼 그냥 보내고 끝).</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>TCP/IP 4계층 vs OSI 7계층 <span class="page-ref">📖 기출문제집 p.306~307</span></h3>
+    <table>
+      <tr><th>TCP/IP 계층</th><th>대응하는 OSI 계층</th><th>대표 프로토콜</th></tr>
+      <tr><td>응용 계층</td><td>응용·표현·세션</td><td>HTTP, FTP, TELNET, SMTP, POP3, IMAP, DNS, SNMP</td></tr>
+      <tr><td>전송 계층</td><td>전송</td><td>TCP, UDP</td></tr>
+      <tr><td>인터넷 계층</td><td>네트워크</td><td>IP, ARP, RARP, ICMP, IGMP</td></tr>
+      <tr><td>네트워크 접속 계층</td><td>데이터링크·물리</td><td>Ethernet, IEEE 802, PPP, HDLC</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "네트워크 접속 계층은 IP주소를 MAC주소로 바꾼다" → 이건 <b>인터넷 계층의 ARP</b>가 하는 일이다. TCP/IP의 "네트워크 계층/인터넷 계층" 이름이 헷갈리기 쉬우니, <b>TCP/IP에는 "세션 계층"이 없다</b>는 것도 자주 나오는 함정(OSI에만 있음).</div>
+
+    <h3>전자메일 프로토콜과 흐름 <span class="page-ref">📖 기출문제집 p.309~311</span></h3>
+    <table>
+      <tr><th>프로토콜</th><th>용도</th></tr>
+      <tr><td><b>SMTP</b></td><td>메일을 <b>보낼 때(송신)</b> 사용 — 내 컴퓨터→내 메일서버, 메일서버→상대 메일서버 구간 모두 SMTP</td></tr>
+      <tr><td><b>POP3</b></td><td>메일을 <b>받을 때</b> 사용. 서버의 메일을 <b>다운로드하고 서버에서는 삭제</b>(원본이 클라이언트로 이동)</td></tr>
+      <tr><td><b>IMAP</b></td><td>메일을 <b>받을 때</b> 사용. <b>복사본만</b> 전송하고 원본은 서버에 그대로 유지 (여러 기기에서 동기화 가능)</td></tr>
+    </table>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 220" role="img" aria-label="전자메일 전달 과정: 발신자에서 발신 메일서버까지, 발신 메일서버에서 수신 메일서버까지는 SMTP를 사용하고 수신 메일서버에서 수신자까지는 POP3 또는 IMAP을 사용한다">
+        <defs>
+          <marker id="mail-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="20" y="80" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="75" y="115" font-size="12" text-anchor="middle">발신자</text>
+
+        <line x1="130" y1="110" x2="220" y2="110" stroke="currentColor" stroke-width="1.5" marker-end="url(#mail-ar)"/>
+        <text x="175" y="100" font-size="12" text-anchor="middle" font-weight="700">SMTP</text>
+
+        <rect x="220" y="80" width="140" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="290" y="105" font-size="12" text-anchor="middle">발신측</text>
+        <text x="290" y="123" font-size="12" text-anchor="middle">메일 서버</text>
+
+        <line x1="360" y1="110" x2="450" y2="110" stroke="currentColor" stroke-width="1.5" marker-end="url(#mail-ar)"/>
+        <text x="405" y="100" font-size="12" text-anchor="middle" font-weight="700">SMTP</text>
+
+        <rect x="450" y="80" width="140" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="520" y="105" font-size="12" text-anchor="middle">수신측</text>
+        <text x="520" y="123" font-size="12" text-anchor="middle">메일 서버</text>
+
+        <line x1="590" y1="110" x2="670" y2="110" stroke="currentColor" stroke-width="1.5" marker-end="url(#mail-ar)"/>
+        <text x="630" y="95" font-size="11.5" text-anchor="middle" font-weight="700">POP3</text>
+        <text x="630" y="130" font-size="11.5" text-anchor="middle" font-weight="700">/IMAP</text>
+
+        <text x="630" y="60" font-size="12" text-anchor="middle">수신자</text>
+        <circle cx="630" cy="40" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+
+        <line x1="640" y1="55" x2="630" y2="80" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <text x="350" y="190" font-size="11" text-anchor="middle" opacity="0.75">발신 전 구간(발신자→발신서버→수신서버)은 전부 SMTP, 마지막 구간(수신서버→수신자)만 POP3 또는 IMAP</text>
+      </svg>
+      <figcaption>전자메일은 보내는 쪽 구간이 전부 SMTP, 받는 사람이 서버에서 자기 메일함으로 꺼내오는 마지막 한 구간만 POP3/IMAP을 쓴다 — "메일 받을 때도 SMTP를 쓴다"는 표현이 자주 나오는 오답 함정이다.</figcaption>
+    </figure>
+
+    <h3>주요 응용계층 프로토콜과 포트 번호</h3>
+    <table>
+      <tr><th>프로토콜</th><th>포트</th><th>용도</th></tr>
+      <tr><td>HTTP</td><td>80</td><td>웹 페이지 전송</td></tr>
+      <tr><td>FTP</td><td>21(제어) / 20(데이터)</td><td>파일 전송</td></tr>
+      <tr><td>TELNET</td><td>23</td><td>원격 접속(내 컴퓨터에서 상대 컴퓨터를 원격 제어)</td></tr>
+      <tr><td>SMTP</td><td>25</td><td>메일 송신</td></tr>
+      <tr><td>DNS</td><td>53</td><td>도메인 이름 ↔ IP주소 변환</td></tr>
+      <tr><td>SNMP</td><td>161</td><td>망(네트워크 장비) 관리 — 일반 사용자용이 아님</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> FTP는 <b>제어 연결(명령어 주고받기)=21번, 데이터 연결(실제 파일 전송)=20번</b>이다. 숫자를 반대로 낸 오답이 자주 나온다. ICMP(오류보고)·RTP(음성/영상 스트리밍)는 이메일 프로토콜이 아니라는 것도 함정으로 자주 나옴.</div>
+
+    <h3>TCP vs UDP <span class="page-ref">📖 기출문제집 p.317~319</span></h3>
+    <table>
+      <tr><th>구분</th><th>TCP</th><th>UDP</th></tr>
+      <tr><td>연결 방식</td><td><b>연결 지향형</b> (3-way handshake로 먼저 연결)</td><td><b>비연결형</b> (그냥 보냄)</td></tr>
+      <tr><td>신뢰성</td><td>높음 — 순서보장·재전송·흐름제어</td><td>낮음 — 순서·도착 보장 안 함</td></tr>
+      <tr><td>속도</td><td>상대적으로 느림(확인 절차 때문)</td><td><b>빠름</b> (오버헤드 적음)</td></tr>
+      <tr><td>사용 예</td><td>웹(HTTP), 파일전송(FTP), 이메일(SMTP)</td><td>DNS, 스트리밍(RTP), 실시간 게임</td></tr>
+      <tr><td>흐름/혼잡제어</td><td>슬라이딩 윈도우, 혼잡제어 있음</td><td>없음</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> TCP = 등기우편(받았는지 서명으로 확인, 안전하지만 느림) / UDP = 그냥 우편함에 던져넣는 전단지(빠르지만 도착 여부를 모름)</div>
+
+    <h3>TCP의 3-way Handshake — 연결을 맺는 절차</h3>
+    <p>TCP는 데이터를 보내기 전에 <b>"진짜 서로 통신할 준비가 됐는지"</b> 3번의 신호를 주고받아 확인한다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 600 260" role="img" aria-label="TCP 3-way handshake: 클라이언트가 SYN을 보내면 서버가 SYN과 ACK를 함께 보내고, 클라이언트가 다시 ACK를 보내 연결이 성립된다">
+        <defs>
+          <marker id="tcp-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="30" y="25" font-size="13" font-weight="700">클라이언트</text>
+        <text x="570" y="25" font-size="13" font-weight="700" text-anchor="end">서버</text>
+        <line x1="40" y1="35" x2="40" y2="240" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <line x1="560" y1="35" x2="560" y2="240" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+        <line x1="40" y1="60" x2="560" y2="75" stroke="currentColor" stroke-width="1.8" marker-end="url(#tcp-ar)"/>
+        <text x="300" y="55" font-size="13" text-anchor="middle" font-weight="700">① SYN (연결 요청)</text>
+
+        <line x1="560" y1="110" x2="40" y2="125" stroke="currentColor" stroke-width="1.8" marker-end="url(#tcp-ar)"/>
+        <text x="300" y="105" font-size="13" text-anchor="middle" font-weight="700">② SYN + ACK (요청 수락 + 나도 연결할게)</text>
+
+        <line x1="40" y1="160" x2="560" y2="175" stroke="currentColor" stroke-width="1.8" marker-end="url(#tcp-ar)"/>
+        <text x="300" y="155" font-size="13" text-anchor="middle" font-weight="700">③ ACK (확인 완료)</text>
+
+        <rect x="180" y="195" width="240" height="35" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="217" font-size="12" text-anchor="middle">연결 성립 — 데이터 전송 시작</text>
+      </svg>
+      <figcaption>3-way handshake — 이름 그대로 <b>3번</b>(SYN → SYN+ACK → ACK) 주고받아야 연결이 성립된다. 이 절차 때문에 UDP보다 느리지만, 서로 "준비됐다"는 걸 확인하고 시작하므로 신뢰성이 높다.</figcaption>
+    </figure>
+
+    <h3>기타 인터넷 계층 프로토콜</h3>
+    <table>
+      <tr><th>프로토콜</th><th>역할</th></tr>
+      <tr><td>ARP (Address Resolution Protocol)</td><td>IP 주소 → <b>MAC(물리) 주소</b>로 변환</td></tr>
+      <tr><td>RARP</td><td>ARP의 반대 — MAC 주소 → IP 주소</td></tr>
+      <tr><td>ICMP</td><td>오류 보고, 상황 보고, 경로 제어정보 전달 (ping이 이걸 이용)</td></tr>
+      <tr><td>IGMP</td><td>멀티캐스트 그룹 관리</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "IP는 오류제어·흐름제어로 패킷 전달을 보장한다" → ❌ 틀림. <b>IP는 비연결형이고 신뢰성을 보장하지 않는다</b> — 재전송·오류복구는 상위의 TCP가 담당한다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>TCP/IP는 4계층: 응용/전송/인터넷/네트워크접속 — <b>세션 계층은 없음</b>(OSI에만 있음)</li>
+      <li>메일 송신은 <b>SMTP</b>, 수신은 <b>POP3(원본삭제) 또는 IMAP(원본유지)</b></li>
+      <li>FTP 포트: 제어=<b>21</b>, 데이터=<b>20</b> (반대로 낸 오답 주의)</li>
+      <li>TCP=연결지향·신뢰성·느림 / UDP=비연결·비신뢰·빠름 — 실시간 스트리밍/DNS는 UDP 사용</li>
+      <li>3-way handshake 순서: <b>SYN → SYN+ACK → ACK</b> (2단계가 아니라 3단계)</li>
+      <li>ARP는 IP→MAC, RARP는 MAC→IP (방향 헷갈리지 않기)</li>
+      <li>IP는 신뢰성 보장 안 함(비연결) — TCP만 재전송·순서보장 담당</li>
+      <li>IPv4=32비트, IPv6=128비트 (64비트로 착각하는 오답 자주 출제)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>POP3</th><th>IMAP</th></tr>
+      <tr><td>메일 원본</td><td>다운로드 후 서버에서 <b>삭제</b></td><td>서버에 <b>유지</b>, 복사본만 전송</td></tr>
+      <tr><td>여러 기기 동기화</td><td>어려움 (한 기기로 이동)</td><td>쉬움 (서버 기준으로 항상 동일)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>TCP</th><th>UDP</th></tr>
+      <tr><td>연결</td><td>연결지향(3-way handshake)</td><td>비연결</td></tr>
+      <tr><td>순서·재전송</td><td>보장함</td><td>보장 안 함</td></tr>
+      <tr><td>대표 활용</td><td>웹, 메일, 파일전송</td><td>DNS, 스트리밍, 게임</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">TCP/IP 4계층</span>
+      <span class="chip">응용계층</span>
+      <span class="chip">전송계층</span>
+      <span class="chip">인터넷계층</span>
+      <span class="chip">네트워크접속계층</span>
+      <span class="chip">SMTP</span>
+      <span class="chip">POP3</span>
+      <span class="chip">IMAP</span>
+      <span class="chip">FTP</span>
+      <span class="chip">TELNET</span>
+      <span class="chip">DNS</span>
+      <span class="chip">SNMP</span>
+      <span class="chip">TCP</span>
+      <span class="chip">UDP</span>
+      <span class="chip">3-way handshake</span>
+      <span class="chip">SYN</span>
+      <span class="chip">ACK</span>
+      <span class="chip">ARP</span>
+      <span class="chip">RARP</span>
+      <span class="chip">ICMP</span>
+      <span class="chip">IGMP</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

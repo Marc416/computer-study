@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>탐색과 해싱 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">07. 자료구조/알고리즘</a> / 탐색과 해싱</div>
+  <h1 class="page-title">탐색과 해싱</h1>
+  <p class="page-subtitle">순차탐색 vs 이진탐색, 해싱과 충돌 해결 · PART 04. 자료구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>순차탐색</b>은 처음부터 하나씩(O(n)), <b>이진탐색</b>은 정렬된 데이터에서 절반씩 잘라가며 찾는다(O(log n)).</p>
+    <p><b>해싱</b>은 계산으로 바로 위치를 찾아가는 방식(이상적으로 O(1))이지만, 서로 다른 값이 같은 위치로 몰리는 <b>충돌(Collision)</b>이 생기면 느려진다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">🔎</span>주요 개념 — 순차탐색 vs 이진탐색</h2>
+    <table>
+      <tr><th>구분</th><th>순차탐색 (Sequential)</th><th>이진탐색 (Binary)</th></tr>
+      <tr><td>전제 조건</td><td>없음 (정렬 불필요)</td><td><b>반드시 정렬된 데이터</b>여야 함</td></tr>
+      <tr><td>탐색 방식</td><td>처음부터 끝까지 하나씩 비교</td><td>중간값과 비교 후 <b>범위를 절반으로</b> 줄임</td></tr>
+      <tr><td>시간복잡도</td><td>O(n)</td><td>O(log₂n)</td></tr>
+    </table>
+
+    <h3>이진탐색 실제로 손으로 풀어보기 <span class="page-ref">📖 기출문제집 p.513</span></h3>
+    <p>정렬된 배열 <b>[4, 6, 11, 12, 15, 17, 18, 20, 21]</b> (인덱스 1~9)에서 <b>21</b>을 찾는다고 하자. 중간 인덱스는 <code>(low+high)÷2</code>를 <b>내림(floor)</b>해서 구한다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 620 340" role="img" aria-label="이진탐색 과정: 탐색범위가 9칸에서 4단계에 걸쳐 절반씩 줄어들어 21을 찾는 과정">
+        <text x="10" y="20" font-size="12" font-weight="700">1단계: low=1,high=9 → mid=5</text>
+        <g>
+          <rect x="10" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="40" y="48" font-size="12" text-anchor="middle">4</text>
+          <rect x="70" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="100" y="48" font-size="12" text-anchor="middle">6</text>
+          <rect x="130" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="160" y="48" font-size="12" text-anchor="middle">11</text>
+          <rect x="190" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="220" y="48" font-size="12" text-anchor="middle">12</text>
+          <rect x="250" y="28" width="60" height="30" fill="currentColor" opacity="0.18" stroke="currentColor"/><text x="280" y="48" font-size="12" text-anchor="middle" font-weight="700">15</text>
+          <rect x="310" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="340" y="48" font-size="12" text-anchor="middle">17</text>
+          <rect x="370" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="400" y="48" font-size="12" text-anchor="middle">18</text>
+          <rect x="430" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="460" y="48" font-size="12" text-anchor="middle">20</text>
+          <rect x="490" y="28" width="60" height="30" fill="none" stroke="currentColor"/><text x="520" y="48" font-size="12" text-anchor="middle">21</text>
+          <text x="280" y="70" font-size="11" text-anchor="middle" opacity="0.8">mid=15 &lt; 21 → 오른쪽 탐색</text>
+        </g>
+
+        <text x="10" y="105" font-size="12" font-weight="700">2단계: low=6,high=9 → mid=7</text>
+        <g opacity="1">
+          <rect x="310" y="113" width="60" height="30" fill="none" stroke="currentColor"/><text x="340" y="133" font-size="12" text-anchor="middle">17</text>
+          <rect x="370" y="113" width="60" height="30" fill="currentColor" opacity="0.18" stroke="currentColor"/><text x="400" y="133" font-size="12" text-anchor="middle" font-weight="700">18</text>
+          <rect x="430" y="113" width="60" height="30" fill="none" stroke="currentColor"/><text x="460" y="133" font-size="12" text-anchor="middle">20</text>
+          <rect x="490" y="113" width="60" height="30" fill="none" stroke="currentColor"/><text x="520" y="133" font-size="12" text-anchor="middle">21</text>
+          <text x="400" y="155" font-size="11" text-anchor="middle" opacity="0.8">mid=18 &lt; 21 → 오른쪽 탐색</text>
+        </g>
+
+        <text x="10" y="190" font-size="12" font-weight="700">3단계: low=8,high=9 → mid=8</text>
+        <g>
+          <rect x="430" y="198" width="60" height="30" fill="currentColor" opacity="0.18" stroke="currentColor"/><text x="460" y="218" font-size="12" text-anchor="middle" font-weight="700">20</text>
+          <rect x="490" y="198" width="60" height="30" fill="none" stroke="currentColor"/><text x="520" y="218" font-size="12" text-anchor="middle">21</text>
+          <text x="460" y="240" font-size="11" text-anchor="middle" opacity="0.8">mid=20 &lt; 21 → 오른쪽 탐색</text>
+        </g>
+
+        <text x="10" y="275" font-size="12" font-weight="700">4단계: low=9,high=9 → mid=9</text>
+        <g>
+          <rect x="490" y="283" width="60" height="30" fill="currentColor" opacity="0.35" stroke="currentColor" stroke-width="2"/><text x="520" y="303" font-size="12" text-anchor="middle" font-weight="700">21</text>
+          <text x="520" y="325" font-size="11" text-anchor="middle" opacity="0.8">mid=21 = 21 → 발견! (비교 4회)</text>
+        </g>
+      </svg>
+      <figcaption>탐색 범위가 9칸 → 4칸 → 2칸 → 1칸으로 매번 절반씩 줄어든다 (음영 칸이 그 단계의 mid). 이 예제는 9개짜리 배열의 최악의 경우로, 총 4번의 비교가 필요했다 — ⌈log₂9⌉=4와 일치.</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> "순차탐색이 이진탐색보다 평균적으로 빠르다" → ❌ 틀림. 이진탐색은 O(log n), 순차탐색은 O(n)이라 데이터가 많을수록 이진탐색이 압도적으로 빠르다. (단, 순차탐색은 <b>정렬이 필요 없다</b>는 장점은 있음)</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗂️</span>주요 개념 — 해싱(Hashing) <span class="page-ref">📖 기출문제집 p.517~519</span></h2>
+    <p>해싱은 "계산 한 번으로 저장 위치를 알아내는" 방식이다. 가장 흔한 방법은 <b>제산법(Division)</b>: <code>해시주소 = 키값 % 배열크기</code>.</p>
+
+    <h3>실제 기출 예제: 제산법으로 충돌 찾기</h3>
+    <p>11칸짜리 배열에 데이터 <b>111, 112, 113, 220, 221, 222</b>를 <code>키 % 11</code>로 저장한다면?</p>
+    <table>
+      <tr><th>키</th><th>계산</th><th>해시주소</th></tr>
+      <tr><td>111</td><td>111 % 11</td><td style="background:var(--warn-soft);font-weight:700">1</td></tr>
+      <tr><td>112</td><td>112 % 11</td><td style="background:var(--good-soft);font-weight:700">2</td></tr>
+      <tr><td>113</td><td>113 % 11</td><td>3</td></tr>
+      <tr><td>220</td><td>220 % 11</td><td>0</td></tr>
+      <tr><td>221</td><td>221 % 11</td><td style="background:var(--warn-soft);font-weight:700">1</td></tr>
+      <tr><td>222</td><td>222 % 11</td><td style="background:var(--good-soft);font-weight:700">2</td></tr>
+    </table>
+    <div class="tip"><b>결과:</b> <b>111과 221</b>이 둘 다 해시주소 1 → <b>충돌</b>. <b>112와 222</b>가 둘 다 해시주소 2 → <b>충돌</b>. 나머지(113→3, 220→0)는 겹치지 않아 충돌 없음.</div>
+
+    <h3>충돌(오버플로) 해결 방법 2가지</h3>
+    <table>
+      <tr><th>방식</th><th>원리</th><th>세부 기법</th></tr>
+      <tr><td><b>폐쇄 주소법</b> (Closed Addressing)</td><td>처음 계산된 해시주소는 <b>그대로 두고</b>, 그 자리에 <b>연결리스트(체인)</b>로 계속 이어붙임</td><td><b>체이닝 (Chaining)</b></td></tr>
+      <tr><td><b>개방 주소법</b> (Open Addressing)</td><td>충돌 나면 <b>다른 빈 자리를 찾아</b> 해시주소를 다시 계산해서 옮김</td><td>선형조사법, 이차조사법, 이중해싱, 재해싱</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> 체이닝 = 같은 우편함에 편지가 여러 통 오면 <b>묶어서 꽂아두는 것</b>. 개방주소법(선형조사) = 내 우편함이 찼으면 <b>바로 옆 빈 우편함을 찾아 넣는 것</b>.</div>
+    <div class="tip"><b>자주 나오는 함정:</b> "선형 조사법(Linear Probing)은 연결리스트를 사용한다" → ❌ 틀림! <b>연결리스트를 쓰는 건 체이닝(폐쇄주소법)</b>이다. 선형조사법은 개방주소법이라 배열 안에서 다음 빈 칸을 순서대로 찾아간다.</div>
+
+    <h3>해싱 성능 요약</h3>
+    <ul class="point-list">
+      <li>충돌이 <b>전혀 없으면</b> 탐색 시간복잡도는 <b>O(1)</b> — 계산 한 번으로 바로 찾음</li>
+      <li>충돌이 발생한 <b>최악의 경우</b> 시간복잡도는 <b>O(n)</b></li>
+      <li>해시 함수 종류: 제산법(나머지), 폴딩법(부분을 나눠 더하거나 XOR), 중간제곱법, 숫자분석법</li>
+      <li>키 공간(가능한 키의 수)이 저장 공간보다 훨씬 크므로 <b>충돌은 필연적으로 발생</b>한다</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>이진탐색은 <b>정렬된 데이터에서만</b> 가능 — 정렬 안 된 데이터라고 하면 함정</li>
+      <li>이진탐색 비교 횟수 계산: n개 데이터면 최대 <b>⌈log₂n⌉</b>번</li>
+      <li>제산법 해시 충돌 찾기: 두 키를 배열크기로 나눈 <b>나머지가 같으면</b> 충돌</li>
+      <li>체이닝=연결리스트(폐쇄주소법), 선형조사법=배열 안에서 빈칸 탐색(개방주소법) — 절대 뒤바꾸지 말 것</li>
+      <li>충돌 없을 때 O(1), 충돌(최악) 있을 때 O(n) — 순차탐색 O(n)과 헷갈리지 말 것</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>체이닝 (폐쇄주소법)</th><th>선형조사법 (개방주소법)</th></tr>
+      <tr><td>자료구조</td><td>연결리스트</td><td>배열 (다음 빈 칸 탐색)</td></tr>
+      <tr><td>원래 해시주소</td><td>그대로 유지</td><td>충돌 시 새 주소로 이동</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">순차탐색</span>
+      <span class="chip">이진탐색</span>
+      <span class="chip">해싱</span>
+      <span class="chip">해시함수</span>
+      <span class="chip">제산법</span>
+      <span class="chip">폴딩법</span>
+      <span class="chip">충돌</span>
+      <span class="chip">오버플로</span>
+      <span class="chip">체이닝</span>
+      <span class="chip">선형조사법</span>
+      <span class="chip">이차조사법</span>
+      <span class="chip">이중해싱</span>
+      <span class="chip">재해싱</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

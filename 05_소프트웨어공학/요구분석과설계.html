@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요구분석과 설계 (결합도·응집도) | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">05. 소프트웨어공학</a> / 요구분석과 설계</div>
+  <h1 class="page-title">요구분석과 설계 — 결합도·응집도</h1>
+  <p class="page-subtitle">모듈 독립성의 두 척도 · PART 06. 소프트웨어공학</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>결합도(모듈 사이의 관련성)는 낮을수록</b>, <b>응집도(모듈 내부의 관련성)는 높을수록</b> 좋은 설계다.</p>
+    <p>결합도·응집도는 모두 <b>모듈의 독립성</b>을 판단하는 척도이고, 시험은 거의 항상 "어느 쪽이 더 강하냐/약하냐 순서"를 묻는다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>결합도와 응집도, 뭐가 다른가</h3>
+    <div class="analogy">
+      <b>비유:</b> 한 학교(프로그램)에 여러 반(모듈)이 있다고 하자.<br>
+      <b>응집도</b> = "우리 반 학생들이 얼마나 한 목표로 똘똘 뭉쳐있나" → 높을수록 좋음(같은 반끼리는 긴밀하게)<br>
+      <b>결합도</b> = "옆 반 일에 우리 반이 얼마나 간섭하나" → 낮을수록 좋음(반끼리는 독립적으로)
+    </div>
+
+    <h3>결합도(Coupling) 스펙트럼 — 약할수록 좋음 <span class="page-ref">📖 기출문제집 p.634</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 190" role="img" aria-label="결합도 스펙트럼: 자료 결합이 가장 약하고 내용 결합이 가장 강하다. 약한 결합도가 좋은 설계다">
+        <defs><linearGradient id="cpl" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="currentColor" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0.85"/>
+        </linearGradient></defs>
+        <rect x="20" y="20" width="720" height="30" fill="url(#cpl)" rx="4"/>
+        <text x="20" y="15" font-size="11" opacity="0.8">약함(좋음) ← ─────────────────────────────────────────────→ 강함(나쁨)</text>
+        <g font-size="11" text-anchor="middle">
+          <text x="92" y="40" fill="var(--bg)" font-weight="700">자료</text>
+          <text x="236" y="40" fill="var(--bg)" font-weight="700">스탬프</text>
+          <text x="380" y="40" font-weight="700">제어</text>
+          <text x="524" y="40" font-weight="700">공통</text>
+          <text x="668" y="40" font-weight="700">내용</text>
+        </g>
+        <g font-size="10.5" text-anchor="middle">
+          <text x="92" y="70">필요한 자료만</text><text x="92" y="83">값으로 전달</text>
+          <text x="236" y="70">배열·레코드 등</text><text x="236" y="83">자료구조째로 전달</text>
+          <text x="380" y="70">제어값(flag,</text><text x="380" y="83">switch)을 전달</text>
+          <text x="524" y="70">여러 모듈이</text><text x="524" y="83">공동 자료영역 공유</text>
+          <text x="668" y="70">한 모듈이 다른</text><text x="668" y="83">모듈 내부를 직접 참조</text>
+        </g>
+        <text x="20" y="115" font-size="11" font-weight="700">암기: "자스제공내" — 자료 &lt; 스탬프 &lt; 제어 &lt; 공통 &lt; 내용</text>
+        <text x="20" y="140" font-size="10.5" opacity="0.8">💡 "자스제공내"를 소리내어 읽으면 외우기 쉽다 (자, 스, 제, 공, 내)</text>
+      </svg>
+      <figcaption>결합도는 왼쪽(자료 결합)이 가장 바람직하고, 오른쪽(내용 결합)으로 갈수록 모듈 간 의존이 강해져 한 모듈을 고치면 다른 모듈까지 줄줄이 깨진다.</figcaption>
+    </figure>
+
+    <h3>응집도(Cohesion) 스펙트럼 — 강할수록 좋음 <span class="page-ref">📖 기출문제집 p.635~636</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 900 190" role="img" aria-label="응집도 스펙트럼: 우연적 응집이 가장 약하고 기능적 응집이 가장 강하다. 강한 응집도가 좋은 설계다">
+        <defs><linearGradient id="coh" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="currentColor" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0.85"/>
+        </linearGradient></defs>
+        <rect x="20" y="20" width="860" height="30" fill="url(#coh)" rx="4"/>
+        <text x="20" y="15" font-size="11" opacity="0.8">약함(나쁨) ← ─────────────────────────────────────────────────────────→ 강함(좋음)</text>
+        <g font-size="10.5" text-anchor="middle">
+          <text x="82" y="40">우연적</text>
+          <text x="205" y="40">논리적</text>
+          <text x="328" y="40" fill="var(--bg)">시간적</text>
+          <text x="451" y="40" fill="var(--bg)">절차적</text>
+          <text x="574" y="40" fill="var(--bg)">교환적</text>
+          <text x="697" y="40" fill="var(--bg)" font-weight="700">순차적</text>
+          <text x="820" y="40" fill="var(--bg)" font-weight="700">기능적</text>
+        </g>
+        <g font-size="9.5" text-anchor="middle">
+          <text x="82" y="68">아무 관계없는</text><text x="82" y="80">요소들의 조합</text>
+          <text x="205" y="68">유사 기능끼리</text><text x="205" y="80">묶고 선택 수행</text>
+          <text x="328" y="68">한번만 수행되는</text><text x="328" y="80">요소들의 모임</text>
+          <text x="451" y="68">정해진 순서대로</text><text x="451" y="80">수행돼야 함</text>
+          <text x="574" y="68">같은 입출력</text><text x="574" y="80">자료를 사용</text>
+          <text x="697" y="68">한 요소의 출력이</text><text x="697" y="80">다음 요소의 입력</text>
+          <text x="820" y="68">모듈이 딱 하나의</text><text x="820" y="80">기능만 수행</text>
+        </g>
+        <text x="20" y="115" font-size="11" font-weight="700">암기: "우논시절교순기" — 우연 &lt; 논리 &lt; 시간 &lt; 절차 &lt; 교환(통신) &lt; 순차 &lt; 기능</text>
+        <text x="20" y="140" font-size="10.5" opacity="0.8">💡 결합도(5단계)보다 한 단계 더 많은 7단계라는 점도 시험 포인트</text>
+      </svg>
+      <figcaption>응집도는 오른쪽(기능적 응집)이 가장 이상적 — 모듈 하나가 딱 한 가지 일만 할 때 유지보수가 가장 쉽다.</figcaption>
+    </figure>
+
+    <h3>모듈화 설계 원칙</h3>
+    <ul>
+      <li><b>상세설계로 갈수록 추상화 수준은 낮아진다</b> (상위설계=추상적, 하위설계=구체적 — "낮아진다"를 "높아진다"로 바꿔치기하는 게 자주 나오는 함정)</li>
+      <li>설계는 <b>분석 단계에서 얻은 정보</b>를 반영해 반복적으로 진행되어야 하며, 분석 모델까지 추적 가능해야 한다</li>
+      <li>좋은 설계 = <b>결합도 낮게 + 응집도 높게</b> — 이 한 문장이 이 챕터 전체의 결론이다</li>
+    </ul>
+    <div class="tip"><b>계산/판별 순서:</b> 문제에 결합도·응집도 종류가 여러 개 나오고 "약한 순 또는 강한 순으로 나열하라"고 하면, 위 스펙트럼 그림의 좌→우 순서 그대로 답하면 된다. 암기 문장("자스제공내", "우논시절교순기")만 외우면 계산이랄 것도 없다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>결합도는 <b>낮을수록</b>, 응집도는 <b>높을수록</b> 좋은 설계 — 반대로 서술하는 오답 함정 매우 잦음</li>
+      <li>결합도 약한 순: <b>자료 &lt; 스탬프 &lt; 제어 &lt; 공통 &lt; 내용</b></li>
+      <li>응집도 약한 순: <b>우연적 &lt; 논리적 &lt; 시간적 &lt; 절차적 &lt; 교환적 &lt; 순차적 &lt; 기능적</b></li>
+      <li>"여러 모듈이 공동 자료 영역을 사용" → <b>공통 결합</b> (자료 결합 아님, 헷갈리기 쉬움)</li>
+      <li>"한 모듈이 다른 모듈 내부를 직접 참조/수정" → <b>내용 결합</b> (가장 나쁜 결합도)</li>
+      <li>"모듈 내 한 요소의 출력이 다음 요소의 입력" → <b>순차적 응집</b></li>
+      <li>가장 이상적인 응집 = <b>기능적 응집</b> (논리적 응집 아님 — 매년 나오는 오답 함정)</li>
+      <li>상세설계로 갈수록 추상화 수준은 <b>낮아진다</b> (높아진다 아님)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>결합도 (Coupling)</th><th>응집도 (Cohesion)</th></tr>
+      <tr><td>측정 대상</td><td>모듈 <b>사이</b>의 관련성</td><td>모듈 <b>내부</b> 요소들의 관련성</td></tr>
+      <tr><td>좋은 방향</td><td>낮을수록(약할수록) 좋음</td><td>높을수록(강할수록) 좋음</td></tr>
+      <tr><td>단계 수</td><td>5단계</td><td>7단계</td></tr>
+      <tr><td>가장 좋은 것</td><td>자료 결합</td><td>기능적 응집</td></tr>
+      <tr><td>가장 나쁜 것</td><td>내용 결합</td><td>우연적 응집</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">결합도</span>
+      <span class="chip">응집도</span>
+      <span class="chip">자료결합</span>
+      <span class="chip">스탬프결합</span>
+      <span class="chip">제어결합</span>
+      <span class="chip">공통결합</span>
+      <span class="chip">내용결합</span>
+      <span class="chip">우연적응집</span>
+      <span class="chip">논리적응집</span>
+      <span class="chip">시간적응집</span>
+      <span class="chip">절차적응집</span>
+      <span class="chip">교환적응집</span>
+      <span class="chip">순차적응집</span>
+      <span class="chip">기능적응집</span>
+      <span class="chip">모듈독립성</span>
+      <span class="chip">추상화수준</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

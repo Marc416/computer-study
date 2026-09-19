@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP 주소체계와 서브넷팅 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / IP 주소체계와 서브넷팅</div>
+  <h1 class="page-title">IP 주소체계와 서브넷팅</h1>
+  <p class="page-subtitle">IPv4 클래스 · 서브넷마스크 · CIDR · IPv6 · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>IPv4 주소(32비트)는 <b>네트워크ID + 호스트ID</b>로 나뉘고, 이 경계를 어디서 자르는지가 클래스(A/B/C)와 서브넷마스크다.</p>
+    <p>서브넷팅 계산은 매년 나온다 — <b>"호스트 비트 몇 개를 서브넷ID로 빌려오는가"</b>만 이해하면 나머지는 전부 이 규칙의 응용이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — IPv4 클래스 체계 <span class="page-ref">📖 기출문제집 p.336~338</span></h2>
+
+    <p>IPv4 주소는 32비트, 8비트씩 4묶음(옥텟)으로 나뉘고 각 묶음을 점(.)으로 구분해 10진수로 쓴다. <b>첫 옥텟의 맨 앞 비트 패턴</b>으로 클래스가 정해지고, 그 패턴이 클래스마다 네트워크ID와 호스트ID의 경계를 다르게 만든다.</p>
+
+    <table>
+      <tr><th>클래스</th><th>첫 옥텟 시작비트</th><th>첫 옥텟 범위</th><th>네트워크ID</th><th>호스트ID</th><th>기본 서브넷마스크</th></tr>
+      <tr><td><b>A</b></td><td>0</td><td>0~127</td><td>1바이트(8bit)</td><td>3바이트(24bit)</td><td>255.0.0.0</td></tr>
+      <tr><td><b>B</b></td><td>10</td><td>128~191</td><td>2바이트(16bit)</td><td>2바이트(16bit)</td><td>255.255.0.0</td></tr>
+      <tr><td><b>C</b></td><td>110</td><td>192~223</td><td>3바이트(24bit)</td><td>1바이트(8bit)</td><td>255.255.255.0</td></tr>
+      <tr><td>D</td><td>1110</td><td>224~239</td><td colspan="2">멀티캐스트 전용 (호스트 개념 없음)</td><td>-</td></tr>
+    </table>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 700 300" role="img" aria-label="IPv4 클래스별 32비트 주소 구조: A클래스는 앞 1바이트, B클래스는 앞 2바이트, C클래스는 앞 3바이트가 네트워크ID이고 나머지가 호스트ID다">
+        <text x="10" y="20" font-size="12" font-weight="700">A클래스</text>
+        <rect x="10" y="30" width="80" height="40" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="50" y="55" font-size="11" text-anchor="middle">0|net(7)</text>
+        <rect x="90" y="30" width="240" height="40" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <text x="210" y="55" font-size="11" text-anchor="middle" opacity="0.7">호스트ID (24bit)</text>
+
+        <text x="10" y="100" font-size="12" font-weight="700">B클래스</text>
+        <rect x="10" y="110" width="160" height="40" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="90" y="135" font-size="11" text-anchor="middle">10|net(14)</text>
+        <rect x="170" y="110" width="160" height="40" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <text x="250" y="135" font-size="11" text-anchor="middle" opacity="0.7">호스트ID (16bit)</text>
+
+        <text x="10" y="180" font-size="12" font-weight="700">C클래스</text>
+        <rect x="10" y="190" width="240" height="40" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="130" y="215" font-size="11" text-anchor="middle">110|net(21)</text>
+        <rect x="250" y="190" width="80" height="40" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <text x="290" y="215" font-size="11" text-anchor="middle" opacity="0.7">호스트(8bit)</text>
+
+        <line x1="10" y1="250" x2="330" y2="250" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+        <text x="10" y="270" font-size="10.5" opacity="0.7">32비트 전체 폭 (짙은 테두리 = 네트워크ID, 옅은 테두리 = 호스트ID)</text>
+        <text x="10" y="290" font-size="10.5" opacity="0.7">클래스가 A→B→C로 갈수록 네트워크ID가 늘고 호스트ID는 줄어든다 (기관 수↑, 기관당 호스트 수↓)</text>
+      </svg>
+      <figcaption>클래스별 네트워크ID/호스트ID 경계 — 맨 앞의 구분비트(0, 10, 110)가 클래스를 정하고, 그만큼 네트워크ID 폭이 늘어난다.</figcaption>
+    </figure>
+
+    <div class="tip"><b>암기 규칙:</b> 첫 옥텟 값이 <b>127 이하 → A</b>, <b>191 이하 → B</b>, <b>223 이하 → C</b>. 딱 이 세 경계값(127/191/223)만 외우면 어떤 IP든 3초 안에 클래스 판별 가능.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧮</span>주요 개념 — 서브넷마스크와 CIDR <span class="page-ref">📖 기출문제집 p.338~342</span></h2>
+
+    <p>서브넷마스크는 IP주소 32비트 중 <b>네트워크(+서브넷) 부분을 1, 호스트 부분을 0</b>으로 표시한 것이다. <b>IP주소 AND 서브넷마스크 = 네트워크 주소</b>가 계산의 전부다. 회사가 큰 네트워크 하나를 여러 부서용 작은 네트워크로 쪼갤 때, 원래 호스트ID 비트 중 앞쪽 몇 개를 "서브넷ID"로 빌려와 쓴다.</p>
+
+    <div class="tip">
+      <b>서브넷 개수 ↔ 필요 비트 수:</b> 서브넷을 2ⁿ개로 나누려면 호스트ID에서 <b>n비트</b>를 빌려와야 한다 (2¹=2개, 2²=4개, 2³=8개...)
+    </div>
+
+    <p><b>예제 1. C클래스 네트워크 하나를 8개의 서브넷으로 나눌 때 서브넷마스크는?</b></p>
+    <ol class="steps">
+      <li>C클래스 기본 마스크는 255.255.255.0 (호스트ID 8비트 전부 사용 가능)</li>
+      <li>8개의 서브넷 = 2³ 이므로 <b>3비트</b>를 호스트ID에서 서브넷ID로 빌려온다</li>
+      <li>마지막 옥텟을 비트로 쓰면: 앞 3비트가 서브넷용(1로 표시) → <code>11100000</code></li>
+      <li><code>11100000</code>을 10진수로 변환 → <b>224</b></li>
+      <li>정답: <b>255.255.255.224</b> (남은 5비트가 서브넷당 호스트ID)</li>
+    </ol>
+
+    <p><b>예제 2. IPv4 CIDR 표기법 "/27"이 의미하는 서브넷마스크는?</b> (CIDR는 네트워크ID 비트 수를 "/숫자"로 바로 알려주는 표기법)</p>
+    <ol class="steps">
+      <li>/27 = 32비트 중 <b>왼쪽 27비트가 네트워크ID(서브넷 포함)</b>라는 뜻</li>
+      <li>27비트를 8비트씩 끊으면: 8+8+8=24비트(앞 3옥텟 전부 1) + 남은 3비트</li>
+      <li>4번째 옥텟은 8비트 중 앞 3비트만 1 → <code>11100000</code> = <b>224</b></li>
+      <li>정답: <b>255.255.255.224</b> (예제1과 결과가 같다 — /27과 "3비트 서브넷"은 동일한 말)</li>
+    </ol>
+
+    <p><b>예제 3. IP주소 117.17.23.253/27이 속한 네트워크 주소와 사용 가능 호스트 수는?</b></p>
+    <ol class="steps">
+      <li>/27 → 서브넷마스크 255.255.255.224 (예제2에서 구함)</li>
+      <li>마지막 옥텟 253을 2진수로: <code>11111101</code></li>
+      <li>네트워크ID로 쓰이는 왼쪽 3비트만 남기고 나머지를 0으로: <code>11100000</code> = <b>224</b></li>
+      <li>네트워크 주소 = <b>117.17.23.224</b></li>
+      <li>호스트ID는 5비트 남았으므로 표현 가능한 값은 2⁵=32개, 그중 <b>전부0(네트워크주소)·전부1(브로드캐스트주소)</b> 2개는 호스트로 못 씀</li>
+      <li>사용 가능한 호스트 수 = 32 − 2 = <b>30개</b></li>
+    </ol>
+
+    <p><b>예제 4. C클래스 211.168.83.0 네트워크를 서브넷마스크 255.255.255.224로 나눴을 때, 211.168.83.34가 속한 서브넷의 브로드캐스트 주소는?</b></p>
+    <ol class="steps">
+      <li>서브넷마스크 224 = <code>11100000</code> → 호스트ID는 5비트, 서브넷 크기 = 2⁵ = 32개 주소 단위로 구획</li>
+      <li>34를 32로 나눈 몫만큼 구획이 이동: 34 ÷ 32 = 1구획 남고 2 → <b>34가 속한 구획은 32~63</b></li>
+      <li>그 구획의 마지막 주소(호스트ID 전부 1)가 브로드캐스트 주소</li>
+      <li>정답: <b>211.168.83.63</b></li>
+    </ol>
+    <div class="tip"><b>빠른 요령:</b> 서브넷마스크가 224(=2⁵ 간격)면 네 번째 옥�터 값은 항상 <b>0, 32, 64, 96...</b> 단위로 구획이 나뉜다. 어떤 호스트든 "몇 번째 32칸 구획에 있는지"만 찾으면 그 구획의 시작(네트워크주소)과 끝(브로드캐스트주소)이 바로 나온다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>주요 개념 — IPv6 <span class="page-ref">📖 기출문제집 p.343~347</span></h2>
+    <table>
+      <tr><th>구분</th><th>IPv4</th><th>IPv6</th></tr>
+      <tr><td>주소 길이</td><td>32비트 (4바이트)</td><td><b>128비트 (16바이트)</b> — IPv4의 4배</td></tr>
+      <tr><td>표기</td><td>8비트×4, 점(.)구분, 10진수</td><td>16비트×8, <b>콜론(:)</b>구분, 16진수</td></tr>
+      <tr><td>헤더</td><td>가변, 체크섬 필드 있음</td><td>기본헤더 40바이트 고정, <b>체크섬 필드 없음</b>(속도↑)</td></tr>
+      <tr><td>주소 생략</td><td>없음</td><td>연속된 0은 <code>::</code>로 <b>딱 1번만</b> 생략 가능</td></tr>
+      <tr><td>보안</td><td>IPSec 별도 설치</td><td><b>IPSec 자체(내장) 지원</b></td></tr>
+      <tr><td>주소 종류</td><td>유니캐스트·멀티캐스트·브로드캐스트</td><td>유니캐스트·멀티캐스트·<b>애니캐스트</b>(브로드캐스트 없음)</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "IPv6는 IPv4보다 주소가 2배 길다" → ❌ <b>4배</b>다 (32bit→128bit). "IPv6는 브로드캐스트 주소를 지원한다" → ❌ IPv6엔 브로드캐스트가 없고 대신 <b>애니캐스트</b>가 추가됐다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>첫 옥텟 값만 보고 클래스 판별: 127이하=A, 191이하=B, 223이하=C</li>
+      <li>서브넷 2ⁿ개로 나누려면 호스트ID에서 <b>n비트</b>를 빌려온다 — 개수↔비트수 변환이 핵심</li>
+      <li>CIDR "/n" = 네트워크ID 비트수 n개라는 뜻, 서브넷마스크로 직접 변환 가능</li>
+      <li>네트워크주소 = IP AND 마스크, 브로드캐스트주소 = 호스트ID 전부 1</li>
+      <li>사용 가능 호스트 수 = 2^(호스트비트수) − 2 (네트워크주소·브로드캐스트주소 제외)</li>
+      <li>서브넷마스크 값(224, 192, 240 등)만 보고 "몇 칸 단위로 구획되는지" 바로 계산하는 연습 필수</li>
+      <li>IPv6은 128비트, 4배, 콜론표기, 체크섬없음, IPSec내장, 애니캐스트 추가 — 세트로 암기</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>클래스 기반(Classful) 주소</th><th>CIDR(Classless) 주소</th></tr>
+      <tr><td>네트워크ID 경계</td><td>클래스(A/B/C)로 고정</td><td>/n으로 자유롭게 지정</td></tr>
+      <tr><td>유연성</td><td>낮음(주소 낭비 발생)</td><td>높음(필요한 만큼만 할당)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>네트워크 주소</th><th>브로드캐스트 주소</th></tr>
+      <tr><td>호스트ID 값</td><td>전부 0</td><td>전부 1</td></tr>
+      <tr><td>용도</td><td>네트워크 자체를 가리킴(호스트 할당 불가)</td><td>해당 네트워크 전체에 전송(호스트 할당 불가)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">IPv4</span>
+      <span class="chip">클래스A</span>
+      <span class="chip">클래스B</span>
+      <span class="chip">클래스C</span>
+      <span class="chip">네트워크ID</span>
+      <span class="chip">호스트ID</span>
+      <span class="chip">서브넷마스크</span>
+      <span class="chip">서브넷팅</span>
+      <span class="chip">CIDR</span>
+      <span class="chip">네트워크주소</span>
+      <span class="chip">브로드캐스트주소</span>
+      <span class="chip">IPv6</span>
+      <span class="chip">애니캐스트</span>
+      <span class="chip">IPSec</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

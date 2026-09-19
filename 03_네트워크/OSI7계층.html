@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSI 7계층 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / OSI 7계층</div>
+  <h1 class="page-title">OSI 7계층</h1>
+  <p class="page-subtitle">계층별 PDU·기능·프로토콜, 데이터링크 계층의 오류제어(ARQ) · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>OSI 7계층은 통신을 <b>7단계로 쪼개서</b> 각자 자기 일만 하게 만든 표준 설계도다. 아래(물리)로 갈수록 "선으로 실제 신호를 어떻게 보낼까"에 가깝고, 위(응용)로 갈수록 "사람이 쓰는 서비스"에 가깝다.</p>
+    <p>계층마다 부르는 데이터 단위(PDU)가 다르다: <b>비트→프레임→패킷→세그먼트→데이터</b> (물리→데이터링크→네트워크→전송→그 위).</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>왜 계층을 나눴을까?</h3>
+    <div class="analogy"><b>비유:</b> 택배를 보낼 때 "포장(응용이 만든 내용물) → 상자에 넣기(표현) → 운송장 붙이기(세션·전송) → 트럭에 싣기(네트워크) → 도로 위를 달리기(데이터링크) → 실제 도로와 바퀴(물리)"처럼, 각 단계가 자기 역할만 알고 아래 단계에 넘기면 되므로 <b>한 계층만 바꿔도 나머지는 그대로 재사용</b>할 수 있다. 이게 계층화(layering)의 목적이다.</div>
+
+    <h3>7계층 구조 한눈에 보기 <span class="page-ref">📖 기출문제집 p.297~304</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 560" role="img" aria-label="OSI 7계층을 위에서부터 응용, 표현, 세션, 전송, 네트워크, 데이터링크, 물리 계층 순으로 쌓고 각 계층의 PDU와 대표 프로토콜을 나열한 그림">
+        <defs>
+          <marker id="osi-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+
+        <g>
+          <rect x="20" y="15" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="40" font-size="13" text-anchor="middle" font-weight="700">7. 응용 (Application)</text>
+          <text x="115" y="58" font-size="10.5" text-anchor="middle" opacity="0.75">사용자가 직접 접하는 서비스</text>
+          <rect x="225" y="15" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="50" font-size="12.5" text-anchor="middle">데이터</text>
+          <rect x="350" y="15" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="40" font-size="11.5" text-anchor="middle">HTTP · FTP · SMTP · Telnet · DNS</text>
+          <text x="525" y="58" font-size="10.5" text-anchor="middle" opacity="0.75">전자메일·파일전송·웹 서비스</text>
+        </g>
+
+        <g>
+          <rect x="20" y="90" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="115" font-size="13" text-anchor="middle" font-weight="700">6. 표현 (Presentation)</text>
+          <text x="115" y="133" font-size="10.5" text-anchor="middle" opacity="0.75">변환·암호화·압축</text>
+          <rect x="225" y="90" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="125" font-size="12.5" text-anchor="middle">데이터</text>
+          <rect x="350" y="90" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="115" font-size="11.5" text-anchor="middle">SSL/TLS · MPEG · JPEG</text>
+          <text x="525" y="133" font-size="10.5" text-anchor="middle" opacity="0.75">데이터 형식 통일, 압축, 암복호화</text>
+        </g>
+
+        <g>
+          <rect x="20" y="165" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="190" font-size="13" text-anchor="middle" font-weight="700">5. 세션 (Session)</text>
+          <text x="115" y="208" font-size="10.5" text-anchor="middle" opacity="0.75">대화(세션) 설정·유지·종료</text>
+          <rect x="225" y="165" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="200" font-size="12.5" text-anchor="middle">데이터</text>
+          <rect x="350" y="165" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="190" font-size="11.5" text-anchor="middle">NetBIOS · RPC</text>
+          <text x="525" y="208" font-size="10.5" text-anchor="middle" opacity="0.75">동기화 지점(체크포인트) 설정</text>
+        </g>
+
+        <g>
+          <rect x="20" y="240" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <text x="115" y="265" font-size="13" text-anchor="middle" font-weight="700">4. 전송 (Transport)</text>
+          <text x="115" y="283" font-size="10.5" text-anchor="middle" opacity="0.75">종단간 신뢰성·흐름·오류제어</text>
+          <rect x="225" y="240" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="280" y="275" font-size="13" text-anchor="middle" font-weight="700">세그먼트</text>
+          <rect x="350" y="240" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="525" y="265" font-size="12" text-anchor="middle" font-weight="700">TCP · UDP</text>
+          <text x="525" y="283" font-size="10.5" text-anchor="middle" opacity="0.75">포트 번호로 프로세스 구분</text>
+        </g>
+
+        <g>
+          <rect x="20" y="315" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="340" font-size="13" text-anchor="middle" font-weight="700">3. 네트워크 (Network)</text>
+          <text x="115" y="358" font-size="10.5" text-anchor="middle" opacity="0.75">경로 선택(라우팅)</text>
+          <rect x="225" y="315" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="350" font-size="12.5" text-anchor="middle">패킷</text>
+          <rect x="350" y="315" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="340" font-size="11.5" text-anchor="middle">IP · ICMP · IGMP</text>
+          <text x="525" y="358" font-size="10.5" text-anchor="middle" opacity="0.75">장비: 라우터(router)</text>
+        </g>
+
+        <g>
+          <rect x="20" y="390" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="415" font-size="13" text-anchor="middle" font-weight="700">2. 데이터링크 (Data Link)</text>
+          <text x="115" y="433" font-size="10.5" text-anchor="middle" opacity="0.75">인접 노드 간 프레임 전송</text>
+          <rect x="225" y="390" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="425" font-size="12.5" text-anchor="middle">프레임</text>
+          <rect x="350" y="390" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="415" font-size="11.5" text-anchor="middle">HDLC · Ethernet · PPP</text>
+          <text x="525" y="433" font-size="10.5" text-anchor="middle" opacity="0.75">장비: 브리지·스위치</text>
+        </g>
+
+        <g>
+          <rect x="20" y="465" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="115" y="490" font-size="13" text-anchor="middle" font-weight="700">1. 물리 (Physical)</text>
+          <text x="115" y="508" font-size="10.5" text-anchor="middle" opacity="0.75">전기 신호·전압·커넥터</text>
+          <rect x="225" y="465" width="110" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="280" y="500" font-size="12.5" text-anchor="middle">비트</text>
+          <rect x="350" y="465" width="350" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="525" y="490" font-size="11.5" text-anchor="middle">RS-232C</text>
+          <text x="525" y="508" font-size="10.5" text-anchor="middle" opacity="0.75">장비: 리피터·허브</text>
+        </g>
+
+        <text x="10" y="545" font-size="11" opacity="0.7">↓ 송신측: 응용→물리로 캡슐화(각 계층이 헤더를 덧붙임)</text>
+        <text x="360" y="545" font-size="11" opacity="0.7">↑ 수신측: 물리→응용으로 역캡슐화(헤더를 하나씩 벗김)</text>
+      </svg>
+      <figcaption>OSI 7계층 구조 — 계층 번호가 낮을수록(1에 가까울수록) 물리적 신호에 가깝고, 높을수록(7에 가까울수록) 사람이 쓰는 서비스에 가깝다. 가운데 열이 <b>PDU(프로토콜 데이터 단위)</b> — 시험에 가장 많이 나오는 표.</figcaption>
+    </figure>
+
+    <h3>계층별 핵심 기능 요약</h3>
+    <table>
+      <tr><th>계층</th><th>PDU</th><th>핵심 기능</th></tr>
+      <tr><td><b>7. 응용</b></td><td>데이터</td><td>사용자가 쓰는 서비스 자체 (메일, 웹, 파일전송)</td></tr>
+      <tr><td><b>6. 표현</b></td><td>데이터</td><td>데이터 <b>형식 변환·압축·암호화</b> — "이 그림이 JPG인지 BMP인지" 같은 표현 방식 담당</td></tr>
+      <tr><td><b>5. 세션</b></td><td>데이터</td><td>통신 <b>세션(대화)의 설정·유지·종료</b>, 동기화 지점 관리</td></tr>
+      <tr><td><b>4. 전송</b></td><td>세그먼트</td><td><b>종단 간(end-to-end)</b> 신뢰성 보장: 오류제어·흐름제어·연결관리, 포트번호로 프로세스 구분</td></tr>
+      <tr><td><b>3. 네트워크</b></td><td>패킷</td><td><b>경로 선택(라우팅)</b>, 논리 주소(IP)로 목적지까지 찾아감</td></tr>
+      <tr><td><b>2. 데이터링크</b></td><td>프레임</td><td><b>인접 노드 간</b> 프레임 전송, 오류제어·흐름제어, 물리 주소(MAC) 사용</td></tr>
+      <tr><td><b>1. 물리</b></td><td>비트</td><td>전기적·기계적 신호 전송 (전압 레벨, 커넥터 규격 등)</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "네트워크 계층이 압축·암호화를 담당한다" → ❌ 그건 <b>표현 계층</b>의 일이다. 네트워크 계층은 경로선택(라우팅)만 한다. 시험에서 표현 계층 설명을 네트워크/전송 계층에 슬쩍 바꿔치기하는 문제가 매우 잦다.</div>
+
+    <h3>데이터링크 계층의 오류제어 — 정지대기(Stop-and-Wait) ARQ <span class="page-ref">📖 기출문제집 p.299</span></h3>
+    <p>데이터링크 계층은 <b>한 프레임을 보내고 응답(ACK/NAK)이 올 때까지 기다렸다가</b> 다음 프레임을 보낸다. 에러가 있으면 NAK를 받고 같은 프레임을 재전송한다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 240" role="img" aria-label="정지대기 ARQ 방식: 송신측이 프레임1을 보내고 ACK를 받은 뒤 프레임2를 보내지만 에러로 NAK를 받아 프레임2를 재전송하는 타임라인">
+        <defs>
+          <marker id="arq-ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="20" font-size="12" font-weight="700">송신측</text>
+        <text x="560" y="20" font-size="12" font-weight="700" text-anchor="end">수신측</text>
+        <line x1="30" y1="30" x2="30" y2="220" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+        <line x1="590" y1="30" x2="590" y2="220" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+
+        <line x1="30" y1="50" x2="590" y2="65" stroke="currentColor" stroke-width="1.5" marker-end="url(#arq-ar)"/>
+        <text x="300" y="45" font-size="11.5" text-anchor="middle">Frame 1</text>
+
+        <line x1="590" y1="80" x2="30" y2="95" stroke="currentColor" stroke-width="1.5" marker-end="url(#arq-ar)"/>
+        <text x="300" y="92" font-size="11.5" text-anchor="middle">ACK (정상 수신 확인)</text>
+
+        <line x1="30" y1="115" x2="590" y2="130" stroke="currentColor" stroke-width="1.5" marker-end="url(#arq-ar)"/>
+        <text x="300" y="110" font-size="11.5" text-anchor="middle">Frame 2</text>
+
+        <line x1="590" y1="145" x2="30" y2="160" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arq-ar)"/>
+        <text x="300" y="157" font-size="11.5" text-anchor="middle">NAK (에러 발생!)</text>
+
+        <line x1="30" y1="180" x2="590" y2="195" stroke="currentColor" stroke-width="1.5" marker-end="url(#arq-ar)"/>
+        <text x="300" y="175" font-size="11.5" text-anchor="middle" font-weight="700">Frame 2 재전송</text>
+
+        <text x="300" y="215" font-size="10.5" text-anchor="middle" opacity="0.7">응답(ACK/NAK)을 받을 때까지 다음 프레임을 보내지 않고 "정지"해서 "대기"한다 → 정지대기(Stop-and-Wait)</text>
+      </svg>
+      <figcaption>정지대기 ARQ — 가장 단순한 오류제어 방식. 한 번에 프레임 1개만 보내고 확인받은 뒤 다음 것을 보내므로 안전하지만 느리다 (이후 배우는 슬라이딩 윈도우가 이 속도 문제를 해결).</figcaption>
+    </figure>
+
+    <h3>프로토콜의 일반적 기능</h3>
+    <ul>
+      <li><b>단편화·재합성</b>: 큰 데이터를 작게 쪼개고, 받은 뒤 다시 합침</li>
+      <li><b>캡슐화</b>: 데이터에 제어정보(헤더)를 덧붙임</li>
+      <li><b>연결제어</b>: 연결형(TCP)/비연결형(UDP) 방식 선택</li>
+      <li><b>흐름제어</b>: 받는 쪽이 감당 못할 속도로 보내지 않게 조절</li>
+      <li><b>오류제어</b>: 에러 검출·재전송</li>
+      <li><b>순서제어</b>: 프레임 번호를 매겨 순서 보장</li>
+      <li><b>동기화, 주소지정</b></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>계층별 PDU 암기: <b>물리=비트, 데이터링크=프레임, 네트워크=패킷, 전송=세그먼트</b> (그 위는 그냥 "데이터")</li>
+      <li>표현 계층 = <b>변환·암호화·압축</b> (네트워크/전송 계층으로 바꿔치기하는 오답 주의)</li>
+      <li>전송 계층 = <b>종단간(end-to-end) 신뢰성</b>, 프로토콜은 TCP/UDP</li>
+      <li>네트워크 계층 = <b>라우팅(경로선택)</b>, 장비는 라우터</li>
+      <li>데이터링크 계층 = <b>인접 노드 간</b> 프레임 전송, 오류·흐름제어, 장비는 브리지/스위치</li>
+      <li>수신측 처리 순서는 <b>하위→상위</b> (송신측은 상위→하위) — 반대로 서술하면 오답</li>
+      <li>계층-프로토콜 매칭: RS-232C(물리) / HDLC·Ethernet(데이터링크) / IP·ICMP(네트워크) / TCP·UDP(전송) / HTTP·SMTP·Telnet(응용) / SSL·MPEG(표현)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>표현 계층</th><th>세션 계층</th></tr>
+      <tr><td>역할</td><td>데이터 형식 변환·암호화·압축</td><td>대화(세션) 시작~종료 관리</td></tr>
+      <tr><td>예시 프로토콜</td><td>SSL/TLS, JPEG, MPEG</td><td>NetBIOS, RPC</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>데이터링크 계층</th><th>네트워크 계층</th></tr>
+      <tr><td>전송 범위</td><td>인접한 두 노드 사이(한 구간)</td><td>출발지~목적지 전체 경로</td></tr>
+      <tr><td>주소</td><td>MAC(물리) 주소</td><td>IP(논리) 주소</td></tr>
+      <tr><td>PDU</td><td>프레임</td><td>패킷</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">OSI 7계층</span>
+      <span class="chip">PDU</span>
+      <span class="chip">비트</span>
+      <span class="chip">프레임</span>
+      <span class="chip">패킷</span>
+      <span class="chip">세그먼트</span>
+      <span class="chip">물리계층</span>
+      <span class="chip">데이터링크계층</span>
+      <span class="chip">네트워크계층</span>
+      <span class="chip">전송계층</span>
+      <span class="chip">세션계층</span>
+      <span class="chip">표현계층</span>
+      <span class="chip">응용계층</span>
+      <span class="chip">캡슐화</span>
+      <span class="chip">정지대기ARQ</span>
+      <span class="chip">ACK</span>
+      <span class="chip">NAK</span>
+      <span class="chip">라우터</span>
+      <span class="chip">브리지</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

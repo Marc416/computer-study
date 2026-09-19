@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>암호화와 정보보안 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">06. 정보보안</a> / 암호화와 정보보안</div>
+  <h1 class="page-title">암호화와 정보보안</h1>
+  <p class="page-subtitle">대칭키·공개키 암호화, 정보보안 3요소, 공격기법, 보안시스템 · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>대칭키</b>(같은 키로 암복호화, 빠름) vs <b>공개키</b>(다른 키, 느리지만 키 배포가 안전). RSA=공개키, DES/AES/SEED=대칭키.</p>
+    <p>정보보안 3요소: <b>기밀성(읽기 제한)·무결성(변경 방지)·가용성(항상 사용 가능)</b>. 공격은 이 3가지 중 하나를 노린다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">🔐</span>주요 개념 — 암호화</h2>
+
+    <h3>대칭키 암호화 vs 공개키(비대칭키) 암호화 <span class="page-ref">📖 기출문제집 p.370~373</span></h3>
+    <p>암호화는 결국 "<b>암호화할 때 쓰는 키</b>"와 "<b>복호화할 때 쓰는 키</b>"가 같은지 다른지의 문제다. 같으면 대칭키, 다르면 공개키(비대칭키)다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 440" role="img" aria-label="대칭키 암호화는 송신자와 수신자가 같은 비밀키로 암복호화하고, 공개키 암호화는 수신자의 공개키로 암호화하고 수신자의 개인키로만 복호화한다">
+        <defs>
+          <marker id="cr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="24" font-size="13" font-weight="700">① 대칭키(비밀키) 암호화 — 같은 키로 잠그고 연다</text>
+        <circle cx="60" cy="80" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="85" font-size="12" text-anchor="middle">철수</text>
+        <rect x="150" y="55" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="75" font-size="11.5" text-anchor="middle">평문 → 암호화</text>
+        <text x="210" y="92" font-size="10.5" text-anchor="middle" opacity="0.75">(비밀키 K)</text>
+        <line x1="90" y1="80" x2="150" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <line x1="270" y1="80" x2="360" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <text x="315" y="70" font-size="11" text-anchor="middle">암호문</text>
+        <rect x="360" y="55" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="420" y="75" font-size="11.5" text-anchor="middle">암호문 → 복호화</text>
+        <text x="420" y="92" font-size="10.5" text-anchor="middle" opacity="0.75">(같은 비밀키 K)</text>
+        <line x1="480" y1="80" x2="540" y2="80" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <circle cx="570" cy="80" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="570" y="85" font-size="12" text-anchor="middle">영희</text>
+        <text x="315" y="130" font-size="11" text-anchor="middle" opacity="0.8">※ 같은 키 K를 철수·영희 둘 다 사전에 안전하게 공유해야 함 (키 분배가 약점)</text>
+
+        <line x1="10" y1="170" x2="750" y2="170" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+
+        <text x="20" y="200" font-size="13" font-weight="700">② 공개키(비대칭키) 암호화 — 잠그는 키와 여는 키가 다르다</text>
+        <circle cx="60" cy="260" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="265" font-size="12" text-anchor="middle">철수</text>
+        <rect x="150" y="235" width="140" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="220" y="255" font-size="11.5" text-anchor="middle">평문 → 암호화</text>
+        <text x="220" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 <b>공개키</b>)</text>
+        <line x1="90" y1="260" x2="150" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <line x1="290" y1="260" x2="380" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <text x="335" y="250" font-size="11" text-anchor="middle">암호문</text>
+        <rect x="380" y="235" width="150" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="455" y="255" font-size="11.5" text-anchor="middle">암호문 → 복호화</text>
+        <text x="455" y="272" font-size="10.5" text-anchor="middle" opacity="0.75">(영희의 <b>개인키</b>만 가능)</text>
+        <line x1="530" y1="260" x2="590" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr1)"/>
+        <circle cx="620" cy="260" r="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="620" y="265" font-size="12" text-anchor="middle">영희</text>
+        <text x="620" y="315" font-size="10.5" text-anchor="middle" opacity="0.8">개인키는<br/>본인만 보관</text>
+
+        <rect x="150" y="360" width="500" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="400" y="385" font-size="11.5" text-anchor="middle">공개키는 누구나 가질 수 있음 → 아무나 영희에게 비밀 메시지를 보낼 수 있지만,</text>
+        <text x="400" y="403" font-size="11.5" text-anchor="middle">복호화(여는 것)는 <b>개인키를 가진 영희만</b> 가능 — 키를 미리 공유할 필요가 없다</text>
+      </svg>
+      <figcaption>대칭키는 하나의 키를 공유하므로 빠르지만 키 전달 과정이 약점이고, 공개키는 두 개의 서로 다른 키(공개키/개인키)를 쓰므로 느리지만 키를 안전하게 나눠줄 필요가 없다.</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>구분</th><th>대칭키(비밀키) 방식</th><th>공개키(비대칭키) 방식</th></tr>
+      <tr><td>키</td><td>암호화·복호화에 <b>같은 키</b></td><td>암호화·복호화에 <b>다른 키</b> (공개키/개인키)</td></tr>
+      <tr><td>속도</td><td><b>빠름</b></td><td>느림</td></tr>
+      <tr><td>대표 알고리즘</td><td>DES, 3중 DES, AES, SEED, ARIA, LEA</td><td>RSA, Diffie-Hellman, DSA</td></tr>
+      <tr><td>용도</td><td>일반 데이터 암호화(대용량)</td><td>키 교환, 전자서명, 인증</td></tr>
+      <tr><td>부인 방지</td><td>불가능</td><td>가능 (전자서명)</td></tr>
+      <tr><td>키 관리</td><td>사용자 n명이면 <sub>n</sub>C<sub>2</sub>개(많음)</td><td>사용자 n명이면 2n개(적음)</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "공개키 암호화가 대칭키보다 빠르다" → ❌ 반대다, <b>대칭키가 더 빠름</b>. "국내 개발 대칭키 알고리즘"은 <b>ARIA, SEED, LEA, HIGHT</b> — RSA·DES·AES는 국내개발 아님.</div>
+
+    <h3>PKI (공개키 기반 구조)와 전자서명</h3>
+    <ul>
+      <li><b>PKI</b>: 인증기관(CA)이 공개키와 소유자 정보를 묶어 <b>인증서</b>를 발급 — "이 공개키는 진짜 이 사람 것"을 보증</li>
+      <li><b>전자서명</b>: 송신자가 <b>자신의 개인키</b>로 서명 → 수신자는 <b>송신자의 공개키</b>로 검증 (암호화와는 키 사용 방향이 반대!)</li>
+      <li>전자서명이 제공하는 것: <b>무결성 확인 + 부인 방지</b> (내용을 숨기는 게 목적이 아니라 "누가 썼는지" 증명하는 것)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> 공개키로 "암호화"할 때는 <b>상대방의 공개키</b>를 쓰지만, 전자서명(서명)할 때는 <b>자신의 개인키</b>를 쓴다 — 목적(비밀유지 vs 신원증명)에 따라 키 사용 방향이 반대임을 헷갈리지 말 것.</div>
+
+    <h3>해시 함수</h3>
+    <ul>
+      <li><b>일방향성</b>: 해시값에서 원문을 역산할 수 없음 (암호화처럼 되돌리는 게 목적이 아님)</li>
+      <li>평문 길이가 <b>가변</b>이어도 해시값 길이는 <b>항상 고정</b></li>
+      <li>원문이 <b>한 글자만 달라져도</b> 해시값은 완전히 달라짐 → 무결성(위변조 여부) 검증에 사용</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🛡️</span>주요 개념 — 정보보안 3요소</h2>
+
+    <h3>기밀성·무결성·가용성 <span class="page-ref">📖 기출문제집 p.376</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 220" role="img" aria-label="정보보안 3요소: 기밀성은 인증된 사람만 읽기, 무결성은 허가 없이 못 바꾸기, 가용성은 필요할 때 항상 쓸 수 있기">
+        <rect x="20" y="30" width="200" height="150" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="120" y="55" font-size="14" text-anchor="middle" font-weight="700">기밀성</text>
+        <text x="120" y="72" font-size="11" text-anchor="middle" opacity="0.75">Confidentiality</text>
+        <text x="120" y="100" font-size="11.5" text-anchor="middle">인증된 사람만</text>
+        <text x="120" y="118" font-size="11.5" text-anchor="middle">"읽을" 수 있다</text>
+        <text x="120" y="150" font-size="10.5" text-anchor="middle" opacity="0.75">공격 예: 스니핑</text>
+
+        <rect x="250" y="30" width="200" height="150" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="55" font-size="14" text-anchor="middle" font-weight="700">무결성</text>
+        <text x="350" y="72" font-size="11" text-anchor="middle" opacity="0.75">Integrity</text>
+        <text x="350" y="100" font-size="11.5" text-anchor="middle">허가 없이</text>
+        <text x="350" y="118" font-size="11.5" text-anchor="middle">"바꿀" 수 없다</text>
+        <text x="350" y="150" font-size="10.5" text-anchor="middle" opacity="0.75">공격 예: 중간자공격(MITM)</text>
+
+        <rect x="480" y="30" width="200" height="150" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="580" y="55" font-size="14" text-anchor="middle" font-weight="700">가용성</text>
+        <text x="580" y="72" font-size="11" text-anchor="middle" opacity="0.75">Availability</text>
+        <text x="580" y="100" font-size="11.5" text-anchor="middle">필요할 때</text>
+        <text x="580" y="118" font-size="11.5" text-anchor="middle">항상 "쓸" 수 있다</text>
+        <text x="580" y="150" font-size="10.5" text-anchor="middle" opacity="0.75">공격 예: DoS/DDoS</text>
+      </svg>
+      <figcaption>정보보안 문제의 절반은 "이 공격이 셋 중 무엇을 노리는가"를 묻는다 — 스니핑=기밀성, 변조=무결성, DoS=가용성 공격으로 짝지어 암기.</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> 3대 요구사항은 <b>기밀성·무결성·가용성</b>뿐이다. "안전성(Safety)", "신뢰성" 등은 3요소에 포함되지 않는 오답 선택지로 자주 나온다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🦠</span>주요 개념 — 악성코드와 공격기법</h2>
+
+    <h3>악성코드 종류</h3>
+    <table>
+      <tr><th>종류</th><th>특징</th></tr>
+      <tr><td>바이러스 (Virus)</td><td>다른 프로그램 파일에 <b>자신을 복사</b>하여 감염시킴, 숙주 필요</td></tr>
+      <tr><td>웜 (Worm)</td><td><b>자기복제는 하지만 다른 파일을 감염시키진 않음</b> — 네트워크로 스스로 퍼짐</td></tr>
+      <tr><td>트로이 목마</td><td>정상 프로그램으로 위장하여 내부에 악성코드를 숨김, 자기복제 <b>안 함</b></td></tr>
+      <tr><td>랜섬웨어</td><td>파일을 <b>암호화</b>해 사용 불가능하게 만든 뒤 복구 대가로 금전 요구</td></tr>
+      <tr><td>스파이웨어</td><td>사용자 몰래 정보를 수집해 외부로 전송</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "웜은 다른 파일을 감염시킨다" → ❌ 웜은 <b>자기복제만</b> 하고 파일 감염은 <b>바이러스</b>의 특징이다.</div>
+
+    <h3>사회공학적 공격 기법 (사람을 속이는 공격)</h3>
+    <table>
+      <tr><th>기법</th><th>방법</th></tr>
+      <tr><td>스니핑 (Sniffing)</td><td>네트워크 패킷을 <b>엿듣기</b>만 함 (기밀성 공격)</td></tr>
+      <tr><td>스푸핑 (Spoofing)</td><td>IP·MAC·DNS 등 <b>고유 식별자를 위장</b>해 속이는 공격</td></tr>
+      <tr><td>피싱 (Phishing)</td><td>가짜 홈페이지로 유인해 개인정보 입력을 유도</td></tr>
+      <tr><td>파밍 (Pharming)</td><td>DNS 자체를 변조해 <b>정상 URL을 입력해도</b> 가짜 사이트로 연결</td></tr>
+      <tr><td>스미싱 (Smishing)</td><td>문자메시지(SMS) 링크로 악성코드 설치·소액결제 유도</td></tr>
+      <tr><td>세션 하이재킹</td><td>이미 인증된 <b>세션을 가로채서</b> 로그인 절차 없이 접속</td></tr>
+      <tr><td>ARP 스푸핑</td><td>MAC 주소를 위조해 랜(LAN) 내부 통신 흐름을 왜곡 (데이터링크 계층 공격)</td></tr>
+    </table>
+    <div class="tip"><b>피싱 vs 파밍 구분법:</b> 피싱은 "가짜 링크를 <b>클릭</b>하게" 속이고, 파밍은 <b>정상 주소를 입력해도</b> DNS가 조작되어 가짜 사이트로 끌려간다 — 사용자 행동과 무관하게 당하는 게 파밍.</div>
+
+    <h3>서비스 거부 공격 (DoS/DDoS) — 가용성을 노리는 공격</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 260" role="img" aria-label="DDoS 공격: 공격자가 다수의 좀비 PC를 조종해 동시에 목표 서버로 대량의 트래픽을 보내 서비스를 마비시킨다">
+        <defs>
+          <marker id="cr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <circle cx="60" cy="40" r="24" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="45" font-size="10.5" text-anchor="middle">공격자</text>
+        <circle cx="60" cy="120" r="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="60" y="124" font-size="9.5" text-anchor="middle">좀비1</text>
+        <circle cx="60" cy="180" r="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="60" y="184" font-size="9.5" text-anchor="middle">좀비2</text>
+        <circle cx="60" cy="240" r="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="60" y="244" font-size="9.5" text-anchor="middle">좀비3</text>
+        <line x1="60" y1="64" x2="60" y2="100" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr2)"/>
+        <text x="90" y="85" font-size="10" opacity="0.75">조종 명령</text>
+        <line x1="80" y1="120" x2="380" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr2)"/>
+        <line x1="80" y1="180" x2="380" y2="160" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr2)"/>
+        <line x1="80" y1="240" x2="380" y2="175" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr2)"/>
+        <text x="220" y="200" font-size="10.5" opacity="0.8">대량 트래픽 동시 전송</text>
+        <rect x="400" y="120" width="200" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="500" y="150" font-size="13" text-anchor="middle" font-weight="700">목표 서버</text>
+        <text x="500" y="168" font-size="10.5" text-anchor="middle" opacity="0.8">과부하 → 정상 사용자 접속불가</text>
+      </svg>
+      <figcaption>DDoS(분산 서비스 거부 공격) — 공격자가 여러 대의 좀비 PC(봇넷)를 동원해 목표 서버에 감당 못 할 트래픽을 동시에 퍼부어 <b>가용성</b>을 무너뜨린다.</figcaption>
+    </figure>
+    <table>
+      <tr><th>공격 유형</th><th>원리</th></tr>
+      <tr><td>SYN Flooding</td><td>존재하지 않는 클라이언트인 척 접속 요청을 반복해 서버의 접속 대기 공간을 고갈</td></tr>
+      <tr><td>Ping of Death</td><td>처리할 수 없는 초과 크기의 ICMP 패킷을 보내 재조립 과정에서 자원 고갈</td></tr>
+      <tr><td>Land 공격</td><td>출발지 IP와 목적지 IP를 <b>동일하게</b> 위조해 응답 루프 유발</td></tr>
+      <tr><td>Teardrop</td><td>패킷 조각을 비정상적으로 만들어 재조립 과정을 방해</td></tr>
+      <tr><td>Smurf</td><td>공격대상 IP로 위장해 다수에게 ICMP를 브로드캐스트 → 응답이 대상에 몰림</td></tr>
+    </table>
+
+    <h3>웹 보안 공격 · 시큐어 코딩</h3>
+    <ul>
+      <li><b>SQL Injection</b>: 입력값에 SQL 구문을 끼워넣어 DB를 조작</li>
+      <li><b>XSS(Cross Site Scripting)</b>: 악성 스크립트를 게시물에 심어 열람자의 브라우저에서 실행</li>
+      <li><b>버퍼 오버플로우</b>: 입력 <b>길이(data length)</b>를 검증하지 않아 메모리 버퍼 밖까지 덮어씀 (자료형(data type) 문제가 아님)</li>
+      <li>시큐어 코딩: <b>POST</b> 방식 사용(GET보다 보안성↑), 화이트리스트 방식 확장자 검증, 인자화된 질의문 사용</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🧱</span>주요 개념 — 보안 시스템과 제도</h2>
+
+    <h3>방화벽·IDS·IPS 배치 순서</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 160" role="img" aria-label="보안 장비 배치 순서: 외부 인터넷에서 방화벽을 먼저 거쳐 대량의 위험 트래픽을 걸러내고, 그 다음 IPS가 남은 트래픽을 정밀 분석해 내부망으로 전달한다">
+        <defs>
+          <marker id="cr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="40" y="45" font-size="13" text-anchor="middle">외부 인터넷</text>
+        <line x1="80" y1="70" x2="150" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr3)"/>
+        <rect x="150" y="45" width="130" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="215" y="65" font-size="12" text-anchor="middle">방화벽</text>
+        <text x="215" y="82" font-size="10" text-anchor="middle" opacity="0.75">1차 패킷 필터링</text>
+        <line x1="280" y1="70" x2="350" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr3)"/>
+        <rect x="350" y="45" width="130" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="415" y="65" font-size="12" text-anchor="middle">IPS</text>
+        <text x="415" y="82" font-size="10" text-anchor="middle" opacity="0.75">정밀분석·실시간차단</text>
+        <line x1="480" y1="70" x2="550" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#cr3)"/>
+        <text x="620" y="75" font-size="13" text-anchor="middle">내부망</text>
+      </svg>
+      <figcaption>침입방지시스템(IPS)은 <b>방화벽 뒤에</b> 설치해, 방화벽이 걸러낸 나머지 트래픽만 정밀 분석하도록 한다 — 앞에 두면 모든 트래픽을 IPS가 직접 처리해야 해서 비효율적.</figcaption>
+    </figure>
+    <table>
+      <tr><th>구분</th><th>역할</th></tr>
+      <tr><td>방화벽 (Firewall)</td><td>정해진 규칙으로 <b>패킷 필터링</b>, 1차 방어선</td></tr>
+      <tr><td>IDS (침입탐지시스템)</td><td>공격 <b>탐지·경보만</b> (오용탐지=알려진 패턴 매칭, 이상탐지=정상행위 이탈 감지)</td></tr>
+      <tr><td>IPS (침입방지시스템)</td><td>탐지에 더해 <b>실시간 차단</b>까지 수행</td></tr>
+      <tr><td>VPN</td><td>공중망에 <b>터널링+암호화</b>로 전용선 같은 효과, 데이터링크·인터넷 계층에서 동작</td></tr>
+      <tr><td>프록시 서버</td><td>클라이언트 대신 요청을 중계 + 캐시 역할(응답속도 향상)</td></tr>
+    </table>
+    <div class="tip"><b>디지털 포렌식 5대 원칙:</b> 정당성(적법한 절차)·재현(같은 결과 재현 가능)·신속성(휘발성 정보 신속 확보)·연계보관성(획득→이송→분석→보관→제출 과정 추적 가능)·무결성(위변조 금지)</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>대칭키=속도빠름·같은키 / 공개키=속도느림·다른키(RSA) — 뒤바꿔 내는 문제 많음</li>
+      <li>전자서명은 <b>자신의 개인키</b>로 서명, 암호화는 <b>상대의 공개키</b>로 — 키 사용 방향 반대</li>
+      <li>정보보안 3요소는 기밀성·무결성·가용성뿐 (안전성 등은 오답)</li>
+      <li>스니핑=기밀성 공격, 변조=무결성 공격, DoS/DDoS=가용성 공격 매칭</li>
+      <li>웜=자기복제만, 바이러스=파일감염, 트로이목마=위장, 랜섬웨어=암호화 후 금전요구</li>
+      <li>피싱(클릭 유도) vs 파밍(DNS변조로 정상주소 입력해도 낚임) 구분</li>
+      <li>IPS는 방화벽 <b>뒤에</b> 설치, 버퍼오버플로우는 <b>길이(length)</b> 문제(자료형 아님)</li>
+      <li>국내개발 대칭키 알고리즘: <b>ARIA·SEED·LEA·HIGHT</b></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>피싱 (Phishing)</th><th>파밍 (Pharming)</th></tr>
+      <tr><td>속이는 방법</td><td>가짜 사이트로 <b>유인</b>(이메일 링크 클릭)</td><td>DNS 자체를 <b>변조</b></td></tr>
+      <tr><td>사용자 행동</td><td>잘못된 링크를 클릭해야 당함</td><td>정상 주소를 입력해도 당함</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>IDS</th><th>IPS</th></tr>
+      <tr><td>기능</td><td>탐지·경보만</td><td>탐지 + 실시간 <b>차단</b></td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>웜 (Worm)</th><th>바이러스 (Virus)</th></tr>
+      <tr><td>자기복제</td><td>O</td><td>O</td></tr>
+      <tr><td>파일 감염</td><td>X (네트워크로 스스로 전파)</td><td>O (숙주 파일 필요)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">대칭키</span><span class="chip">공개키</span><span class="chip">RSA</span><span class="chip">DES</span>
+      <span class="chip">AES</span><span class="chip">SEED</span><span class="chip">PKI</span><span class="chip">전자서명</span>
+      <span class="chip">해시함수</span><span class="chip">기밀성</span><span class="chip">무결성</span><span class="chip">가용성</span>
+      <span class="chip">바이러스</span><span class="chip">웜</span><span class="chip">트로이목마</span><span class="chip">랜섬웨어</span>
+      <span class="chip">스니핑</span><span class="chip">스푸핑</span><span class="chip">피싱</span><span class="chip">파밍</span>
+      <span class="chip">스미싱</span><span class="chip">DDoS</span><span class="chip">SYN플로딩</span><span class="chip">방화벽</span>
+      <span class="chip">IDS</span><span class="chip">IPS</span><span class="chip">VPN</span><span class="chip">SQL Injection</span>
+      <span class="chip">XSS</span><span class="chip">버퍼오버플로우</span><span class="chip">디지털포렌식</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 기초 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">08. 프로그래밍언어</a> / Python 기초</div>
+  <h1 class="page-title">Python 기초</h1>
+  <p class="page-subtitle">자료형·슬라이싱·재귀·클래스·예외처리 · PART 07. 프로그래밍언어론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>Python은 <b>변수 선언 시 자료형을 지정하지 않는다</b> — 값을 넣는 순간 타입이 정해진다(동적 타이핑). 그리고 <b>인터프리터 방식</b>으로 한 줄씩 실행되는 플랫폼 독립적 언어다.</p>
+    <p>자료구조 4형제 — <b>리스트(변경 O, 중복 O)</b>, <b>튜플(변경 X, 중복 O)</b>, <b>집합(변경 O, 중복 X, 순서 X)</b>, <b>딕셔너리(key-value)</b> — 이 성격 차이를 묻는 문제가 압도적으로 많다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>Python 언어의 특징 <span class="page-ref">📖 기출문제집 p.789~790</span></h3>
+    <ul>
+      <li><b>변수 선언이 없다</b> — 다른 언어처럼 <code>int a;</code> 처럼 타입을 미리 정하지 않고, <code>a = 10</code>처럼 값을 넣는 순간 "아, 이건 정수구나"하고 타입이 결정된다. (동적 타이핑, Dynamic Typing)</li>
+      <li><b>인터프리터 언어</b> — C처럼 통째로 컴파일한 뒤 실행하는 게 아니라, 한 줄씩 번역하면서 바로 실행한다. 그래서 대화식(interactive)으로 한 줄씩 테스트해볼 수 있다.</li>
+      <li><b>플랫폼 독립적</b> — 윈도우에서 짠 코드가 맥·리눅스에서도 그대로 돌아간다.</li>
+      <li><b>객체지향 지원</b> — <code>class</code> 키워드로 클래스를 정의하고 객체(인스턴스)를 만들 수 있다.</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "변수 선언 시 변수명 앞에 데이터형을 지정해야 한다" → ❌ 틀렸다. 그건 C/Java 얘기고, Python은 <b>타입을 안 적는다.</b></div>
+
+    <h3>리스트 인덱싱과 슬라이싱 <span class="page-ref">📖 기출문제집 p.790</span></h3>
+    <p><b>바보도 이해하는 인덱싱 규칙:</b> 리스트의 첫 번째 칸은 <b>0번</b>부터 시작한다. "3번째 칸"이 아니라 "인덱스 3"이라고 부르면 헷갈리지 않는다. <code>range(시작, 끝, 간격)</code>은 "끝"에 해당하는 숫자는 <b>포함하지 않는다.</b></p>
+    <figure class="diagram">
+      <svg viewBox="0 0 780 200" role="img" aria-label="리스트 val의 인덱스 0부터 11까지를 보여주고, range(2, 12, 3)이 가리키는 인덱스 2, 5, 8, 11을 강조 표시한 다이어그램">
+        <defs>
+          <marker id="py1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="10" y="25" font-size="13">val = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]</text>
+        <g font-size="12">
+          <!-- 12 boxes -->
+          <!-- generate manually -->
+        </g>
+        <g>
+          <rect x="20"  y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="75"  y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="130" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <rect x="185" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="240" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="295" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <rect x="350" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="405" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="460" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <rect x="515" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="570" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="625" y="60" width="55" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+          <text x="47"  y="88" font-size="14" text-anchor="middle">1</text>
+          <text x="102" y="88" font-size="14" text-anchor="middle">2</text>
+          <text x="157" y="88" font-size="14" text-anchor="middle" font-weight="700">3</text>
+          <text x="212" y="88" font-size="14" text-anchor="middle">4</text>
+          <text x="267" y="88" font-size="14" text-anchor="middle">5</text>
+          <text x="322" y="88" font-size="14" text-anchor="middle" font-weight="700">6</text>
+          <text x="377" y="88" font-size="14" text-anchor="middle">7</text>
+          <text x="432" y="88" font-size="14" text-anchor="middle">8</text>
+          <text x="487" y="88" font-size="14" text-anchor="middle" font-weight="700">9</text>
+          <text x="542" y="88" font-size="14" text-anchor="middle">10</text>
+          <text x="597" y="88" font-size="14" text-anchor="middle">11</text>
+          <text x="652" y="88" font-size="14" text-anchor="middle" font-weight="700">12</text>
+          <g font-size="11" opacity="0.7" text-anchor="middle">
+            <text x="47" y="120">idx 0</text><text x="102" y="120">idx 1</text>
+            <text x="157" y="120">idx 2</text><text x="212" y="120">idx 3</text>
+            <text x="267" y="120">idx 4</text><text x="322" y="120">idx 5</text>
+            <text x="377" y="120">idx 6</text><text x="432" y="120">idx 7</text>
+            <text x="487" y="120">idx 8</text><text x="542" y="120">idx 9</text>
+            <text x="597" y="120">idx 10</text><text x="652" y="120">idx 11</text>
+          </g>
+        </g>
+        <text x="390" y="150" font-size="12.5" text-anchor="middle" font-weight="700">range(2, 12, 3) → 굵은 테두리 칸(idx 2,5,8,11)만 골라서 더한다</text>
+        <text x="390" y="175" font-size="12.5" text-anchor="middle">3 + 6 + 9 + 12 = 30</text>
+      </svg>
+      <figcaption>range(시작=2, 끝=len(val)=12, 간격=3)은 인덱스 2, 5, 8, 11을 차례로 가리킨다. 끝 값 12는 포함되지 않는다는 점이 함정.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>예제 풀이: val=[1..12]일 때 for i in range(2,len(val),3): rst += val[i] 의 결과는?</b>
+      <ol class="steps">
+        <li>len(val) = 12 → range(2, 12, 3)이 만드는 i 값: 2, 5, 8, 11</li>
+        <li>i=2 → val[2]=3 → rst = 0+3 = 3</li>
+        <li>i=5 → val[5]=6 → rst = 3+6 = 9</li>
+        <li>i=8 → val[8]=9 → rst = 9+9 = 18</li>
+        <li>i=11 → val[11]=12 → rst = 18+12 = <b>30</b></li>
+      </ol>
+    </div>
+
+    <h3>튜플 슬라이싱 <span class="page-ref">📖 기출문제집 p.793</span></h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 560 150" role="img" aria-label="튜플 data2의 각 인덱스와 슬라이싱 data2[1:3]가 가리키는 범위를 보여주는 다이어그램">
+        <rect x="20" y="30" width="90" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="110" y="30" width="90" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="200" y="30" width="90" height="45" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="290" y="30" width="90" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="380" y="30" width="90" height="45" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="58" font-size="14" text-anchor="middle">'h'</text>
+        <text x="155" y="58" font-size="14" text-anchor="middle" font-weight="700">'e'</text>
+        <text x="245" y="58" font-size="14" text-anchor="middle" font-weight="700">'l'</text>
+        <text x="335" y="58" font-size="14" text-anchor="middle">'l'</text>
+        <text x="425" y="58" font-size="14" text-anchor="middle">'o'</text>
+        <g font-size="11" opacity="0.7" text-anchor="middle">
+          <text x="65" y="90">idx 0</text><text x="155" y="90">idx 1</text><text x="245" y="90">idx 2</text>
+          <text x="335" y="90">idx 3</text><text x="425" y="90">idx 4</text>
+        </g>
+        <text x="290" y="115" font-size="12.5" text-anchor="middle" font-weight="700">[1:3] → 시작 인덱스 1부터 끝 인덱스 3 "전"까지 → ('e','l')</text>
+      </svg>
+      <figcaption>슬라이싱 [시작:끝]은 "끝" 인덱스를 포함하지 않는다 — data2[1:3]은 idx 1, 2 두 칸만 가져온다.</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> 튜플(tuple)은 <b>()로 표현하고 값을 바꿀 수 없다.</b> 리스트처럼 <code>.pop()</code>이나 값 대입이 불가능 — "data2는 갱신되지 않는다"가 자주 나오는 정답 포인트.</div>
+
+    <h3>재귀 함수(Recursion) <span class="page-ref">📖 기출문제집 p.792</span></h3>
+    <p>재귀함수는 <b>"자기 자신을 다시 호출하는 함수"</b>다. 종이인형 뽑기처럼 계속 안으로 들어갔다가(호출), 맨 안쪽에서 멈추는 조건(base case)을 만나면 답을 하나씩 곱하면서 다시 밖으로 나온다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 560 320" role="img" aria-label="재귀함수 cals(4)의 호출 스택이 cals(1)까지 내려갔다가 결과를 곱하며 되돌아오는 과정을 보여주는 다이어그램">
+        <defs>
+          <marker id="py2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="40"  y="10"  width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="140" y="35" font-size="13" text-anchor="middle">cals(4) = 4 × cals(3)</text>
+        <line x1="140" y1="50" x2="140" y2="75" stroke="currentColor" stroke-width="1.5" marker-end="url(#py2)"/>
+        <text x="200" y="68" font-size="10.5" opacity="0.7">호출↓</text>
+
+        <rect x="60"  y="80"  width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="160" y="105" font-size="13" text-anchor="middle">cals(3) = 3 × cals(2)</text>
+        <line x1="160" y1="120" x2="160" y2="145" stroke="currentColor" stroke-width="1.5" marker-end="url(#py2)"/>
+
+        <rect x="80"  y="150" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="180" y="175" font-size="13" text-anchor="middle">cals(2) = 2 × cals(1)</text>
+        <line x1="180" y1="190" x2="180" y2="215" stroke="currentColor" stroke-width="1.5" marker-end="url(#py2)"/>
+
+        <rect x="100" y="220" width="200" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <text x="200" y="245" font-size="13" text-anchor="middle" font-weight="700">cals(1) = 1 (기저조건, 멈춤!)</text>
+
+        <line x1="320" y1="240" x2="420" y2="240" stroke="currentColor" stroke-width="1.5" marker-end="url(#py2)"/>
+        <text x="440" y="290" font-size="12" text-anchor="middle">이제 값을 들고</text>
+        <text x="440" y="305" font-size="12" text-anchor="middle" font-weight="700">2×1 → 3×2 → 4×6</text>
+        <text x="440" y="270" font-size="12" text-anchor="middle">되돌아오며 곱한다</text>
+      </svg>
+      <figcaption>cals(4)는 cals(1)에 도달할 때까지 계속 자신을 호출(내려감)하다가, 멈춤 조건(기저조건)을 만나면 그 값을 들고 하나씩 곱하며 되돌아온다: 1→2→6→24.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>계산 순서:</b>
+      <ol class="steps">
+        <li>cals(4) 호출 → 4는 1이 아니므로 <code>4 × cals(3)</code> 을 계산해야 함 (일단 보류)</li>
+        <li>cals(3) 호출 → <code>3 × cals(2)</code> (보류)</li>
+        <li>cals(2) 호출 → <code>2 × cals(1)</code> (보류)</li>
+        <li>cals(1) 호출 → 기저조건! <b>1을 반환</b> (더 이상 호출 안 함)</li>
+        <li>되돌아가며 계산: cals(2)=2×1=2 → cals(3)=3×2=6 → cals(4)=4×6=<b>24</b></li>
+      </ol>
+    </div>
+
+    <h3>자료구조 4형제: 리스트·튜플·집합·딕셔너리 <span class="page-ref">📖 기출문제집 p.793~794</span></h3>
+    <table>
+      <tr><th>구분</th><th>기호</th><th>중복</th><th>순서</th><th>변경(mutable)</th><th>예시</th></tr>
+      <tr><td><b>리스트 (list)</b></td><td><code>[ ]</code></td><td>허용</td><td>있음</td><td>가능 (append, pop 등)</td><td><code>[1,3,5,7]</code></td></tr>
+      <tr><td><b>튜플 (tuple)</b></td><td><code>( )</code></td><td>허용</td><td>있음</td><td><b>불가능</b></td><td><code>(1,3,5,7)</code></td></tr>
+      <tr><td><b>집합 (set)</b></td><td><code>{ }</code></td><td><b>불허(자동 제거)</b></td><td><b>없음</b></td><td>가능 (add 등)</td><td><code>{1,3,5,7}</code></td></tr>
+      <tr><td><b>딕셔너리 (dict)</b></td><td><code>{key:value}</code></td><td>key는 불허</td><td>있음(3.7+)</td><td>가능</td><td><code>{'name':'nam'}</code></td></tr>
+    </table>
+    <div class="tip">
+      <b>예제: a=[1,3,5,7], b={1,3,5,7}, c=(1,3,5,7) 에 a.append(3), b.add(3) 실행 후 len(a)+len(b)+len(c)는?</b>
+      <ol class="steps">
+        <li>a는 리스트 → 중복 허용 → append(3) 하면 [1,3,5,7,3] → len(a) = 5</li>
+        <li>b는 집합 → 중복 불허 → add(3) 해도 이미 3이 있어서 그대로 {1,3,5,7} → len(b) = 4</li>
+        <li>c는 튜플 → 애초에 변경 자체가 불가능, 그대로 (1,3,5,7) → len(c) = 4</li>
+        <li>5 + 4 + 4 = <b>13</b></li>
+      </ol>
+    </div>
+    <p><b>집합(set)으로 중복 제거하기:</b> <code>set(['apple','banana','orange','apple','apple','banana'])</code> → 중복이 사라져 <code>{'apple','banana','orange'}</code> 3개만 남는다. "리스트에서 서로 다른 값이 몇 개인지 세라"는 문제는 항상 <b>set으로 감싸고 len()</b>을 쓰면 풀린다.</p>
+
+    <h3>클래스와 객체 <span class="page-ref">📖 기출문제집 p.791~792</span></h3>
+    <div class="analogy"><b>비유:</b> <b>클래스 = 붕어빵 틀, 객체(인스턴스) = 붕어빵.</b> 틀(class Student)은 하나지만, 그 틀로 여러 개의 붕어빵(학생 객체 3명)을 찍어낼 수 있고, 각 붕어빵(객체)은 자기만의 팥(id, kor, eng 값)을 담고 있다.</div>
+    <table>
+      <tr><th>문법</th><th>의미</th></tr>
+      <tr><td><code>class Student:</code></td><td>Student라는 이름의 클래스(틀) 정의</td></tr>
+      <tr><td><code>def __init__(self, id, kor, eng):</code></td><td><b>생성자</b> — 객체를 만들 때 자동으로 실행되어 초깃값을 채움</td></tr>
+      <tr><td><code>self.id = id</code></td><td>이 객체(self) 자신의 id 속성에 값을 저장</td></tr>
+      <tr><td><code>Student("ok", 90, 100)</code></td><td>Student 틀로 새 객체(붕어빵) 1개 생성</td></tr>
+    </table>
+    <div class="tip"><b>self가 뭔가요:</b> "지금 이 붕어빵(만들어지고 있는 바로 그 객체)"을 가리키는 자기참조 변수. 메소드를 정의할 때는 항상 첫 번째 매개변수로 <code>self</code>를 적어줘야 한다.</div>
+
+    <h3>예외처리 (try / except) <span class="page-ref">📖 기출문제집 p.794~795</span></h3>
+    <table>
+      <tr><th>키워드</th><th>역할</th></tr>
+      <tr><td><code>try:</code></td><td>에러가 날 수도 있는 위험한 코드를 일단 실행해본다</td></tr>
+      <tr><td><code>except:</code></td><td>try 안에서 에러(예외)가 발생했을 때만 대신 실행된다</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> try는 "일단 해보고", except는 "터지면 이렇게 처리해" — 안전벨트 같은 것. 문자열('92')과 숫자(90)를 <code>&gt;=</code>로 비교하면 파이썬은 에러를 내는데, 그 순간 except가 받아서 프로그램이 죽지 않고 계속 돈다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>"변수 선언 시 데이터형을 지정해야 한다" → ❌ Python은 <b>타입을 안 씀</b> (동적 타이핑)</li>
+      <li><b>range(시작,끝,간격)</b>은 "끝"을 포함하지 않는다 — 슬라이싱 [a:b]도 마찬가지로 b는 미포함</li>
+      <li>리스트[변경O,중복O] / 튜플[변경X,중복O] / 집합[변경O,중복X,순서X] / 딕셔너리[key-value] 성격 구분</li>
+      <li>재귀함수 문제는 <b>기저조건(base case)까지 내려갔다가 값을 곱하며 되돌아오는 과정</b>을 손으로 그려서 풀 것</li>
+      <li>클래스의 생성자는 <code>__init__</code>, 첫 매개변수는 항상 <code>self</code></li>
+      <li>중복 제거 개수를 물으면 → <code>set()</code>으로 감싸고 <code>len()</code></li>
+      <li>try/except: try에서 에러 나면 except로 넘어가고, 프로그램은 죽지 않는다</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>리스트 (list)</th><th>튜플 (tuple)</th><th>집합 (set)</th></tr>
+      <tr><td>기호</td><td><code>[ ]</code></td><td><code>( )</code></td><td><code>{ }</code></td></tr>
+      <tr><td>값 변경</td><td>가능</td><td><b>불가능</b></td><td>가능</td></tr>
+      <tr><td>중복 값</td><td>허용</td><td>허용</td><td><b>자동 제거</b></td></tr>
+      <tr><td>인덱스 접근</td><td>가능 [0]</td><td>가능 [0]</td><td><b>불가능</b> (순서 없음)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>range(2,12,3)</th><th>slice [1:3]</th></tr>
+      <tr><td>의미</td><td>2부터 12 "직전"까지 3씩 증가</td><td>인덱스 1부터 3 "직전"까지</td></tr>
+      <tr><td>포함 여부</td><td>끝 값(12) 미포함</td><td>끝 인덱스(3) 미포함</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">동적타이핑</span>
+      <span class="chip">인터프리터</span>
+      <span class="chip">list</span>
+      <span class="chip">tuple</span>
+      <span class="chip">set</span>
+      <span class="chip">dict</span>
+      <span class="chip">슬라이싱</span>
+      <span class="chip">range</span>
+      <span class="chip">재귀함수</span>
+      <span class="chip">기저조건</span>
+      <span class="chip">class</span>
+      <span class="chip">__init__</span>
+      <span class="chip">self</span>
+      <span class="chip">try</span>
+      <span class="chip">except</span>
+      <span class="chip">append</span>
+      <span class="chip">pop</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

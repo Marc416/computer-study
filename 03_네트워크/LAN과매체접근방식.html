@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAN과 매체접근방식 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / LAN과 매체접근방식</div>
+  <h1 class="page-title">LAN과 매체접근방식</h1>
+  <p class="page-subtitle">토폴로지, CSMA/CD·CSMA/CA, 무선랜 표준, 근거리 무선기술 · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>유선 LAN(이더넷)은 <b>CSMA/CD</b>, 무선 LAN(Wi-Fi)은 <b>CSMA/CA</b>를 매체접근 방식으로 쓴다 — 이름은 비슷해도 원리가 다르다.</p>
+    <p>LAN 토폴로지는 <b>성형·버스형·링형</b> 3가지가 기본이고, 이더넷은 버스형 토폴로지에서 발전했다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — LAN 토폴로지</h2>
+
+    <h3>토폴로지 3형태</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 220" role="img" aria-label="LAN 토폴로지 3종: 성형은 중앙 허브에 모든 노드가 연결, 버스형은 하나의 공통 회선에 모든 노드가 연결, 링형은 노드들이 원형으로 순환 연결된다">
+        <text x="90" y="20" font-size="13" text-anchor="middle" font-weight="700">성형 (Star)</text>
+        <circle cx="90" cy="110" r="14" fill="none" stroke="currentColor" stroke-width="2"/><text x="90" y="114" font-size="10" text-anchor="middle">HUB</text>
+        <g stroke="currentColor" stroke-width="1.2">
+          <line x1="90" y1="96" x2="90" y2="50"/><line x1="103" y1="100" x2="140" y2="70"/>
+          <line x1="103" y1="120" x2="140" y2="150"/><line x1="77" y1="120" x2="40" y2="150"/><line x1="77" y1="100" x2="40" y2="70"/>
+        </g>
+        <g fill="currentColor"><circle cx="90" cy="42" r="8"/><circle cx="148" cy="65" r="8"/><circle cx="148" cy="155" r="8"/><circle cx="32" cy="155" r="8"/><circle cx="32" cy="65" r="8"/></g>
+
+        <text x="360" y="20" font-size="13" text-anchor="middle" font-weight="700">버스형 (Bus)</text>
+        <line x1="260" y1="110" x2="460" y2="110" stroke="currentColor" stroke-width="2.5"/>
+        <g fill="currentColor"><circle cx="280" cy="110" r="7"/><circle cx="330" cy="110" r="7"/><circle cx="390" cy="110" r="7"/><circle cx="440" cy="110" r="7"/></g>
+        <g stroke="currentColor" stroke-width="1"><line x1="280" y1="103" x2="280" y2="80"/><line x1="330" y1="103" x2="330" y2="80"/><line x1="390" y1="103" x2="390" y2="80"/><line x1="440" y1="103" x2="440" y2="80"/></g>
+
+        <text x="620" y="20" font-size="13" text-anchor="middle" font-weight="700">링형 (Ring)</text>
+        <circle cx="620" cy="110" r="60" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g fill="currentColor"><circle cx="620" cy="50" r="7"/><circle cx="675" cy="110" r="7"/><circle cx="620" cy="170" r="7"/><circle cx="565" cy="110" r="7"/></g>
+      </svg>
+      <figcaption>성형은 중앙 장치(허브/스위치) 고장 시 전체 마비, 버스형은 공통 회선 고장 시 전체 마비(개별 노드 고장은 무관), 링형은 한 노드 고장이 전체 흐름을 끊을 수 있다 — "어디가 고장나면 전체가 죽는가"로 구분하면 헷갈리지 않는다.</figcaption>
+    </figure>
+    <table>
+      <tr><th>분류</th><th>종류</th></tr>
+      <tr><td>토폴로지</td><td>성(star)형, 버스(bus)형, 링(ring)형</td></tr>
+      <tr><td>매체접근방식</td><td>CSMA/CD, 토큰 버스, 토큰 링, CSMA/CA</td></tr>
+      <tr><td>전송방식</td><td>베이스밴드 LAN, 브로드밴드 LAN</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🚦</span>주요 개념 — CSMA/CD (유선, 이더넷)</h2>
+    <p><b>CSMA/CD</b> = Carrier Sense Multiple Access with <b>Collision Detection</b>. "회선이 비었는지 확인하고 보내되, 충돌 나면 감지하고 다시 시도"하는 임의접근 방식. <b>이더넷(Ethernet, IEEE 802.3)</b>의 매체접근방식이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="CSMA/CD 동작 순서도: 회선 감지 후 비어있으면 전송하고, 전송 중 충돌이 감지되면 전체에 알리고 임의시간 대기 후 재시도한다">
+        <defs>
+          <marker id="cs1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="230" y="10" width="180" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="37" font-size="12.5" text-anchor="middle">① 회선 사용 여부 감지</text>
+        <line x1="320" y1="55" x2="320" y2="85" stroke="currentColor" stroke-width="1.5" marker-end="url(#cs1)"/>
+
+        <polygon points="320,85 400,120 320,155 240,120" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="124" font-size="11.5" text-anchor="middle">사용 중?</text>
+        <text x="410" y="115" font-size="11">예 → 일정시간 대기 후 재검사</text>
+        <path d="M 400 120 C 480 90, 480 30, 320 30" fill="none" stroke="currentColor" stroke-width="1.3" marker-end="url(#cs1)"/>
+
+        <line x1="320" y1="155" x2="320" y2="185" stroke="currentColor" stroke-width="1.5" marker-end="url(#cs1)"/>
+        <text x="330" y="172" font-size="11">아니오</text>
+        <rect x="230" y="185" width="180" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="212" font-size="12.5" text-anchor="middle">② 전송 시작</text>
+
+        <line x1="320" y1="230" x2="320" y2="260" stroke="currentColor" stroke-width="1.5" marker-end="url(#cs1)"/>
+        <rect x="180" y="260" width="280" height="35" rx="8" fill="none" stroke="var(--bad,#d5304f)" stroke-width="1.5"/>
+        <text x="320" y="283" font-size="12" text-anchor="middle">③ 충돌 감지 시: 전체 노드에 알리고 임의시간 대기 후 ①로</text>
+      </svg>
+      <figcaption>CSMA/CD는 "먼저 듣고, 비었으면 보내고, 부딪히면 알리고 다시 시도"하는 방식이다. 노드 수가 적고 부하가 적은 환경에서 가장 잘 동작한다.</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> CSMA/CD는 충돌이 발생하면 지연시간을 <b>예측하기 어렵다</b>(임의 대기 때문). "지연시간을 정확히 예측할 수 있다"는 오답. 또한 CSMA/CD는 <b>토큰을 사용하지 않는다</b> — 토큰 방식(토큰링/토큰버스)과 헷갈리지 말 것.</div>
+    <div class="tip"><b>함정 주의 2:</b> "하나의 스테이션이 고장나면 네트워크 전체가 마비된다" → 버스형에서는 ❌ 틀림. 개별 노드 고장은 무관하고, <b>공용 회선 자체</b>가 고장나야 전체가 마비된다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📶</span>주요 개념 — CSMA/CA (무선 LAN)</h2>
+    <p>유선처럼 충돌을 "감지"하기 어려운 무선 환경에서는 애초에 충돌을 <b>회피(Avoidance)</b>하는 <b>CSMA/CA</b>를 쓴다. IEEE 802.11(Wi-Fi) 계열의 매체접근방식.</p>
+    <ul>
+      <li>채널이 비어있어도 <b>임의의 백오프(backoff) 값</b>만큼 기다렸다가 전송 (동시전송 확률을 낮춤)</li>
+      <li>수신측은 프레임을 오류 없이 받으면 <b>ACK</b>를 전송해 확인</li>
+      <li><b>RTS/CTS</b>(Request to Send / Clear to Send)로 채널을 미리 예약해 "숨은 터미널 문제"를 해결</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> IEEE 802.11b는 CSMA/CD가 아니라 <b>CSMA/CA</b>를 쓴다. "CSMA/CD 방식을 IEEE 802.11b의 MAC 방식으로 사용" → 오답.</div>
+
+    <h3>CSMA/CD vs CSMA/CA</h3>
+    <table>
+      <tr><th>구분</th><th>CSMA/CD</th><th>CSMA/CA</th></tr>
+      <tr><td>환경</td><td>유선 (이더넷)</td><td>무선 (Wi-Fi)</td></tr>
+      <tr><td>충돌 대응</td><td>충돌을 <b>감지(Detection)</b>한 뒤 대응</td><td>충돌을 <b>회피(Avoidance)</b> — 미리 예방</td></tr>
+      <tr><td>대표 표준</td><td>IEEE 802.3</td><td>IEEE 802.11</td></tr>
+    </table>
+
+    <h3>IEEE 802.11 무선랜 표준 비교 <span class="page-ref">📖 기출문제집 p.365</span></h3>
+    <table>
+      <tr><th>표준</th><th>대역</th><th>최대 속도</th><th>변조/특징</th></tr>
+      <tr><td>802.11a</td><td>5GHz</td><td>54Mbps</td><td>OFDM</td></tr>
+      <tr><td>802.11b</td><td>2.4GHz</td><td>11Mbps</td><td>CSMA/CA 초기 규격</td></tr>
+      <tr><td>802.11g</td><td>2.4GHz</td><td>54Mbps</td><td>OFDM (802.11a 속도를 2.4GHz에서)</td></tr>
+      <tr><td>802.11n</td><td>2.4/5GHz</td><td>-</td><td><b>MIMO</b>(다중 안테나) 기술 사용</td></tr>
+      <tr><td>802.11ax (Wi-Fi 6)</td><td>2.4/5GHz</td><td>-</td><td>OFDMA, MU-MIMO, 1024-QAM</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "802.11b는 OFDM 방식으로 22Mbps" → ❌ 틀림(OFDM은 802.11a/g/n/ax). "802.11g는 5GHz에서 DSSS 사용" → ❌ 틀림(802.11g는 2.4GHz).</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📡</span>주요 개념 — 근거리 무선기술(PAN)과 이동통신</h2>
+
+    <h3>PAN(Personal Area Network) 기술 비교</h3>
+    <table>
+      <tr><th>기술</th><th>표준</th><th>특징</th></tr>
+      <tr><td>블루투스(Bluetooth)</td><td>IEEE 802.15.1</td><td>10m 내외, 다양한 기기 간 페어링 통신</td></tr>
+      <tr><td>NFC</td><td>-</td><td>10cm 이내 <b>초근접</b>, 양방향, 모바일 결제에 활용, RFID의 변형</td></tr>
+      <tr><td>ZigBee</td><td>IEEE 802.15.4</td><td>저속·저전력·저비용, 센서 네트워크·홈네트워크용</td></tr>
+    </table>
+    <div class="tip"><b>암기팁:</b> "블루투스=범용 페어링", "NFC=결제(초근접)", "ZigBee=저전력 센서망" — 각자의 대표 용도로 구분</div>
+
+    <h3>기타 무선기술</h3>
+    <ul>
+      <li><b>Wi-Fi</b>: IEEE 802.11 기반, WLAN 인증마크</li>
+      <li><b>WiBro</b>: 한국형 무선인터넷 서비스, IEEE 802.16e (모바일 와이맥스)</li>
+      <li><b>LTE</b>: 4세대 이동통신, MIMO + OFDM 기반</li>
+      <li><b>5G</b>: eMBB(초고속)·URLLC(초저지연)·mMTC(초연결) 3대 시나리오, <b>빔포밍(Beamforming)</b>·Massive MIMO 활용</li>
+      <li><b>MANET(애드혹 네트워크)</b>: 액세스포인트 없이 노드끼리 자율 구성, 각 노드가 호스트+라우터 역할 동시 수행</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "MANET은 동적 토폴로지 구성을 위해 AP 같은 중재자가 필요하다" → ❌ 틀림. MANET의 핵심은 <b>AP 없이</b> 노드들이 자율적으로 망을 구성한다는 것.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>이더넷=CSMA/CD, Wi-Fi=CSMA/CA — 유·무선 매체접근방식 구분</li>
+      <li>CSMA/CD는 충돌 감지 후 대응, 지연시간 <b>예측 불가</b>, 토큰 미사용</li>
+      <li>버스형 토폴로지: 개별 노드 고장은 무관, <b>공용회선</b> 고장이 전체 마비 원인</li>
+      <li>802.11 표준별 대역/속도/기술(OFDM, MIMO 등) 짝짓기 문제</li>
+      <li>블루투스·NFC·ZigBee 특징과 IEEE 표준번호 매칭</li>
+      <li>MANET은 AP 없이 자율 구성, 각 노드가 라우팅 기능도 겸함</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>CSMA/CD</th><th>CSMA/CA</th></tr>
+      <tr><td>사용 환경</td><td>유선(이더넷)</td><td>무선(Wi-Fi)</td></tr>
+      <tr><td>전략</td><td>충돌 감지(사후 대응)</td><td>충돌 회피(사전 예방, 백오프)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>블루투스</th><th>NFC</th><th>ZigBee</th></tr>
+      <tr><td>거리</td><td>~10m</td><td>~10cm</td><td>다양(저전력 특화)</td></tr>
+      <tr><td>속도</td><td>중간</td><td>느림</td><td>느림</td></tr>
+      <tr><td>주 용도</td><td>기기 간 페어링</td><td>결제·태깅</td><td>센서 네트워크</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">성형</span>
+      <span class="chip">버스형</span>
+      <span class="chip">링형</span>
+      <span class="chip">CSMA/CD</span>
+      <span class="chip">CSMA/CA</span>
+      <span class="chip">이더넷</span>
+      <span class="chip">IEEE 802.3</span>
+      <span class="chip">IEEE 802.11</span>
+      <span class="chip">RTS/CTS</span>
+      <span class="chip">MIMO</span>
+      <span class="chip">OFDM</span>
+      <span class="chip">Bluetooth</span>
+      <span class="chip">NFC</span>
+      <span class="chip">ZigBee</span>
+      <span class="chip">5G</span>
+      <span class="chip">MANET</span>
+      <span class="chip">애드혹</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

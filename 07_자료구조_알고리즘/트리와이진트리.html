@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>트리와 이진트리 순회 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">07. 자료구조·알고리즘</a> / 트리와 이진트리 순회</div>
+  <h1 class="page-title">트리와 이진트리 순회</h1>
+  <p class="page-subtitle">전위·중위·후위 순회 · 힙(Heap) · PART 04. 자료구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>순회 3형제는 <b>루트를 언제 방문하냐</b>로 구분한다: 전위=<b>먼저</b>, 중위=<b>가운데</b>, 후위=<b>마지막</b>.</p>
+    <p>왼쪽 서브트리는 항상 오른쪽보다 먼저 — 세 방식 모두 공통이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>트리 용어</h3>
+    <table>
+      <tr><th>용어</th><th>의미</th></tr>
+      <tr><td>루트 (Root)</td><td>트리의 맨 꼭대기 노드 (부모가 없음)</td></tr>
+      <tr><td>단말 노드 (Leaf)</td><td>자식이 없는 노드</td></tr>
+      <tr><td>서브트리 (Subtree)</td><td>어떤 노드를 루트로 삼는 부분 트리</td></tr>
+      <tr><td>이진트리 (Binary Tree)</td><td>모든 노드가 <b>자식을 최대 2개(왼쪽·오른쪽)</b>까지만 가질 수 있는 트리</td></tr>
+    </table>
+    <p><b>트리와 그래프의 차이:</b> 트리는 <b>사이클(순환)이 없는</b> 비선형 자료구조이고, 그래프는 사이클이 있을 수 있다. 트리도 그래프의 일종(사이클 없는 연결 그래프)이다.</p>
+
+    <h3>이진트리 순회(Traversal) 3형제 <span class="page-ref">📖 기출문제집 p.470~476</span></h3>
+    <p>아래의 학습용 예제 트리 하나로 세 가지 순회를 전부 손으로 따라가 본다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 400 260" role="img" aria-label="7개 노드로 이루어진 예제 이진트리: 루트 A 아래 왼쪽 자식 B와 오른쪽 자식 C, B의 자식은 D와 E, C의 자식은 F와 G">
+        <defs>
+          <marker id="tr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <line x1="200" y1="40" x2="120" y2="120" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="200" y1="40" x2="280" y2="120" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="120" y1="120" x2="70" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="120" y1="120" x2="170" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="280" y1="120" x2="230" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="280" y1="120" x2="330" y2="200" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="200" cy="40" r="22" fill="none" stroke="currentColor" stroke-width="2"/><text x="200" y="46" font-size="14" text-anchor="middle">A</text>
+        <circle cx="120" cy="120" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="120" y="126" font-size="14" text-anchor="middle">B</text>
+        <circle cx="280" cy="120" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="280" y="126" font-size="14" text-anchor="middle">C</text>
+        <circle cx="70" cy="200" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="70" y="206" font-size="14" text-anchor="middle">D</text>
+        <circle cx="170" cy="200" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="170" y="206" font-size="14" text-anchor="middle">E</text>
+        <circle cx="230" cy="200" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="230" y="206" font-size="14" text-anchor="middle">F</text>
+        <circle cx="330" cy="200" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="330" y="206" font-size="14" text-anchor="middle">G</text>
+      </svg>
+      <figcaption>예제 이진트리 — 루트 A, 왼쪽 서브트리 루트 B(자식 D,E), 오른쪽 서브트리 루트 C(자식 F,G). 이 하나의 트리로 세 순회를 전부 비교한다.</figcaption>
+    </figure>
+
+    <h4 style="margin:16px 0 6px;font-size:14px;">① 전위 순회 (Preorder) — 루트 → 왼쪽 → 오른쪽</h4>
+    <div class="tip">
+      <ol class="steps">
+        <li>루트 A 방문 → <b>A</b></li>
+        <li>왼쪽 서브트리(B 기준)로 이동: B 방문 → 왼쪽 자식 D 방문 → 오른쪽 자식 E 방문 → <b>B, D, E</b></li>
+        <li>오른쪽 서브트리(C 기준)로 이동: C 방문 → 왼쪽 자식 F 방문 → 오른쪽 자식 G 방문 → <b>C, F, G</b></li>
+        <li>전체 결과: <b>A - B - D - E - C - F - G</b></li>
+      </ol>
+    </div>
+
+    <h4 style="margin:16px 0 6px;font-size:14px;">② 중위 순회 (Inorder) — 왼쪽 → 루트 → 오른쪽</h4>
+    <div class="tip">
+      <ol class="steps">
+        <li>왼쪽 서브트리(B 기준) 먼저 전부 순회: D 방문 → B 방문 → E 방문 → <b>D, B, E</b></li>
+        <li>루트 A 방문 → <b>A</b></li>
+        <li>오른쪽 서브트리(C 기준) 순회: F 방문 → C 방문 → G 방문 → <b>F, C, G</b></li>
+        <li>전체 결과: <b>D - B - E - A - F - C - G</b></li>
+      </ol>
+    </div>
+
+    <h4 style="margin:16px 0 6px;font-size:14px;">③ 후위 순회 (Postorder) — 왼쪽 → 오른쪽 → 루트</h4>
+    <div class="tip">
+      <ol class="steps">
+        <li>왼쪽 서브트리(B 기준) 순회: D 방문 → E 방문 → B 방문 → <b>D, E, B</b></li>
+        <li>오른쪽 서브트리(C 기준) 순회: F 방문 → G 방문 → C 방문 → <b>F, G, C</b></li>
+        <li>마지막으로 루트 A 방문 → <b>A</b></li>
+        <li>전체 결과: <b>D - E - B - F - G - C - A</b></li>
+      </ol>
+    </div>
+    <div class="analogy"><b>암기 비유:</b> 이름표(루트)를 <b>먼저</b> 부르면 전위, <b>가운데서</b> 부르면 중위, <b>맨 마지막</b>에 부르면 후위. 왼쪽부터 보는 건 셋 다 공통.</div>
+    <div class="tip"><b>함정 주의:</b> "이진탐색트리를 중위 순회하면 오름차순 정렬 결과가 나온다"는 참(자주 출제). 순회 순서를 헷갈리면 절대 못 푸니, 위 3단계를 실전에서 매번 손으로 직접 그려서 확인할 것.</div>
+
+    <h3>힙 (Heap) <span class="page-ref">📖 기출문제집 p.480~482</span></h3>
+    <p>힙은 <b>완전이진트리</b>이면서, "부모가 자식보다 크거나 같다(최대힙)" 또는 "부모가 자식보다 작거나 같다(최소힙)"는 조건을 만족하는 자료구조다. <b>정렬된 트리가 아니다</b> — 형제 노드끼리는 크기 비교가 안 된다, 오직 부모-자식 관계만 보장된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 360 200" role="img" aria-label="최대힙 예제: 루트 90 아래 자식 60과 70, 그 아래 각각 자식들이 부모보다 작거나 같은 값을 가진다">
+        <line x1="180" y1="35" x2="100" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="180" y1="35" x2="260" y2="100" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="100" y1="100" x2="60" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="100" y1="100" x2="140" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="260" y1="100" x2="230" y2="165" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="180" cy="35" r="22" fill="none" stroke="currentColor" stroke-width="2"/><text x="180" y="41" font-size="13" text-anchor="middle">90</text>
+        <circle cx="100" cy="100" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="100" y="106" font-size="13" text-anchor="middle">60</text>
+        <circle cx="260" cy="100" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="260" y="106" font-size="13" text-anchor="middle">70</text>
+        <circle cx="60" cy="165" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="60" y="171" font-size="13" text-anchor="middle">40</text>
+        <circle cx="140" cy="165" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="140" y="171" font-size="13" text-anchor="middle">55</text>
+        <circle cx="230" cy="165" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="230" y="171" font-size="13" text-anchor="middle">65</text>
+      </svg>
+      <figcaption>최대힙 예시 — 90≥60,70 / 60≥40,55 / 70≥65. 모든 부모-자식 쌍이 조건을 만족하지만, 60과 70(형제)의 대소관계는 규칙에 없다.</figcaption>
+    </figure>
+    <div class="tip"><b>힌트:</b> "힙을 중위 순회하면 정렬된 순서가 나온다"는 <b>거짓</b>이다(이진탐색트리와 헷갈리는 함정). 힙에서 정렬된 순서를 얻으려면 루트를 계속 꺼내며 재구성하는 <b>힙 정렬(Heap Sort)</b> 과정이 필요하다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>전위=<b>루트→왼쪽→오른쪽</b>, 중위=<b>왼쪽→루트→오른쪽</b>, 후위=<b>왼쪽→오른쪽→루트</b> — 순서만 정확히 외우면 어떤 트리든 손으로 풀림</li>
+      <li>순회 문제는 반드시 <b>그려서</b> 풀 것 — 암산으로 하면 서브트리 경계를 놓치기 쉽다</li>
+      <li>이진탐색트리(BST)를 중위 순회 → <b>오름차순 정렬</b> 결과 (힙과 헷갈리지 말 것)</li>
+      <li>힙은 <b>완전이진트리 + 부모자식 대소관계</b>만 보장, 형제 간 순서는 무관</li>
+      <li>트리 vs 그래프: 트리는 <b>사이클 없음</b>, 그래프는 사이클 가능</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>전위 순회</th><th>중위 순회</th><th>후위 순회</th></tr>
+      <tr><td>순서</td><td>루트-왼쪽-오른쪽</td><td>왼쪽-루트-오른쪽</td><td>왼쪽-오른쪽-루트</td></tr>
+      <tr><td>루트 방문 시점</td><td>가장 먼저</td><td>중간</td><td>가장 마지막</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>이진탐색트리 (BST)</th><th>힙 (Heap)</th></tr>
+      <tr><td>보장하는 것</td><td>왼쪽&lt;부모&lt;오른쪽 (전체 정렬 순서)</td><td>부모≥자식(최대) 또는 부모≤자식(최소)만</td></tr>
+      <tr><td>중위 순회 결과</td><td><b>정렬됨</b></td><td>정렬 안 됨</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">이진트리</span>
+      <span class="chip">전위순회</span>
+      <span class="chip">중위순회</span>
+      <span class="chip">후위순회</span>
+      <span class="chip">Preorder</span>
+      <span class="chip">Inorder</span>
+      <span class="chip">Postorder</span>
+      <span class="chip">서브트리</span>
+      <span class="chip">루트</span>
+      <span class="chip">단말노드</span>
+      <span class="chip">힙</span>
+      <span class="chip">Heap</span>
+      <span class="chip">최대힙</span>
+      <span class="chip">최소힙</span>
+      <span class="chip">완전이진트리</span>
+      <span class="chip">이진탐색트리</span>
+      <span class="chip">BST</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

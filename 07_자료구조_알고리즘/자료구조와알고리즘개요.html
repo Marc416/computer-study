@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자료구조와 알고리즘 개요 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">07. 자료구조·알고리즘</a> / 자료구조와 알고리즘 개요</div>
+  <h1 class="page-title">자료구조와 알고리즘 개요</h1>
+  <p class="page-subtitle">선형/비선형 분류 · 알고리즘의 조건 · 시간복잡도 · 순환(재귀) · PART 04. 자료구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>자료구조는 데이터 사이의 관계가 <b>1:1이면 선형</b>(배열·리스트·스택·큐), <b>1:n 또는 n:m이면 비선형</b>(트리·그래프)이다.</p>
+    <p>알고리즘의 성능은 <b>시간복잡도(Big-O)</b>로 표현하고, 순환(재귀)은 결국 <b>스택에 함수 호출을 쌓았다 꺼내는 것</b>이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 자료구조의 분류</h2>
+
+    <h3>선형 구조 vs 비선형 구조 <span class="page-ref">📖 기출문제집 p.431</span></h3>
+    <table>
+      <tr><th>구분</th><th>관계</th><th>정의</th><th>예시</th></tr>
+      <tr><td><b>선형(Linear)</b></td><td>1 : 1</td><td>데이터 항목 사이의 선후 관계가 하나의 "선"으로 명확하게 이어짐</td><td>배열, 연결리스트, 스택, 큐</td></tr>
+      <tr><td><b>비선형(Non-linear)</b></td><td>1:n 또는 n:m</td><td>하나의 항목이 여러 항목과 관계를 가짐 (그래프적 구조)</td><td>트리, 그래프</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "이진 트리(Binary Tree)"는 이름에 "트리"가 들어가니 당연히 <b>비선형</b>이다 — "선형 자료구조가 아닌 것은?" 문제의 단골 정답.</div>
+    <div class="analogy"><b>비유:</b> 선형 구조 = 기차처럼 한 줄로 서서 앞뒤만 아는 관계, 비선형 구조 = 가족 족보처럼 한 사람 밑에 여러 자식이 뻗어나가는 관계</div>
+
+    <h3>알고리즘의 조건 <span class="page-ref">📖 기출문제집 p.432</span></h3>
+    <table>
+      <tr><th>조건</th><th>의미</th></tr>
+      <tr><td>입력 (Input)</td><td>외부에서 제공되는 자료가 0개 이상 있을 수 있다</td></tr>
+      <tr><td>출력 (Output)</td><td>반드시 <b>1개 이상</b>의 결과를 생성해야 한다</td></tr>
+      <tr><td>명확성 (Definiteness)</td><td>각 명령은 모호하지 않고 명확해야 한다</td></tr>
+      <tr><td>유한성 (Finiteness)</td><td>한정된 수의 단계 뒤에는 <b>반드시 종료</b>해야 한다</td></tr>
+      <tr><td>실제성 (Effectiveness)</td><td>모든 명령은 실제로 <b>실행 가능한 연산</b>이어야 한다</td></tr>
+      <tr><td>유효성 (Feasibility)</td><td>원칙적으로 모든 명령은 종이와 연필만으로도 수행 가능해야 한다</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "알고리즘 단계들에는 순서가 정해져 있지 않다" → ❌ 틀림. 알고리즘은 <b>정해진 순서</b>대로 진행되어야 한다.</div>
+
+    <h3>컴퓨팅 사고(Computational Thinking)의 4요소</h3>
+    <ul>
+      <li><b>분해(Decomposition):</b> 복잡한 문제를 작은 문제 여러 개로 쪼갬</li>
+      <li><b>패턴 인식(Pattern Recognition):</b> 작은 문제들 사이의 반복되는 패턴을 찾음</li>
+      <li><b>추상화(Abstraction):</b> 불필요한 부분을 제거하고 핵심 요소만 남김</li>
+      <li><b>알고리즘(Algorithm):</b> 문제 해결을 위한 절차를 정함</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📈</span>시간복잡도 (Big-O 표기법)</h2>
+    <p>알고리즘이 "얼마나 빠른가"를 입력 크기 <b>n</b>이 커질 때 연산 횟수가 <b>어떤 속도로 늘어나는지</b>로 표현한 것이다. 여러 항이 섞여 있으면 <b>차수가 가장 높은 항 하나만</b> 남기고 나머지는 버린다 (예: 3nlogn+100 → O(nlogn)).</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 340" role="img" aria-label="입력 크기가 커질수록 O(1), O(log n), O(n), O(n log n), O(n²), O(2ⁿ) 각 시간복잡도의 연산 횟수가 얼마나 빠르게 증가하는지 비교한 그래프">
+        <defs>
+          <marker id="arA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <line x1="60" y1="300" x2="600" y2="300" stroke="currentColor" stroke-width="1.5" marker-end="url(#arA)"/>
+        <text x="605" y="304" font-size="12">n (입력 크기)</text>
+        <line x1="60" y1="300" x2="60" y2="20" stroke="currentColor" stroke-width="1.5" marker-end="url(#arA)"/>
+        <text x="30" y="20" font-size="12">연산 수</text>
+
+        <polyline points="60,280 600,280" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="530" y="272" font-size="11.5">O(1) — 상수, 안 늘어남</text>
+
+        <polyline points="60,280 150,240 250,215 350,198 450,185 600,168" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="180" font-size="11.5">O(log n) — 로그, 완만</text>
+
+        <polyline points="60,280 600,40" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <text x="480" y="55" font-size="11.5">O(n) — 선형, 정비례</text>
+
+        <polyline points="60,280 200,210 350,120 480,55 550,25" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <text x="380" y="65" font-size="11.5" opacity="0.9">O(n log n)</text>
+
+        <polyline points="60,280 160,255 250,190 320,110 370,50 400,20" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="270" y="120" font-size="11.5" font-weight="700">O(n²) — 제곱, 급격히 증가</text>
+
+        <polyline points="60,280 160,270 220,240 260,180 290,100 310,30" fill="none" stroke="currentColor" stroke-width="2.2"/>
+        <text x="160" y="180" font-size="11.5" font-weight="700">O(2ⁿ) — 지수, 폭발적</text>
+      </svg>
+      <figcaption>같은 n이라도 시간복잡도에 따라 실제 연산량은 하늘과 땅 차이다. 오른쪽으로 갈수록(n이 커질수록) O(2ⁿ), O(n²) 알고리즘은 급격히 느려진다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>시간복잡도 크기 순서 (작은 것 → 큰 것):</b><br>
+      O(1) &lt; O(log n) &lt; O(n) &lt; O(n log n) &lt; O(n²) &lt; O(n³) &lt; O(2ⁿ) &lt; O(n!) &lt; O(nⁿ)
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔁</span>순환 (재귀, Recursion) <span class="page-ref">📖 기출문제집 p.433~435</span></h2>
+    <p>재귀함수는 자기 자신을 다시 호출하는 함수다. 컴퓨터 내부적으로는 <b>함수를 호출할 때마다 그 상태(지역변수, 복귀주소)를 스택에 쌓고</b>, 종료 조건(base case)에 도달하면 쌓인 순서의 반대로 하나씩 꺼내며(pop) 계산을 완성한다. 그래서 재귀는 "스택"과 뗄 수 없다.</p>
+
+    <p><b>계산 방법: factorial(4)를 재귀로 계산하는 과정</b></p>
+    <ol class="steps">
+      <li>factorial(4)를 호출 → 아직 답을 모르니 factorial(3)을 먼저 호출해야 함 → <b>스택에 factorial(4) 쌓임</b></li>
+      <li>factorial(3) → factorial(2)를 호출해야 함 → <b>스택에 factorial(3) 쌓임</b></li>
+      <li>factorial(2) → factorial(1)을 호출해야 함 → <b>스택에 factorial(2) 쌓임</b></li>
+      <li>factorial(1) → factorial(0)을 호출해야 함 → <b>스택에 factorial(1) 쌓임</b></li>
+      <li>factorial(0) = 1 (종료조건 도달) → 이제부터 <b>스택에서 꺼내며(pop) 역순으로 계산</b> 시작</li>
+      <li>factorial(1) = 1 × factorial(0) = 1 × 1 = 1 → pop</li>
+      <li>factorial(2) = 2 × factorial(1) = 2 × 1 = 2 → pop</li>
+      <li>factorial(3) = 3 × factorial(2) = 3 × 2 = 6 → pop</li>
+      <li>factorial(4) = 4 × factorial(3) = 4 × 6 = <b>24</b> → pop, 최종 답</li>
+    </ol>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 320" role="img" aria-label="factorial(4) 재귀 호출이 스택에 쌓였다가(왼쪽, 호출 방향) 종료조건에 도달한 뒤 순서대로 꺼내지며 계산되는(오른쪽, 리턴 방향) 모습">
+        <defs>
+          <marker id="arB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="150" y="20" font-size="13" text-anchor="middle" font-weight="700">① 호출 — 스택에 쌓임 (PUSH)</text>
+        <rect x="70" y="220" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="242" font-size="12" text-anchor="middle">factorial(4)</text>
+        <rect x="70" y="184" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="206" font-size="12" text-anchor="middle">factorial(3)</text>
+        <rect x="70" y="148" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="170" font-size="12" text-anchor="middle">factorial(2)</text>
+        <rect x="70" y="112" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="150" y="134" font-size="12" text-anchor="middle">factorial(1)</text>
+        <rect x="70" y="70" width="160" height="34" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="150" y="92" font-size="12" text-anchor="middle" font-weight="700">factorial(0)=1 (종료)</text>
+        <text x="150" y="270" font-size="10.5" opacity="0.7">↑ 스택 top (가장 최근 호출)</text>
+
+        <line x1="270" y1="150" x2="340" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#arB)"/>
+        <text x="305" y="140" font-size="11" text-anchor="middle">pop</text>
+
+        <text x="480" y="20" font-size="13" text-anchor="middle" font-weight="700">② 리턴 — 순서대로 꺼내며 계산 (POP)</text>
+        <rect x="400" y="220" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="242" font-size="12" text-anchor="middle">4×6=24 (최종답)</text>
+        <rect x="400" y="184" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="206" font-size="12" text-anchor="middle">3×2=6</text>
+        <rect x="400" y="148" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="170" font-size="12" text-anchor="middle">2×1=2</text>
+        <rect x="400" y="112" width="160" height="34" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="480" y="134" font-size="12" text-anchor="middle">1×1=1</text>
+      </svg>
+      <figcaption>재귀 호출은 종료조건에 닿을 때까지 스택에 쌓이기만 하다가(①), 종료조건 이후부터 역순으로 하나씩 꺼내지며(②) 실제 계산이 이루어진다.</figcaption>
+    </figure>
+
+    <p><b>계산 방법: fib(5) 호출 횟수와 결과값 구하기</b> <span class="page-ref">📖 기출문제집 p.433</span></p>
+    <div class="tip">
+      fib(n) = fib(n-1) + fib(n-2), fib(0)=0, fib(1)=1 일 때
+      <ol class="steps">
+        <li>fib(5) = fib(4) + fib(3)</li>
+        <li>fib(4) = fib(3) + fib(2), fib(3) = fib(2) + fib(1)</li>
+        <li>계속 쪼개면 fib(1)과 fib(0)이 나올 때까지 호출이 가지치기 됨</li>
+        <li>모든 호출을 다 세면 <b>fib(5) 자신을 포함해 총 15번</b> 호출됨</li>
+        <li>최종 결과값 fib(5) = <b>5</b></li>
+      </ol>
+    </div>
+    <div class="tip"><b>재귀 → 반복문 변환 팁:</b> 재귀함수가 종료되는 조건(base case, 예: n==0)이 반복문에서는 <b>루프를 멈추는 조건의 반대</b>가 된다. factorial 재귀의 종료조건이 n==0이면, 반복문의 while 조건은 <b>n&gt;0</b>이어야 한다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>선형(배열·리스트·스택·큐) vs 비선형(트리·그래프) 구분 — 이진 트리는 <b>비선형</b></li>
+      <li>알고리즘의 6가지 조건: 입력·출력·명확성·유한성·실제성·유효성 (순서가 없다는 표현은 오답)</li>
+      <li>시간복잡도 여러 항이 섞이면 <b>차수가 가장 높은 항</b>만 남기고 표기</li>
+      <li>이중 for문(중첩 반복문) → O(n²), 단일 for문 → O(n), 절반씩 줄여나가면 → O(log n)</li>
+      <li>재귀 함수의 총 호출 횟수·최종 반환값을 손으로 직접 트리처럼 펼쳐서 계산하는 문제 (fib류)</li>
+      <li>재귀함수를 반복문(while/for)으로 바꾸는 문제 — 종료조건의 반대가 반복 조건이 됨</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>순환(재귀)</th><th>반복(Iteration)</th></tr>
+      <tr><td>구현 방식</td><td>자기 자신을 다시 호출</td><td>while/for 루프</td></tr>
+      <tr><td>메모리 사용</td><td>호출할 때마다 스택 프레임 소비 (많음)</td><td>추가 메모리 거의 없음</td></tr>
+      <tr><td>코드 길이</td><td>보통 더 간결함</td><td>상대적으로 길어질 수 있음</td></tr>
+      <tr><td>종료 조건</td><td>base case (종료조건) 필수</td><td>루프 조건이 거짓이 될 때</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>선형 자료구조</th><th>비선형 자료구조</th></tr>
+      <tr><td>관계</td><td>1:1</td><td>1:n, n:m</td></tr>
+      <tr><td>예시</td><td>배열, 연결리스트, 스택, 큐</td><td>트리, 그래프</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">선형구조</span>
+      <span class="chip">비선형구조</span>
+      <span class="chip">알고리즘 조건</span>
+      <span class="chip">유한성</span>
+      <span class="chip">명확성</span>
+      <span class="chip">컴퓨팅사고</span>
+      <span class="chip">분해</span>
+      <span class="chip">추상화</span>
+      <span class="chip">Big-O</span>
+      <span class="chip">시간복잡도</span>
+      <span class="chip">O(n log n)</span>
+      <span class="chip">순환</span>
+      <span class="chip">재귀</span>
+      <span class="chip">팩토리얼</span>
+      <span class="chip">피보나치</span>
+      <span class="chip">base case</span>
+      <span class="chip">스택프레임</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

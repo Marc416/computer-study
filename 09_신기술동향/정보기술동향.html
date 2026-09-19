@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정보기술 동향 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">09. 신기술동향</a> / 정보기술 동향</div>
+  <h1 class="page-title">정보기술 동향</h1>
+  <p class="page-subtitle">VoIP·RFID·유비쿼터스컴퓨팅·AR/VR·클라우드·가상화·빅데이터·IoT · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>이 파트는 "이 기술의 정의를 정확히 아는가"를 묻는 <b>용어 매칭형 문제</b>가 대부분이다 — 비슷한 이름의 기술을 정확히 구분하는 게 핵심.</p>
+    <p>빅데이터 3V = <b>규모(Volume)·속도(Velocity)·다양성(Variety)</b> — "시각화(Visualization)"는 3V가 아니라 자주 나오는 함정.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">📡</span>주요 개념 — 통신·인식 기술</h2>
+
+    <h3>VoIP (Voice over Internet Protocol)</h3>
+    <p>음성을 IP 패킷으로 변환해 인터넷망으로 전화 통화를 가능케 하는 기술. 게이트웨이로 기존 공중전화망(PSTN)과도 연결된다.</p>
+    <table>
+      <tr><th>QoS 파라미터</th><th>의미</th></tr>
+      <tr><td>지연 (Delay)</td><td>패킷이 송신지→수신지 도달하는 데 걸리는 시간</td></tr>
+      <tr><td>지터 (Jitter)</td><td>패킷 <b>도착 간격의 불규칙한 변동</b> — 크면 음성이 끊기거나 왜곡</td></tr>
+      <tr><td>패킷 손실</td><td>전송 중 일부 패킷 유실 — 실시간 통신이라 복구 어려움</td></tr>
+      <tr><td>무음 억제</td><td>무음 구간엔 패킷을 안 보내 대역폭 절약</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "지터는 도착시간 간격이 규칙적인 경우"라는 표현은 ❌ 틀렸다 — 지터는 <b>불규칙한 변동</b>을 의미한다.</div>
+
+    <h3>RFID (Radio Frequency IDentification)</h3>
+    <p>무선주파수로 <b>태그</b>에 저장된 정보를 <b>리더기</b>가 비접촉으로 읽는 인식 기술.</p>
+    <table>
+      <tr><th>구분</th><th>능동형 태그</th><th>수동형 태그</th></tr>
+      <tr><td>전원</td><td>배터리 <b>내장</b></td><td>배터리 <b>없음</b> — 리더기 전자기 유도로 작동</td></tr>
+      <tr><td>인식 거리</td><td>길다</td><td>짧다</td></tr>
+      <tr><td>가격</td><td>비쌈</td><td>저렴</td></tr>
+      <tr><td>수명</td><td>배터리 수명에 제한</td><td>반영구적</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "RFID 태그는 항상 배터리가 필요하다" → ❌ <b>수동형은 배터리 불필요</b>. ARP는 IP→MAC 변환, <b>RARP는 반대로 MAC→IP</b> 변환(순서 헷갈리기 쉬움).</div>
+
+    <h3>QR코드 vs 바코드 vs RFID</h3>
+    <table>
+      <tr><th>구분</th><th>바코드</th><th>QR코드</th><th>RFID</th></tr>
+      <tr><td>방식</td><td>굵기가 다른 막대(1차원)</td><td>가로·세로 2차원 격자</td><td>무선주파수</td></tr>
+      <tr><td>정보량</td><td>적음</td><td>많음 (숫자 최대 7,089자)</td><td>많음 + 반영구 저장</td></tr>
+      <tr><td>인식</td><td>광학(빛)으로 스캔</td><td>광학 스캔</td><td>전파로 비접촉 인식</td></tr>
+      <tr><td>오류 정정</td><td>없음</td><td><b>있음</b> (손상돼도 복원)</td><td>-</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🕶️</span>주요 개념 — 실감기술: 어디까지가 진짜인가</h2>
+
+    <h3>가상현실(VR) · 증강현실(AR) · 디지털트윈 · 메타버스 스펙트럼</h3>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 200" role="img" aria-label="실감기술 스펙트럼: 완전한 현실에서 완전한 가상까지 증강현실, 디지털트윈, 가상현실, 메타버스 순으로 가상의 비중이 커진다">
+        <defs>
+          <marker id="tr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <line x1="40" y1="150" x2="680" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#tr1)"/>
+        <text x="40" y="175" font-size="11.5">현실 100%</text>
+        <text x="650" y="175" font-size="11.5" text-anchor="end">가상 100%</text>
+
+        <circle cx="150" cy="150" r="6" fill="currentColor"/>
+        <text x="150" y="100" font-size="12.5" text-anchor="middle" font-weight="700">증강현실 (AR)</text>
+        <text x="150" y="118" font-size="10.5" text-anchor="middle" opacity="0.8">현실 위에 가상정보를</text>
+        <text x="150" y="132" font-size="10.5" text-anchor="middle" opacity="0.8">겹쳐 보여줌</text>
+
+        <circle cx="330" cy="150" r="6" fill="currentColor"/>
+        <text x="330" y="100" font-size="12.5" text-anchor="middle" font-weight="700">디지털 트윈</text>
+        <text x="330" y="118" font-size="10.5" text-anchor="middle" opacity="0.8">현실을 가상에</text>
+        <text x="330" y="132" font-size="10.5" text-anchor="middle" opacity="0.8">그대로 복제·연동</text>
+
+        <circle cx="500" cy="150" r="6" fill="currentColor"/>
+        <text x="500" y="100" font-size="12.5" text-anchor="middle" font-weight="700">가상현실 (VR)</text>
+        <text x="500" y="118" font-size="10.5" text-anchor="middle" opacity="0.8">현실과 단절된</text>
+        <text x="500" y="132" font-size="10.5" text-anchor="middle" opacity="0.8">완전 가상 공간 체험</text>
+
+        <circle cx="640" cy="150" r="6" fill="currentColor"/>
+        <text x="640" y="100" font-size="12.5" text-anchor="middle" font-weight="700">메타버스</text>
+        <text x="640" y="118" font-size="10.5" text-anchor="middle" opacity="0.8">가상공간에서</text>
+        <text x="640" y="132" font-size="10.5" text-anchor="middle" opacity="0.8">사회·경제 활동까지</text>
+      </svg>
+      <figcaption>네 기술 모두 "현실과 가상을 어떻게 섞는가"의 문제다. AR은 현실이 주(主)고 가상은 덧붙이는 정보, VR은 현실을 완전히 차단, 디지털트윈은 현실을 데이터로 복제해 실시간 연동, 메타버스는 그 가상공간 안에서 사회활동까지 하는 것.</figcaption>
+    </figure>
+    <table>
+      <tr><th>구분</th><th>정의</th></tr>
+      <tr><td>증강현실 (AR)</td><td>현실 세계 위에 컴퓨터가 만든 가상 정보를 <b>겹쳐서</b> 보여줌</td></tr>
+      <tr><td>가상현실 (VR)</td><td>현실과 무관한 <b>완전한 가상 공간</b>을 오감으로 체험</td></tr>
+      <tr><td>디지털 트윈</td><td>현실의 사물·시스템을 가상공간에 <b>똑같이 복제</b>해 실시간 반응(시뮬레이션·예측에 활용)</td></tr>
+      <tr><td>메타버스</td><td>가상공간에서 아바타로 <b>사회·경제·문화 활동</b>까지 하는 3차원 플랫폼</td></tr>
+      <tr><td>NFT</td><td>블록체인으로 디지털 콘텐츠에 <b>고유 소유권</b>을 표시하는 토큰</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "노매딕 컴퓨팅이 현실과 가상화면을 결합"이라는 설명은 ❌ 그건 <b>증강현실(AR)</b>의 정의다. 노매딕 컴퓨팅은 "장소 상관없이 다양한 정보기기가 편재되어 굳이 휴대할 필요가 없는" 개념.</div>
+
+    <h3>유비쿼터스 컴퓨팅의 세부 유형 (헷갈리는 이름들)</h3>
+    <table>
+      <tr><th>유형</th><th>정의</th></tr>
+      <tr><td>노매딕(Nomadic) 컴퓨팅</td><td>장소 상관없이 정보기기가 편재 → 사용자가 <b>휴대할 필요 없음</b></td></tr>
+      <tr><td>퍼베이시브(Pervasive) 컴퓨팅</td><td>컴퓨터가 도처에 <b>편재</b>되도록 하는 기술</td></tr>
+      <tr><td>감지(Sentient) 컴퓨팅</td><td>센서로 사용자·환경 상황을 <b>인식</b>해 필요 정보 제공</td></tr>
+      <tr><td>엑조틱(Exotic) 컴퓨팅</td><td>스스로 생각해 현실·가상 세계를 <b>연계</b></td></tr>
+      <tr><td>디스포절(Disposable) 컴퓨팅</td><td>값싸게 만들어 <b>한 번 쓰고 버리는</b> 컴퓨팅</td></tr>
+      <tr><td>웨어러블(Wearable) 컴퓨팅</td><td>옷·안경처럼 <b>착용</b>하는 컴퓨팅</td></tr>
+      <tr><td>임베디드(Embedded) 컴퓨팅</td><td>사물에 마이크로칩을 <b>내장</b>해 서비스 기능 수행</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">☁️</span>주요 개념 — 클라우드와 가상화</h2>
+
+    <h3>공용 클라우드 vs 사설 클라우드</h3>
+    <table>
+      <tr><th>구분</th><th>공용 클라우드 (Public)</th><th>사설 클라우드 (Private)</th></tr>
+      <tr><td>운영 주체</td><td>서비스 제공업체</td><td>기업 자체</td></tr>
+      <tr><td>사용자</td><td>불특정 다수 공유</td><td>해당 기업 전용</td></tr>
+      <tr><td>보안</td><td>상대적으로 낮음</td><td>높음(데이터를 외부에 맡기지 않음)</td></tr>
+    </table>
+
+    <h3>가상화(Virtualization)와 하이퍼바이저</h3>
+    <p>가상화는 <b>하나의 물리적 하드웨어를 여러 개의 가상 자원처럼</b> 나눠 쓰는 기술이다. 이를 관리하는 소프트웨어가 <b>하이퍼바이저</b>(가상 머신 모니터).</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="Type-1 하이퍼바이저는 하드웨어 위에서 직접 실행되고, Type-2 하이퍼바이저는 호스트 운영체제 위에서 응용프로그램처럼 실행된다">
+        <rect x="30" y="30" width="280" height="200" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="170" y="52" font-size="13" text-anchor="middle" font-weight="700">Type-1 (베어메탈)</text>
+        <rect x="55" y="70" width="100" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="94" font-size="10.5" text-anchor="middle">Guest OS 1</text>
+        <rect x="185" y="70" width="100" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="235" y="94" font-size="10.5" text-anchor="middle">Guest OS 2</text>
+        <rect x="55" y="130" width="230" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="170" y="154" font-size="11.5" text-anchor="middle">하이퍼바이저</text>
+        <rect x="55" y="190" width="230" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="170" y="210" font-size="11" text-anchor="middle">물리 하드웨어</text>
+
+        <rect x="390" y="30" width="280" height="200" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="530" y="52" font-size="13" text-anchor="middle" font-weight="700">Type-2 (호스트형)</text>
+        <rect x="415" y="70" width="100" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="465" y="94" font-size="10.5" text-anchor="middle">Guest OS 1</text>
+        <rect x="545" y="70" width="100" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="595" y="94" font-size="10.5" text-anchor="middle">Guest OS 2</text>
+        <rect x="415" y="130" width="230" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="530" y="150" font-size="11" text-anchor="middle">하이퍼바이저 (응용프로그램)</text>
+        <rect x="415" y="170" width="230" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="530" y="190" font-size="11" text-anchor="middle">호스트 운영체제</text>
+        <rect x="415" y="210" width="230" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="530" y="224" font-size="10" text-anchor="middle">물리 하드웨어</text>
+      </svg>
+      <figcaption>Type-1은 하드웨어 위에서 하이퍼바이저가 직접 실행(성능↑), Type-2는 이미 설치된 호스트 OS 위에서 하이퍼바이저가 하나의 응용프로그램처럼 동작한다(설치 간편, 성능은 상대적으로 낮음).</figcaption>
+    </figure>
+    <div class="tip"><b>함정 주의:</b> "가상 머신 모니터를 쓰면 반드시 호스트 운영체제가 필요하다" → ❌ <b>Type-1은 호스트 OS 없이</b> 하드웨어에서 직접 실행된다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📊</span>주요 개념 — 빅데이터와 IoT</h2>
+
+    <h3>빅데이터의 3V</h3>
+    <table>
+      <tr><th>요소</th><th>의미</th></tr>
+      <tr><td><b>Volume</b> (규모)</td><td>데이터의 방대한 양</td></tr>
+      <tr><td><b>Velocity</b> (속도)</td><td>데이터가 생성·처리되는 빠른 속도 (생성 주기가 <b>짧음</b>)</td></tr>
+      <tr><td><b>Variety</b> (다양성)</td><td>정형·비정형 등 다양한 형태의 데이터</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> 3V에 "시각화(Visualization)"나 "가상화(Virtualization)"를 끼워넣는 오답이 매년 나온다 — <b>3V는 Volume·Velocity·Variety뿐</b>.</div>
+
+    <h3>사물인터넷(IoT) 보안 위협</h3>
+    <ul>
+      <li>취약한 인증(기본 비밀번호 그대로 사용), 데이터 유출, 공급망 공격, DDoS 봇넷 악용, 물리적 피해</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "저사양 IoT 장치는 구조가 단순해서 보안이 안전하다" → ❌ 오히려 <b>보안 기능을 넣기 어려워 취약</b>하다.</div>
+
+    <h3>HTML5의 특징</h3>
+    <ul>
+      <li>플러그인 없이 <b>비디오·오디오</b> 재생 가능 (Flash 등 외부 플러그인 불필요)</li>
+      <li><b>&lt;canvas&gt;</b>: 즉시모드 2D 그래픽 그리기 API / <b>&lt;svg&gt;</b>: XML 기반 2D 벡터 그래픽</li>
+      <li>오프라인 저장소(로컬 DB) 지원, GPS·카메라 등 <b>디바이스 하드웨어 제어</b> 가능</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "HTML5는 디바이스에 접근할 수 없어 보안이 철저하다" → ❌ 오히려 HTML5는 <b>GPS·카메라 등 디바이스 기능에 직접 접근 가능</b>한 게 특징이다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>능동형 RFID 태그(배터리O, 인식거리 김) vs 수동형(배터리X, 저렴)</li>
+      <li>ARP(IP→MAC) vs RARP(MAC→IP) 변환 방향 구분</li>
+      <li>AR(현실+가상정보), VR(완전가상), 디지털트윈(현실 복제), 메타버스(가상 사회활동) 정의 구분</li>
+      <li>노매딕/퍼베이시브/감지/엑조틱/디스포절 컴퓨팅 등 유비쿼터스 세부유형 이름-정의 매칭</li>
+      <li>빅데이터 3V = Volume·Velocity·Variety (시각화·가상화 아님)</li>
+      <li>Type-1(베어메탈, 호스트OS 불필요) vs Type-2(호스트OS 위에서 실행) 하이퍼바이저 구분</li>
+      <li>HTML5는 플러그인 없이 멀티미디어 재생 + 디바이스 하드웨어 직접 제어 가능</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>증강현실 (AR)</th><th>가상현실 (VR)</th><th>디지털 트윈</th></tr>
+      <tr><td>현실 비중</td><td>현실이 주(主)</td><td>현실 완전 차단</td><td>현실을 그대로 복제</td></tr>
+      <tr><td>목적</td><td>정보를 겹쳐 보여줌</td><td>몰입 체험</td><td>실시간 시뮬레이션·예측</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>Type-1 하이퍼바이저</th><th>Type-2 하이퍼바이저</th></tr>
+      <tr><td>실행 위치</td><td>하드웨어 위 직접</td><td>호스트 OS 위 응용프로그램</td></tr>
+      <tr><td>성능</td><td>높음</td><td>상대적으로 낮음</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">VoIP</span><span class="chip">지터</span><span class="chip">RFID</span><span class="chip">능동형태그</span>
+      <span class="chip">수동형태그</span><span class="chip">ARP</span><span class="chip">RARP</span><span class="chip">QR코드</span>
+      <span class="chip">증강현실</span><span class="chip">가상현실</span><span class="chip">디지털트윈</span><span class="chip">메타버스</span>
+      <span class="chip">NFT</span><span class="chip">노매딕컴퓨팅</span><span class="chip">퍼베이시브컴퓨팅</span><span class="chip">임베디드컴퓨팅</span>
+      <span class="chip">공용클라우드</span><span class="chip">사설클라우드</span><span class="chip">가상화</span><span class="chip">하이퍼바이저</span>
+      <span class="chip">빅데이터</span><span class="chip">3V</span><span class="chip">IoT</span><span class="chip">HTML5</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

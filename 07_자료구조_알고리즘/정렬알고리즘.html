@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정렬 알고리즘 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">07. 자료구조/알고리즘</a> / 정렬 알고리즘</div>
+  <h1 class="page-title">정렬 알고리즘</h1>
+  <p class="page-subtitle">버블·선택·삽입 정렬 단계별 풀이, 시간복잡도 비교 · PART 04. 자료구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>시험에 나오는 정렬 문제는 대부분 <b>"이 배열이 몇 단계 만에 이렇게 바뀌었다, 무슨 정렬이냐"</b>를 묻는다. 그러니 각 정렬이 <b>한 단계에서 뭘 하는지</b>(비교? 교환? 어디를 건드리는지)를 손으로 직접 따라갈 수 있어야 한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 정렬 알고리즘 한눈에</h2>
+    <table>
+      <tr><th>정렬</th><th>한 줄 원리</th><th>시간복잡도(평균)</th><th>안정정렬</th></tr>
+      <tr><td>버블(Bubble)</td><td><b>인접한</b> 두 값을 비교해 크면 교환. 한 번 돌 때마다 최댓값이 끝으로 이동</td><td>O(n²)</td><td>O</td></tr>
+      <tr><td>선택(Selection)</td><td>남은 것 중 <b>최솟값을 찾아</b> 맨 앞(현재 위치)과 교환</td><td>O(n²)</td><td>X</td></tr>
+      <tr><td>삽입(Insertion)</td><td>정렬된 부분에 다음 값을 <b>알맞은 위치로 밀어넣기</b></td><td>O(n²) (거의 정렬된 데이터엔 O(n))</td><td>O</td></tr>
+      <tr><td>퀵(Quick)</td><td><b>피벗</b> 기준으로 작은 값/큰 값 그룹으로 나눠 재귀 정렬</td><td>O(n log n) (최악 O(n²))</td><td>X</td></tr>
+      <tr><td>합병(Merge)</td><td>반씩 쪼갠 뒤(분할) <b>정렬하며 합치기</b></td><td>O(n log n)</td><td>O</td></tr>
+      <tr><td>힙(Heap)</td><td>힙 트리를 만들어 <b>루트(최댓값)를 꺼내는 것</b>을 반복</td><td>O(n log n)</td><td>X</td></tr>
+      <tr><td>셸(Shell)</td><td>일정 간격(gap)씩 떨어진 값끼리 먼저 삽입정렬, 간격을 줄여가며 반복</td><td>O(n^1.5) 근사</td><td>X</td></tr>
+      <tr><td>기수(Radix)</td><td>비교 없이 <b>자릿수(낮은 자리부터)</b> 기준으로 분배·수집 반복</td><td>O(dn) (d=자릿수)</td><td>O</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "정렬 대상 크기만큼 추가 공간이 필요한 정렬" → <b>합병(Merge) 정렬</b>이다 — 두 부분을 합칠 때 임시 배열이 필요하기 때문. 나머지 정렬은 대부분 제자리(in-place) 정렬이 가능.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🫧</span>버블 정렬 — 실제 기출 예제로 손으로 따라가기 <span class="page-ref">📖 기출문제집 p.498</span></h2>
+    <p>배열 <b>[5, 2, 3, 8, 1]</b>을 오름차순 정렬. 버블 정렬은 <b>왼쪽부터 인접한 두 칸씩 비교</b>하며 왼쪽이 크면 교환 — 이걸 배열 끝까지 반복하는 게 "한 패스(pass)"다.</p>
+    <table>
+      <tr><th>단계</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>비고</th></tr>
+      <tr><td>초기</td><td>5</td><td>2</td><td>3</td><td>8</td><td>1</td><td>-</td></tr>
+      <tr><td>1pass</td><td>2</td><td>3</td><td>5</td><td style="background:var(--good-soft);font-weight:700">1</td><td style="background:var(--good-soft);font-weight:700">8</td><td>(5,2)(5,3)교환, (5,8)유지, (8,1)교환 → 최댓값 8 맨끝 확정</td></tr>
+      <tr><td>2pass</td><td>2</td><td>3</td><td style="background:var(--good-soft);font-weight:700">1</td><td style="background:var(--good-soft);font-weight:700">5</td><td style="background:var(--chip-bg)">8</td><td>(5,1)교환 → 5 확정</td></tr>
+      <tr><td>3pass</td><td>2</td><td style="background:var(--good-soft);font-weight:700">1</td><td style="background:var(--good-soft);font-weight:700">3</td><td style="background:var(--chip-bg)">5</td><td style="background:var(--chip-bg)">8</td><td>(3,1)교환 → 3 확정 (여기까지가 실제 기출 문제 범위)</td></tr>
+      <tr><td>4pass</td><td style="background:var(--good-soft);font-weight:700">1</td><td style="background:var(--good-soft);font-weight:700">2</td><td style="background:var(--chip-bg)">3</td><td style="background:var(--chip-bg)">5</td><td style="background:var(--chip-bg)">8</td><td>(2,1)교환 → 완전 정렬 완료</td></tr>
+    </table>
+    <div class="tip"><b>패턴을 눈치챘는가?</b> 버블 정렬은 <b>한 패스마다 뒤에서부터 하나씩</b> 제자리를 찾아간다 (초록색 칸이 오른쪽에서부터 채워짐). 그래서 n개짜리 배열은 최대 <b>n−1번</b>의 패스면 항상 끝난다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔍</span>선택 정렬 — 실제 기출 예제 <span class="page-ref">📖 기출문제집 p.502</span></h2>
+    <p>배열 <b>[34, 27, 19, 50, 2, 21, 13]</b>. 선택 정렬은 <b>매 단계마다 "남은 범위에서 가장 작은 값"을 찾아서</b> 현재 위치와 교환한다.</p>
+    <table>
+      <tr><th>단계</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>동작</th></tr>
+      <tr><td>초기</td><td>34</td><td>27</td><td>19</td><td>50</td><td>2</td><td>21</td><td>13</td><td>-</td></tr>
+      <tr><td>1단계</td><td style="background:var(--good-soft);font-weight:700">2</td><td>27</td><td>19</td><td>50</td><td style="background:var(--warn-soft)">34</td><td>21</td><td>13</td><td>최솟값 2와 위치1(34) 교환</td></tr>
+      <tr><td>2단계</td><td style="background:var(--chip-bg)">2</td><td style="background:var(--good-soft);font-weight:700">13</td><td>19</td><td>50</td><td>34</td><td>21</td><td style="background:var(--warn-soft)">27</td><td>최솟값 13과 위치2(27) 교환</td></tr>
+      <tr><td>3단계</td><td style="background:var(--chip-bg)">2</td><td style="background:var(--chip-bg)">13</td><td style="background:var(--good-soft);font-weight:700">19</td><td>50</td><td>34</td><td>21</td><td>27</td><td><b>19가 이미 제자리 → 교환 없음!</b></td></tr>
+      <tr><td>4단계</td><td style="background:var(--chip-bg)">2</td><td style="background:var(--chip-bg)">13</td><td style="background:var(--chip-bg)">19</td><td style="background:var(--good-soft);font-weight:700">21</td><td>34</td><td style="background:var(--warn-soft)">50</td><td>27</td><td>최솟값 21과 위치4(50) 교환</td></tr>
+      <tr><td>5단계</td><td style="background:var(--chip-bg)">2</td><td style="background:var(--chip-bg)">13</td><td style="background:var(--chip-bg)">19</td><td style="background:var(--chip-bg)">21</td><td style="background:var(--good-soft);font-weight:700">27</td><td>50</td><td style="background:var(--warn-soft)">34</td><td>최솟값 27과 위치5(34) 교환</td></tr>
+      <tr><td>6단계</td><td style="background:var(--chip-bg)">2</td><td style="background:var(--chip-bg)">13</td><td style="background:var(--chip-bg)">19</td><td style="background:var(--chip-bg)">21</td><td style="background:var(--chip-bg)">27</td><td style="background:var(--good-soft);font-weight:700">34</td><td style="background:var(--chip-bg)">50</td><td>최솟값 34와 위치6(50) 교환 → 완료</td></tr>
+    </table>
+    <div class="tip"><b>이 문제의 함정:</b> 3단계에서 배열이 <b>안 바뀐 것처럼 보여서</b> "어? 정렬이 멈췄나?" 하고 오답을 고르기 쉽다. 사실은 "남은 범위의 최솟값(19)이 이미 제자리에 있어서 교환할 필요가 없었을 뿐" — 선택 정렬은 매 단계 반드시 최솟값을 <b>찾기는</b> 하지만, 교환은 필요할 때만 일어난다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📥</span>삽입 정렬 — 실제 기출 예제 <span class="page-ref">📖 기출문제집 p.503</span></h2>
+    <p>배열 <b>[69, 30, 10, 2, 16, 8, 31, 22]</b>. 삽입 정렬은 배열을 <b>"정렬된 부분"</b>과 <b>"안 정렬된 부분"</b>으로 나누고, 안 정렬된 부분의 맨 앞 값을 정렬된 부분의 <b>알맞은 자리에 밀어 넣는다</b>.</p>
+    <table>
+      <tr><th>회전</th><th colspan="4" style="text-align:center">정렬된 부분</th><th colspan="4" style="text-align:center">안 정렬된 부분</th></tr>
+      <tr><td>초기</td><td style="background:var(--good-soft)">69</td><td></td><td></td><td></td><td>30</td><td>10</td><td>2</td><td>16 8 31 22</td></tr>
+      <tr><td>1회전</td><td style="background:var(--good-soft)">30</td><td style="background:var(--good-soft)">69</td><td></td><td></td><td>10</td><td>2</td><td>16</td><td>8 31 22</td></tr>
+      <tr><td>2회전</td><td style="background:var(--good-soft)">10</td><td style="background:var(--good-soft)">30</td><td style="background:var(--good-soft)">69</td><td></td><td>2</td><td>16</td><td>8</td><td>31 22</td></tr>
+      <tr><td>3회전</td><td style="background:var(--good-soft)">2</td><td style="background:var(--good-soft)">10</td><td style="background:var(--good-soft)">30</td><td style="background:var(--good-soft)">69</td><td>16</td><td>8</td><td>31</td><td>22</td></tr>
+      <tr><td><b>4회전</b></td><td style="background:var(--good-soft)">2</td><td style="background:var(--good-soft)">10</td><td style="background:var(--good-soft);font-weight:700">16</td><td style="background:var(--good-soft)">30</td><td style="background:var(--good-soft)">69</td><td>8</td><td>31</td><td>22</td></tr>
+    </table>
+    <ol class="steps">
+      <li>초기: 첫 원소 69는 "정렬된 부분"이 1개짜리라고 취급하고 시작</li>
+      <li>1회전: 30을 꺼내 정렬된 부분[69]과 비교 → 30&lt;69이므로 69 앞으로 삽입 → [30,69]</li>
+      <li>2회전: 10을 꺼내 [30,69]와 비교 → 10이 제일 작으므로 맨 앞 삽입 → [10,30,69]</li>
+      <li>3회전: 2를 꺼내 [10,30,69]와 비교 → 2가 제일 작으므로 맨 앞 삽입 → [2,10,30,69]</li>
+      <li>4회전: 16을 꺼내 [2,10,30,69]와 뒤에서부터 비교 → 69&gt;16(밀림), 30&gt;16(밀림), 10&lt;16(멈춤) → 10 뒤에 삽입 → <b>[2,10,16,30,69]</b></li>
+    </ol>
+    <div class="tip"><b>정답 확인:</b> 4회전 후 전체 배열 = <b>2, 10, 16, 30, 69, 8, 31, 22</b> (정렬된 부분 5개 + 아직 안 건드린 나머지 8,31,22 그대로)</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>주어진 "단계별 배열 변화"만 보고 <b>어떤 정렬인지 맞추는 문제</b> — 인접한 것끼리만 바뀌면 버블, 최솟값이 앞으로 튀면 선택, 뒤에서부터 하나씩 밀려나면 삽입</li>
+      <li>선택 정렬은 <b>이미 제자리인 값이면 교환 없이 넘어갈 수 있다</b> (교환 없다고 정렬 안 한 게 아님)</li>
+      <li>합병 정렬만 유일하게 <b>추가 메모리(임시 배열)가 필요</b>한 정렬</li>
+      <li>안정 정렬 여부: 버블·삽입·합병·기수 = 안정 / 선택·퀵·힙·셸 = 불안정</li>
+      <li>평균 시간복잡도 O(n log n) 그룹: <b>퀵·합병·힙</b> / O(n²) 그룹: 버블·선택·삽입</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>버블 정렬</th><th>선택 정렬</th><th>삽입 정렬</th></tr>
+      <tr><td>비교 대상</td><td>인접한 두 값</td><td>남은 범위 전체에서 최솟값</td><td>정렬된 부분과 비교하며 위치 탐색</td></tr>
+      <tr><td>교환 시점</td><td>비교할 때마다 (크면 즉시)</td><td>한 단계당 최대 1번</td><td>알맞은 자리 찾을 때까지 밀기</td></tr>
+      <tr><td>이미 정렬된 데이터</td><td>여전히 O(n²) (개선판은 O(n))</td><td>항상 O(n²)</td><td>매우 빠름 (O(n))</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">버블정렬</span>
+      <span class="chip">선택정렬</span>
+      <span class="chip">삽입정렬</span>
+      <span class="chip">퀵정렬</span>
+      <span class="chip">합병정렬</span>
+      <span class="chip">힙정렬</span>
+      <span class="chip">셸정렬</span>
+      <span class="chip">기수정렬</span>
+      <span class="chip">안정정렬</span>
+      <span class="chip">시간복잡도</span>
+      <span class="chip">패스(pass)</span>
+      <span class="chip">회전</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

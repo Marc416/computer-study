@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2023년 군무원 기출 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">군무원 기출문제</a> / 2023년</div>
+  <h1 class="page-title">2023년 군무원 - 컴퓨터일반</h1>
+  <p class="page-subtitle">25문항 · 기출문제집 p.835~846 · 주제별로 묶어서 복습</p>
+
+  <section class="block">
+    <h2><span class="emoji">🔧</span>컴퓨터구조</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q6. 부울 함수 f(x,y,z)=xyz+xy'z+x'yz+x'yz' 간소화 결과는?</p>
+      <p class="a">✅ 정답 ④ x'y + xz — xz(y+y') + x'y(z+z') = xz + x'y</p>
+      <p class="memo">💡 항을 잘 묶으면 <b>공통 인수 밖으로, (y+y')나 (z+z')는 1로</b> 소거되는 패턴 → <a href="../01_컴퓨터구조/부울대수와카르노맵.html">01_컴퓨터구조 · 부울대수와 카르노맵</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q7. 레지스터 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "Index Register가 절대 주소를 결정한다"가 틀림. 인덱스 레지스터는 <b>기준 주소로부터의 상대적 거리(오프셋)</b>를 담당</p>
+      <p class="memo">💡 배열 원소 접근처럼 <b>기준 주소 + 인덱스값</b>으로 유효주소를 계산할 때 쓰임 → <a href="../01_컴퓨터구조/CPU와명령어처리.html">01_컴퓨터구조 · CPU와 명령어처리</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q10. 가장 큰 용량을 표현하는 단위는?</p>
+      <p class="a">✅ 정답 ③ YB(2⁸⁰) — TB(2⁴⁰) &lt; EB(2⁶⁰) &lt; ZB(2⁷⁰) &lt; YB(2⁸⁰)</p>
+      <p class="memo">💡 <b>K→M→G→T→P→E→Z→Y</b> 순서로 10승씩 증가 (10, 20, 30...80) → <a href="../01_컴퓨터구조/컴퓨터시스템개요.html">01_컴퓨터구조 · 컴퓨터시스템개요</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q13. 펌웨어(firmware)에 대한 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "RAM에 저장"이 틀림. 펌웨어(BIOS 포함)는 <b>ROM에 저장</b>되는 마이크로프로그램</p>
+      <p class="memo">💡 펌웨어 = 소프트웨어를 하드웨어화한 것, <b>전원이 꺼져도 유지돼야 하므로 비휘발성 ROM</b>에 저장 → <a href="../01_컴퓨터구조/BIOS와정보처리시스템분류.html">01_컴퓨터구조 · BIOS와 정보처리시스템분류</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q19. 메모리 속도가 빠른 것부터 느린 순서로 나열한 것은?</p>
+      <p class="a">✅ 정답 ③ 레지스터 → CPU캐시 → 메인메모리 → SSD → HDD</p>
+      <p class="memo">💡 보조기억장치 중에서도 <b>SSD가 HDD보다 빠름</b> — 이 순서를 통째로 암기 → <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">01_컴퓨터구조 · 마이크로오퍼레이션과 기억장치</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q20. DRAM과 SRAM 비교 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "동일 크기일 때 DRAM이 SRAM보다 비싸다"가 틀림. <b>SRAM이 훨씬 비싸다</b> (구조가 복잡해서 집적도는 낮음)</p>
+      <p class="memo">💡 SRAM=빠름·비쌈·저집적, DRAM=느림·저렴·고집적 — 가격/속도가 <b>항상 반대로 짝지어짐</b> → <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">01_컴퓨터구조 · 마이크로오퍼레이션과 기억장치</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🖥️</span>운영체제</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q14. 가상기억장치(virtual memory) 특징 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ① — "목적이 처리 속도 향상"이 틀림. 실제 목적은 <b>메모리 용량 제약 해결과 다중 프로그래밍 실현</b>이며, 응답시간·반환시간은 오히려 향상되지 않는다</p>
+      <p class="memo">💡 가상메모리는 <b>이용률·처리율은 올리지만 속도 자체를 빠르게 하진 않는다</b> — 매년 나오는 함정 → <a href="../02_운영체제/가상메모리.html">02_운영체제 · 가상메모리</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q21. 하드웨어를 제어하고 자원을 배분·관리하는 운영체제 핵심 모듈은?</p>
+      <p class="a">✅ 정답 ④ 커널(Kernel) — 셸은 사용자 인터페이스 담당, BIOS는 부팅 초기화용</p>
+      <p class="memo">💡 "메모리 상주 + 자원관리 + 스케줄링"이라는 표현이 나오면 무조건 <b>커널</b> → <a href="../02_운영체제/운영체제정의.html">02_운영체제 · 운영체제 정의</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>네트워크 / 정보보안</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q3. OSI 참조모델 계층-프로토콜 연결 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "데이터링크 계층 - UDP"가 틀림. UDP는 <b>전송 계층</b> 프로토콜</p>
+      <p class="memo">💡 데이터링크 계층엔 프로토콜보다는 <b>MAC/이더넷/HDLC</b> 등이 온다 — UDP·TCP는 무조건 전송계층 → <a href="../03_네트워크/OSI7계층.html">03_네트워크 · OSI 7계층</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q11. 웹서버-브라우저 간 하이퍼텍스트 문서 전송 통신규약은?</p>
+      <p class="a">✅ 정답 ④ HTTP</p>
+      <p class="memo">💡 FTP=파일전송, SMTP=메일발송, HTTP=웹문서 — <b>용도별 프로토콜 짝짓기</b>는 매번 나오는 유형 → <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">03_네트워크 · TCP/IP 응용·전송계층</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q23. 2개 이상 LAN을 연결하고 트래픽을 필터링하는 장비는?</p>
+      <p class="a">✅ 정답 ② 브리지(Bridge) — 데이터링크 계층에서 MAC 주소 기반으로 필터링</p>
+      <p class="memo">💡 리피터=단순 신호증폭(필터링 X), 브리지=필터링 O, 라우터=계층이 다름(3계층) → <a href="../03_네트워크/인터네트워킹장비.html">03_네트워크 · 인터네트워킹 장비</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q24. 점대점 신뢰통신과 종단간 신뢰통신을 보장하는 계층은?</p>
+      <p class="a">✅ 정답 ② (1)링크 계층 (2)전송 계층 — Point-to-Point는 데이터링크, End-to-End는 전송계층</p>
+      <p class="memo">💡 "구간(hop)별 신뢰성"=데이터링크, "출발지~목적지 전체 신뢰성"=전송계층으로 구분 → <a href="../03_네트워크/OSI7계층.html">03_네트워크 · OSI 7계층</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q25. 공격과 방어 기술이 잘못 짝지어진 것은?</p>
+      <p class="a">✅ 정답 ① — "불법적 가로채기 - 우회경로 기술"이 틀림. 가로채기 방어는 <b>암호화 기술</b></p>
+      <p class="memo">💡 위장=인증, 변조=해시함수, 부인=디지털서명, <b>가로채기=암호화</b> — 4개 세트로 암기 → <a href="../06_정보보안/index.html">06_정보보안</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗄️</span>데이터베이스</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q2. DBMS의 필수 기능이 아닌 것은?</p>
+      <p class="a">✅ 정답 ③ — "사용자 통제 및 보안 기능"은 DBMS 3대 필수기능(정의/조작/제어)에 포함 안 됨(제어기능의 일부로 오인하기 쉬움)</p>
+      <p class="memo">💡 DBMS 3대 기능은 <b>정의·조작·제어</b> — 세부적으로 나열된 보기 중 이 틀에서 벗어난 것을 찾는 유형 → <a href="../04_데이터베이스/index.html">04_데이터베이스</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌲</span>자료구조 / 알고리즘</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q5. 전위 순회 결과가 A B D E H C F G일 때 중위 순회 결과는?</p>
+      <p class="a">✅ 정답 ③ D B H E A F C G — 전위 순회의 첫 노드(A)가 루트, 중위 순회에서는 루트가 중간에 위치</p>
+      <p class="memo">💡 전위=루트가 맨 앞, 중위=루트가 중간, 후위=루트가 맨 뒤 — <b>루트 위치만 봐도 순회 종류 구분 가능</b> → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q8. [7,6,3,9,4]를 삽입정렬로 오름차순 정렬할 때 2회전 후 결과는?</p>
+      <p class="a">✅ 정답 ① 3,6,7 | 9,4 — 1회전에서 6,7 정렬, 2회전에서 3을 앞으로 삽입</p>
+      <p class="memo">💡 삽입정렬은 <b>정렬된 부분에 새 값을 알맞은 위치로 밀어넣는</b> 방식 — 한 번에 한 칸씩만 정렬영역이 늘어남 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🐍</span>프로그래밍 언어</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q4. 유사 객체들을 묶어 공통 특성을 만드는 객체의 타입은?</p>
+      <p class="a">✅ 정답 ④ 클래스(Class) — 같은 속성·메소드를 정의하는 템플릿</p>
+      <p class="memo">💡 클래스=설계도(템플릿), 인스턴스=그 설계도로 찍어낸 실제 객체 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q15. Java 배열/스트림/리스트 코드 실행 결과는?</p>
+      <p class="a">✅ 정답 ② Result1: 21, Result2: 20 — arr1(2배씩 증가), arr2(4배씩 증가)를 합친 뒤 정렬·중복제거한 리스트 크기와 특정 인덱스 값의 합</p>
+      <p class="memo">💡 이런 문제는 <b>배열값을 직접 나열해보고, 정렬·중복제거를 손으로 시뮬레이션</b>하는 게 제일 빠름 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q16. C 포인터(strstr, strncpy) 사용 코드의 출력 결과는?</p>
+      <p class="a">✅ 정답 ③ pd: PP1 / pc: 22K771 / pb: 771 — strstr로 부분 문자열 위치를 찾고 strncpy로 그 위치부터 덮어쓴 뒤, 포인터가 공유하는 메모리이므로 pb도 함께 바뀜</p>
+      <p class="memo">💡 <b>pa,pb,pc,pd가 전부 같은 배열을 가리키는 포인터</b>라 한 곳을 수정하면 나머지 포인터로 읽은 값도 바뀐다 → <a href="../08_프로그래밍언어/C언어_포인터.md">08_프로그래밍언어 · C언어 포인터</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q22. (가)(나)에 들어갈 프로그래밍 패러다임 용어는?</p>
+      <p class="a">✅ 정답 ① (가)절차지향언어 (나)객체지향언어 — 함수로 나눠 해결 vs 객체 간 메시지 교환으로 해결</p>
+      <p class="memo">💡 "함수 단위 분해"=절차지향, "객체 간 메시지 전달"=객체지향 — 정의 문장으로 패러다임 구분하는 유형 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🆕</span>신기술 / 소프트웨어공학</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q1. 서버·스토리지·네트워크를 가상화해 필요시 자원을 제공하는 클라우드 서비스는?</p>
+      <p class="a">✅ 정답 ③ IaaS(Infrastructure as a Service) — 인프라 자체를 서비스로 제공</p>
+      <p class="memo">💡 SaaS=완성된 SW, PaaS=개발 플랫폼, <b>IaaS=서버/네트워크 등 인프라</b> — 계층이 낮을수록 사용자가 더 많이 관리해야 함</p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q9. 문제에서 중요하지 않은 부분을 제거하고 핵심만 남기는 컴퓨팅 사고 구성요소는?</p>
+      <p class="a">✅ 정답 ④ 추상화 — 세부사항을 생략하고 핵심 규칙만 추출</p>
+      <p class="memo">💡 컴퓨팅 사고 4요소: <b>분해(쪼개기) - 패턴인식(공통점 찾기) - 추상화(핵심만 남기기) - 알고리즘(절차 구축)</b></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q12. 프로그래밍 언어를 흉내 낸 일반 언어 형태의 알고리즘 표현 방법은?</p>
+      <p class="a">✅ 정답 ① 의사코드(Pseudo Code) — 특정 언어에 종속되지 않고 사람이 이해하기 쉽게 표현</p>
+      <p class="memo">💡 순서도=그림, 자연어=완전한 문장, <b>의사코드=그 중간(구조는 코드, 표현은 자연어)</b> → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q17. 문자/음성으로 질문하면 답을 주는 AI 기반 소프트웨어는?</p>
+      <p class="a">✅ 정답 ① 챗봇(ChatBot) — NLP로 대화를 시뮬레이션</p>
+      <p class="memo">💡 메타버스=가상공간, IoT=사물인터넷, OTT=동영상 스트리밍 — <b>용어 정의를 정확히 구분</b></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q18. AI 기술과 가장 관계가 없는 것은?</p>
+      <p class="a">✅ 정답 ④ 증강현실(AR) — AR은 AI가 아니라 가상현실(VR)에서 파생된 기술</p>
+      <p class="memo">💡 자연어처리·음성인식·영상인식은 <b>AI의 하위 분야</b>, AR/VR은 <b>별개의 기술 계통</b></p>
+    </div>
+  </section>
+</div>
+</body>
+</html>

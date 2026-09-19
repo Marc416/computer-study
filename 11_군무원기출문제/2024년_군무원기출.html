@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2024년 군무원 기출 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">군무원 기출문제</a> / 2024년</div>
+  <h1 class="page-title">2024년 군무원 - 컴퓨터일반</h1>
+  <p class="page-subtitle">25문항 · 기출문제집 p.824~834 · 주제별로 묶어서 복습</p>
+
+  <section class="block">
+    <h2><span class="emoji">🖥️</span>운영체제</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q1. 프로세스 스케줄링 방법 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — FCFS는 "평균 대기시간 최적화"가 아니다. 먼저 온 프로세스 실행시간이 길면 뒤 프로세스가 오래 기다림(호위효과)</p>
+      <p class="memo">💡 평균 대기시간을 <b>최적화하는 건 SJF</b> — FCFS는 그냥 "온 순서대로"일 뿐 최적화 개념이 없음 → <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q6. chmod 640 sample 명령어 설명 중 옳은 것은?</p>
+      <p class="a">✅ 정답 ③ — 그룹에 속한 사용자는 읽기(4)만 가능 (6=rw-, 4=r--, 0=---)</p>
+      <p class="memo">💡 8진수 한 자리 = r(4)+w(2)+x(1) 조합, 소유자/그룹/나머지 순서 — <b>chmod 계산은 반드시 3자리를 각각 분해</b> → <a href="../02_운영체제/운영체제실무.html">02_운영체제 · 운영체제 실무</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q13. 도착시간·실행시간이 주어진 4개 프로세스를 선점형 SJF로 스케줄링할 때 평균 반환시간은?</p>
+      <p class="a">✅ 정답 ① 6.25 — (16+3+2+4)/4 = 6.25초. 새 프로세스 도착마다 실행시간을 비교해 더 짧은 쪽으로 즉시 교체하는 게 핵심</p>
+      <p class="memo">💡 선점형 SJF는 <b>매 도착 시점마다 "지금 남은 시간 vs 새로 온 프로세스 시간"을 비교</b>해서 다시 스케줄링 → <a href="../02_운영체제/프로세스스케줄링.html">02_운영체제 · 프로세스 스케줄링</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q14. 외부 단편화가 없고 순차·직접 접근이 모두 가능한 디스크 할당 방식은?</p>
+      <p class="a">✅ 정답 ④ 색인(index) 할당 — 연결 할당도 외부단편화는 없지만 직접접근이 안 됨</p>
+      <p class="memo">💡 "외부단편화 없음"만 보면 연결/색인 둘 다 후보, <b>"직접 접근 가능"까지 봐야 색인 할당</b>으로 좁혀짐 → <a href="../02_운영체제/디스크스케줄링과할당기법.html">02_운영체제 · 디스크 스케줄링과 할당기법</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q15. 64비트 컴퓨터, 페이지 크기 4096B일 때 페이지번호·오프셋 비트 수는?</p>
+      <p class="a">✅ 정답 ④ 52, 12 — 오프셋=log₂(4096)=12비트, 페이지번호=64−12=52비트</p>
+      <p class="memo">💡 <b>페이지 크기가 오프셋 비트 수를 결정</b>하고, 전체 주소비트에서 오프셋을 뺀 나머지가 페이지번호 비트 → <a href="../02_운영체제/가상메모리.html">02_운영체제 · 가상메모리</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>네트워크 / 정보보안</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q2. 2.4GHz와 5GHz를 모두 지원하는 무선 규격은?</p>
+      <p class="a">✅ 정답 ③ 802.11n — a는 5GHz만, g는 2.4GHz만, ac는 5GHz만</p>
+      <p class="memo">💡 802.11 규격별 대역폭 암기: <b>n만 듀얼밴드(2.4+5GHz)</b> 지원 → <a href="../03_네트워크/index.html">03_네트워크</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q3. 암호화 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ③ — "공개키 암호화는 개인키로 원문 복호화가 불가능하다"가 틀림 → 실제로는 <b>개인키로 복호화 가능</b></p>
+      <p class="memo">💡 공개키 암호화: <b>공개키로 암호화 → 개인키로 복호화</b>가 정석 흐름 → <a href="../06_정보보안/index.html">06_정보보안 · 암호화</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q7. TCP/IP 통신 방식 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ④ — "IP가 TCP보다 상위 계층"이라는 설명이 틀림. <b>IP(인터넷 계층)는 TCP(전송 계층)보다 하위</b></p>
+      <p class="memo">💡 계층 순서(위→아래): 응용 - 전송(TCP/UDP) - 인터넷(IP) - 네트워크접근 → <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">03_네트워크 · TCP/IP 응용·전송계층</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q16. HDLC(데이터링크 계층 프로토콜) 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ① — HDLC는 바이트 단위가 아니라 <b>비트(블록) 단위</b>로 전송하는 동기 방식</p>
+      <p class="memo">💡 바이트 단위 동기 방식은 BSC 같은 다른 프로토콜 — HDLC의 정체성은 <b>비트 지향</b> → <a href="../03_네트워크/데이터링크제어와흐름제어.html">03_네트워크 · 데이터링크제어와 흐름제어</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q17. 다중화(Multiplexing) 방식 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ③ — "ATDM(비동기 시분할)에서 시간 슬롯 낭비 발생"이 틀림. 그 현상은 <b>STDM(동기 시분할)</b>에서 생김</p>
+      <p class="memo">💡 STDM=고정 슬롯 할당(낭비 O), ATDM=필요한 채널에만 동적 할당(낭비 X) — 이름이 비슷해서 자주 뒤바뀜 → <a href="../03_네트워크/index.html">03_네트워크</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔧</span>컴퓨터구조</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q5. EPROM에 대한 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "데이터 갱신 횟수에 제한이 없다"가 틀림. EPROM도 <b>갱신 횟수 제한이 있다</b></p>
+      <p class="memo">💡 EPROM은 자외선으로 지우고 다시 쓸 수 있지만 <b>무한정 반복은 불가능</b> → <a href="../01_컴퓨터구조/마이크로오퍼레이션과기억장치.html">01_컴퓨터구조 · 마이크로오퍼레이션과 기억장치</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q9. 문자 인코딩 방법 설명 중 옳은 것은?</p>
+      <p class="a">✅ 정답 ④ — 유니코드는 16비트로 2¹⁶(65,536)개 문자 표현 가능</p>
+      <p class="memo">💡 비트 수 암기: <b>ASCII 7비트, EBCDIC 8비트, BCD 6비트, 유니코드 16비트</b> — 서로 바꿔 내는 게 단골 함정 → <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터표현과 진법</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q10. 논리회로(반가산기/멀티플렉서/플립플롭) 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ③ — "T 플립플롭은 입력이 0이면 반전"이 틀림. <b>입력이 1일 때 반전</b>, 0이면 이전 상태 유지</p>
+      <p class="memo">💡 T=Toggle, T=1이면 매번 뒤집힘 — <b>0과 1의 동작이 반대로 나오면 오답</b> → <a href="../01_컴퓨터구조/논리회로.html">01_컴퓨터구조 · 논리회로</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q11. 캐시 메모리로 사용되는 것은?</p>
+      <p class="a">✅ 정답 ① SRAM — DRAM은 주기억장치용</p>
+      <p class="memo">💡 "빠르지만 비싼 SRAM=캐시", "느리지만 저렴한 DRAM=주기억장치" → <a href="../01_컴퓨터구조/캐시기억장치.md">01_컴퓨터구조 · 캐시기억장치</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q23. 2진수 10101001.11000011을 16진수로 변환하면?</p>
+      <p class="a">✅ 정답 ② A9.C3 — 4비트씩 묶기: 1010=A, 1001=9, 1100=C, 0011=3</p>
+      <p class="memo">💡 2진→16진 변환은 <b>소수점 기준으로 좌우 양쪽에서 4비트씩</b> 끊어서 각각 16진수로 변환 → <a href="../01_컴퓨터구조/데이터표현과진법.html">01_컴퓨터구조 · 데이터표현과 진법</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗄️</span>데이터베이스 / 자료구조 / 소프트웨어공학</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q8. 애트리뷰트가 가질 수 있는 값의 범위를 정의하는 개념은?</p>
+      <p class="a">✅ 정답 ② 도메인(Domain) — 하나의 애트리뷰트가 취할 수 있는 원자값들의 집합</p>
+      <p class="memo">💡 값의 <b>제약조건(무엇이 유효한 값인가)</b>을 묻는 문제엔 도메인 → <a href="../04_데이터베이스/index.html">04_데이터베이스</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q22. SQL 뷰(View)에 대한 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ④ — "기본 테이블이 변경돼도 뷰는 변경 안 된다"가 틀림. 기본 테이블이 바뀌면 <b>뷰도 자동으로 영향받는다</b></p>
+      <p class="memo">💡 뷰는 <b>가상 테이블</b>(실제 데이터를 저장하지 않고 질의만 저장) — 원본이 바뀌면 뷰 결과도 그대로 바뀜 → <a href="../04_데이터베이스/뷰(View).md">04_데이터베이스 · 뷰(View)</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q18. 중위 표기식 "100 − 20 * 5 + 2"를 후위 표기법으로 바꾸면?</p>
+      <p class="a">✅ 정답 ③ 100 20 5 * − 2 + — 연산자 우선순위(* 먼저)대로 안쪽부터 후위로 변환</p>
+      <p class="memo">💡 후위표기 변환은 <b>우선순위 높은 연산부터 괄호치듯 묶어서 안→밖으로</b> 변환 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q19. UML 다이어그램 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "State 다이어그램이 객체 간 메시지를 시간 흐름으로 표현"은 틀림. 그건 <b>Sequence 다이어그램</b> 설명. State는 <b>객체 하나의 내부 상태 변화</b>를 표현</p>
+      <p class="memo">💡 "여러 객체 간 순서"=Sequence, "객체 하나의 상태 변화"=State — 이름이 비슷한 다이어그램끼리 설명이 자주 뒤바뀜 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q20. 이진 트리 성질 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ③ — "n개 노드의 깊이는 최대 n−1"이 틀림. 한 줄로 쭉 이어진 트리(사향 트리)면 <b>깊이가 최대 n</b></p>
+      <p class="memo">💡 n개의 노드는 항상 <b>n−1개의 간선</b>을 갖지만, 깊이는 트리 모양에 따라 1(균형)~n(사향)까지 다양 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q21. 빅오 표기법 실행시간 크기 비교로 옳은 것은?</p>
+      <p class="a">✅ 정답 ① O(1) &lt; O(log n) &lt; O(n) &lt; O(n²) &lt; O(2ⁿ)</p>
+      <p class="memo">💡 순서 암기: <b>상수 &lt; 로그 &lt; 선형 &lt; 다항(n²) &lt; 지수(2ⁿ)</b> — 지수함수가 항상 최악 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q24. 응집도(Cohesion)/결합도(Coupling) 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — 응집도는 "모듈 간"이 아니라 <b>모듈 내부 요소들 사이</b>의 연관 정도를 뜻함 (모듈 간 얘기는 결합도)</p>
+      <p class="memo">💡 <b>"응집도=모듈 안, 결합도=모듈 사이"</b> — 이 둘을 헷갈리면 문장이 통째로 틀려짐 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🐍</span>프로그래밍 언어</h2>
+    <div class="wrong-card">
+      <p class="q">🧮 Q12. 파이썬 try/except/else/finally 실행 결과는?</p>
+      <p class="a">✅ 정답 ① 값 에러 / 마칩니다. — "89점"은 int()로 변환 불가 → ValueError 발생 → except 블록 실행 → finally는 항상 실행</p>
+      <p class="memo">💡 <b>finally는 예외 발생 여부와 상관없이 항상 실행</b>된다는 것이 핵심 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">🧮 Q25. 선택 정렬(selection sort) C코드 빈칸에 들어갈 코드는?</p>
+      <p class="a">✅ 정답 ④ — <code>for(j=i; j&lt;5; j++) if(arr[j]&lt;arr[min]) min=j;</code></p>
+      <p class="memo">💡 선택정렬은 <b>남은 범위(j=i부터)에서 최솟값의 인덱스</b>를 찾아 현재 위치와 교환 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🆕</span>신기술</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q4. 하이퍼바이저/KVM 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ② — "KVM의 게스트 OS는 리눅스로 제한"이 틀림. <b>게스트 OS 종류에 제한 없음</b>(Windows 등도 가능)</p>
+      <p class="memo">💡 하이퍼바이저는 가상머신을 동작시키는 기반 SW, KVM은 리눅스 커널에 통합됐을 뿐 <b>게스트까지 리눅스로 제한하지는 않음</b></p>
+    </div>
+  </section>
+</div>
+</body>
+</html>

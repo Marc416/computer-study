@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다중화 방식과 데이터 교환 방식 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">03. 네트워크</a> / 다중화 방식과 데이터 교환 방식</div>
+  <h1 class="page-title">다중화 방식과 데이터 교환 방식</h1>
+  <p class="page-subtitle">FDM·TDM·CDMA, 회선교환·메시지교환·패킷교환 · PART 03. 데이터통신론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>다중화(Multiplexing)</b>는 "하나의 회선을 여러 사람이 나눠 쓰는 방법", <b>교환 방식</b>은 "데이터가 목적지까지 가는 경로를 잡는 방법"이다.</p>
+    <p>다중화는 주파수로 나누면 <b>FDM</b>, 시간으로 나누면 <b>TDM</b>, 코드로 나누면 <b>CDMA</b>다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>다중화(Multiplexing) 방식 <span class="page-ref">📖 기출문제집 p.289</span></h3>
+    <p>전용회선 하나를 사람마다 새로 깔면 비용이 어마어마하다. <b>다중화</b>는 하나의 물리적 회선을 여러 채널로 "쪼개서" 동시에 여러 명이 쓰게 하는 기술이다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="FDM은 하나의 회선 대역폭을 여러 주파수 채널로 나누고, TDM은 하나의 회선을 시간 슬롯으로 나누어 여러 사용자가 공유하는 모습을 비교하는 다이어그램">
+        <text x="175" y="20" font-size="13" text-anchor="middle" font-weight="700">FDM (주파수분할)</text>
+        <rect x="40" y="35" width="270" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="60" y="55" font-size="10">A</text>
+        <line x1="80" y1="35" x2="80" y2="65" stroke="currentColor" stroke-dasharray="2,2" opacity="0.6"/>
+        <text x="110" y="55" font-size="10">보호대역</text>
+        <line x1="150" y1="35" x2="150" y2="65" stroke="currentColor" stroke-dasharray="2,2" opacity="0.6"/>
+        <text x="170" y="55" font-size="10">B</text>
+        <line x1="220" y1="35" x2="220" y2="65" stroke="currentColor" stroke-dasharray="2,2" opacity="0.6"/>
+        <text x="250" y="55" font-size="10">C</text>
+        <text x="175" y="90" font-size="10.5" text-anchor="middle" opacity="0.75">대역폭을 여러 주파수 채널로 "동시에" 분할</text>
+        <text x="175" y="106" font-size="10" text-anchor="middle" opacity="0.6">채널 간섭 방지용 보호대역(guard band) 필요</text>
+
+        <text x="530" y="20" font-size="13" text-anchor="middle" font-weight="700">TDM (시분할)</text>
+        <rect x="400" y="35" width="270" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="445" y1="35" x2="445" y2="65" stroke="currentColor"/>
+        <line x1="490" y1="35" x2="490" y2="65" stroke="currentColor"/>
+        <line x1="535" y1="35" x2="535" y2="65" stroke="currentColor"/>
+        <line x1="580" y1="35" x2="580" y2="65" stroke="currentColor"/>
+        <line x1="625" y1="35" x2="625" y2="65" stroke="currentColor"/>
+        <text x="422" y="55" font-size="10" text-anchor="middle">A</text>
+        <text x="467" y="55" font-size="10" text-anchor="middle">B</text>
+        <text x="512" y="55" font-size="10" text-anchor="middle">C</text>
+        <text x="557" y="55" font-size="10" text-anchor="middle">A</text>
+        <text x="602" y="55" font-size="10" text-anchor="middle">B</text>
+        <text x="530" y="90" font-size="10.5" text-anchor="middle" opacity="0.75">같은 회선을 "시간을 잘게 쪼개" 돌아가며 사용</text>
+        <text x="530" y="106" font-size="10" text-anchor="middle" opacity="0.6">동기식(무조건 할당) / 비동기식(필요할 때만 할당)</text>
+
+        <text x="350" y="150" font-size="12" text-anchor="middle" font-weight="700">CDMA (코드분할)</text>
+        <text x="350" y="175" font-size="10.5" text-anchor="middle" opacity="0.8">FDM+TDM 혼합. 같은 시간·주파수를 쓰되 사용자마다 다른 "코드"로 신호를 구분</text>
+        <text x="350" y="192" font-size="10.5" text-anchor="middle" opacity="0.8">대역확산(Spread Spectrum) 기법 사용 → 압축·에러복구에 유리해 디지털 이동통신에서 널리 사용</text>
+      </svg>
+      <figcaption>FDM은 "공간(주파수)"을 나누고, TDM은 "시간"을 나눈다 — 다중화 방식을 구분하는 가장 쉬운 기준.</figcaption>
+    </figure>
+    <table>
+      <tr><th>방식</th><th>분할 기준</th><th>특징</th></tr>
+      <tr><td>FDM (Frequency Division)</td><td>주파수</td><td>채널 간 <b>보호대역(guard band)</b> 필요, 여러 채널 동시 전송</td></tr>
+      <tr><td>TDM (Time Division)</td><td>시간</td><td><b>동기식(STDM)</b>: 데이터 없어도 슬롯 할당(낭비) / <b>비동기식(ATDM)</b>: 필요할 때만 할당(효율적)</td></tr>
+      <tr><td>CDMA (Code Division)</td><td>코드</td><td>FDM+TDM 혼합, 대역확산 사용, 압축·에러복구 용이</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "TDMA는 대역확산 기법을 사용한다" → ❌ 대역확산은 <b>CDMA</b>의 특징이다. TDMA는 시간을 슬롯으로 나눌 뿐이다.</div>
+
+    <h3>데이터 교환 방식 <span class="page-ref">📖 기출문제집 p.290~291</span></h3>
+    <p>다중화가 "회선을 나눠쓰는 법"이라면, 교환 방식은 "내 데이터가 목적지까지 <b>어떤 경로로</b> 가는가"의 문제다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 260" role="img" aria-label="회선교환은 통신 전 전용 경로를 미리 설정하고, 패킷교환은 데이터를 패킷으로 쪼개 각기 다른 경로로 보낼 수 있는 차이를 보여주는 다이어그램">
+        <text x="180" y="20" font-size="13" text-anchor="middle" font-weight="700">회선교환 (Circuit Switching)</text>
+        <circle cx="40" cy="70" r="14" fill="none" stroke="currentColor"/>
+        <text x="40" y="74" font-size="10" text-anchor="middle">송신</text>
+        <rect x="90" y="60" width="30" height="20" fill="none" stroke="currentColor"/>
+        <rect x="160" y="60" width="30" height="20" fill="none" stroke="currentColor"/>
+        <circle cx="280" cy="70" r="14" fill="none" stroke="currentColor"/>
+        <text x="280" y="74" font-size="10" text-anchor="middle">수신</text>
+        <line x1="54" y1="70" x2="90" y2="70" stroke="currentColor" stroke-width="2.5"/>
+        <line x1="120" y1="70" x2="160" y2="70" stroke="currentColor" stroke-width="2.5"/>
+        <line x1="190" y1="70" x2="266" y2="70" stroke="currentColor" stroke-width="2.5"/>
+        <text x="160" y="110" font-size="10.5" text-anchor="middle" opacity="0.75">통신 전 <b>전용 경로</b>를 미리 설정, 통화 내내 독점</text>
+        <text x="160" y="126" font-size="10" text-anchor="middle" opacity="0.6">전송 지연 적음, 예: 전화망</text>
+
+        <text x="540" y="20" font-size="13" text-anchor="middle" font-weight="700">패킷교환 (Packet Switching)</text>
+        <circle cx="400" cy="70" r="14" fill="none" stroke="currentColor"/>
+        <text x="400" y="74" font-size="10" text-anchor="middle">송신</text>
+        <rect x="450" y="45" width="26" height="18" fill="none" stroke="currentColor"/>
+        <rect x="450" y="90" width="26" height="18" fill="none" stroke="currentColor"/>
+        <rect x="520" y="45" width="26" height="18" fill="none" stroke="currentColor"/>
+        <rect x="520" y="90" width="26" height="18" fill="none" stroke="currentColor"/>
+        <circle cx="600" cy="70" r="14" fill="none" stroke="currentColor"/>
+        <text x="600" y="74" font-size="10" text-anchor="middle">수신</text>
+        <line x1="414" y1="65" x2="450" y2="54" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="414" y1="75" x2="450" y2="99" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="476" y1="54" x2="520" y2="54" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="476" y1="99" x2="520" y2="99" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="546" y1="54" x2="586" y2="65" stroke="currentColor" stroke-width="1.2"/>
+        <line x1="546" y1="99" x2="586" y2="75" stroke="currentColor" stroke-width="1.2"/>
+        <text x="500" y="140" font-size="10.5" text-anchor="middle" opacity="0.75">데이터를 <b>패킷</b>으로 쪼개 각자 다른 경로로 전송, 목적지에서 재조립</text>
+        <text x="500" y="156" font-size="10" text-anchor="middle" opacity="0.6">회선 공유로 효율적, 예: 인터넷</text>
+      </svg>
+      <figcaption>회선교환은 "길을 통째로 예약", 패킷교환은 "짐을 나눠서 각자 갈 수 있는 길로 보냄" — 회선 독점 여부가 핵심 차이.</figcaption>
+    </figure>
+    <table>
+      <tr><th>구분</th><th>회선교환</th><th>메시지교환</th><th>패킷교환</th></tr>
+      <tr><td>연결 방식</td><td>통신 전 전용 경로 설정</td><td>경로 설정 없이 저장 후 전달</td><td>패킷 단위로 저장 후 전달</td></tr>
+      <tr><td>회선 점유</td><td>독점 (연결 내내)</td><td>공유</td><td>공유</td></tr>
+      <tr><td>전송 지연</td><td>적음</td><td>많음(전체 메시지 저장 후 전달)</td><td>중간(패킷 단위라 상대적으로 적음)</td></tr>
+      <tr><td>적합한 통신</td><td>실시간(음성·영상)</td><td>비실시간 대용량</td><td>대화형 데이터통신</td></tr>
+      <tr><td>대표 예</td><td>전화망</td><td>이메일(구형 방식)</td><td>인터넷</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "회선교환이 패킷교환보다 더 많은 동시 접속자를 수용한다" → ❌ 틀림. 회선을 <b>독점</b>하는 회선교환은 오히려 동시 접속자 수가 <b>적다</b>. 회선을 나눠 쓰는 패킷교환이 더 많은 사용자를 수용한다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>FDM=주파수 분할, TDM=시간 분할, CDMA=코드 분할(대역확산) — 분할 기준으로 구분</li>
+      <li>동기식 TDM(STDM)은 슬롯 낭비, 비동기식 TDM(ATDM)은 필요한 채널에만 할당해 효율적</li>
+      <li>회선교환=경로 독점·저지연·실시간용, 패킷교환=경로 공유·효율적·인터넷용</li>
+      <li>"더 많은 동시 접속자 수용" → 회선을 공유하는 <b>패킷교환</b>이 정답</li>
+      <li>패킷교환은 <b>데이터그램 방식</b>과 <b>가상회선 방식</b>으로 다시 나뉜다는 점 기억</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>FDM</th><th>TDM</th><th>CDMA</th></tr>
+      <tr><td>분할 기준</td><td>주파수</td><td>시간</td><td>코드</td></tr>
+      <tr><td>동시 전송</td><td>가능 (채널별 동시)</td><td>순서대로 돌아가며</td><td>같은 시간·주파수를 코드로 구분</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>회선교환</th><th>패킷교환</th></tr>
+      <tr><td>경로</td><td>고정(독점)</td><td>가변(공유)</td></tr>
+      <tr><td>동시 사용자 수</td><td>적음</td><td>많음</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">FDM</span>
+      <span class="chip">TDM</span>
+      <span class="chip">CDMA</span>
+      <span class="chip">대역확산</span>
+      <span class="chip">보호대역</span>
+      <span class="chip">STDM</span>
+      <span class="chip">ATDM</span>
+      <span class="chip">회선교환</span>
+      <span class="chip">메시지교환</span>
+      <span class="chip">패킷교환</span>
+      <span class="chip">데이터그램</span>
+      <span class="chip">가상회선</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025년 군무원 기출 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">군무원 기출문제</a> / 2025년</div>
+  <h1 class="page-title">2025년 군무원 - 컴퓨터일반</h1>
+  <p class="page-subtitle">25문항 · 기출문제집 p.813~823 · 주제별로 묶어서 복습</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>이미 각 폴더에서 배운 개념이 실전에서 <b>어떻게 변형되어 나오는지</b> 확인하는 문제 세트. 헷갈렸던 문제는 관련 문서 링크를 눌러 원래 개념부터 다시 보자.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💻</span>컴퓨터구조 / 프로그래밍언어</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q1. 유니코드(Unicode)에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ④ — 아스키의 한계를 극복하기 위해 16비트 이상으로 전 세계 문자를 통합 표현하는 코드체계</p>
+      <p class="memo">💡 "언어별로 독립적인 코드체계 유지"는 <b>EUC-KR 같은 지역 코드</b> 이야기 — 유니코드는 정반대로 전 세계를 <b>하나의 코드표로 통합</b>하는 게 목적</p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q2. 파이썬 for/range 반복문 실행 결과는?</p>
+      <p class="a">✅ 정답 ① Result: 40 — range(1,20,3)로 a=1,4,7,10,13,16,19를 돌며 b에 누적, b&gt;15에서 break</p>
+      <p class="memo">💡 <b>range(시작,끝,증가폭)</b>은 끝 값을 포함하지 않는다는 것과 break 시점의 b값 추적이 핵심 → <a href="../08_프로그래밍언어/index.html">08_프로그래밍언어</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q14. 인터럽트에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ③ — 일반적으로 <b>외부 인터럽트가 내부 인터럽트보다 우선순위가 높다</b></p>
+      <p class="memo">💡 하드웨어 인터럽트 &gt; 소프트웨어 인터럽트, Daisy Chain은 <b>하드웨어적</b> 우선순위 판별 방식 → <a href="../01_컴퓨터구조/명령어와인터럽트.html">01_컴퓨터구조 · 명령어와 인터럽트</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q15. 부울식 xy + xy' + x'z + x'z' 를 최소화하면?</p>
+      <p class="a">✅ 정답 ④ 1 — x(y+y') + x'(z+z') = x + x' = 1 (여인법칙 y+y'=1 두 번 적용)</p>
+      <p class="memo">💡 "A + A' = 1" 패턴이 두 군데서 동시에 보이면 답은 그냥 <b>1</b> → <a href="../01_컴퓨터구조/부울대수와카르노맵.html">01_컴퓨터구조 · 부울대수와 카르노맵</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q21. C 포인터 연산(*ptr += 1) 결과는?</p>
+      <p class="a">✅ 정답 ④ 10, 10 — ptr이 x를 가리키므로 *ptr+=1은 x 자체를 9→10으로 바꾼다. *ptr과 x는 <b>같은 메모리를 가리키므로 둘 다 10</b>으로 출력</p>
+      <p class="memo">💡 포인터가 가리키는 주소를 통해 값을 바꾸면 <b>원본 변수도 함께 바뀐다</b>는 것이 핵심 → <a href="../08_프로그래밍언어/C언어_포인터.md">08_프로그래밍언어 · C언어 포인터</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🖥️</span>운영체제</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q7. 운영체제의 역할이 아닌 것은?</p>
+      <p class="a">✅ 정답 ③ — "원시 프로그램을 번역하는 것"은 운영체제가 아니라 <b>언어 번역 프로그램(컴파일러)</b>의 역할</p>
+      <p class="memo">💡 자원 할당·실행환경 제공·오류 감지는 OS, <b>번역은 OS 밖의 별도 시스템 소프트웨어</b> → <a href="../02_운영체제/운영체제정의.html">02_운영체제 · 운영체제 정의</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q9. 교착상태 발생 4대 필요조건은?</p>
+      <p class="a">✅ 정답 ② 상호배제, 점유와 대기, 비선점, 환형(순환) 대기</p>
+      <p class="memo">💡 "우선순위 무시", "자원 분할" 같은 그럴듯한 오답 단어에 낚이지 말 것 — 4개 조건은 항상 <b>고정된 세트</b> → <a href="../02_운영체제/임계영역과교착상태.html">02_운영체제 · 임계영역과 교착상태</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q16. 디스크 스케줄링 기법 설명 중 옳은 것은?</p>
+      <p class="a">✅ 정답 ④ — N-단계 SCAN은 요청을 단위로 나눠 처리해 응답 지연을 완화하고 예측 가능성을 높인다</p>
+      <p class="memo">💡 FCFS=도착순, SSTF=최단탐색(편차 큼), SCAN=한 방향 왕복 — 설명이 서로 <b>뒤바뀐 오답</b>이 자주 나옴 → <a href="../02_운영체제/디스크스케줄링과할당기법.html">02_운영체제 · 디스크 스케줄링과 할당기법</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q25. 단편화(Fragmentation)에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ③ — 통합(Coalescing)이나 압축(Compaction) 기법으로 해결</p>
+      <p class="memo">💡 단편화는 <b>의도적 최적화가 아니라 부작용</b>, 내부 단편화는 "고정 크기 블록에 남는 공간" → <a href="../02_운영체제/기억장치관리정책.html">02_운영체제 · 기억장치 관리정책</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🌐</span>네트워크 / 정보보안</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q4. 프로토콜 변환 기능을 수행하는 네트워크 장비는?</p>
+      <p class="a">✅ 정답 ① 게이트웨이 — 서로 다른 프로토콜 구조의 네트워크를 변환해 연결</p>
+      <p class="memo">💡 계층별 장비: 리피터=물리계층, 브리지=데이터링크계층, 라우터=네트워크계층, <b>게이트웨이=그 이상(응용계층 포함 전체 변환)</b> → <a href="../03_네트워크/인터네트워킹장비.html">03_네트워크 · 인터네트워킹 장비</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q11. 방화벽의 기능으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ③ — 로그 자료를 바탕으로 감사(audit) 기능을 제공한다</p>
+      <p class="memo">💡 방화벽은 <b>알려진 규칙 기반 필터링</b>만 하므로 새로운 공격 차단·내부자 공격 차단·악성코드 탐지에는 취약 → <a href="../06_정보보안/index.html">06_정보보안</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q18. OSI 7계층에 대한 설명 중 옳은 것은?</p>
+      <p class="a">✅ 정답 ④ — 세션 계층은 통신 시스템 간 대화를 설정·유지·동기화한다</p>
+      <p class="memo">💡 MIME/암호화=표현계층, 프레임 단위=데이터링크계층 — <b>기능과 계층 이름을 서로 바꿔치기</b>한 오답 패턴 주의 → <a href="../03_네트워크/OSI7계층.html">03_네트워크 · OSI 7계층</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q23. TCP/IP에서 전송 계층 프로토콜은?</p>
+      <p class="a">✅ 정답 ④ UDP — ARP는 인터넷 계층, FTP·DNS는 응용 계층</p>
+      <p class="memo">💡 계층별 대표 프로토콜 암기: <b>응용(FTP,DNS,HTTP) - 전송(TCP,UDP) - 인터넷(IP,ARP,ICMP)</b> → <a href="../03_네트워크/TCP_IP응용계층과전송계층.html">03_네트워크 · TCP/IP 응용·전송계층</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗄️</span>데이터베이스 / 자료구조 / 소프트웨어공학</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q3. 개체-관계(ER) 모델에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ① — 약한 개체의 참여 제약 조건은 <b>부분 참여</b></p>
+      <p class="memo">💡 관계도 자기 자신의 속성을 가질 수 있고, ER모델은 논리적이 아니라 <b>개념적</b> 데이터 모델 → <a href="../04_데이터베이스/index.html">04_데이터베이스</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q8. 릴레이션 분해 후 재조인 시 발생 현상은?</p>
+      <p class="a">✅ 정답 ② 가짜 튜플(Spurious Tuple) — 원래 없던 튜플이 조인 결과에 생겨나는 현상</p>
+      <p class="memo">💡 무손실 분해(Lossless Decomposition)가 안 됐을 때 생기는 대표 부작용 → <a href="../04_데이터베이스/정규화.md">04_데이터베이스 · 정규화</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q12. 분산 데이터베이스 시스템의 특징은?</p>
+      <p class="a">✅ 정답 ② — 중앙집중 시스템보다 신뢰성·가용성이 우수</p>
+      <p class="memo">💡 사용자는 데이터 위치를 몰라도 되는 <b>위치 투명성</b>이 핵심, 설계는 오히려 더 복잡함 → <a href="../04_데이터베이스/분산데이터베이스.md">04_데이터베이스 · 분산데이터베이스</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q6. 스택의 응용 분야가 아닌 것은?</p>
+      <p class="a">✅ 정답 ① 작업 대기열 관리 — 이건 큐(Queue)의 몫</p>
+      <p class="memo">💡 재귀호출·undo·후위표기식 계산은 <b>LIFO(스택)</b>, 대기열/버퍼링은 <b>FIFO(큐)</b> → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q13. 이진 탐색 트리 회전(Splay Tree Zig-Zag) 설명 중 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ③ — Splay Tree의 회전은 AVL의 LR회전과 <b>구조는 비슷해도 목적이 다르다</b> (균형 유지 X, 최근 접근 노드를 루트로)</p>
+      <p class="memo">💡 AVL=균형 유지가 목적, Splay=자주/최근 쓰는 노드를 루트 근처로 당겨 <b>접근 속도 향상</b>이 목적 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q22. 레드-블랙 트리에 대한 설명으로 옳지 않은 것은?</p>
+      <p class="a">✅ 정답 ① — 동일 키에 대해 여러 경로로 삽입/삭제가 가능하다는 설명이 틀림 (BST 성질상 경로는 유일)</p>
+      <p class="memo">💡 레드-블랙 트리도 결국 <b>이진 탐색 트리</b>라 탐색 알고리즘은 동일, 색상 조건으로 O(log n) 균형만 보장 → <a href="../07_자료구조_알고리즘/index.html">07_자료구조_알고리즘</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q17. 소프트웨어 유지보수 유형과 설명이 옳게 짝지어진 것은?</p>
+      <p class="a">✅ 정답 ① 완전형 — 성능 향상·자원 최적화를 위한 개선</p>
+      <p class="memo">💡 수정형=오류수정, 적응형=환경변화 대응, 예방형=미래 대비 — <b>이름과 설명이 자주 뒤섞여</b> 출제됨 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q20. 애자일 모델의 특징으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ③ — 주기적으로 프로토타입을 만들며 요구를 반영해 개발</p>
+      <p class="memo">💡 ①②는 <b>나선형 모델</b>, ④는 <b>폭포수 모델</b> 설명 — 방법론끼리 섞어서 헷갈리게 내는 전형적 함정 → <a href="../05_소프트웨어공학/개발방법론.md">05_소프트웨어공학 · 개발방법론</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q24. 응집도(Cohesion)와 결합도(Coupling)에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ① — 응집도는 최대화, 결합도는 최소화되어야 좋은 설계</p>
+      <p class="memo">💡 "응집도 ↑ 결합도 ↓"가 좋은 모듈 설계의 기본 원칙 → <a href="../05_소프트웨어공학/index.html">05_소프트웨어공학</a></p>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🆕</span>신기술 / 기타</h2>
+    <div class="wrong-card">
+      <p class="q">❌ Q5. 시스템 소프트웨어가 아닌 것은?</p>
+      <p class="a">✅ 정답 ② 워드 프로세서 — 이건 응용 소프트웨어</p>
+      <p class="memo">💡 OS·부트로더·장치드라이버는 <b>시스템 SW</b>, 사용자가 직접 쓰는 문서작성·게임 등은 <b>응용 SW</b> → <a href="../01_컴퓨터구조/소프트웨어와컴퓨터분류.html">01_컴퓨터구조 · 소프트웨어와 컴퓨터분류</a></p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q10. 화자 종속 vs 화자 독립 음성인식에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ④ — 화자 독립은 다수를 위한 일반화 모델, 화자 종속은 특정 사용자 전용 학습 모델</p>
+      <p class="memo">💡 "종속=한 사람 전용(정확도↑ 범용성↓)", "독립=여러 사람용(범용성↑)" — 이름과 설명이 반대로 나오면 오답</p>
+    </div>
+    <div class="wrong-card">
+      <p class="q">❌ Q19. 개인정보 비식별화 기술에 대한 설명으로 옳은 것은?</p>
+      <p class="a">✅ 정답 ② 범주화 — 나이·지역 등을 구간으로 묶어 숨기는 방식</p>
+      <p class="memo">💡 데이터마스킹=노이즈로 가림, 데이터값삭제=식별정보 자체 삭제, 총계처리=집계해서 개인 특성 은닉 — <b>기법 이름과 설명 매칭</b>이 핵심 → <a href="../06_정보보안/index.html">06_정보보안</a></p>
+    </div>
+  </section>
+</div>
+</body>
+</html>
