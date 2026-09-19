@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>조합논리회로와 순서논리회로 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 조합논리회로와 순서논리회로</div>
+  <h1 class="page-title">조합논리회로와 순서논리회로</h1>
+  <p class="page-subtitle">가산기·멀티플렉서·디코더 / 플립플롭·카운터 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>조합논리회로</b> = 현재 입력값<b>만으로</b> 출력이 결정 (기억 X). <b>순서논리회로</b> = 이전 상태(기억)를 함께 반영해 출력이 결정.</p>
+    <p>순서논리회로의 핵심 부품은 <b>플립플롭(Flip-Flop)</b> — 1비트를 저장할 수 있는 최소 단위.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>조합논리회로 vs 순서논리회로 판별법</h3>
+    <div class="analogy"><b>판별 기준:</b> "지금 입력만 보고 답이 나오나?" → 조합논리회로 / "과거에 뭘 했는지 기억해야 답이 나오나?" → 순서논리회로 (카운터, 레지스터는 이전 값을 기억해야 하므로 순서논리회로)</div>
+
+    <table>
+      <tr><th>조합논리회로 (Combinational)</th><th>순서논리회로 (Sequential)</th></tr>
+      <tr><td>반가산기, 전가산기</td><td>플립플롭 (SR, JK, D, T)</td></tr>
+      <tr><td>인코더, 디코더</td><td>레지스터</td></tr>
+      <tr><td>멀티플렉서(MUX), 디멀티플렉서(DEMUX)</td><td>카운터 (동기식/비동기식, 링 카운터)</td></tr>
+    </table>
+
+    <h3>조합논리회로 ① 가산기 (Adder)</h3>
+    <table>
+      <tr><th>종류</th><th>입력</th><th>기능</th></tr>
+      <tr><td>반가산기 (Half Adder)</td><td>A, B (2개)</td><td>합(S) = A⊕B, 자리올림(C) = A·B — 입력 캐리는 못 받음</td></tr>
+      <tr><td>전가산기 (Full Adder)</td><td>A, B, 입력캐리(Ci) (3개)</td><td>S = A⊕B⊕Ci, Co = AB + ACi + BCi — <b>반가산기 2개 + OR 게이트</b>로 구성 가능</td></tr>
+    </table>
+    <div class="tip"><b>4비트 병렬 가감산기:</b> 전가산기 4개를 연결하고, B값을 XOR 게이트에 통과시켜 M(모드)이 0이면 A+B(덧셈), M이 1이면 B를 1의 보수로 바꾼 뒤 캐리에 M(=1)을 더해 2의 보수 가산 → 결국 A−B(뺄셈)이 된다.</div>
+
+    <h3>조합논리회로 ② 선택 회로</h3>
+    <table>
+      <tr><th>이름</th><th>기능</th></tr>
+      <tr><td>멀티플렉서 (MUX)</td><td>여러 입력 중 <b>선택선</b>으로 고른 1개만 출력 (다대일)</td></tr>
+      <tr><td>디멀티플렉서 (DEMUX)</td><td>1개의 입력을 선택선에 따라 여러 출력 중 하나로 분배 (일대다)</td></tr>
+      <tr><td>디코더 (Decoder)</td><td>n비트 입력 → 2ⁿ개 출력 중 <b>해당하는 하나만 1</b>로 활성화</td></tr>
+      <tr><td>인코더 (Encoder)</td><td>디코더의 반대, 2ⁿ개 입력 중 활성화된 것을 n비트 코드로 변환</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> 멀티플렉서 = 여러 채널 중 하나를 고르는 TV 리모컨, 디코더 = 우편번호(코드) 하나를 보고 해당 지역(출력선) 하나를 찾아가는 것</div>
+
+    <h3>순서논리회로 — 플립플롭(Flip-Flop) 종류</h3>
+    <table>
+      <tr><th>종류</th><th>입력</th><th>특징</th></tr>
+      <tr><td><b>SR</b> 플립플롭</td><td>S(Set), R(Reset)</td><td>S=R=1인 경우 <b>동작 불능(금지 상태)</b> — 가장 큰 단점</td></tr>
+      <tr><td><b>JK</b> 플립플롭</td><td>J, K</td><td>SR의 단점을 보완. <b>J=K=1이면 이전 값을 반전(toggle)</b> 출력 — 불능 상태 없음</td></tr>
+      <tr><td><b>D</b> 플립플롭</td><td>D(Data)</td><td>입력된 값을 <b>그대로 다음 상태로 저장</b> (지연, Delay)</td></tr>
+      <tr><td><b>T</b> 플립플롭</td><td>T(Toggle)</td><td>T=1이면 매 클록마다 <b>출력을 반전</b>, T=0이면 유지 — 카운터에 주로 사용</td></tr>
+    </table>
+
+    <h3>JK 플립플롭 진리표 (기출 포인트)</h3>
+    <table>
+      <tr><th>J</th><th>K</th><th>다음 출력 Q</th><th>의미</th></tr>
+      <tr><td>0</td><td>0</td><td>Q (그대로)</td><td>이전 상태 유지</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>리셋</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>셋</td></tr>
+      <tr><td>1</td><td>1</td><td>Q' (반전)</td><td>토글 — SR의 금지상태를 대체</td></tr>
+    </table>
+
+    <h3>카운터(Counter)와 레지스터</h3>
+    <ul>
+      <li><b>레지스터</b>: 플립플롭 여러 개를 나열해 여러 비트를 저장하는 장치</li>
+      <li><b>카운터</b>: 클록이 들어올 때마다 정해진 순서로 값이 변하는 레지스터 (동기식/비동기식)</li>
+      <li><b>링 카운터(Ring Counter)</b>: 플립플롭들을 고리(ring) 모양으로 연결 — 마지막 플립플롭의 출력이 다시 첫 번째로 돌아감</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>주어진 회로/기능이 조합논리회로인지 순서논리회로인지 구분하기 (카운터·레지스터·플립플롭 = 순서논리)</li>
+      <li>전가산기는 <b>반가산기 2개 + OR 게이트 1개</b>로 구성 가능</li>
+      <li>4비트 병렬 가감산기에서 M(모드) 값에 따라 덧셈/뺄셈이 결정되는 원리 (XOR + 2의 보수)</li>
+      <li>SR 플립플롭의 <b>불능(금지) 상태</b>는 S=R=1일 때 발생 — JK가 이를 해결</li>
+      <li>JK 플립플롭에서 <b>J=K=1이면 반전(toggle)</b> — 자주 나오는 계산/진리표 문제</li>
+      <li>멀티플렉서·디멀티플렉서·디코더·인코더 기능 서로 구분하기</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>반가산기</th><th>전가산기</th></tr>
+      <tr><td>입력 개수</td><td>2개 (A, B)</td><td>3개 (A, B, 입력캐리)</td></tr>
+      <tr><td>입력캐리 처리</td><td>불가능</td><td>가능</td></tr>
+      <tr><td>구성</td><td>기본 단위</td><td>반가산기 2개 + OR</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>SR 플립플롭</th><th>JK 플립플롭</th></tr>
+      <tr><td>둘 다 1 입력 시</td><td>불능(금지) 상태 발생</td><td>토글(반전) — 문제 없음</td></tr>
+      <tr><td>관계</td><td colspan="2">JK는 SR의 단점을 보완해 설계된 개선형</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">반가산기</span>
+      <span class="chip">전가산기</span>
+      <span class="chip">멀티플렉서</span>
+      <span class="chip">디멀티플렉서</span>
+      <span class="chip">디코더</span>
+      <span class="chip">인코더</span>
+      <span class="chip">SR 플립플롭</span>
+      <span class="chip">JK 플립플롭</span>
+      <span class="chip">D 플립플롭</span>
+      <span class="chip">T 플립플롭</span>
+      <span class="chip">토글</span>
+      <span class="chip">불능상태</span>
+      <span class="chip">링카운터</span>
+      <span class="chip">병렬가감산기</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

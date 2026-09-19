@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터 인터페이스와 멀티미디어 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 컴퓨터 인터페이스와 멀티미디어</div>
+  <h1 class="page-title">컴퓨터 인터페이스와 멀티미디어</h1>
+  <p class="page-subtitle">PCI·SATA·IEEE1394 비교, 색상 모델, 이미지·오디오 용량 계산, MPEG 표준 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>PCI·SATA·IEEE1394는 모두 주변장치 연결 규격이고, <b>USB 세부 내용은 별도 문서(입출력 포트와 USB) 참고</b>.</p>
+    <p>색은 <b>RGB(가산)</b> vs <b>CMYK(감산)</b>로 나뉘고, 동영상 압축 표준은 용도별로 <b>MPEG-1/2/4/7/21</b>이 다르다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>컴퓨터 인터페이스 표준</h3>
+    <table>
+      <tr><th>규격</th><th>방식</th><th>용도/특징</th></tr>
+      <tr><td>PCI</td><td>병렬 버스</td><td>마더보드에 여러 주변장치를 연결하는 버스 규격, CPU와 독립 동작</td></tr>
+      <tr><td>SATA</td><td>직렬</td><td>하드디스크·광디스크 연결용, 최대 6Gbps</td></tr>
+      <tr><td>IEEE 1394 (FireWire)</td><td>직렬</td><td>영상·음향 장비용, PnP·핫스와핑 지원, 최대 63개 포트, 애플은 FireWire·소니는 i.Link로 부름</td></tr>
+      <tr><td>USB</td><td>직렬</td><td>범용 인터페이스 — 세부 버전/특징은 <b>입출력 포트와 USB</b> 문서 참고</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "FireWire(IEEE1394)는 USB 1.1보다 느리다" → ❌ 틀림. IEEE1394가 USB 1.1(12Mbps)보다 훨씬 빠르다(최대 400Mbps).</div>
+
+    <h3>색상 모델</h3>
+    <table>
+      <tr><th>모델</th><th>방식</th><th>혼합할수록</th><th>용도</th></tr>
+      <tr><td><b>RGB</b> (Red, Green, Blue)</td><td>가산 혼합</td><td>흰색에 가까워짐</td><td>모니터, 빛 기반 디스플레이</td></tr>
+      <tr><td><b>CMYK</b> (Cyan, Magenta, Yellow, Black)</td><td>감산 혼합</td><td>검은색에 가까워짐</td><td>잉크젯 프린터, 인쇄</td></tr>
+      <tr><td><b>HSV</b> (Hue, Saturation, Value)</td><td>-</td><td>-</td><td>색상·채도·명도로 사람의 직관적 시각에 기초</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "RGB 모델은 감산 모델로 프린터에 이용된다" → ❌ 틀림. <b>RGB=가산(빛)</b>, <b>CMYK=감산(잉크)</b>. K(Black)를 R/G/B와 헷갈리지 말 것.</div>
+
+    <h3>이미지·오디오 용량 계산 (공식 암기 필수)</h3>
+    <div class="tip">
+      이미지 용량 = 가로 화소 수 × 세로 화소 수 × <b>화소당 비트 수(색상 표현 비트)</b> ÷ 8 (바이트 변환)<br>
+      오디오 용량 = 샘플링 주파수(Hz) × <b>샘플당 비트 수</b> × 채널 수(모노=1, 스테레오=2) × 시간(초) ÷ 8
+    </div>
+    <p><b>예시:</b> 256색(2⁸=8비트) × 1024×1024 화소 = 1024×1024×1바이트 = <b>1MB</b></p>
+    <p><b>예시:</b> 44.1KHz 샘플링 × 16bit × 스테레오(×2) × 100초 ÷ 8 ≈ <b>17.6MB</b></p>
+
+    <h3>RLE (Run Length Encoding)</h3>
+    <ul>
+      <li><b>무손실(비손실) 압축</b> 방식 — 동일한 값이 연속될 때 "값+반복횟수"로 표현</li>
+      <li>단순한 이미지(아이콘 등 동일 색상이 길게 이어지는 데이터)에 효과적</li>
+      <li>대표 파일: BMP, PCX, GIF</li>
+      <li><b>패턴이 불규칙하면 오히려 압축률이 떨어짐</b> (같은 색이 길게 이어지지 않으면 비효율적)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "RLE는 손실 압축 기법" → ❌ 틀림. RLE는 <b>무손실</b> 압축이다.</div>
+
+    <h3>동영상/음향 압축 표준 — MPEG 시리즈</h3>
+    <table>
+      <tr><th>표준</th><th>용도</th></tr>
+      <tr><td>MPEG-1</td><td>CD-ROM급 동영상·음향, 최대 1.5Mbps (비디오 CD)</td></tr>
+      <tr><td>MPEG-2</td><td>디지털TV·DVD 등 고화질·고음질 (MPEG-1 개선판)</td></tr>
+      <tr><td>MPEG-3</td><td>고선명 TV용으로 개발되었으나 <b>MPEG-2에 흡수·통합</b> — 실제 규격 없음</td></tr>
+      <tr><td>MPEG-4</td><td>저속 전송(64Kbps~) 멀티미디어 통신용 압축 (인터넷/이동통신)</td></tr>
+      <tr><td>MPEG-7</td><td>멀티미디어 콘텐츠 <b>검색</b>을 위한 메타데이터 표준</td></tr>
+      <tr><td>MPEG-21</td><td>콘텐츠 제작·유통·보안 등 <b>전체 관리 프레임워크</b> 표준</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "MPEG-3은 고화질 TV용 규격" → ❌ 실제로는 MPEG-2에 흡수되어 <b>존재하지 않는 규격</b>이다. (자주 나오는 오답 함정)</div>
+
+    <h3>이미지 파일 형식 · 비트맵/벡터</h3>
+    <p>비트맵/벡터 그래픽의 원리·비교는 <b>비트맵_벡터_그래픽 문서</b>에 정리되어 있음. 여기서는 추가 포인트만 정리:</p>
+    <ul>
+      <li><b>WAV</b>: 무손실 오디오 포맷 (마이크로소프트·IBM 표준) — 음질은 좋지만 용량이 큼</li>
+      <li><b>WMF</b>: Windows Metafile, 벡터 도형 교환용 포맷</li>
+      <li><b>PSD</b>: 포토샵 전용 파일 형식</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>PCI·SATA·IEEE1394·USB 각각의 방식(직렬/병렬)과 속도 비교</li>
+      <li>RGB(가산, 빛, 모니터) vs CMYK(감산, 잉크, 프린터) 헷갈리지 않기</li>
+      <li>이미지 용량 = 화소 수 × 화소당 비트 수 계산 문제 (색상 수 → 비트 수 변환 포함)</li>
+      <li>오디오 용량 = 샘플링율 × 샘플당 비트수 × 채널수 × 시간 계산 문제</li>
+      <li>RLE는 <b>무손실</b> 압축, 동일 데이터가 길게 반복될수록 압축률이 높아짐</li>
+      <li>MPEG 표준 중 <b>MPEG-3은 존재하지 않음(MPEG-2에 흡수)</b>, MPEG-7은 검색용, MPEG-21은 관리 프레임워크</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>RGB</th><th>CMYK</th></tr>
+      <tr><td>혼합 방식</td><td>가산 혼합</td><td>감산 혼합</td></tr>
+      <tr><td>다 섞으면</td><td>흰색</td><td>검은색</td></tr>
+      <tr><td>기반</td><td>빛</td><td>잉크(안료)</td></tr>
+      <tr><td>대표 장치</td><td>모니터</td><td>프린터</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>MPEG-2</th><th>MPEG-4</th><th>MPEG-7</th></tr>
+      <tr><td>목적</td><td>고화질 방송/DVD</td><td>저속 멀티미디어 통신</td><td>콘텐츠 검색용 메타데이터</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">PCI</span>
+      <span class="chip">SATA</span>
+      <span class="chip">IEEE 1394</span>
+      <span class="chip">FireWire</span>
+      <span class="chip">RGB</span>
+      <span class="chip">CMYK</span>
+      <span class="chip">HSV</span>
+      <span class="chip">가산혼합</span>
+      <span class="chip">감산혼합</span>
+      <span class="chip">RLE</span>
+      <span class="chip">무손실압축</span>
+      <span class="chip">샘플링</span>
+      <span class="chip">양자화</span>
+      <span class="chip">MPEG-1</span>
+      <span class="chip">MPEG-2</span>
+      <span class="chip">MPEG-4</span>
+      <span class="chip">MPEG-7</span>
+      <span class="chip">MPEG-21</span>
+      <span class="chip">WAV</span>
+      <span class="chip">RTP</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

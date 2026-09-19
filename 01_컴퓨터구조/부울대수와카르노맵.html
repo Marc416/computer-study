@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부울대수와 카르노맵 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 부울대수와 카르노맵</div>
+  <h1 class="page-title">부울대수와 카르노맵</h1>
+  <p class="page-subtitle">논리식 간략화 두 가지 방법 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>논리식을 간단하게 줄이는 방법은 두 가지 — <b>대수적으로 법칙을 적용</b>하거나, <b>카르노맵(K-map)에 표로 그려서</b> 눈으로 묶는다.</p>
+    <p>시험에서는 <b>결과 확인용으로 부울대수, 정답을 빨리 찾는 용도로 카르노맵</b>을 함께 쓰는 게 효율적이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>부울대수 기본 법칙</h3>
+    <table>
+      <tr><th>법칙</th><th>내용</th></tr>
+      <tr><td>항등법칙</td><td>A + 0 = A, A · 1 = A</td></tr>
+      <tr><td>지배법칙</td><td>A + 1 = 1, A · 0 = 0</td></tr>
+      <tr><td>동일법칙</td><td>A + A = A, A · A = A</td></tr>
+      <tr><td>보수법칙</td><td>A + A' = 1, A · A' = 0</td></tr>
+      <tr><td>분배법칙</td><td>A(B+C) = AB+AC, A+BC = (A+B)(A+C)</td></tr>
+      <tr><td>흡수법칙</td><td>A + AB = A, A(A+B) = A</td></tr>
+      <tr><td>드모르간 법칙</td><td>(A+B)' = A'B', (AB)' = A'+B'</td></tr>
+    </table>
+
+    <h3>대수적 간략화 예제 (기출)</h3>
+    <div class="tip">
+      <b>예제 1</b>: AB + AB' + A'B<br>
+      = A(B+B') + A'B = A + A'B = (A+A')(A+B) = <b>A + B</b>
+    </div>
+    <div class="tip">
+      <b>예제 2</b>: A(A'+B)<br>
+      = AA' + AB = 0 + AB = <b>AB</b>
+    </div>
+    <div class="tip">
+      <b>예제 3</b>: ABC + AB'C + A'B'C<br>
+      = (AB+AB'+A'B')C = (A+A'B')C = (A+A')(A+B')C = <b>AC + B'C</b>
+    </div>
+    <div class="analogy"><b>풀이 팁:</b> 공통 문자를 묶어 인수분해 → 보수법칙(X+X'=1)으로 소거 → 분배법칙으로 재정리. "같은 항이 두 번 곱해지면 지운다"는 흡수법칙을 가장 많이 쓴다.</div>
+
+    <h3>카르노맵(K-map)이란?</h3>
+    <ul>
+      <li>진리표의 결과(참이 되는 항)를 <b>격자 표</b>에 옮겨 그린 것</li>
+      <li>인접한 칸끼리는 <b>변수 하나만 다르도록</b> 배치 (그레이코드 순서: 00, 01, 11, 10)</li>
+      <li>1이 적힌 칸들을 <b>2, 4, 8, 16개 단위(2ⁿ)로 묶어서</b> 공통 변수만 남기면 간략화된 식이 나옴</li>
+      <li><b>무관 조건(Don't Care, X)</b>은 0이든 1이든 편한 대로 해석해 최대한 크게 묶는 데 활용</li>
+    </ul>
+
+    <h3>카르노맵 예제 — F(A,B) 2변수</h3>
+    <table>
+      <tr><th>AB \ 값</th><th>결과</th></tr>
+      <tr><td>00</td><td>0</td></tr>
+      <tr><td>01</td><td>1</td></tr>
+      <tr><td>11</td><td>1</td></tr>
+      <tr><td>10</td><td>0</td></tr>
+    </table>
+    <p>01과 11 두 칸이 인접(B=1로 공통) → 간략화 결과 <b>F = B</b></p>
+
+    <h3>카르노맵 예제 — F(A,B,C,D) 4변수, Don't Care 활용</h3>
+    <table>
+      <tr><th>AB＼CD</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+      <tr><td>00</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>01</td><td>0</td><td>1</td><td>X</td><td>0</td></tr>
+      <tr><td>11</td><td>0</td><td>1</td><td>X</td><td>0</td></tr>
+      <tr><td>10</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+    </table>
+    <div class="analogy">가장자리 4칸(00·00 / 00·10 / 10·00 / 10·10)이 둥글게 인접(B'D' 공통) + 가운데 X를 1로 취급해 01·11칸 묶음(BC 공통) → 이런 식으로 <b>가장 큰 묶음</b>을 우선 찾는 게 요령</div>
+
+    <h3>카르노맵 풀이 순서</h3>
+    <ol>
+      <li>진리표에서 결과가 1인 항을 카르노맵에 표시</li>
+      <li>가장 큰 묶음(8개 → 4개 → 2개 → 1개 순)부터 찾기</li>
+      <li>묶음 안에서 <b>값이 변하지 않는 변수만</b> 남기고 나머지는 제거</li>
+      <li>모든 1을 포함할 때까지 묶음을 OR로 연결</li>
+      <li>Don't Care(X)는 묶음을 더 크게 만들 수 있을 때만 1로 사용, 아니면 무시</li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>주어진 논리식을 대수법칙으로 단계별로 줄여서 보기와 맞는 답 고르기 (분배·보수·흡수법칙 활용)</li>
+      <li>카르노맵을 보고 최소화된 곱의 합(SOP) 형태 논리식 고르기</li>
+      <li>Don't Care(X) 조건은 <b>간략화에 유리할 때만</b> 1로 사용 — 무조건 1로 치지 않음</li>
+      <li>드모르간 법칙으로 NAND/NOR 게이트로만 구현된 회로 ↔ AND/OR/NOT 식 서로 변환</li>
+      <li>부울 함수 중 "나머지와 다른 것"을 고르는 유형 — 각 보기를 모두 간략화해서 비교</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>부울대수 간략화</th><th>카르노맵 간략화</th></tr>
+      <tr><td>방법</td><td>법칙을 순서대로 대입해 수식 전개</td><td>표에 값을 채우고 인접한 1끼리 묶기</td></tr>
+      <tr><td>장점</td><td>변수가 적을 때 빠름, 증명 가능</td><td>변수가 많아도 시각적으로 실수 적음</td></tr>
+      <tr><td>단점</td><td>변수 많아지면 실수하기 쉬움</td><td>변수 5개 이상이면 표가 복잡해짐</td></tr>
+      <tr><td>적정 변수 수</td><td>2~3개</td><td>2~4개(최대 5~6개)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">부울대수</span>
+      <span class="chip">분배법칙</span>
+      <span class="chip">흡수법칙</span>
+      <span class="chip">보수법칙</span>
+      <span class="chip">드모르간</span>
+      <span class="chip">카르노맵</span>
+      <span class="chip">K-map</span>
+      <span class="chip">그레이코드</span>
+      <span class="chip">Don't Care</span>
+      <span class="chip">무관조건</span>
+      <span class="chip">최소항</span>
+      <span class="chip">곱의합</span>
+      <span class="chip">SOP</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>입출력 제어와 병렬처리 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 입출력 제어와 병렬처리</div>
+  <h1 class="page-title">입출력 제어와 병렬처리</h1>
+  <p class="page-subtitle">I/O 제어 방식, Flynn의 분류, 암달의 법칙, 클라우드 컴퓨팅 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>I/O 제어는 <b>프로그램 I/O → 인터럽트 구동 I/O → DMA → 채널</b> 순으로 CPU 부담이 줄어든다.</p>
+    <p>병렬처리는 <b>Flynn의 분류(SISD/SIMD/MISD/MIMD)</b>로 나누고, 성능 향상의 한계는 <b>암달의 법칙</b>으로 계산한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>I/O 제어 방식 4가지 (CPU 부담이 큰 순서 → 작은 순서)</h3>
+    <table>
+      <tr><th>방식</th><th>동작</th><th>CPU 개입</th></tr>
+      <tr><td>프로그램 I/O</td><td>CPU가 입출력 명령을 직접 실행·대기</td><td>가장 큼 (시간 낭비 심함)</td></tr>
+      <tr><td>인터럽트 구동 I/O</td><td>I/O 모듈이 동작하는 동안 CPU는 다른 일 처리, 끝나면 인터럽트로 통지</td><td>중간</td></tr>
+      <tr><td>DMA</td><td>DMA 제어기가 기억장치↔I/O 간 데이터 전송을 전담, CPU는 시작·종료에만 관여</td><td>작음</td></tr>
+      <tr><td>채널</td><td>자체 채널 프로그램으로 CPU 간섭 없이 여러 블록을 한 번에 입출력</td><td>가장 작음 (최고성능)</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> 프로그램 I/O = 사장이 직접 택배 포장, 인터럽트 = 포장 끝나면 알려달라 하고 다른 일, DMA = 아예 택배기사에게 통째로 맡김, 채널 = 전담 물류팀이 알아서 여러 건을 처리</div>
+
+    <h3>DMA (Direct Memory Access)</h3>
+    <ul>
+      <li>대용량 데이터 전송 시 <b>CPU 레지스터를 거치지 않고</b> 기억장치와 I/O 간 직접 전송</li>
+      <li>기억장치 접근을 위해 CPU의 시스템 버스 사용권을 잠시 빼앗는 <b>사이클 스틸링(cycle stealing)</b> 수행</li>
+      <li>전송이 완료되면 DMA 제어기가 <b>CPU에 인터럽트</b>를 요청</li>
+      <li>한 시스템에 여러 개의 DMA 제어기가 존재할 수 있음</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "대량 고속 전송에는 인터럽트 방식이 DMA보다 효율적" → ❌ 틀림. DMA가 CPU 상태정보 저장 없이 직접 접근하므로 더 효율적이다.</div>
+
+    <h3>폴링(Polling) vs 인터럽트(Interrupt)</h3>
+    <ul>
+      <li><b>폴링:</b> 프로세서가 I/O 장치 상태를 반복적으로 검사(체크)하며 대기 → CPU 시간 낭비가 가장 심함</li>
+      <li><b>인터럽트:</b> 신호가 발생했을 때만 I/O에 관여 → 폴링보다 CPU 효율적</li>
+    </ul>
+
+    <h3>버퍼링(Buffering) vs 스풀링(Spooling)</h3>
+    <table>
+      <tr><th>구분</th><th>버퍼링</th><th>스풀링</th></tr>
+      <tr><td>목적</td><td>느린 I/O와 빠른 CPU 간 속도차 보완</td><td>동일</td></tr>
+      <tr><td>범위</td><td>한 작업의 입출력과 계산을 동시 수행</td><td>여러 작업의 입출력·계산을 함께 수행</td></tr>
+      <tr><td>사용 공간</td><td><b>주기억장치</b></td><td><b>디스크</b> (큰 버퍼처럼 사용)</td></tr>
+    </table>
+
+    <h3>Flynn의 분류 (명령어·데이터 스트림 기준)</h3>
+    <table>
+      <tr><th>분류</th><th>명령어 스트림</th><th>데이터 스트림</th><th>예시</th></tr>
+      <tr><td>SISD</td><td>1개</td><td>1개</td><td>단일 프로세서, 파이프라이닝</td></tr>
+      <tr><td>SIMD</td><td>1개</td><td>n개</td><td>배열처리기(Array processor), GPU</td></tr>
+      <tr><td>MISD</td><td>n개</td><td>1개</td><td>이론적 모델 (실제 사례 거의 없음)</td></tr>
+      <tr><td>MIMD</td><td>n개</td><td>n개</td><td>다중처리기, 클러스터</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "명령어가 순서대로 실행되지만 여러 단계로 나눠 중첩 실행" → 이건 <b>파이프라이닝(SISD)</b> 설명이다. MIMD와 헷갈리지 말 것.</div>
+
+    <h3>GPU / GPGPU</h3>
+    <ul>
+      <li>GPU는 <b>단순한 ALU를 매우 많이</b> 가지고 있어 대량의 간단한 연산을 병렬로 빠르게 처리 (SIMD 방식)</li>
+      <li>제어 부분이 약해 <b>분기문(if) 처리에는 취약</b> → CPU가 GPU를 제어하는 구조</li>
+      <li><b>GPGPU:</b> 그래픽 연산 외의 범용 계산에 GPU를 활용하는 기술 (OpenCL 등 사용)</li>
+      <li>기계학습·인공신경망·블록체인 연산에 GPU가 널리 쓰이는 이유 = <b>대량의 단순 연산을 병렬 처리</b>하는 데 최적화된 구조이기 때문</li>
+    </ul>
+
+    <h3>슈퍼스칼라 / VLIW / 슈퍼파이프라인</h3>
+    <table>
+      <tr><th>기법</th><th>원리</th><th>병렬화 결정 주체</th></tr>
+      <tr><td>슈퍼스칼라 (Superscalar)</td><td>여러 개의 파이프라인(기능 유니트)을 두어 한 사이클에 2개 이상 명령어 동시 처리</td><td>하드웨어</td></tr>
+      <tr><td>VLIW</td><td>하나의 긴 명령어 안에 여러 연산을 미리 묶어 넣어 동시 실행</td><td>컴파일러</td></tr>
+      <tr><td>슈퍼파이프라인</td><td>파이프라인 한 단계를 더 잘게 쪼개 내부 클록 주파수를 높임</td><td>하드웨어</td></tr>
+    </table>
+
+    <h3>암달의 법칙 (Amdahl's Law) ⭐ 계산 필수</h3>
+    <div class="tip">
+      시스템 일부를 개선했을 때 <b>전체 성능 향상의 한계</b>를 구하는 공식<br>
+      전체 성능 향상 배수 = 1 / [ (1 − p) + p/s ]<br>
+      (p = 개선 대상 부분이 차지하는 비율, s = 그 부분의 성능 향상 배수)
+    </div>
+    <p>병렬처리 프로세서 수를 늘려도 <b>순차 실행 부분 때문에 성능 향상에 한계</b>가 있다는 것을 보여준다. (무어의 법칙과 다름 — 혼동 주의)</p>
+    <div class="analogy"><b>예시:</b> 전체 작업의 75%를 4배 빠르게 해도, 나머지 25%는 그대로이므로 → 1 / [0.25 + 0.75/4] = 약 2.28배. "부분만 빨라져도 전체가 그만큼 빨라지진 않는다"가 핵심.</div>
+
+    <h3>병렬 컴퓨터 시스템 구조</h3>
+    <table>
+      <tr><th>구분</th><th>설명</th></tr>
+      <tr><td>UMA (균일 기억장치 액세스)</td><td>모든 프로세서가 상호연결망으로 접속된 기억장치를 동일한 속도로 공유</td></tr>
+      <tr><td>NUMA (불균일 기억장치 액세스)</td><td>로컬 메모리 접근이 원격 메모리 접근보다 빠름 (거리에 따라 접근시간 차이)</td></tr>
+      <tr><td>NORMA (무-원격 기억장치 액세스)</td><td>프로세서가 원격(다른 노드) 기억장치에 직접 접근 불가</td></tr>
+      <tr><td>클러스터 (Cluster)</td><td>고속 근거리 통신망으로 연결된 여러 컴퓨터가 하나의 대형 시스템처럼 동작</td></tr>
+      <tr><td>그리드 컴퓨팅</td><td>원거리(WAN)로 연결된 서로 다른 종류의 컴퓨터들을 묶어 가상의 고성능 컴퓨터 구성</td></tr>
+    </table>
+
+    <h3>클라우드 컴퓨팅 서비스 모델</h3>
+    <table>
+      <tr><th>모델</th><th>제공 범위</th><th>사용자가 하는 일</th></tr>
+      <tr><td><b>IaaS</b> (Infrastructure)</td><td>서버·스토리지·네트워크 등 인프라</td><td>OS부터 직접 설치·관리</td></tr>
+      <tr><td><b>PaaS</b> (Platform)</td><td>인프라 + 개발 플랫폼·실행환경</td><td>애플리케이션만 개발</td></tr>
+      <tr><td><b>SaaS</b> (Software)</td><td>완성된 응용 소프트웨어</td><td>웹브라우저로 바로 사용</td></tr>
+    </table>
+    <div class="analogy"><b>암기:</b> IaaS(땅만) → PaaS(집까지) → SaaS(가구까지 완비) 순으로 제공 범위가 넓어짐</div>
+    <ul>
+      <li><b>Public Cloud:</b> 인터넷을 통해 비용 지불(또는 무료)로 사용 / <b>Private Cloud:</b> 회사 내부용</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>I/O 제어 방식 중 CPU 부담이 가장 작은 것: <b>채널 &gt; DMA &gt; 인터럽트 &gt; 프로그램 I/O</b> 순 이해</li>
+      <li>DMA는 <b>사이클 스틸링</b>으로 시스템 버스 사용권을 일시적으로 가져간다</li>
+      <li>버퍼링=<b>주기억장치</b> 사용, 스풀링=<b>디스크</b> 사용 — 자주 뒤바꿔 출제</li>
+      <li>Flynn 분류에서 "여러 단계로 나눠 중첩 실행"은 <b>SISD(파이프라이닝)</b>이지 MIMD가 아님</li>
+      <li>GPU/GPGPU가 유리한 이유 = <b>대량의 단순 병렬 연산</b> (분기문 처리는 오히려 취약)</li>
+      <li>암달의 법칙 계산 문제: p(개선 비율)와 s(개선 배수)를 대입해 전체 향상 배수 구하기</li>
+      <li>클라우드 서비스 모델 3단계(IaaS/PaaS/SaaS) 구분 — 매년 국가직/지방직 단골 출제</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>DMA</th><th>채널(Channel)</th></tr>
+      <tr><td>CPU 개입</td><td>시작·종료 시에만</td><td>거의 없음 (채널 프로그램이 독립 수행)</td></tr>
+      <tr><td>처리 단위</td><td>블록 단위 전송</td><td>여러 블록을 하나의 명령어로 처리</td></tr>
+      <tr><td>성능</td><td>빠름</td><td>가장 빠름 (고성능 입출력)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>IaaS</th><th>PaaS</th><th>SaaS</th></tr>
+      <tr><td>제공 대상</td><td>인프라(서버, 스토리지)</td><td>개발 플랫폼</td><td>완성 소프트웨어</td></tr>
+      <tr><td>예시</td><td>서버 임대</td><td>개발 환경 임대</td><td>웹메일, ERP</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">프로그램 I/O</span>
+      <span class="chip">인터럽트 구동 I/O</span>
+      <span class="chip">DMA</span>
+      <span class="chip">채널</span>
+      <span class="chip">사이클 스틸링</span>
+      <span class="chip">폴링</span>
+      <span class="chip">버퍼링</span>
+      <span class="chip">스풀링</span>
+      <span class="chip">Flynn</span>
+      <span class="chip">SISD</span>
+      <span class="chip">SIMD</span>
+      <span class="chip">MISD</span>
+      <span class="chip">MIMD</span>
+      <span class="chip">GPU</span>
+      <span class="chip">GPGPU</span>
+      <span class="chip">슈퍼스칼라</span>
+      <span class="chip">VLIW</span>
+      <span class="chip">암달의 법칙</span>
+      <span class="chip">UMA</span>
+      <span class="chip">NUMA</span>
+      <span class="chip">클러스터</span>
+      <span class="chip">그리드컴퓨팅</span>
+      <span class="chip">IaaS</span>
+      <span class="chip">PaaS</span>
+      <span class="chip">SaaS</span>
+      <span class="chip">클라우드컴퓨팅</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

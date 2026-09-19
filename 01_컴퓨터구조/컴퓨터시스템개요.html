@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴퓨터 시스템 개요 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 컴퓨터 시스템 개요</div>
+  <h1 class="page-title">컴퓨터 시스템 개요</h1>
+  <p class="page-subtitle">컴퓨터의 기본 구조와 성능 측정 단위 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>컴퓨터는 <b>입력·출력·기억·연산·제어</b> 5대 장치로 구성되고, CPU는 <b>제어장치 + 연산장치(ALU)</b>다.</p>
+    <p>시스템 버스는 <b>CPU와 주기억장치만 직접 접근</b>하며, 입출력장치는 DMA·채널을 거쳐야 한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>컴퓨터의 5대 구성 장치</h3>
+    <table>
+      <tr><th>장치</th><th>역할</th></tr>
+      <tr><td>입력장치</td><td>외부 → 컴퓨터 내부로 데이터 전송 (키보드, 마우스 등)</td></tr>
+      <tr><td>출력장치</td><td>내부 → 외부로 데이터 전송 (모니터, 프린터 등)</td></tr>
+      <tr><td>기억장치</td><td>주기억장치(RAM/ROM), 보조기억장치(HDD/SSD), 캐시로 구성</td></tr>
+      <tr><td>연산장치 (ALU)</td><td>산술·논리 연산 수행. 누산기 등을 포함</td></tr>
+      <tr><td>제어장치 (CU)</td><td>주기억장치의 명령어를 꺼내 해독하고 각 장치에 제어신호 전달</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> 제어장치는 "지휘자", 연산장치는 "연주자". 지휘자가 악보(명령어)를 읽고 신호를 주면 연주자가 실제 연산을 한다.</div>
+    <p><b>중앙처리장치(CPU) = 제어장치 + 연산장치(ALU) + 레지스터</b></p>
+
+    <h3>시스템 버스와 데이터/제어 흐름</h3>
+    <ul>
+      <li>시스템 버스에 <b>직접 접근 가능한 것은 CPU와 주기억장치뿐</b></li>
+      <li>입출력장치는 <b>DMA, 채널, 인터럽트 구동 I/O</b> 등을 통해서만 버스에 접근 가능</li>
+      <li><b>데이터 흐름</b>: 입력장치→주기억장치, 주기억장치↔연산장치, 주기억장치→출력장치</li>
+      <li><b>제어 흐름</b>: 제어장치 → 각 장치로 뻗어나가는 신호</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "입출력장치가 CPU와 직접 데이터를 교환한다"는 표현은 틀렸다 — 반드시 제어장치의 입출력 제어(DMA/채널/인터럽트)를 거쳐야 한다.</div>
+
+    <h3>컴퓨터 성능 측정 단위</h3>
+    <table>
+      <tr><th>용어</th><th>의미</th></tr>
+      <tr><td>처리량 (Throughput)</td><td>단위 시간당 처리하는 작업(또는 트랜잭션)의 양</td></tr>
+      <tr><td>응답 시간 (Response Time)</td><td>입력이 들어오고 <b>반응이 시작</b>되기까지 걸리는 시간</td></tr>
+      <tr><td>반환 시간 (Turn Around Time)</td><td>작업 제출부터 <b>최종 결과를 받기까지</b> 걸리는 전체 시간</td></tr>
+      <tr><td>병목 현상 (Bottleneck)</td><td>자원이 용량/처리량의 최대 한계에 도달해 성능이 정체되는 현상</td></tr>
+      <tr><td>자원 이용도 (Utilization)</td><td>전체 시간 중 자원이 실제로 사용된 시간의 비율</td></tr>
+    </table>
+
+    <h3>처리 속도 단위</h3>
+    <table>
+      <tr><th>단위</th><th>의미</th></tr>
+      <tr><td>MIPS</td><td>Million Instructions Per Second — 초당 처리하는 백만 개 명령어 수</td></tr>
+      <tr><td>FLOPS</td><td>FLoating point Operations Per Second — 초당 부동소수점 연산 수</td></tr>
+      <tr><td>클록(Clock)</td><td>모든 부품의 동작 기준이 되는 신호. <b>클록 수가 높을수록 처리속도가 빠름</b></td></tr>
+    </table>
+
+    <div class="tip">
+      <b>계산 공식 (매년 출제):</b><br>
+      클록 주기 = 1 / 클록 주파수<br>
+      명령어 1개 실행 시간 = 클록 주기 × CPI (Cycle Per Instruction)<br>
+      전체 실행 시간 = 명령어 수 × CPI × 클록 주기
+    </div>
+
+    <h3>기억 용량 단위 (2의 거듭제곱)</h3>
+    <table>
+      <tr><th>단위</th><th>크기</th></tr>
+      <tr><td>KB (킬로바이트)</td><td>2¹⁰ B</td></tr>
+      <tr><td>MB (메가바이트)</td><td>2²⁰ B</td></tr>
+      <tr><td>GB (기가바이트)</td><td>2³⁰ B</td></tr>
+      <tr><td>TB (테라바이트)</td><td>2⁴⁰ B</td></tr>
+      <tr><td>PB (페타바이트)</td><td>2⁵⁰ B</td></tr>
+      <tr><td>EB (엑사바이트)</td><td>2⁶⁰ B</td></tr>
+      <tr><td>ZB (제타바이트)</td><td>2⁷⁰ B</td></tr>
+      <tr><td>YB (요타바이트)</td><td>2⁸⁰ B</td></tr>
+    </table>
+
+    <h3>집적회로(IC) 집적도 분류</h3>
+    <table>
+      <tr><th>구분</th><th>이름</th><th>게이트 수(1칩 기준)</th></tr>
+      <tr><td>SSI</td><td>Small Scale</td><td>100개 미만</td></tr>
+      <tr><td>MSI</td><td>Medium Scale</td><td>100~1,000개</td></tr>
+      <tr><td>LSI</td><td>Large Scale</td><td>1,000~10,000개</td></tr>
+      <tr><td>VLSI</td><td>Very Large Scale</td><td>약 1만~100만개</td></tr>
+      <tr><td>ULSI</td><td>Ultra Large Scale</td><td>약 100만개 이상</td></tr>
+    </table>
+    <div class="analogy">집적도 크기 순서 <b>SSI &lt; MSI &lt; LSI &lt; VLSI &lt; ULSI</b> — "숫자가 클수록(Ultra > Very > Large) 더 빽빽하다"로 암기</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>입출력장치는 시스템 버스에 <b>직접 접근 불가</b> — DMA/채널을 통해서만 접근</li>
+      <li>캐시기억장치는 주기억장치보다 <b>용량이 작아야</b> 한다 (크면 접근시간·비용 증가)</li>
+      <li>CPU 구성요소 고르기: 제어장치·연산장치·레지스터는 O, PCI·DRAM·메인보드는 X</li>
+      <li>레지스터는 <b>플립플롭</b>으로 구성 (DRAM 아님 — 자주 나오는 오답 함정)</li>
+      <li>RISC는 CISC보다 <b>명령어 종류가 적고</b> 고정 명령어 형식 (반대로 헷갈리기 쉬움)</li>
+      <li>클록 주파수·CPI·실행시간 3요소 중 2개를 주고 나머지 계산하는 문제 매년 출제</li>
+      <li>정보량 단위 크기 비교 정렬 문제 (GB &lt; TB &lt; PB &lt; EB &lt; ZB &lt; YB)</li>
+      <li>SRAM도 DRAM과 마찬가지로 <b>휘발성</b> (비휘발성 아님 — 자주 나오는 오답 함정)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>응답 시간</th><th>반환 시간</th></tr>
+      <tr><td>정의</td><td>입력 후 <b>반응이 시작</b>될 때까지</td><td>제출부터 <b>결과를 받을</b> 때까지 전체</td></tr>
+      <tr><td>범위</td><td>더 짧음 (일부 구간)</td><td>더 김 (전체 처리 과정)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>CISC</th><th>RISC</th></tr>
+      <tr><td>명령어 종류</td><td>많음, 가변 길이</td><td>적음, 고정 길이</td></tr>
+      <tr><td>하드웨어</td><td>복잡</td><td>단순</td></tr>
+      <tr><td>대표 예시</td><td>x86 계열</td><td>ARM, MIPS 계열</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">시스템 버스</span>
+      <span class="chip">DMA</span>
+      <span class="chip">채널</span>
+      <span class="chip">제어장치</span>
+      <span class="chip">연산장치</span>
+      <span class="chip">레지스터</span>
+      <span class="chip">응답시간</span>
+      <span class="chip">반환시간</span>
+      <span class="chip">처리량</span>
+      <span class="chip">병목현상</span>
+      <span class="chip">MIPS</span>
+      <span class="chip">FLOPS</span>
+      <span class="chip">클록</span>
+      <span class="chip">CPI</span>
+      <span class="chip">RISC</span>
+      <span class="chip">CISC</span>
+      <span class="chip">SSI</span>
+      <span class="chip">VLSI</span>
+      <span class="chip">ULSI</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

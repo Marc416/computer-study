@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데이터의 표현과 진법 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">01. 컴퓨터구조</a> / 데이터의 표현과 진법</div>
+  <h1 class="page-title">데이터의 표현과 진법</h1>
+  <p class="page-subtitle">데이터 단위, 문자 코드 체계, 진법 변환 · PART 01. 전자계산기구조론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>데이터의 최소 단위는 <b>비트</b>이고, 8비트 = <b>1바이트</b>, CPU가 한 번에 처리하는 단위는 <b>워드</b>다.</p>
+    <p>진법 변환은 <b>2진 ↔ 8진 ↔ 16진</b>을 자릿수 묶음(3비트=8진 1자리, 4비트=16진 1자리)으로 빠르게 변환하는 것이 핵심이다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>데이터 표현 단위</h3>
+    <table>
+      <tr><th>단위</th><th>크기</th><th>설명</th></tr>
+      <tr><td>비트 (bit)</td><td>1자리 (0 또는 1)</td><td>정보의 최소 단위. n비트로 2ⁿ개의 데이터 표시 가능</td></tr>
+      <tr><td>니블 (nibble)</td><td>4비트</td><td>16진수 1자리에 대응. 독립적으로 처리되지 않음</td></tr>
+      <tr><td>바이트 (byte)</td><td>8비트</td><td>문자 표현의 최소 단위, 기억용량의 기본 단위</td></tr>
+      <tr><td>워드 (word)</td><td>컴퓨터마다 다름 (2/4/8바이트 등)</td><td>CPU가 한 번에 처리·접근하는 데이터 단위</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> 니블은 4비트다 (2비트 아님 — 자주 나오는 오답 함정). 워드 크기는 컴퓨터 시스템마다 다를 수 있다(고정 아님).</div>
+
+    <h3>문자 코드 체계별 비트 수</h3>
+    <table>
+      <tr><th>코드</th><th>비트 수</th><th>표현 가능 문자 수</th></tr>
+      <tr><td>BCD</td><td>6비트</td><td>2⁶ = 64개</td></tr>
+      <tr><td>ASCII</td><td>7비트</td><td>2⁷ = 128개</td></tr>
+      <tr><td>EBCDIC</td><td>8비트</td><td>2⁸ = 256개</td></tr>
+      <tr><td>유니코드 (Unicode)</td><td>16비트</td><td>2¹⁶개 (전 세계 문자 표현)</td></tr>
+    </table>
+    <div class="analogy">비트 수 크기 순서: <b>BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</b></div>
+
+    <h3>진법 변환</h3>
+    <p><b>2진 → 8진 → 16진</b> 상호 변환은 자릿수를 묶어서 처리하면 빠르다.</p>
+    <table>
+      <tr><th>변환</th><th>규칙</th></tr>
+      <tr><td>2진 ↔ 4진</td><td>2진수 <b>2자리</b> = 4진수 1자리</td></tr>
+      <tr><td>2진 ↔ 8진</td><td>2진수 <b>3자리</b> = 8진수 1자리</td></tr>
+      <tr><td>2진 ↔ 16진</td><td>2진수 <b>4자리</b> = 16진수 1자리</td></tr>
+    </table>
+    <div class="tip">
+      <b>예: 8진수 (2001)₈ → 2진수</b><br>
+      2 → 010, 0 → 000, 0 → 000, 1 → 001<br>
+      합치면 010 000 000 001 → 앞의 0 생략 → <b>10000000001</b>₂
+    </div>
+    <div class="tip">
+      <b>예: 16진수 (302)₁₆ → 2진수</b><br>
+      3 → 0011, 0 → 0000, 2 → 0010<br>
+      합치면 0011 0000 0010 → 앞의 0 생략 → <b>1100000010</b>₂
+    </div>
+
+    <h3>N진수 → 10진수 변환 (자릿값 곱해서 더하기)</h3>
+    <div class="tip">
+      <b>예: 16진수 (1B4.C)₁₆ → 10진수</b><br>
+      1×16² + B(11)×16¹ + 4×16⁰ + C(12)×16⁻¹<br>
+      = 256 + 176 + 4 + 0.75 = <b>436.75</b>
+    </div>
+    <div class="tip">
+      <b>예: 8진수 (13754)₈ → 10진수</b><br>
+      1×8⁴ + 3×8³ + 7×8² + 5×8¹ + 4×8⁰<br>
+      = 4096 + 1536 + 448 + 40 + 4 = <b>6124</b>
+    </div>
+
+    <h3>10진수 → 2진수 변환</h3>
+    <div class="tip">
+      <b>정수부:</b> 2로 계속 나누어 나머지를 <b>역순</b>으로 읽는다.<br>
+      <b>소수부:</b> 2를 계속 곱해서 정수부로 넘어가는 값을 <b>순서대로</b> 읽는다.<br><br>
+      예: 45.1875 → 정수부 45 = 101101₂, 소수부 0.1875 = 0.0011₂ → <b>101101.0011</b>₂
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>서로 다른 진법으로 표현된 값들 중 <b>실제 크기가 다른 것 찾기</b> 유형 (10진수로 통일해서 비교)</li>
+      <li>10진수 ↔ 2진수 변환 계산 문제 (정수부는 나눗셈, 소수부는 곱셈)</li>
+      <li>2진 ↔ 8진(3비트 묶음), 2진 ↔ 16진(4비트 묶음) 빠른 변환</li>
+      <li>문자 코드 체계별 비트 수 순서: BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</li>
+      <li>니블 = 4비트 (2비트 아님), 바이트 = 8비트, 워드 크기는 시스템마다 다름</li>
+      <li>N비트로 표현 가능한 정수 개수는 <b>2ⁿ개</b> (0~2ⁿ-1의 범위)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>단위</th><th>비트 수</th><th>대응 관계</th></tr>
+      <tr><td>니블</td><td>4비트</td><td>16진수 1자리</td></tr>
+      <tr><td>바이트</td><td>8비트</td><td>문자 1개(ASCII 등)</td></tr>
+      <tr><td>하프워드</td><td>2바이트(16비트)</td><td>-</td></tr>
+      <tr><td>풀워드</td><td>4바이트(32비트)</td><td>-</td></tr>
+      <tr><td>더블워드</td><td>8바이트(64비트)</td><td>-</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">비트</span>
+      <span class="chip">니블</span>
+      <span class="chip">바이트</span>
+      <span class="chip">워드</span>
+      <span class="chip">ASCII</span>
+      <span class="chip">BCD</span>
+      <span class="chip">EBCDIC</span>
+      <span class="chip">유니코드</span>
+      <span class="chip">진법 변환</span>
+      <span class="chip">2진수</span>
+      <span class="chip">8진수</span>
+      <span class="chip">16진수</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
