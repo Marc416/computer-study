@@ -22,19 +22,19 @@
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>보수(Complement) 표현법 3가지</h3>
+    <h3>보수(Complement) 표현법 3가지 <span class="page-ref">📖 기출문제집 p.49</span></h3>
     <table>
       <tr><th>방식</th><th>표현 규칙 (4비트, -4 예시)</th></tr>
       <tr><td>부호와 절대치</td><td>최상위 비트=부호(1=음수), 나머지는 절대값 그대로 → <b>1100</b></td></tr>
       <tr><td>1의 보수</td><td>양수 절대치의 모든 비트를 반전(0↔1) → 0100 반전 → <b>1011</b></td></tr>
       <tr><td>2의 보수</td><td>1의 보수에 <b>+1</b> → 1011 + 1 = <b>1100</b></td></tr>
     </table>
-    <div class="tip">
-      <b>계산 순서 (예: -35를 8비트로)</b><br>
-      ① 35의 절대치: 00100011<br>
-      ② 1의 보수(반전): 11011100<br>
-      ③ 2의 보수(+1): <b>11011101</b>
-    </div>
+    <p><b>계산 방법: -35를 8비트 2의 보수로 바꾸는 순서</b> <span class="page-ref">📖 기출문제집 p.51</span></p>
+    <ol class="steps">
+      <li>35를 2진수(절대치)로 변환: <b>00100011</b></li>
+      <li>모든 비트 반전(1의 보수): 00100011 → <b>11011100</b></li>
+      <li>+1 (2의 보수 완성): 11011100 + 1 = <b>11011101</b></li>
+    </ol>
     <div class="tip">
       <b>2의 보수 → 10진수로 되돌리기 (예: 10111100)</b><br>
       최상위 비트가 1 → 음수. 2의 보수를 취해(1의 보수 후 +1) 절대값을 구한다.<br>
@@ -66,7 +66,7 @@
       <tr><td>표현 범위</td><td>좁음</td><td>매우 크거나 작은 수까지 표현 가능</td></tr>
     </table>
 
-    <h3>IEEE 754 부동소수점 표준</h3>
+    <h3>IEEE 754 부동소수점 표준 <span class="page-ref">📖 기출문제집 p.54</span></h3>
     <p>정규화된 형태 <b>±1.bbb...b × 2±E</b> 로 표현하며, 아래 3부분으로 저장한다.</p>
     <table>
       <tr><th>구분</th><th>단일 정밀도 (32비트)</th><th>이중 정밀도 (64비트)</th></tr>
@@ -74,6 +74,25 @@
       <tr><td>지수부</td><td>8비트 (바이어스 <b>127</b>)</td><td>11비트 (바이어스 <b>1023</b>)</td></tr>
       <tr><td>가수부</td><td>23비트</td><td>52비트</td></tr>
     </table>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 140" role="img" aria-label="IEEE 754 단정도 32비트 비트필드 구조: 부호 1비트, 지수 8비트, 가수 23비트가 순서대로 배치된다">
+        <rect x="20" y="30" width="40" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="40" y="60" font-size="13" text-anchor="middle">S</text>
+        <rect x="60" y="30" width="200" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="160" y="60" font-size="13" text-anchor="middle">지수부 (Exponent)</text>
+        <rect x="260" y="30" width="360" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="440" y="60" font-size="13" text-anchor="middle">가수부 (Mantissa / Fraction)</text>
+        <text x="40" y="20" font-size="11" text-anchor="middle" opacity="0.75">1비트</text>
+        <text x="160" y="20" font-size="11" text-anchor="middle" opacity="0.75">8비트 (바이어스 127)</text>
+        <text x="440" y="20" font-size="11" text-anchor="middle" opacity="0.75">23비트</text>
+        <text x="40" y="100" font-size="11" text-anchor="middle" opacity="0.75">0=양수<br/>1=음수</text>
+        <text x="160" y="100" font-size="11" text-anchor="middle" opacity="0.75">실제 지수 + 127</text>
+        <text x="440" y="100" font-size="11" text-anchor="middle" opacity="0.75">정규화 후 "1." 다음 소수부만 저장</text>
+        <text x="20" y="125" font-size="11.5" opacity="0.8">bit 31</text>
+        <text x="600" y="125" font-size="11.5" text-anchor="end" opacity="0.8">bit 0</text>
+      </svg>
+      <figcaption>IEEE 754 단정도(32비트)의 비트 배치 — 왼쪽부터 부호(1) · 지수(8, 바이어스 127) · 가수(23) 순서로 저장된다. 배정도(64비트)는 지수 11비트·가수 52비트로 늘어날 뿐 구조는 동일하다.</figcaption>
+    </figure>
     <ul>
       <li>부호 비트: 0=양수, 1=음수</li>
       <li>지수부에는 <b>실제 지수 + 바이어스</b> 값을 저장 (음수 지수를 양수로 표현하기 위함)</li>
@@ -81,15 +100,17 @@
       <li>가수부 비트가 많을수록 정밀도(정확도)가 높아짐</li>
       <li>0은 특별한 값으로 모든 비트를 0으로 표현</li>
     </ul>
-    <div class="tip">
-      <b>10진수 → IEEE 754 변환 예 (-2.75)</b><br>
-      ① 2진수 변환: -10.11₂<br>
-      ② 정규화: -1.011 × 2¹<br>
-      ③ 부호=1(음수), 지수=127+1=128=10000000, 가수="011" 뒤에 0 채움<br>
-      → <b>1 10000000 01100000000000000000000</b>
-    </div>
+    <p><b>계산 방법: 10진수 -2.75 → IEEE 754 단정도 변환 순서</b> <span class="page-ref">📖 기출문제집 p.55</span></p>
+    <ol class="steps">
+      <li>2진수로 변환: 2.75 = <b>10.11</b>₂</li>
+      <li>정규화(소수점을 맨 앞자리 1 뒤로 이동): 10.11 → <b>1.011 × 2¹</b></li>
+      <li>부호 결정: 음수이므로 부호비트 = <b>1</b></li>
+      <li>지수 계산: 실제 지수 1 + 바이어스 127 = 128 = 2진수 <b>10000000</b></li>
+      <li>가수 채우기: 정규화된 가수 "011" 뒤에 0을 채워 23비트로: <b>01100000000000000000000</b></li>
+      <li>합치기: <b>1 10000000 01100000000000000000000</b></li>
+    </ol>
 
-    <h3>부동소수점의 사칙연산 규칙</h3>
+    <h3>부동소수점의 사칙연산 규칙 <span class="page-ref">📖 기출문제집 p.58</span></h3>
     <table>
       <tr><th>연산</th><th>규칙</th></tr>
       <tr><td>덧셈/뺄셈</td><td>① 0인지 검사 → ② <b>지수가 큰 쪽에 맞춰</b> 작은 쪽 가수 위치 조정 → ③ 가수 연산 → ④ 결과를 다시 정규화</td></tr>

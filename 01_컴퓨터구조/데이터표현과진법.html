@@ -42,7 +42,7 @@
     </table>
     <div class="analogy">비트 수 크기 순서: <b>BCD(6) &lt; ASCII(7) &lt; EBCDIC(8) &lt; 유니코드(16)</b></div>
 
-    <h3>진법 변환</h3>
+    <h3>진법 변환 <span class="page-ref">📖 기출문제집 p.39~41</span></h3>
     <p><b>2진 → 8진 → 16진</b> 상호 변환은 자릿수를 묶어서 처리하면 빠르다.</p>
     <table>
       <tr><th>변환</th><th>규칙</th></tr>
@@ -73,11 +73,29 @@
       = 4096 + 1536 + 448 + 40 + 4 = <b>6124</b>
     </div>
 
-    <h3>10진수 → 2진수 변환</h3>
+    <h3>10진수 → 2진수 변환 <span class="page-ref">📖 기출문제집 p.41</span></h3>
+    <p><b>정수부</b>는 몫이 0이 될 때까지 2로 계속 나누고 나머지를 <b>아래에서 위로(역순)</b> 읽는다. <b>소수부</b>는 2를 계속 곱해서 넘어가는 정수부를 <b>위에서 아래로(순서대로)</b> 읽는다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 300" role="img" aria-label="45를 2진수로 바꾸는 나눗셈 반복 과정: 몫이 0이 될 때까지 2로 나누고 나머지를 아래에서 위로 읽는다">
+        <defs>
+          <marker id="arh1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="20" y="20" font-size="13" font-weight="700">정수부 45 → 2진수</text>
+        <text x="20" y="50" font-size="13">45 ÷ 2 = 22 … 나머지 1</text>
+        <text x="20" y="78" font-size="13">22 ÷ 2 = 11 … 나머지 0</text>
+        <text x="20" y="106" font-size="13">11 ÷ 2 = 5 … 나머지 1</text>
+        <text x="20" y="134" font-size="13">5 ÷ 2 = 2 … 나머지 1</text>
+        <text x="20" y="162" font-size="13">2 ÷ 2 = 1 … 나머지 0</text>
+        <text x="20" y="190" font-size="13">1 ÷ 2 = 0 … 나머지 1 (몫이 0 → 종료)</text>
+        <line x1="380" y1="185" x2="380" y2="45" stroke="currentColor" stroke-width="1.5" marker-end="url(#arh1)"/>
+        <text x="390" y="120" font-size="12" opacity="0.8">나머지를 아래→위로 읽기</text>
+        <text x="20" y="230" font-size="14" font-weight="700">→ 나머지를 역순으로 읽으면: 1 0 1 1 0 1 = 101101₂</text>
+        <text x="20" y="270" font-size="13" font-weight="700">소수부 0.1875 → 0 . 0 0 1 1 (2를 곱해 넘어가는 정수부를 순서대로) = 0.0011₂</text>
+      </svg>
+      <figcaption>10진 정수를 2진수로 바꾸는 나눗셈 반복법 — 나머지를 아래에서 위로 읽는 이유는, 가장 나중에 나온 나머지가 2진수의 최상위 비트가 되기 때문이다.</figcaption>
+    </figure>
     <div class="tip">
-      <b>정수부:</b> 2로 계속 나누어 나머지를 <b>역순</b>으로 읽는다.<br>
-      <b>소수부:</b> 2를 계속 곱해서 정수부로 넘어가는 값을 <b>순서대로</b> 읽는다.<br><br>
-      예: 45.1875 → 정수부 45 = 101101₂, 소수부 0.1875 = 0.0011₂ → <b>101101.0011</b>₂
+      <b>합친 결과:</b> 45.1875 → 정수부 <b>101101</b>₂ + 소수부 <b>0.0011</b>₂ = <b>101101.0011</b>₂
     </div>
   </section>
 

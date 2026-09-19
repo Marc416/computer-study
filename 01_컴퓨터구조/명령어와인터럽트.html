@@ -22,13 +22,19 @@
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>명령어 형식 계산 문제</h3>
+    <h3>명령어 형식 계산 문제 <span class="page-ref">📖 기출문제집 p.102~103</span></h3>
     <ul>
       <li><b>OPCODE 비트 수 n</b> → 표현 가능한 명령어 종류 = <b>2ⁿ개</b></li>
       <li><b>OPERAND(주소부) 비트 수 m</b> → 표현 가능한 주소 공간 = <b>2ᵐ개</b></li>
     </ul>
+    <p><b>예제: 32비트 명령어, OPERAND가 256M(=2²⁸)워드 주소를 표현할 때 OPCODE로 표현 가능한 명령어 종류는?</b></p>
+    <ol class="steps">
+      <li>256M = 256 × 2²⁰ = 2⁸ × 2²⁰ = <b>2²⁸</b> → OPERAND 필드는 28비트가 필요</li>
+      <li>전체 명령어 길이 32비트 중 OPERAND가 28비트를 차지</li>
+      <li>남는 OPCODE 비트 수 = 32 − 28 = <b>4비트</b></li>
+      <li>OPCODE 4비트로 표현 가능한 명령어 종류 = 2⁴ = <b>16개</b></li>
+    </ol>
     <div class="tip">
-      <b>예제:</b> 32비트 명령어, OPERAND가 256M(=2²⁸)워드 주소를 표현 → OPERAND는 28비트 필요 → 남은 OPCODE는 4비트 → 표현 가능한 명령어는 2⁴ = <b>16개</b><br><br>
       <b>예제2:</b> 12비트 명령어(연산코드 5비트 + 주소부 7비트), 직접 주소지정 방식, 주소 1개=1바이트 → 주소부 7비트로 표현 가능한 최대 메모리 = 2⁷ = <b>128바이트</b>
     </div>
 
@@ -55,13 +61,44 @@
       <tr><td><b>동기 인터럽트</b></td><td>명령어 실행 중 내부에서 발생 (0으로 나누기, 보호 메모리 접근)</td></tr>
     </table>
 
-    <h3>인터럽트 처리 순서</h3>
-    <ol>
+    <h3>인터럽트 처리 순서 <span class="page-ref">📖 기출문제집 p.104~105</span></h3>
+    <ol class="steps">
       <li>인터럽트 발생 장치로부터 <b>요청 신호</b> 수신</li>
       <li>현재 프로그램의 상태(PC, 레지스터)를 <b>스택에 저장</b></li>
       <li>인터럽트 <b>원인을 분석</b>하고 해당 서비스 루틴을 호출·실행</li>
       <li>서비스 루틴 종료 후 저장했던 PC·상태를 복구 → <b>인출(Fetch) 사이클부터 재개</b></li>
     </ol>
+    <figure class="diagram">
+      <svg viewBox="0 0 740 260" role="img" aria-label="인터럽트 처리 흐름: 메인 프로그램 실행 중 인터럽트가 발생하면 상태를 저장하고 서비스 루틴을 실행한 뒤 상태를 복구해 인출 사이클부터 재개한다">
+        <defs>
+          <marker id="ari" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="100" y="40" font-size="12" text-anchor="middle">메인 프로그램 실행 중</text>
+        <line x1="20" y1="60" x2="280" y2="60" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="280" cy="60" r="4" fill="currentColor"/>
+        <text x="280" y="35" font-size="12" text-anchor="middle" font-weight="700">인터럽트 발생</text>
+        <line x1="280" y1="64" x2="280" y2="95" stroke="currentColor" stroke-width="1.5" marker-end="url(#ari)"/>
+
+        <rect x="170" y="95" width="220" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="280" y="116" font-size="12" text-anchor="middle">① 상태 저장</text>
+        <text x="280" y="133" font-size="11" text-anchor="middle" opacity="0.75">PC·레지스터 → 스택</text>
+        <line x1="280" y1="145" x2="280" y2="175" stroke="currentColor" stroke-width="1.5" marker-end="url(#ari)"/>
+
+        <rect x="170" y="175" width="220" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="280" y="196" font-size="12" text-anchor="middle">② ISR 실행</text>
+        <text x="280" y="213" font-size="11" text-anchor="middle" opacity="0.75">원인 분석 후 서비스 루틴 수행</text>
+        <line x1="390" y1="200" x2="425" y2="200" stroke="currentColor" stroke-width="1.5" marker-end="url(#ari)"/>
+
+        <rect x="425" y="175" width="220" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="535" y="196" font-size="12" text-anchor="middle">③ 상태 복구</text>
+        <text x="535" y="213" font-size="11" text-anchor="middle" opacity="0.75">스택 → PC·레지스터</text>
+        <line x1="535" y1="175" x2="535" y2="64" stroke="currentColor" stroke-width="1.5" marker-end="url(#ari)"/>
+
+        <line x1="535" y1="60" x2="710" y2="60" stroke="currentColor" stroke-width="1.5" marker-end="url(#ari)"/>
+        <text x="620" y="42" font-size="12" text-anchor="middle" font-weight="700">④ 인출(Fetch)부터 재개</text>
+      </svg>
+      <figcaption>인터럽트는 메인 프로그램 실행 도중 "곁가지"로 빠져나가 상태를 저장(①)하고 서비스 루틴을 실행(②)한 뒤, 상태를 되돌려(③) 반드시 <b>인출 사이클</b>부터 다시 시작(④)한다 — 실행(Execute) 사이클로 바로 복귀하지 않는다는 점이 시험 함정.</figcaption>
+    </figure>
     <div class="tip"><b>함정 주의:</b> 인터럽트 사이클을 마치면 실행 사이클이 아니라 반드시 <b>인출(Fetch) 사이클</b>부터 다시 시작한다. 또한 인터럽트가 끝난 뒤 항상 원래 프로세스로 복귀하는 것은 아니며, 스케줄링 정책에 따라 다른 프로세스가 실행될 수도 있다.</div>
 
     <h3>인터럽트 우선순위</h3>

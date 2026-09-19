@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로세스 스케줄링 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 프로세스 스케줄링</div>
+  <h1 class="page-title">프로세스 스케줄링</h1>
+  <p class="page-subtitle">CPU를 어떤 프로세스에 언제 줄지 결정하는 방식 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>비선점(Non-preemptive)</b> = FCFS, SJF, HRN — 한 번 CPU를 잡으면 끝날 때까지 안 뺏김</p>
+    <p><b>선점(Preemptive)</b> = RR, SRT, MLQ, MFQ — 더 급한 프로세스가 오면 중간에 CPU를 뺏을 수 있음</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>스케줄링 평가 기준</h3>
+    <table>
+      <tr><th>기준</th><th>의미</th></tr>
+      <tr><td>처리량 (Throughput)</td><td>단위 시간당 완료되는 프로세스 수 — 클수록 좋음</td></tr>
+      <tr><td>대기 시간 (Waiting Time)</td><td>준비 큐에서 CPU를 기다린 시간 — 작을수록 좋음</td></tr>
+      <tr><td>반환 시간 (Turnaround Time)</td><td>도착부터 완료까지 전체 시간 (대기시간+실행시간) — 작을수록 좋음</td></tr>
+      <tr><td>응답 시간 (Response Time)</td><td>도착부터 (처음 또는 완료까지) 반응이 오기까지 시간</td></tr>
+      <tr><td>CPU 이용률</td><td>CPU가 놀지 않고 일한 시간의 비율 — 클수록 좋음</td></tr>
+    </table>
+
+    <h3>선점 vs 비선점 분류 ⭐ (매년 출제)</h3>
+    <table>
+      <tr><th>구분</th><th>알고리즘</th></tr>
+      <tr><td><b>비선점 (Non-preemptive)</b></td><td>FCFS, SJF(비선점), <b>HRN(HRRN)</b></td></tr>
+      <tr><td><b>선점 (Preemptive)</b></td><td>RR, SRT(=선점 SJF), MLQ, MFQ</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "RR은 비선점 방식이다"는 틀린 설명 — RR은 대표적인 <b>선점형</b>이다.</div>
+
+    <h3>FCFS (First Come First Served)</h3>
+    <ul>
+      <li>도착한 순서대로 CPU를 할당하는 <b>가장 단순한 비선점</b> 방식</li>
+      <li>구현이 쉽지만, 실행시간이 긴 프로세스가 먼저 오면 뒤 프로세스들이 오래 기다림</li>
+      <li>일괄처리 시스템에는 효율적이나, 빠른 응답이 필요한 <b>대화식 시스템에는 부적합</b></li>
+    </ul>
+    <div class="tip">
+      <b>계산 예시 (2018 계리직):</b> P1(도착0,실행2) P2(도착2,실행2) P3(도착3,실행3) P4(도착4,실행9)를 FCFS로 처리 →
+      응답시간(도착~완료) 각각 2, 2, 4, 12초 → 평균 응답시간 = (2+2+4+12)/4 = <b>5초</b>
+    </div>
+
+    <h3>SJF (Shortest Job First) / SRT (Shortest Remaining Time)</h3>
+    <ul>
+      <li><b>SJF</b>: 실행시간이 가장 짧은 작업부터 처리하는 <b>비선점</b> 방식 → 평균 대기시간이 이론상 최소</li>
+      <li><b>SRT</b>: SJF의 <b>선점(preemptive) 버전</b> — 새 프로세스가 도착할 때마다 "남은 실행시간"을 비교해서 더 짧은 쪽이 CPU를 뺏음</li>
+      <li>실행시간이 긴 프로세스는 계속 밀려서 <b>기아상태(Starvation)</b>에 빠질 위험 있음</li>
+    </ul>
+    <div class="tip">
+      <b>SJF 계산 예시 (2014 서울시):</b> P1(0,6) P2(1,4) P3(2,1) P4(3,2) → 실행순서 P1→P3→P4→P2, 대기시간 합 0+4+4+8=16 → 평균 대기시간 = 16/4 = <b>4초</b><br><br>
+      <b>SRT 계산 예시 (2015 국가직):</b> P1(0,8) P2(2,4) P3(4,1) P4(6,4) → 도착할 때마다 남은시간 비교해 재배정 → 평균 반환시간 = <b>7</b>
+    </div>
+
+    <h3>RR (Round Robin)</h3>
+    <ul>
+      <li>각 프로세스에게 동일한 <b>시간 할당량(Time Slice/Quantum)</b>만큼만 CPU를 주고, 다 쓰면 강제로 준비 큐 맨 뒤로 보냄</li>
+      <li>대표적인 <b>선점</b> 방식, <b>시분할 시스템</b>에 적합</li>
+      <li>Time Slice가 <b>너무 크면</b> → FCFS와 동일해짐</li>
+      <li>Time Slice가 <b>너무 작으면</b> → 문맥교환(Context Switching)이 잦아져 오버헤드 증가</li>
+      <li>도착 순서대로 순환하므로 <b>기아상태가 발생하지 않음</b></li>
+    </ul>
+    <p><b>계산 방법:</b> Quantum만큼 실행하다 다 못 끝내면 <b>도착한 순서대로 준비 큐 맨 뒤에 다시 줄을 세운다</b>. 타임라인을 시간 순서대로 손으로 따라가며 "지금 큐 맨 앞이 누구인지"만 계속 갱신하면 된다.</p>
+    <div class="tip">
+      <b>계산 예제 (2016 계리직, Quantum=2): P1(도착0,실행3) P2(도착1,실행4) P3(도착3,실행2)</b> <span class="page-ref">📖 기출문제집 p.215</span>
+      <ol class="steps">
+        <li>t=0: P1 도착 → 준비큐가 비어있으므로 즉시 CPU 할당, 2초 실행(0~2)</li>
+        <li>t=1: P2 도착 → 준비큐에서 대기 [P2]</li>
+        <li>t=2: P1의 Quantum(2초) 소진, 잔여 1초 남음 → 준비큐 맨 뒤로 이동 [P1(잔여1)]. 큐 맨 앞 P2가 CPU 할당, 2초 실행(2~4)</li>
+        <li>t=3: P3 도착 → 준비큐 맨 뒤에 추가 [P1(잔여1), P3]</li>
+        <li>t=4: P2의 Quantum 소진, 잔여 2초 남음 → 준비큐 맨 뒤로 [P1(잔여1), P3, P2(잔여2)]. 큐 맨 앞 P1이 CPU 할당, 남은 1초 실행(4~5) → <b>P1 완료(t=5)</b></li>
+        <li>t=5: 큐 맨 앞 P3이 CPU 할당, 2초 실행(5~7) → <b>P3 완료(t=7)</b></li>
+        <li>t=7: 큐에 남은 P2(잔여2)가 CPU 할당, 2초 실행(7~9) → <b>P2 완료(t=9)</b></li>
+        <li>이 문제의 "응답시간" = 도착~종료(반환시간과 동일하게 정의): P1=5−0=5, P2=9−1=8, P3=7−3=4 → 평균 = (5+8+4)/3 ≈ <b>5.7초</b></li>
+      </ol>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 180" role="img" aria-label="라운드로빈 간트차트: P1이 0부터 2까지, P2가 2부터 4까지, P1이 4부터 5까지, P3이 5부터 7까지, P2가 7부터 9까지 순서대로 CPU를 사용한다">
+        <polygon points="40,45 46,58 34,58" fill="currentColor"/>
+        <text x="40" y="40" font-size="10.5" text-anchor="middle">P1도착</text>
+        <polygon points="110,45 116,58 104,58" fill="currentColor"/>
+        <text x="110" y="40" font-size="10.5" text-anchor="middle">P2도착</text>
+        <polygon points="250,45 256,58 244,58" fill="currentColor"/>
+        <text x="250" y="40" font-size="10.5" text-anchor="middle">P3도착</text>
+
+        <rect x="40" y="70" width="140" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="110" y="95" font-size="13" text-anchor="middle">P1</text>
+        <rect x="180" y="70" width="140" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="250" y="95" font-size="13" text-anchor="middle">P2</text>
+        <rect x="320" y="70" width="70" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="355" y="95" font-size="13" text-anchor="middle">P1</text>
+        <rect x="390" y="70" width="140" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="460" y="95" font-size="13" text-anchor="middle">P3</text>
+        <rect x="530" y="70" width="140" height="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="600" y="95" font-size="13" text-anchor="middle">P2</text>
+
+        <line x1="40" y1="120" x2="670" y2="120" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+        <g font-size="11" text-anchor="middle" opacity="0.85">
+          <line x1="40" y1="115" x2="40" y2="125" stroke="currentColor"/><text x="40" y="140">0</text>
+          <line x1="180" y1="115" x2="180" y2="125" stroke="currentColor"/><text x="180" y="140">2</text>
+          <line x1="320" y1="115" x2="320" y2="125" stroke="currentColor"/><text x="320" y="140">4</text>
+          <line x1="390" y1="115" x2="390" y2="125" stroke="currentColor"/><text x="390" y="140">5</text>
+          <line x1="530" y1="115" x2="530" y2="125" stroke="currentColor"/><text x="530" y="140">7</text>
+          <line x1="670" y1="115" x2="670" y2="125" stroke="currentColor"/><text x="670" y="140">9</text>
+        </g>
+        <text x="670" y="165" font-size="10.5" text-anchor="end" opacity="0.75">시간(초)</text>
+      </svg>
+      <figcaption>Quantum=2인 RR 스케줄링의 간트차트. 위쪽 삼각형은 프로세스 도착 시점, 막대는 실제로 CPU를 점유한 구간이다. P1은 두 번(0~2, 4~5), P2도 두 번(2~4, 7~9)에 나눠 실행되는 것이 RR의 특징이다.</figcaption>
+    </figure>
+
+    <h3>우선순위(Priority) 스케줄링</h3>
+    <ul>
+      <li>프로세스의 <b>상대적 중요도(우선순위)</b>가 높은 것부터 CPU 할당</li>
+      <li><b>선점/비선점 둘 다</b> 구현 가능 (선점 방식으로만 되는 것 아님 — 자주 나오는 오답 함정)</li>
+      <li>우선순위가 낮은 프로세스는 계속 밀려 <b>기아상태</b> 위험</li>
+      <li>해결책: <b>노화(Aging)</b> 기법 — 오래 기다린 프로세스의 우선순위를 점점 높여줌</li>
+    </ul>
+
+    <h3>HRN / HRRN (Highest Response-ratio Next)</h3>
+    <p>SJF의 단점(긴 작업의 기아상태)을 보완한 <b>비선점</b> 방식. 대기시간이 길수록 우선순위가 올라가도록 만든 공식을 사용한다.</p>
+    <div class="tip">
+      <b>우선순위 공식:</b> (대기시간 + 서비스시간) / 서비스시간 → 값이 <b>클수록 먼저 처리</b><br>
+      예시(2017 지방직): P1(대기10,서비스5)=3, P2(12,4)=4, P3(8,12)=1.67, P4(15,3)=6 → 값이 가장 큰 <b>P4가 최우선</b>
+    </div>
+
+    <h3>MLQ / MFQ (다단계 큐 / 다단계 피드백 큐)</h3>
+    <table>
+      <tr><th>구분</th><th>설명</th></tr>
+      <tr><td>MLQ (Multilevel Queue)</td><td>준비 큐를 우선순위별로 <b>여러 개</b>로 나누고, 각 큐마다 서로 다른 스케줄링 알고리즘을 쓸 수 있음</td></tr>
+      <tr><td>MFQ (Multilevel Feedback Queue)</td><td>MLQ에서 한 단계 발전 — 프로세스가 <b>CPU를 많이 쓸수록 하위 큐로 이동</b>시켜, 입출력 위주/CPU 위주 프로세스에 서로 다른 시간 할당량을 준다 (하위 큐일수록 할당시간을 크게)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>비선점 = FCFS·SJF·HRN(HRRN), 선점 = RR·SRT·MLQ·MFQ — 분류 문제 매년 출제</li>
+      <li>FCFS/SJF/RR/HRRN 각각에 대한 평균 대기시간·반환시간·응답시간 계산 문제 (간트차트 그려보는 게 핵심)</li>
+      <li>SRT = SJF의 선점 버전 (같은 원리, 선점 여부만 다름)</li>
+      <li>기아상태 발생 가능: <b>SJF, 우선순위</b> 방식 / 기아상태 없음: <b>FCFS, RR, HRRN</b></li>
+      <li>기아상태 해결책 = <b>Aging(노화)</b> 또는 HRN 방식 적용</li>
+      <li>RR의 Time Slice가 너무 크면 FCFS와 동일, 너무 작으면 문맥교환 오버헤드 증가</li>
+      <li>우선순위 스케줄링은 선점·비선점 둘 다 가능 ("항상 선점 방식"이라는 표현은 오답)</li>
+      <li>HRRN 공식: (대기시간+서비스시간)/서비스시간, 값이 클수록 우선</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>SJF</th><th>SRT</th></tr>
+      <tr><td>선점 여부</td><td>비선점</td><td>선점 (SJF의 선점 버전)</td></tr>
+      <tr><td>재비교 시점</td><td>없음 (한 번 시작하면 끝까지)</td><td>새 프로세스 도착 시마다 남은시간 비교</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>FCFS</th><th>RR</th></tr>
+      <tr><td>선점 여부</td><td>비선점</td><td>선점</td></tr>
+      <tr><td>적합 환경</td><td>일괄처리 시스템</td><td>시분할 시스템</td></tr>
+      <tr><td>기아상태</td><td>없음</td><td>없음</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>MLQ</th><th>MFQ</th></tr>
+      <tr><td>큐 이동</td><td>고정 (한 번 배정되면 그대로)</td><td>가능 (CPU 사용량에 따라 하위 큐로 이동)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">선점</span>
+      <span class="chip">비선점</span>
+      <span class="chip">FCFS</span>
+      <span class="chip">SJF</span>
+      <span class="chip">SRT</span>
+      <span class="chip">RR</span>
+      <span class="chip">Round Robin</span>
+      <span class="chip">Time Slice</span>
+      <span class="chip">우선순위 스케줄링</span>
+      <span class="chip">HRN</span>
+      <span class="chip">HRRN</span>
+      <span class="chip">MLQ</span>
+      <span class="chip">MFQ</span>
+      <span class="chip">기아상태</span>
+      <span class="chip">Starvation</span>
+      <span class="chip">Aging</span>
+      <span class="chip">대기시간</span>
+      <span class="chip">반환시간</span>
+      <span class="chip">응답시간</span>
+      <span class="chip">문맥교환</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

@@ -22,7 +22,7 @@
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>부울대수 기본 법칙</h3>
+    <h3>부울대수 기본 법칙 <span class="page-ref">📖 기출문제집 p.71</span></h3>
     <table>
       <tr><th>법칙</th><th>내용</th></tr>
       <tr><td>항등법칙</td><td>A + 0 = A, A · 1 = A</td></tr>
@@ -49,7 +49,7 @@
     </div>
     <div class="analogy"><b>풀이 팁:</b> 공통 문자를 묶어 인수분해 → 보수법칙(X+X'=1)으로 소거 → 분배법칙으로 재정리. "같은 항이 두 번 곱해지면 지운다"는 흡수법칙을 가장 많이 쓴다.</div>
 
-    <h3>카르노맵(K-map)이란?</h3>
+    <h3>카르노맵(K-map)이란? <span class="page-ref">📖 기출문제집 p.77~78</span></h3>
     <ul>
       <li>진리표의 결과(참이 되는 항)를 <b>격자 표</b>에 옮겨 그린 것</li>
       <li>인접한 칸끼리는 <b>변수 하나만 다르도록</b> 배치 (그레이코드 순서: 00, 01, 11, 10)</li>
@@ -75,7 +75,59 @@
       <tr><td>11</td><td>0</td><td>1</td><td>X</td><td>0</td></tr>
       <tr><td>10</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
     </table>
-    <div class="analogy">가장자리 4칸(00·00 / 00·10 / 10·00 / 10·10)이 둥글게 인접(B'D' 공통) + 가운데 X를 1로 취급해 01·11칸 묶음(BC 공통) → 이런 식으로 <b>가장 큰 묶음</b>을 우선 찾는 게 요령</div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 400" role="img" aria-label="카르노맵 4x4 격자에서 네 모서리를 묶어 B'D'를, 가운데 2x2 블록을 묶어 BC를 얻는 그루핑 시각화">
+        <text x="150" y="30" font-size="12" text-anchor="middle" opacity="0.8">CD →</text>
+        <text x="150" y="52" font-size="12" text-anchor="middle">00</text>
+        <text x="240" y="52" font-size="12" text-anchor="middle">01</text>
+        <text x="330" y="52" font-size="12" text-anchor="middle">11</text>
+        <text x="420" y="52" font-size="12" text-anchor="middle">10</text>
+        <text x="60" y="90" font-size="12" text-anchor="end">AB ↓</text>
+        <text x="60" y="125" font-size="12" text-anchor="end">00</text>
+        <text x="60" y="195" font-size="12" text-anchor="end">01</text>
+        <text x="60" y="265" font-size="12" text-anchor="end">11</text>
+        <text x="60" y="335" font-size="12" text-anchor="end">10</text>
+
+        <!-- 4x4 grid cells (x=105 start, each 90 wide; y=60 start, each 70 tall) -->
+        <g fill="none" stroke="currentColor" stroke-width="1.2">
+          <rect x="105" y="60" width="90" height="70"/><rect x="195" y="60" width="90" height="70"/><rect x="285" y="60" width="90" height="70"/><rect x="375" y="60" width="90" height="70"/>
+          <rect x="105" y="130" width="90" height="70"/><rect x="195" y="130" width="90" height="70"/><rect x="285" y="130" width="90" height="70"/><rect x="375" y="130" width="90" height="70"/>
+          <rect x="105" y="200" width="90" height="70"/><rect x="195" y="200" width="90" height="70"/><rect x="285" y="200" width="90" height="70"/><rect x="375" y="200" width="90" height="70"/>
+          <rect x="105" y="270" width="90" height="70"/><rect x="195" y="270" width="90" height="70"/><rect x="285" y="270" width="90" height="70"/><rect x="375" y="270" width="90" height="70"/>
+        </g>
+        <g font-size="15" text-anchor="middle">
+          <text x="150" y="102">1</text><text x="240" y="102">0</text><text x="330" y="102">0</text><text x="420" y="102">1</text>
+          <text x="150" y="172">0</text><text x="240" y="172">1</text><text x="330" y="172">X</text><text x="420" y="172">0</text>
+          <text x="150" y="242">0</text><text x="240" y="242">1</text><text x="330" y="242">X</text><text x="420" y="242">0</text>
+          <text x="150" y="312">1</text><text x="240" y="312">0</text><text x="330" y="312">0</text><text x="420" y="312">1</text>
+        </g>
+
+        <!-- Grouping BC: middle 2x2 block (rows 01,11 / cols 01,11) -->
+        <rect x="200" y="135" width="180" height="130" rx="10" fill="#4f5bd5" fill-opacity="0.15" stroke="#4f5bd5" stroke-width="3"/>
+        <!-- Grouping B'D': four corners -->
+        <rect x="110" y="65" width="80" height="60" rx="8" fill="#c2410c" fill-opacity="0.15" stroke="#c2410c" stroke-width="3" stroke-dasharray="6,4"/>
+        <rect x="380" y="65" width="80" height="60" rx="8" fill="#c2410c" fill-opacity="0.15" stroke="#c2410c" stroke-width="3" stroke-dasharray="6,4"/>
+        <rect x="110" y="275" width="80" height="60" rx="8" fill="#c2410c" fill-opacity="0.15" stroke="#c2410c" stroke-width="3" stroke-dasharray="6,4"/>
+        <rect x="380" y="275" width="80" height="60" rx="8" fill="#c2410c" fill-opacity="0.15" stroke="#c2410c" stroke-width="3" stroke-dasharray="6,4"/>
+
+        <rect x="105" y="360" width="16" height="16" fill="#4f5bd5" fill-opacity="0.3" stroke="#4f5bd5" stroke-width="2"/>
+        <text x="128" y="373" font-size="12">가운데 2×2 묶음 → <tspan font-weight="700">BC</tspan> (X를 1로 취급)</text>
+        <rect x="330" y="360" width="16" height="16" fill="#c2410c" fill-opacity="0.3" stroke="#c2410c" stroke-width="2" stroke-dasharray="4,3"/>
+        <text x="353" y="373" font-size="12">모서리 4칸(원통처럼 연결) → <tspan font-weight="700">B'D'</tspan></text>
+      </svg>
+      <figcaption>카르노맵은 표의 <b>양 끝이 서로 붙어있다고 생각</b>해야 한다 — 첫 열(CD=00)과 마지막 열(CD=10)이 이웃이고, 첫 행(AB=00)과 마지막 행(AB=10)도 이웃이다. 그래서 네 모서리(점선)는 실제로 인접한 4칸이 되어 B'D'로 묶이고, 가운데 2×2 블록(실선)은 Don't Care(X)를 1로 취급해 BC로 묶인다.</figcaption>
+    </figure>
+
+    <p><b>계산 방법: 위 카르노맵을 곱의 합(SOP)으로 간략화하는 순서</b></p>
+    <ol class="steps">
+      <li>1이 있는 칸을 모두 확인: (00,00), (00,10), (01,01), (01,11=X), (11,01), (11,11=X), (10,00), (10,10)</li>
+      <li>가장 큰 묶음부터 찾기 — 가운데 2×2 블록(01·11행 × 01·11열)에서 X를 1로 취급하면 4칸 묶음 완성</li>
+      <li>이 묶음에서 <b>값이 안 변하는 변수만</b> 남긴다: 두 행 모두 B=1, 두 열 모두 C=1 → <b>BC</b></li>
+      <li>남은 1칸들(네 모서리)을 묶기 — 표를 원통처럼 감으면 4칸이 인접 → 이 묶음도 4칸 묶음</li>
+      <li>이 묶음에서 값이 안 변하는 변수만 남긴다: 두 행 모두 B=0, 두 열 모두 D=0 → <b>B'D'</b></li>
+      <li>모든 1을 다 덮었으므로 두 묶음을 OR로 연결 → <b>F(A,B,C,D) = BC + B'D'</b></li>
+    </ol>
 
     <h3>카르노맵 풀이 순서</h3>
     <ol>

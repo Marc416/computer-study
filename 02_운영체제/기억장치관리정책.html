@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기억장치 관리정책 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 기억장치 관리정책</div>
+  <h1 class="page-title">기억장치 관리정책</h1>
+  <p class="page-subtitle">오버레이·스와핑·분할방식·메모리 배치 정책 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>가변분할 방식에서 빈 공간에 프로세스를 배치하는 3가지 정책 — <b>최초적합(First-fit) · 최적적합(Best-fit) · 최악적합(Worst-fit)</b>.</p>
+    <p>고정분할은 <b>내부 단편화</b>, 가변분할은 <b>외부 단편화</b>가 발생한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념</h2>
+
+    <h3>오버레이 (Overlay)</h3>
+    <p>프로그램 크기가 실제 메모리보다 클 때, 전체를 한 번에 올리지 않고 <b>필요한 부분만 적당한 크기로 잘라서</b> 순차적으로 가져오는 기법.</p>
+
+    <h3>스와핑 (Swapping)</h3>
+    <table>
+      <tr><th>용어</th><th>방향</th></tr>
+      <tr><td>스왑 인 (Swap-in)</td><td><b>보조기억장치 → 주기억장치</b>로 프로세스를 가져옴</td></tr>
+      <tr><td>스왑 아웃 (Swap-out)</td><td><b>주기억장치 → 보조기억장치</b>로 프로세스를 내보냄</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "스왑 영역(보조기억장치)에서 메모리로 데이터를 가져오는 작업"은 스왑 <b>아웃</b>이 아니라 스왑 <b>인</b>이다. 방향을 바꿔서 내는 문제가 반복 출제된다.</div>
+
+    <h3>분할 방식과 단편화</h3>
+    <table>
+      <tr><th>구분</th><th>고정 분할방식</th><th>가변 분할방식 (세그멘테이션)</th></tr>
+      <tr><td>분할 기준</td><td>프로세스 크기와 무관하게 동일 크기로 분할</td><td>프로세스 크기에 맞춰 분할</td></tr>
+      <tr><td>발생하는 단편화</td><td><b>내부 단편화</b></td><td><b>외부 단편화</b> (내부 단편화는 없음)</td></tr>
+      <tr><td>해결 방법</td><td>페이지 크기 조정</td><td>압축(Compaction, 조각모음) — 쓰레기 수집</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> 내부 단편화 = 큰 상자에 작은 물건을 넣어 상자 안에 남는 빈틈, 외부 단편화 = 여러 상자 사이사이에 남는, 너무 작아서 못 쓰는 빈 공간.</div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 640 220" role="img" aria-label="내부 단편화와 외부 단편화 비교: 고정분할은 프로세스를 넣은 블록 내부에 빈틈이 남고, 가변분할은 할당된 블록들 사이사이에 사용하지 못하는 작은 빈 공간이 흩어져 남는다">
+        <text x="20" y="24" font-size="12.5" font-weight="700">고정 분할 — 내부 단편화</text>
+        <rect x="20" y="34" width="280" height="50" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="20" y="34" width="190" height="50" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="115" y="64" font-size="12" text-anchor="middle">프로세스 (190)</text>
+        <rect x="210" y="34" width="90" height="50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="255" y="64" font-size="11" text-anchor="middle">내부단편화(90)</text>
+        <text x="160" y="102" font-size="11" text-anchor="middle" opacity="0.75">→ 블록(280) 안에서 프로세스가 다 못 채운 자투리 공간</text>
+
+        <text x="20" y="140" font-size="12.5" font-weight="700">가변 분할 — 외부 단편화</text>
+        <rect x="20" y="150" width="90" height="50" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="180" font-size="11" text-anchor="middle">P1</text>
+        <rect x="110" y="150" width="18" height="50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <rect x="128" y="150" width="110" height="50" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="183" y="180" font-size="11" text-anchor="middle">P2</text>
+        <rect x="238" y="150" width="12" height="50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 2"/>
+        <rect x="250" y="150" width="70" height="50" fill="currentColor" opacity="0.15" stroke="currentColor" stroke-width="1.5"/>
+        <text x="285" y="180" font-size="11" text-anchor="middle">P3</text>
+        <text x="360" y="215" font-size="11" opacity="0.75">↖ 점선 = 어느 프로세스도 못 들어갈 만큼 작은 조각들</text>
+      </svg>
+      <figcaption>내부 단편화는 할당받은 블록 <b>안쪽</b>에, 외부 단편화는 블록들 <b>사이</b>에 생긴다 — 그래서 외부 단편화는 압축(Compaction)으로 조각들을 한쪽으로 몰아 붙여야 해결된다.</figcaption>
+    </figure>
+
+    <h3>메모리 배치 정책 (가변분할에서 어디에 넣을까) <span class="page-ref">📖 기출문제집 p.239</span></h3>
+    <table>
+      <tr><th>정책</th><th>방식</th><th>특징</th></tr>
+      <tr><td><b>최초 적합</b><br>(First-fit)</td><td>맨 앞부터 탐색해 <b>처음</b>으로 맞는 공간에 배치</td><td>탐색 시간이 짧음</td></tr>
+      <tr><td><b>최적 적합</b><br>(Best-fit)</td><td>요청 크기에 <b>가장 가깝게 맞는</b>(가장 작은 여유) 공간에 배치</td><td>내부 단편화 최소화, 탐색 시간이 김 (전체 탐색 필요)</td></tr>
+      <tr><td><b>최악 적합</b><br>(Worst-fit)</td><td><b>가장 큰</b> 공간에 배치</td><td>배치 후 남는 공간을 크게 남겨 재사용성을 높이려는 의도</td></tr>
+    </table>
+    <p><b>계산 방법:</b> 빈 공간 목록을 <b>앞에서부터 순서대로</b> 볼지, <b>전체를 다 보고</b> 가장 딱 맞는/가장 큰 곳을 고를지만 구분하면 된다.</p>
+    <div class="tip">
+      <b>계산 예제 (2025 지방직): 빈 공간 1번(10KB)·2번(25KB)·3번(30KB)·4번(15KB), 12KB 프로세스 요청</b> <span class="page-ref">📖 기출문제집 p.239</span>
+      <ol class="steps">
+        <li>1번(10KB)은 12KB보다 작아 애초에 후보에서 제외 — 남은 후보: 2번(25KB), 3번(30KB), 4번(15KB)</li>
+        <li><b>최초적합</b>: 앞에서부터 순서대로 탐색 → 처음 만나는 <b>2번(25KB)</b>에 배치, 남는 공간 13KB</li>
+        <li><b>최적적합</b>: 후보 전부를 비교해 <b>가장 작게 남는</b> 곳 선택 → <b>4번(15KB)</b>에 배치, 남는 공간 3KB(최소)</li>
+        <li><b>최악적합</b>: 후보 전부를 비교해 <b>가장 크게 남는</b> 곳 선택 → <b>3번(30KB)</b>에 배치, 남는 공간 18KB(최대)</li>
+      </ol>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="12KB 프로세스 요청 시 최초적합은 25KB 블록, 최적적합은 15KB 블록, 최악적합은 30KB 블록에 배치되는 모습을 비교하는 다이어그램">
+        <text x="0" y="16" font-size="11.5" font-weight="700">빈 공간 목록</text>
+        <rect x="0" y="24" width="40" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <text x="20" y="45" font-size="10.5" text-anchor="middle" opacity="0.6">1번 10K</text>
+        <rect x="44" y="24" width="100" height="36" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="94" y="45" font-size="11" text-anchor="middle">2번 25K</text>
+        <rect x="148" y="24" width="120" height="36" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="208" y="45" font-size="11" text-anchor="middle">3번 30K</text>
+        <rect x="272" y="24" width="60" height="36" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="302" y="45" font-size="11" text-anchor="middle">4번 15K</text>
+
+        <text x="0" y="96" font-size="11.5" font-weight="700">최초적합</text>
+        <rect x="44" y="80" width="100" height="36" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="2.5"/>
+        <text x="94" y="101" font-size="11" text-anchor="middle">12K 배치 (13K 남음)</text>
+        <rect x="148" y="80" width="120" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <rect x="272" y="80" width="60" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+
+        <text x="0" y="152" font-size="11.5" font-weight="700">최적적합</text>
+        <rect x="44" y="136" width="100" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <rect x="148" y="136" width="120" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <rect x="272" y="136" width="60" height="36" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="2.5"/>
+        <text x="302" y="157" font-size="10" text-anchor="middle">12K(3K남음)</text>
+
+        <text x="0" y="208" font-size="11.5" font-weight="700">최악적합</text>
+        <rect x="44" y="192" width="100" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        <rect x="148" y="192" width="120" height="36" fill="currentColor" opacity="0.18" stroke="currentColor" stroke-width="2.5"/>
+        <text x="208" y="213" font-size="11" text-anchor="middle">12K 배치 (18K 남음)</text>
+        <rect x="272" y="192" width="60" height="36" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+
+        <text x="0" y="264" font-size="11" opacity="0.75">진하게 칠해진 칸 = 각 정책이 실제로 12KB 프로세스를 배치하는 블록</text>
+      </svg>
+      <figcaption>같은 요청(12KB)이라도 정책에 따라 완전히 다른 블록에 배치된다 — 최초적합은 "처음 맞는 곳", 최적적합은 "가장 빡빡하게 맞는 곳", 최악적합은 "가장 넉넉한 곳"을 고른다.</figcaption>
+    </figure>
+
+    <h3>버디 시스템 (Buddy System)</h3>
+    <p>메모리를 <b>2의 거듭제곱</b> 크기로 반복적으로 이등분하여 관리하다가, 인접한 빈 버퍼(버디)끼리는 다시 합쳐서(병합) 재사용한다. 고정분할·가변분할 방식의 단편화 문제를 절충해서 완화하는 기법이다.</p>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>스왑인(보조→주기억) vs 스왑아웃(주기억→보조) 방향 구분 — 자주 뒤집어서 오답 유도</li>
+      <li>First-fit / Best-fit / Worst-fit 각각 어디에 배치되는지 계산하는 문제 (거의 매년 출제)</li>
+      <li>가변분할 방식은 <b>내부 단편화가 발생하지 않는다</b> (외부 단편화만 발생)</li>
+      <li>고정분할 방식은 크기가 고정되어 있어 <b>내부 단편화</b>가 발생한다</li>
+      <li>외부 단편화 해결책 = 압축(Compaction, 조각모음)</li>
+      <li>Best-fit은 내부 단편화를 최소화하지만, 탐색을 위해 <b>전체 공간 목록을 다 봐야 해서 느림</b></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>최초적합</th><th>최적적합</th><th>최악적합</th></tr>
+      <tr><td>배치 위치</td><td>처음 맞는 곳</td><td>가장 딱 맞는 곳</td><td>가장 큰 곳</td></tr>
+      <tr><td>탐색 속도</td><td>빠름</td><td>느림</td><td>느림</td></tr>
+      <tr><td>남는 공간</td><td>랜덤</td><td>최소</td><td>최대</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>내부 단편화</th><th>외부 단편화</th></tr>
+      <tr><td>발생 위치</td><td>할당된 공간 <b>내부</b>에 남는 자투리</td><td>할당되지 않은 공간들 <b>사이</b>의 조각</td></tr>
+      <tr><td>발생하는 방식</td><td>고정분할, 버디 시스템</td><td>가변분할(세그멘테이션)</td></tr>
+      <tr><td>해결책</td><td>페이지(블록) 크기 조정</td><td>압축(Compaction)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">오버레이</span>
+      <span class="chip">스왑인</span>
+      <span class="chip">스왑아웃</span>
+      <span class="chip">고정분할</span>
+      <span class="chip">가변분할</span>
+      <span class="chip">내부단편화</span>
+      <span class="chip">외부단편화</span>
+      <span class="chip">최초적합</span>
+      <span class="chip">최적적합</span>
+      <span class="chip">최악적합</span>
+      <span class="chip">First-fit</span>
+      <span class="chip">Best-fit</span>
+      <span class="chip">Worst-fit</span>
+      <span class="chip">버디시스템</span>
+      <span class="chip">압축</span>
+      <span class="chip">Compaction</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

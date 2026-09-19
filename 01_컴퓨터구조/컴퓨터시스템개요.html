@@ -22,7 +22,7 @@
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>컴퓨터의 5대 구성 장치</h3>
+    <h3>컴퓨터의 5대 구성 장치 <span class="page-ref">📖 기출문제집 p.11</span></h3>
     <table>
       <tr><th>장치</th><th>역할</th></tr>
       <tr><td>입력장치</td><td>외부 → 컴퓨터 내부로 데이터 전송 (키보드, 마우스 등)</td></tr>
@@ -41,6 +41,49 @@
       <li><b>데이터 흐름</b>: 입력장치→주기억장치, 주기억장치↔연산장치, 주기억장치→출력장치</li>
       <li><b>제어 흐름</b>: 제어장치 → 각 장치로 뻗어나가는 신호</li>
     </ul>
+    <figure class="diagram">
+      <svg viewBox="0 0 760 400" role="img" aria-label="컴퓨터 구조도: CPU와 주기억장치는 주소, 데이터, 제어 3개의 버스에 직접 연결되지만 입력장치와 출력장치는 DMA 제어기를 거쳐야만 버스에 연결된다">
+        <defs>
+          <marker id="arS" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="280" y="20" width="200" height="140" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="380" y="38" font-size="13" text-anchor="middle" opacity="0.8">CPU</text>
+        <rect x="300" y="55" width="70" height="45" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="335" y="80" font-size="11.5" text-anchor="middle">제어장치</text>
+        <rect x="390" y="55" width="70" height="45" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="425" y="80" font-size="11.5" text-anchor="middle">연산장치</text>
+        <rect x="300" y="112" width="160" height="35" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="380" y="134" font-size="11.5" text-anchor="middle">레지스터</text>
+        <line x1="380" y1="160" x2="380" y2="205" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+
+        <line x1="60" y1="210" x2="700" y2="210" stroke="currentColor" stroke-width="1.5"/>
+        <text x="30" y="214" font-size="11" text-anchor="end">주소</text>
+        <line x1="60" y1="225" x2="700" y2="225" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <line x1="700" y1="225" x2="60" y2="225" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <text x="30" y="229" font-size="11" text-anchor="end">데이터</text>
+        <line x1="60" y1="240" x2="700" y2="240" stroke="currentColor" stroke-width="1.5"/>
+        <text x="30" y="244" font-size="11" text-anchor="end">제어</text>
+        <text x="700" y="205" font-size="11" text-anchor="end" opacity="0.75">시스템 버스</text>
+
+        <line x1="640" y1="260" x2="640" y2="240" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <rect x="560" y="260" width="160" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="640" y="292" font-size="12" text-anchor="middle">주기억장치 (RAM/ROM)</text>
+
+        <line x1="140" y1="260" x2="140" y2="240" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <rect x="60" y="260" width="160" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="140" y="285" font-size="12" text-anchor="middle" font-weight="700">DMA 제어기</text>
+        <text x="140" y="300" font-size="10.5" text-anchor="middle" opacity="0.75">(또는 채널)</text>
+
+        <line x1="100" y1="360" x2="100" y2="317" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <rect x="30" y="360" width="140" height="35" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="100" y="382" font-size="11.5" text-anchor="middle">입력장치</text>
+
+        <line x1="190" y1="360" x2="190" y2="317" stroke="currentColor" stroke-width="1.5" marker-end="url(#arS)"/>
+        <rect x="190" y="360" width="140" height="35" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="260" y="382" font-size="11.5" text-anchor="middle">출력장치</text>
+      </svg>
+      <figcaption>CPU와 주기억장치는 시스템 버스(주소·데이터·제어)에 <b>직접</b> 연결되지만, 입력·출력장치는 한 단계 떨어져 <b>DMA 제어기(또는 채널)</b>를 거쳐야만 버스를 쓸 수 있다 — 그래서 "입출력장치가 시스템 버스에 직접 접근한다"는 문장이 항상 오답이다.</figcaption>
+    </figure>
     <div class="tip"><b>함정 주의:</b> "입출력장치가 CPU와 직접 데이터를 교환한다"는 표현은 틀렸다 — 반드시 제어장치의 입출력 제어(DMA/채널/인터럽트)를 거쳐야 한다.</div>
 
     <h3>컴퓨터 성능 측정 단위</h3>
@@ -62,11 +105,18 @@
     </table>
 
     <div class="tip">
-      <b>계산 공식 (매년 출제):</b><br>
+      <b>계산 공식 (매년 출제)</b> <span class="page-ref">📖 기출문제집 p.17</span><br>
       클록 주기 = 1 / 클록 주파수<br>
       명령어 1개 실행 시간 = 클록 주기 × CPI (Cycle Per Instruction)<br>
       전체 실행 시간 = 명령어 수 × CPI × 클록 주기
     </div>
+    <p><b>예제. 클록 주파수 2GHz, CPI=1, 명령어 100만 개 프로그램의 실행 시간은?</b></p>
+    <ol class="steps">
+      <li>클록 주기 계산: 1 / 2GHz = 1 / (2×10⁹) = <b>0.5ns</b> (나노초)</li>
+      <li>명령어 1개 실행 시간: 클록주기 × CPI = 0.5ns × 1 = <b>0.5ns</b></li>
+      <li>전체 실행 시간: 명령어 수 × 명령어 1개 실행 시간 = 100만 × 0.5ns</li>
+      <li>= 1,000,000 × 0.5ns = 500,000ns = <b>0.5ms</b></li>
+    </ol>
 
     <h3>기억 용량 단위 (2의 거듭제곱)</h3>
     <table>

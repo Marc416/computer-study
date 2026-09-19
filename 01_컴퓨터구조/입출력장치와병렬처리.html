@@ -32,13 +32,45 @@
     </table>
     <div class="analogy"><b>비유:</b> 프로그램 I/O = 사장이 직접 택배 포장, 인터럽트 = 포장 끝나면 알려달라 하고 다른 일, DMA = 아예 택배기사에게 통째로 맡김, 채널 = 전담 물류팀이 알아서 여러 건을 처리</div>
 
-    <h3>DMA (Direct Memory Access)</h3>
+    <h3>DMA (Direct Memory Access) <span class="page-ref">📖 기출문제집 p.150</span></h3>
     <ul>
       <li>대용량 데이터 전송 시 <b>CPU 레지스터를 거치지 않고</b> 기억장치와 I/O 간 직접 전송</li>
       <li>기억장치 접근을 위해 CPU의 시스템 버스 사용권을 잠시 빼앗는 <b>사이클 스틸링(cycle stealing)</b> 수행</li>
       <li>전송이 완료되면 DMA 제어기가 <b>CPU에 인터럽트</b>를 요청</li>
       <li>한 시스템에 여러 개의 DMA 제어기가 존재할 수 있음</li>
     </ul>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 280" role="img" aria-label="DMA 동작 흐름: CPU가 DMA 제어기에 전송을 지시하면 CPU 개입 없이 DMA 제어기가 주기억장치와 입출력장치 사이를 직접 연결해 데이터를 옮기고, 끝나면 CPU에 인터럽트로 완료를 알린다">
+        <defs>
+          <marker id="ard" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="270" y="20" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="330" y="50" font-size="13" text-anchor="middle">CPU</text>
+
+        <line x1="330" y1="70" x2="330" y2="105" stroke="currentColor" stroke-width="1.5" marker-end="url(#ard)"/>
+        <text x="340" y="90" font-size="10.5">① 전송 시작 지시(주소·길이)</text>
+
+        <rect x="240" y="105" width="180" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="330" y="128" font-size="13" text-anchor="middle" font-weight="700">DMA 제어기</text>
+        <text x="330" y="145" font-size="10.5" text-anchor="middle" opacity="0.75">CPU 대신 전송을 전담</text>
+
+        <line x1="240" y1="150" x2="90" y2="200" stroke="currentColor" stroke-width="2" marker-end="url(#ard)"/>
+        <line x1="90" y1="200" x2="240" y2="150" stroke="currentColor" stroke-width="2" marker-end="url(#ard)"/>
+        <rect x="20" y="200" width="140" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="90" y="230" font-size="12" text-anchor="middle">주기억장치</text>
+
+        <line x1="420" y1="150" x2="560" y2="200" stroke="currentColor" stroke-width="2" marker-end="url(#ard)"/>
+        <line x1="560" y1="200" x2="420" y2="150" stroke="currentColor" stroke-width="2" marker-end="url(#ard)"/>
+        <rect x="500" y="200" width="120" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="560" y="230" font-size="12" text-anchor="middle">입출력장치</text>
+
+        <text x="330" y="192" font-size="10.5" text-anchor="middle" font-weight="700">② CPU 개입 없이 직접 전송</text>
+
+        <path d="M 390 105 C 460 80, 480 40, 392 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ard)"/>
+        <text x="470" y="58" font-size="10.5">③ 전송 완료 시 인터럽트</text>
+      </svg>
+      <figcaption>CPU는 DMA 제어기에 <b>①시작만 지시</b>하고 손을 뗀다. 실제 <b>②데이터 전송은 DMA 제어기가 주기억장치↔입출력장치 사이에서 직접</b> 수행하며, 끝나면 <b>③인터럽트</b>로 CPU에 완료만 통보한다 — "CPU를 거치지 않는다"의 실제 의미.</figcaption>
+    </figure>
     <div class="tip"><b>함정 주의:</b> "대량 고속 전송에는 인터럽트 방식이 DMA보다 효율적" → ❌ 틀림. DMA가 CPU 상태정보 저장 없이 직접 접근하므로 더 효율적이다.</div>
 
     <h3>폴링(Polling) vs 인터럽트(Interrupt)</h3>
@@ -55,7 +87,7 @@
       <tr><td>사용 공간</td><td><b>주기억장치</b></td><td><b>디스크</b> (큰 버퍼처럼 사용)</td></tr>
     </table>
 
-    <h3>Flynn의 분류 (명령어·데이터 스트림 기준)</h3>
+    <h3>Flynn의 분류 (명령어·데이터 스트림 기준) <span class="page-ref">📖 기출문제집 p.158</span></h3>
     <table>
       <tr><th>분류</th><th>명령어 스트림</th><th>데이터 스트림</th><th>예시</th></tr>
       <tr><td>SISD</td><td>1개</td><td>1개</td><td>단일 프로세서, 파이프라이닝</td></tr>
@@ -63,6 +95,34 @@
       <tr><td>MISD</td><td>n개</td><td>1개</td><td>이론적 모델 (실제 사례 거의 없음)</td></tr>
       <tr><td>MIMD</td><td>n개</td><td>n개</td><td>다중처리기, 클러스터</td></tr>
     </table>
+    <figure class="diagram">
+      <svg viewBox="0 0 460 320" role="img" aria-label="Flynn의 분류 2x2 매트릭스: 가로축은 데이터 스트림 개수, 세로축은 명령어 스트림 개수를 나타내며 SISD, SIMD, MISD, MIMD 네 조합을 보여준다">
+        <text x="290" y="20" font-size="12" text-anchor="middle" opacity="0.8">데이터 스트림 →</text>
+        <text x="150" y="35" font-size="11" text-anchor="middle">1개</text>
+        <text x="370" y="35" font-size="11" text-anchor="middle">n개</text>
+        <text x="30" y="150" font-size="12" text-anchor="middle" transform="rotate(-90 30 150)" opacity="0.8">명령어 스트림 →</text>
+        <text x="70" y="105" font-size="11" text-anchor="middle">1개</text>
+        <text x="70" y="255" font-size="11" text-anchor="middle">n개</text>
+
+        <rect x="90" y="50" width="200" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="100" font-size="16" text-anchor="middle" font-weight="700">SISD</text>
+        <text x="190" y="122" font-size="10.5" text-anchor="middle" opacity="0.75">단일 프로세서</text>
+        <text x="190" y="138" font-size="10.5" text-anchor="middle" opacity="0.75">(파이프라이닝 포함)</text>
+
+        <rect x="290" y="50" width="150" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="365" y="100" font-size="16" text-anchor="middle" font-weight="700">SIMD</text>
+        <text x="365" y="122" font-size="10.5" text-anchor="middle" opacity="0.75">배열처리기, GPU</text>
+
+        <rect x="90" y="160" width="200" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="190" y="210" font-size="16" text-anchor="middle" font-weight="700">MISD</text>
+        <text x="190" y="232" font-size="10.5" text-anchor="middle" opacity="0.75">이론적 모델(실사례 거의 없음)</text>
+
+        <rect x="290" y="160" width="150" height="110" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="365" y="210" font-size="16" text-anchor="middle" font-weight="700">MIMD</text>
+        <text x="365" y="232" font-size="10.5" text-anchor="middle" opacity="0.75">다중처리기, 클러스터</text>
+      </svg>
+      <figcaption>Flynn의 분류는 "명령어가 몇 갈래냐 × 데이터가 몇 갈래냐"의 2x2 조합이다. 단일 명령어로 여러 단계를 겹쳐 실행하는 파이프라이닝도 명령어·데이터 스트림이 각각 하나뿐이므로 <b>SISD</b>에 속한다.</figcaption>
+    </figure>
     <div class="tip"><b>함정 주의:</b> "명령어가 순서대로 실행되지만 여러 단계로 나눠 중첩 실행" → 이건 <b>파이프라이닝(SISD)</b> 설명이다. MIMD와 헷갈리지 말 것.</div>
 
     <h3>GPU / GPGPU</h3>

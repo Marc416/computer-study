@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>디스크 스케줄링과 할당 기법 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 디스크 스케줄링과 할당 기법</div>
+  <h1 class="page-title">디스크 스케줄링과 할당 기법</h1>
+  <p class="page-subtitle">헤드 이동을 최소화하는 스케줄링과 파일을 블록에 배치하는 방법 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p><b>디스크 스케줄링</b>은 헤드가 어떤 순서로 요청을 처리할지 정하는 것(FCFS·SSTF·SCAN·C-SCAN·LOOK·C-LOOK).</p>
+    <p><b>디스크 할당</b>은 파일을 디스크 블록에 어떻게 배치할지 정하는 것(연속·연결·색인 할당).</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 디스크 스케줄링</h2>
+
+    <h3>디스크 스케줄링 기법 비교</h3>
+    <table>
+      <tr><th>기법</th><th>동작 방식</th></tr>
+      <tr><td>FCFS</td><td>요청 도착 순서대로 처리. 공평하지만 <b>성능은 가장 좋지 않음</b></td></tr>
+      <tr><td>SSTF</td><td>현재 헤드 위치에서 <b>가장 가까운 트랙</b>부터 처리 (방향 무관). 특정 요청이 계속 밀리는 기아현상 가능</td></tr>
+      <tr><td>SCAN</td><td>한쪽 끝까지 이동하며 만나는 요청 모두 처리 → 반대로 방향 바꿔 왕복</td></tr>
+      <tr><td>C-SCAN</td><td>SCAN처럼 이동하되 <b>한쪽 방향으로만 서비스</b>, 끝에 도달하면 서비스 없이 반대쪽 끝으로 되돌아가 다시 그 방향으로만 처리</td></tr>
+      <tr><td>LOOK</td><td>SCAN과 비슷하지만 <b>맨 끝(0번/최대트랙)까지 가지 않고</b> 마지막 요청에서 방향 전환</td></tr>
+      <tr><td>C-LOOK</td><td>C-SCAN처럼 한쪽으로만 서비스하되, <b>맨 끝까지 가지 않고</b> 마지막 요청에서 바로 반대쪽 시작점으로 복귀</td></tr>
+    </table>
+    <div class="analogy"><b>비유:</b> SCAN·LOOK은 "엘리베이터"처럼 양방향 왕복 운행, C-SCAN·C-LOOK은 "지하철 순환선"처럼 한 방향으로만 돌고 반대편으로 순간이동해 다시 그 방향으로만 돈다.</div>
+
+    <p><b>계산 방법:</b> 매 순간 <b>"지금 헤드 위치에서 남은 요청 중 가장 가까운 트랙이 어디인가"</b>만 반복해서 확인하면 된다. 방향은 상관없이 오직 거리만 비교한다.</p>
+    <div class="tip">
+      <b>SSTF 계산 예제 (2022 국가직): 헤드 위치 50, 요청 큐 = 80,20,100,30,70,130,40</b> <span class="page-ref">📖 기출문제집 p.263</span>
+      <ol class="steps">
+        <li>현재 50 → 남은 요청 중 가장 가까운 트랙은 <b>40</b> (거리 10) → 이동</li>
+        <li>현재 40 → 가장 가까운 트랙은 <b>30</b> (거리 10) → 이동</li>
+        <li>현재 30 → 가장 가까운 트랙은 <b>20</b> (거리 10) → 이동</li>
+        <li>현재 20 → 남은 건 80,100,70,130뿐, 가장 가까운 트랙은 <b>70</b> (거리 50) → 이동</li>
+        <li>현재 70 → 가장 가까운 트랙은 <b>80</b> (거리 10) → 이동</li>
+        <li>현재 80 → 가장 가까운 트랙은 <b>100</b> (거리 20) → 이동</li>
+        <li>현재 100 → 마지막 남은 <b>130</b> (거리 30) → 이동</li>
+        <li>총 이동 거리 = 10+10+10+50+10+20+30 = <b>140</b></li>
+      </ol>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 320" role="img" aria-label="SSTF 디스크 헤드 이동 경로 그래프: 50에서 시작해 40, 30, 20, 70, 80, 100, 130 순서로 이동하며 항상 가장 가까운 트랙을 먼저 방문한다">
+        <line x1="40" y1="20" x2="40" y2="300" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="40" y1="300" x2="610" y2="300" stroke="currentColor" stroke-width="1.5"/>
+        <g font-size="10.5" text-anchor="end" opacity="0.8">
+          <text x="34" y="303">0</text>
+          <text x="34" y="223">40</text>
+          <text x="34" y="143">80</text>
+          <text x="34" y="63">120</text>
+        </g>
+        <text x="10" y="15" font-size="11" opacity="0.75">트랙</text>
+        <text x="610" y="315" font-size="11" text-anchor="end" opacity="0.75">이동 순서 →</text>
+
+        <polyline points="60,200 135,220 210,240 285,260 360,160 435,140 510,100 585,40" fill="none" stroke="currentColor" stroke-width="2"/>
+        <g font-size="11" text-anchor="middle">
+          <circle cx="60" cy="200" r="4" fill="currentColor"/><text x="60" y="188">50(시작)</text>
+          <circle cx="135" cy="220" r="4" fill="currentColor"/><text x="135" y="208">40</text>
+          <circle cx="210" cy="240" r="4" fill="currentColor"/><text x="210" y="228">30</text>
+          <circle cx="285" cy="260" r="4" fill="currentColor"/><text x="285" y="248">20</text>
+          <circle cx="360" cy="160" r="4" fill="currentColor"/><text x="360" y="148">70</text>
+          <circle cx="435" cy="140" r="4" fill="currentColor"/><text x="435" y="128">80</text>
+          <circle cx="510" cy="100" r="4" fill="currentColor"/><text x="510" y="88">100</text>
+          <circle cx="585" cy="40" r="4" fill="currentColor"/><text x="585" y="28">130</text>
+        </g>
+        <g font-size="10" opacity="0.7" text-anchor="middle">
+          <text x="97" y="218">−10</text>
+          <text x="172" y="238">−10</text>
+          <text x="247" y="258">−10</text>
+          <text x="322" y="218">+50</text>
+          <text x="397" y="158">+10</text>
+          <text x="472" y="128">+20</text>
+          <text x="547" y="78">+30</text>
+        </g>
+      </svg>
+      <figcaption>SSTF는 방향과 무관하게 매번 가장 가까운 트랙으로만 움직인다. 20에서 70으로 튀는 구간(+50)처럼 가끔 크게 점프하기도 한다는 점이 SCAN 계열과의 차이.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>C-LOOK 계산 예제:</b> 헤드 위치 50, 이동방향 0→199, 큐 = 65,112,40,16,90,170,165,35,180<br>
+      진행 방향(50보다 큰 것 오름차순)부터 처리 후 맨 앞(작은 값)으로 순간이동: 50→65→90→112→165→170→180 → (맨 앞으로 복귀) →16→35→40<br>
+      총 이동 거리 = <b>318</b>
+    </div>
+    <div class="tip"><b>함정 주의:</b> "N-Step-SCAN이 한 방향으로 움직이는 요구만 처리" 같은 설명은 사실 <b>C-SCAN</b>의 특징을 잘못 붙인 오답 패턴이다. 기법 이름과 설명을 서로 바꿔치기한 선택지에 주의.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🗄️</span>주요 개념 — 디스크 할당 기법</h2>
+
+    <h3>데이터 단위 계층</h3>
+    <p><b>필드 &lt; 레코드 &lt; 파일 &lt; 데이터베이스</b> (필드의 집합=레코드, 레코드의 집합=파일, 파일의 집합=데이터베이스)</p>
+
+    <h3>연속·연결·색인 할당 비교</h3>
+    <table>
+      <tr><th>구분</th><th>연속 할당 (Contiguous)</th><th>연결 할당 (Linked)</th><th>색인 할당 (Indexed)</th></tr>
+      <tr><td>저장 방식</td><td>디스크의 연속된 공간에 저장</td><td>블록들이 디스크 전체에 흩어지고 포인터로 연결</td><td>색인(인덱스) 블록이 각 블록 주소를 관리</td></tr>
+      <tr><td>탐색 속도</td><td><b>빠름</b> (탐색 횟수 최소화)</td><td>느림 (포인터 따라가야 함)</td><td>보통 (색인만 보면 됨)</td></tr>
+      <tr><td>단편화</td><td><b>외부 단편화 발생</b> → 주기적 압축 필요</td><td>외부 단편화 <b>없음</b></td><td>외부 단편화 없음</td></tr>
+      <tr><td>직접 접근</td><td>가능</td><td><b>불가능</b> (순차 접근만)</td><td>가능</td></tr>
+      <tr><td>추가 공간</td><td>불필요</td><td>포인터 저장 공간 필요</td><td>색인 블록 저장 공간 필요</td></tr>
+      <tr><td>디렉터리 정보</td><td>시작주소 + 길이(또는 끝주소)</td><td>첫 블록과 마지막 블록 포인터</td><td>색인 블록 주소</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "연속 할당은 디스크 공간 사용 효율이 높다" → 오답. 검색은 빠르지만 <b>단편화 때문에 공간 효율은 오히려 낮다.</b> "블록 할당 방식은 단편화 해결을 위해 압축이 필요하다" → 압축이 필요한 건 <b>연속 할당</b>이다.</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>SSTF·C-SCAN·C-LOOK 등 주어진 요청 큐로 <b>헤드 이동 순서·총 이동거리 계산</b> 문제 매년 출제</li>
+      <li>SCAN vs C-SCAN vs LOOK vs C-LOOK <b>이름과 설명 짝짓기</b> 문제 (설명을 서로 바꿔서 오답 유도)</li>
+      <li>FCFS는 공평하지만 <b>성능이 가장 좋은 기법은 아니다</b></li>
+      <li>연속 할당 = 빠른 검색 + 외부 단편화 + 압축 필요 / 연결 할당 = 직접접근 불가 + 단편화 없음</li>
+      <li>색인 할당은 색인(인덱스) 블록이 파일을 구성하는 블록 주소를 관리</li>
+      <li>자료 단위 크기 순서: 필드 &lt; 레코드 &lt; 파일 &lt; 데이터베이스</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>SCAN</th><th>C-SCAN</th></tr>
+      <tr><td>방향</td><td>양방향 왕복</td><td>한쪽 방향으로만 서비스</td></tr>
+      <tr><td>끝에서</td><td>방향을 바꿔 되돌아오며 처리</td><td>서비스 없이 반대쪽 끝으로 이동 후 같은 방향 재처리</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>SCAN·C-SCAN</th><th>LOOK·C-LOOK</th></tr>
+      <tr><td>이동 범위</td><td>디스크 <b>맨 끝(0, 최대트랙)까지</b> 이동</td><td>마지막 <b>요청이 있는 지점까지만</b> 이동 (불필요한 이동 없음)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">FCFS</span>
+      <span class="chip">SSTF</span>
+      <span class="chip">SCAN</span>
+      <span class="chip">C-SCAN</span>
+      <span class="chip">LOOK</span>
+      <span class="chip">C-LOOK</span>
+      <span class="chip">헤드이동거리</span>
+      <span class="chip">연속할당</span>
+      <span class="chip">연결할당</span>
+      <span class="chip">색인할당</span>
+      <span class="chip">외부단편화</span>
+      <span class="chip">직접접근</span>
+      <span class="chip">필드</span>
+      <span class="chip">레코드</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

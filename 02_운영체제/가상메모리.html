@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가상 메모리 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 가상 메모리</div>
+  <h1 class="page-title">가상 메모리</h1>
+  <p class="page-subtitle">페이징·세그멘테이션·페이지 교체 알고리즘·스래싱 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>가상 메모리는 <b>보조기억장치 일부를 주기억장치처럼</b> 사용해, 실제 RAM 용량보다 큰 프로그램도 실행 가능하게 하는 기법.</p>
+    <p>구현 방법은 <b>페이징(고정 크기)</b>과 <b>세그멘테이션(가변 크기)</b> 두 가지. 페이지 교체가 너무 잦으면 <b>스래싱</b>이 발생한다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — 가상 메모리 기초</h2>
+
+    <h3>가상 메모리란?</h3>
+    <ul>
+      <li>프로세스가 사용하는 <b>가상 주소(Virtual Address)</b>와 실제 <b>물리 주소(Physical Address)</b>를 분리</li>
+      <li>디스크 공간을 가상의 메모리처럼 활용 → 물리적 메모리 크기 제약 없이 프로그램 실행 가능</li>
+      <li>가상주소 → 물리주소로 바꾸는 것을 <b>동적 주소 변환(DAT)</b>이라 하며, 프로세스 <b>실행 중에</b> 이루어짐</li>
+      <li>프로세스 주소공간의 일부만 주기억장치에 있고 나머지는 보조기억장치에 있어도 됨 (전체가 다 올라갈 필요 없음)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> 가상메모리를 쓰면 프로세서 이용률·다중 프로그래밍은 좋아지지만, <b>개별 프로그램의 수행 속도(응답시간)는 오히려 느려질 수 있다</b> — "속도가 향상된다"는 표현은 오답으로 자주 나옴.</div>
+
+    <h3>페이징 (Paging) vs 세그멘테이션 (Segmentation)</h3>
+    <table>
+      <tr><th>구분</th><th>페이징</th><th>세그멘테이션</th></tr>
+      <tr><td>분할 단위</td><td>페이지 — <b>고정 크기</b></td><td>세그먼트 — <b>가변 크기</b> (논리적 의미 단위)</td></tr>
+      <tr><td>단편화</td><td><b>내부 단편화</b> 발생</td><td><b>외부 단편화</b> 발생</td></tr>
+      <tr><td>주소 구성</td><td>페이지 번호 + 페이지 오프셋</td><td>세그먼트 번호 + 변위(offset)</td></tr>
+      <tr><td>프로그램 의미</td><td>페이지는 논리적 의미를 갖지 않음</td><td>세그먼트는 논리적 의미 단위를 가짐</td></tr>
+    </table>
+    <div class="tip">
+      <b>비트 수 계산 예:</b> 페이지 크기가 2,048바이트(2¹¹) → 페이지 오프셋 = <b>11비트</b>.<br>
+      가상주소 전체가 32비트라면 → 페이지 번호 = 32 − 11 = <b>21비트</b>.
+    </div>
+
+    <h3>페이지 테이블과 TLB</h3>
+    <ul>
+      <li><b>페이지 테이블(Page Table):</b> 페이지 번호 ↔ 프레임 번호를 매핑해주는 표. 프로세스마다 존재</li>
+      <li><b>TLB(Translation Lookaside Buffer):</b> 최근 사용한 페이지↔프레임 변환 결과를 저장해두는 <b>일종의 캐시</b>. 페이지 테이블을 매번 읽는 시간을 줄여 속도 향상</li>
+      <li><b>역페이지테이블(Inverted Page Table):</b> 가상 페이지 번호 대신 <b>물리 프레임</b> 기준으로 테이블을 구성 → 테이블 크기가 가상주소 공간이 아닌 <b>실제 메모리 크기</b>에 비례해 작아짐 (단, 탐색 성능 저하 가능 → TLB·해시로 보완)</li>
+    </ul>
+    <p><b>계산 방법:</b> 논리주소를 <b>페이지 크기로 나눈 몫이 페이지번호, 나머지가 변위(offset)</b>다. 페이지테이블에서 그 페이지번호에 해당하는 프레임번호를 찾은 뒤, <b>프레임번호×페이지크기 + 변위</b>로 물리주소를 만든다.</p>
+    <div class="tip">
+      <b>물리주소 계산 예제: 페이지 크기 2,000byte, 논리주소 2500</b> <span class="page-ref">📖 기출문제집 p.248</span>
+      <ol class="steps">
+        <li>페이지 번호 = 논리주소 ÷ 페이지크기 = 2500 ÷ 2000 = <b>1</b> (몫)</li>
+        <li>변위(offset) = 논리주소 % 페이지크기 = 2500 % 2000 = <b>500</b> (나머지)</li>
+        <li>페이지 테이블에서 "1번 페이지 → 3번 프레임" 매핑을 확인</li>
+        <li>물리주소 = 프레임번호 × 페이지크기 + 변위 = 3 × 2000 + 500 = <b>6500</b></li>
+      </ol>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 340" role="img" aria-label="가상주소에서 물리주소로의 변환 과정: 논리주소 2500을 페이지번호 1과 변위 500으로 나누고, 페이지테이블에서 프레임번호 3을 찾아 물리주소 6500을 만든다">
+        <defs>
+          <marker id="arV" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="200" y="20" width="240" height="45" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="47" font-size="13" text-anchor="middle">가상(논리) 주소 = 2500</text>
+
+        <line x1="270" y1="65" x2="180" y2="100" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+        <line x1="370" y1="65" x2="460" y2="100" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+
+        <rect x="60" y="100" width="230" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="175" y="122" font-size="12" text-anchor="middle">페이지번호 = 2500÷2000</text>
+        <text x="175" y="140" font-size="13" text-anchor="middle" font-weight="700">= 1</text>
+
+        <rect x="350" y="100" width="230" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="465" y="122" font-size="12" text-anchor="middle">변위 = 2500 mod 2000</text>
+        <text x="465" y="140" font-size="13" text-anchor="middle" font-weight="700">= 500</text>
+
+        <line x1="175" y1="150" x2="175" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+        <rect x="60" y="190" width="230" height="55" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="175" y="212" font-size="12" text-anchor="middle">페이지 테이블 조회</text>
+        <text x="175" y="232" font-size="13" text-anchor="middle" font-weight="700">페이지1 → 프레임3</text>
+
+        <line x1="175" y1="245" x2="230" y2="275" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+        <line x1="465" y1="150" x2="465" y2="230" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="465" y1="230" x2="410" y2="275" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+
+        <rect x="160" y="280" width="320" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="320" y="300" font-size="12" text-anchor="middle">물리주소 = 프레임3×2000 + 변위500</text>
+        <text x="320" y="320" font-size="14" text-anchor="middle" font-weight="700">= 6500</text>
+      </svg>
+      <figcaption>가상주소 → 물리주소 변환은 "나눗셈으로 페이지번호·변위 분리 → 페이지테이블로 프레임 찾기 → 프레임×페이지크기+변위로 재조합" 3단계로 이뤄진다.</figcaption>
+    </figure>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔄</span>주요 개념 — 페이지 교체 알고리즘</h2>
+    <table>
+      <tr><th>알고리즘</th><th>교체 기준</th></tr>
+      <tr><td>FIFO</td><td>가장 먼저 적재된(가장 오래된) 페이지 교체</td></tr>
+      <tr><td>LRU (Least Recently Used)</td><td>가장 오랫동안 <b>참조되지 않은</b> 페이지 교체</td></tr>
+      <tr><td>LFU (Least Frequently Used)</td><td><b>사용 빈도(횟수)가 가장 적은</b> 페이지 교체</td></tr>
+      <tr><td>MFU (Most Frequently Used)</td><td>사용 빈도가 가장 많은 페이지 교체</td></tr>
+      <tr><td>최적 교체 (Optimal)</td><td>앞으로 <b>가장 오랫동안 사용되지 않을</b> 페이지 교체 (이론상 최선, 구현 불가)</td></tr>
+      <tr><td>2차 기회 (Second-chance)</td><td>FIFO 기반 + 참조비트. 참조비트가 1이면 0으로 바꾸고 한 번 더 기회, <b>참조비트가 0인 페이지만</b> 교체 대상</td></tr>
+    </table>
+    <p><b>계산 방법:</b> 참조열을 한 칸씩 짚어가며 "지금 프레임에 이 페이지가 있는가?"만 확인한다. 있으면 <b>적중(hit)</b>, 없으면 <b>부재(fault)</b>가 발생해 한 페이지를 내보내고 새 페이지를 채운다 — 어떤 페이지를 내보낼지 고르는 기준만 알고리즘마다 다르다.</p>
+    <div class="tip">
+      <b>계산 예제: 참조열 "2 1 2 3 1 4 5 1 4 3", 프레임 3개, LRU 적용</b> <span class="page-ref">📖 기출문제집 p.259</span>
+      <ol class="steps">
+        <li>2 → 프레임 비어있음 → <b>부재</b>, [2]</li>
+        <li>1 → 없음 → <b>부재</b>, [2,1]</li>
+        <li>2 → 있음 → <b>적중</b>, 사용순서 갱신 [1,2]</li>
+        <li>3 → 없음, 자리 있음 → <b>부재</b>, [1,2,3]</li>
+        <li>1 → 있음 → <b>적중</b>, 갱신 [2,3,1]</li>
+        <li>4 → 없음, 자리 꽉참 → 가장 오래 안 쓴 <b>2를 제거</b> → <b>부재</b>, [3,1,4]</li>
+        <li>5 → 없음 → 가장 오래 안 쓴 <b>3을 제거</b> → <b>부재</b>, [1,4,5]</li>
+        <li>1 → 있음 → <b>적중</b>, 갱신 [4,5,1]</li>
+        <li>4 → 있음 → <b>적중</b>, 갱신 [5,1,4]</li>
+        <li>3 → 없음 → 가장 오래 안 쓴 <b>5를 제거</b> → <b>부재</b>, [1,4,3]</li>
+      </ol>
+      부재 발생 횟수 = 1,2,4,6,7,10번째 = <b>총 6회</b> (같은 참조열을 FIFO로 풀면 7회 — 교체 기준만 다를 뿐 절차는 동일)
+    </div>
+    <table>
+      <tr><th>참조</th><td>2</td><td>1</td><td>2</td><td>3</td><td>1</td><td>4</td><td>5</td><td>1</td><td>4</td><td>3</td></tr>
+      <tr><th>결과</th><td>부재</td><td>부재</td><td>적중</td><td>부재</td><td>적중</td><td>부재</td><td>부재</td><td>적중</td><td>적중</td><td>부재</td></tr>
+      <tr><th>프레임 상태<br><span style="font-weight:400;font-size:11px;opacity:.75">(LRU→MRU순)</span></th><td>2</td><td>2,1</td><td>1,2</td><td>1,2,3</td><td>2,3,1</td><td>3,1,4</td><td>1,4,5</td><td>4,5,1</td><td>5,1,4</td><td>1,4,3</td></tr>
+    </table>
+    <div class="tip"><b>벨레이디의 변칙 (Belady's Anomaly):</b> FIFO는 페이지 프레임 <b>개수를 늘렸는데도 오히려 페이지 폴트가 증가</b>하는 역설적 현상이 발생할 수 있다. (LRU·최적 교체에서는 발생하지 않음)</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔥</span>주요 개념 — 지역성·스래싱·작업집합</h2>
+
+    <h3>지역성 (Locality)</h3>
+    <p>프로세스가 실행되는 동안 <b>메모리의 일부분만 집중적으로 참조</b>하는 경향. 배열을 순서대로 순회하는 것은 <b>공간 지역성</b>의 대표 예.</p>
+
+    <h3>스래싱 (Thrashing)</h3>
+    <ul>
+      <li>페이지 부재가 너무 자주 일어나 <b>프로그램 실행 시간보다 페이지 교체 시간이 더 커지는</b> 현상</li>
+      <li>다중 프로그래밍의 정도(동시 실행 프로세스 수)가 높아질수록 스래싱 발생 가능성 ↑</li>
+      <li>스래싱이 시작되면 CPU 이용률은 <b>급격히 떨어진다</b> (다중 프로그래밍 정도를 높인다고 CPU 이용률이 계속 올라가는 것이 아님)</li>
+      <li>해결책: 다중 프로그래밍의 정도를 <b>낮추기</b> (프로세스 일부를 중단시켜 페이지 프레임 여유 확보)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "다중 프로그래밍 정도가 높아짐에 따라 CPU 이용률이 계속 높아진다"는 틀린 설명 — 어느 지점을 넘으면 스래싱으로 <b>급락</b>한다 (역 U자 곡선).</div>
+
+    <h3>작업 집합 (Working Set)</h3>
+    <p>프로세스가 <b>일정 시간 범위 내에 자주 참조하는 페이지들의 집합</b>. 프로세스 실행 중 참조 지역성이 이동하면서 작업 집합도 <b>계속 변한다</b> (한 번 정해지면 고정되는 것이 아님).</p>
+
+    <h3>페이지 부재 빈도 기법 (Page Fault Frequency)</h3>
+    <p>프로세스에 할당된 페이지 프레임 수가 설정한 <b>부재율 하한보다 낮아지면 프레임 수를 늘리고</b>, 상한을 넘으면 프레임 수를 줄여 스래싱을 조절하는 기법.</p>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>가상메모리는 응답시간을 <b>느리게</b> 만들 수 있음 (속도 향상 아님)</li>
+      <li>페이징=내부단편화만, 세그멘테이션=외부단편화만 발생</li>
+      <li>페이지 크기가 <b>작아지면</b> 페이지 테이블 크기는 <b>커진다</b> (관리할 페이지 개수 증가)</li>
+      <li>TLB는 페이지 테이블의 <b>캐시</b> 역할, 가상→물리 주소 변환 속도 향상용</li>
+      <li>역페이지테이블은 테이블 크기가 <b>실제 메모리 크기</b>에 비례 (가상주소공간 크기와 무관)</li>
+      <li>FIFO만 <b>벨레이디의 변칙</b> 발생 가능 (프레임 늘렸는데 폴트 증가)</li>
+      <li>스래싱 = 페이지 교체시간 &gt; 프로그램 실행시간, 해결은 다중프로그래밍 정도를 낮추는 것</li>
+      <li>작업 집합은 <b>고정되지 않고 계속 변함</b> (오답 함정으로 자주 출제)</li>
+      <li>페이지 교체 알고리즘별 폴트 횟수 계산 문제 (FIFO/LRU/LFU/Optimal 비교) 거의 매년 출제</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>페이징</th><th>세그멘테이션</th></tr>
+      <tr><td>단위</td><td>고정 크기 페이지</td><td>가변 크기 세그먼트</td></tr>
+      <tr><td>단편화</td><td>내부 단편화</td><td>외부 단편화</td></tr>
+      <tr><td>논리적 의미</td><td>없음</td><td>있음 (모듈 단위 등)</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>FIFO</th><th>LRU</th><th>LFU</th><th>Optimal</th></tr>
+      <tr><td>기준</td><td>적재 순서(가장 오래됨)</td><td>참조 시점(가장 오랫동안 안 씀)</td><td>참조 횟수(가장 적게 씀)</td><td>미래 참조(가장 늦게 다시 쓰일 것)</td></tr>
+      <tr><td>구현</td><td>쉬움</td><td>오버헤드 큼 (근사 알고리즘 사용)</td><td>카운터 필요</td><td>이론적, 실제 구현 불가</td></tr>
+      <tr><td>벨레이디 변칙</td><td><b>발생 가능</b></td><td>발생 안 함</td><td>-</td><td>발생 안 함</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">가상메모리</span>
+      <span class="chip">동적주소변환</span>
+      <span class="chip">페이징</span>
+      <span class="chip">세그멘테이션</span>
+      <span class="chip">페이지테이블</span>
+      <span class="chip">TLB</span>
+      <span class="chip">역페이지테이블</span>
+      <span class="chip">FIFO</span>
+      <span class="chip">LRU</span>
+      <span class="chip">LFU</span>
+      <span class="chip">MFU</span>
+      <span class="chip">Optimal</span>
+      <span class="chip">2차기회</span>
+      <span class="chip">벨레이디의변칙</span>
+      <span class="chip">지역성</span>
+      <span class="chip">Locality</span>
+      <span class="chip">스래싱</span>
+      <span class="chip">Thrashing</span>
+      <span class="chip">작업집합</span>
+      <span class="chip">Working Set</span>
+      <span class="chip">페이지부재빈도</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

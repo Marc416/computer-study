@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>운영체제 실무 (UNIX·Windows) | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 운영체제 실무 (UNIX·Windows)</div>
+  <h1 class="page-title">운영체제 실무 (UNIX·Windows)</h1>
+  <p class="page-subtitle">UNIX 커널·파일시스템·프로세스 통신, Windows 실행창 명령어 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>UNIX 커널은 <b>프로세스·파일·메모리·입출력 관리</b>를 담당하고, 명령어 해석은 <b>쉘(shell)</b>의 몫이다.</p>
+    <p><code>fork()</code>는 프로세스를 <b>복사</b>해서 자식을 만들고, 부모는 자식 PID를, 자식은 0을 반환받는다.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">💡</span>주요 개념 — UNIX 커널과 파일시스템</h2>
+
+    <h3>UNIX 커널의 기능</h3>
+    <ul>
+      <li>사용자 프로세스 관리 (Process Management)</li>
+      <li>파일 관리 (File Management)</li>
+      <li>기억장치 관리 (Memory Management)</li>
+      <li>입/출력 시스템 관리 (I/O System Management)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> <b>사용자 명령어 관리, 윈도우(창) 관리는 커널의 기능이 아니라 쉘(shell)의 기능</b>이다. "커널에 속하지 않는 것" 문제에서 자주 정답으로 나온다.</div>
+    <p>UNIX와 BSD 계열은 대부분 <b>C언어</b>로 작성되어 이식성이 높다 (어셈블리어 아님 — 자주 나오는 오답).</p>
+
+    <h3>UNIX 파일 시스템 구조 (디스크 블록 4단계) <span class="page-ref">📖 기출문제집 p.274~275</span></h3>
+    <table>
+      <tr><th>블록</th><th>내용</th></tr>
+      <tr><td>부트 블록 (Boot Block)</td><td>파일 시스템의 첫 블록. 시스템을 실행하는 프로그램·정보 저장</td></tr>
+      <tr><td>슈퍼 블록 (Super Block)</td><td>전체 블록 수, 블록 크기, 사용 중인 블록 수 등 <b>파일시스템 전체 정보</b></td></tr>
+      <tr><td>i-node 블록</td><td>각 파일·디렉터리의 <b>모든 속성 정보</b> 저장</td></tr>
+      <tr><td>데이터 블록</td><td>실제 파일·디렉터리 내용 저장</td></tr>
+    </table>
+    <figure class="diagram">
+      <svg viewBox="0 0 700 260" role="img" aria-label="UNIX 디스크 레이아웃: 부트블록, 슈퍼블록, i-node 블록, 데이터 블록이 순서대로 배치되고 i-node 블록의 내용이 아래 상세 목록으로 확장되어 있다">
+        <defs>
+          <marker id="fs1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="20" y="50" width="90" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="65" y="35" font-size="11.5" text-anchor="middle">부트 블록</text>
+        <text x="65" y="85" font-size="10" text-anchor="middle">Boot</text>
+
+        <rect x="110" y="50" width="100" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="160" y="35" font-size="11.5" text-anchor="middle">슈퍼 블록</text>
+        <text x="160" y="85" font-size="10" text-anchor="middle">Super</text>
+
+        <rect x="210" y="50" width="180" height="60" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="300" y="35" font-size="11.5" text-anchor="middle" font-weight="700">i-node 블록</text>
+        <text x="300" y="85" font-size="10" text-anchor="middle">파일당 1개씩</text>
+
+        <rect x="390" y="50" width="290" height="60" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="535" y="35" font-size="11.5" text-anchor="middle">데이터 블록</text>
+        <text x="535" y="85" font-size="10" text-anchor="middle">실제 파일 내용</text>
+
+        <line x1="300" y1="110" x2="300" y2="145" stroke="currentColor" stroke-width="1.5" marker-end="url(#fs1)"/>
+        <rect x="150" y="150" width="300" height="95" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="172" font-size="11.5" text-anchor="middle" font-weight="700">i-node 안에 있는 것</text>
+        <text x="300" y="192" font-size="10.5" text-anchor="middle">파일종류·소유자·권한·시간·크기·링크수</text>
+        <text x="300" y="208" font-size="10.5" text-anchor="middle">저장블록 주소(직접/단일·이중·삼중 간접 포인터)</text>
+        <text x="300" y="232" font-size="11" text-anchor="middle" font-weight="700">✕ 파일 이름 (디렉터리가 별도 관리)</text>
+      </svg>
+      <figcaption>디스크는 부트→슈퍼→i-node→데이터 블록 순으로 배치된다. i-node에는 파일의 거의 모든 속성이 담기지만 <b>파일 이름만은 예외</b>로, 디렉터리 엔트리가 "이름 ↔ i-node 번호" 매핑을 따로 관리한다.</figcaption>
+    </figure>
+    <div class="tip">
+      <b>i-node가 담고 있는 정보:</b> 파일 종류, 소유자, 접근권한, 접근/생성 시간, 크기, 링크 수, 저장 블록 주소(직접/단일·이중·삼중 간접 블록 포인터)<br>
+      <b>i-node에 없는 것:</b> <b>파일 이름</b> — 파일 이름은 디렉터리 엔트리가 아이노드 번호와 함께 따로 관리한다
+    </div>
+
+    <h3>파일 접근 권한 (rwx, 8진수 표기)</h3>
+    <p>권한은 <b>소유자(user) · 그룹(group) · 나머지(other)</b> 3자리, 각 자리는 r(4)+w(2)+x(1)의 합으로 8진수 표기</p>
+    <table>
+      <tr><th>예시</th><th>의미</th></tr>
+      <tr><td><code>rwxr-xr--</code></td><td>소유자: rwx(7), 그룹: r-x(5), 나머지: r--(4) → <b>754</b></td></tr>
+      <tr><td><code>chmod 531 A</code></td><td>소유자 5(r-x)=읽기+실행, 그룹 3(-wx)=쓰기+실행, 나머지 1(--x)=실행만</td></tr>
+      <tr><td><code>chmod go-x A</code></td><td>그룹(g)·나머지(o)에서 실행(x) 권한 <b>제거</b></td></tr>
+    </table>
+    <div class="tip"><b>계산 순서 예:</b> chmod 531 A 실행 후 소유자는 r-x(읽기+실행). 이어서 chmod go-x A는 소유자에는 영향 없음(g·o만 대상) → 소유자는 최종적으로 <b>읽기+실행만 가능, 쓰기는 불가</b>.</div>
+
+    <h3>ls -l 결과 읽는 법</h3>
+    <p><code>-rwxr-xr-- 2 peter staff 3542 8월 31일 10:00 aaash</code></p>
+    <table>
+      <tr><th>필드</th><th>의미</th></tr>
+      <tr><td>맨 앞 <code>-</code></td><td>파일 종류 (- 는 일반파일, d는 디렉터리)</td></tr>
+      <tr><td><code>rwxr-xr--</code></td><td>소유자/그룹/나머지 권한</td></tr>
+      <tr><td><code>2</code></td><td><b>하드 링크 개수</b> (심볼릭 링크 개수 아님 — 자주 나오는 오답)</td></tr>
+      <tr><td><code>peter</code> / <code>staff</code></td><td>소유자 / 소유그룹</td></tr>
+      <tr><td><code>3542</code></td><td>파일 크기(byte)</td></tr>
+      <tr><td>날짜·시간</td><td>파일 <b>최종 변경 시간</b> (생성시간 아님)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>주요 개념 — 프로세스 간 통신과 fork()</h2>
+
+    <h3>파이프 · 시그널 · 공유메모리</h3>
+    <table>
+      <tr><th>방식</th><th>특징</th></tr>
+      <tr><td>익명 파이프 (Anonymous Pipe)</td><td><b>부모-자식 관계</b>인 프로세스끼리만 공유 가능, 일시적</td></tr>
+      <tr><td>지명 파이프 (Named Pipe)</td><td>파일처럼 이름을 가져 <b>관계 없는 프로세스끼리도</b> 공유 가능, 영구적</td></tr>
+      <tr><td>시그널 (Signal)</td><td>커널·프로세스가 다른 프로세스에게 <b>비동기적으로</b> 사건을 통지</td></tr>
+      <tr><td>공유 메모리 (Shared Memory)</td><td>여러 프로세스가 같은 메모리 영역 공유. <b>상호배제는 OS가 보장하지 않음</b> → 프로그래머가 직접 책임</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "지명 파이프는 부모-자식 관계가 필요하다"는 틀렸다 — 그건 <b>익명 파이프</b>의 특징. 지명 파이프는 관계 없는 프로세스끼리도 통신 가능하다.</div>
+
+    <h3>주요 시그널</h3>
+    <table>
+      <tr><th>시그널</th><th>의미</th></tr>
+      <tr><td>SIGKILL</td><td>프로세스를 <b>강제</b> 종료</td></tr>
+      <tr><td>SIGTERM</td><td>프로세스를 <b>정상적으로</b> 종료 요청</td></tr>
+      <tr><td>SIGILL</td><td>잘못된(illegal) 명령어 실행 시 발생</td></tr>
+      <tr><td>SIGCHLD</td><td>자식 프로세스가 종료될 때 <b>부모에게</b> 전달</td></tr>
+    </table>
+
+    <h3>fork() / exec() / wait()</h3>
+    <ul>
+      <li><code>fork()</code>: 실행 중인 프로세스를 <b>복사</b>해 자식 프로세스 생성. 부모에게는 자식의 PID를, 자식에게는 <b>0</b>을 반환</li>
+      <li>자식 프로세스는 부모의 메모리를 <b>복사</b>해서 가짐 (동일한 메모리 위치를 공유하는 것 아님)</li>
+      <li><code>exec()</code>: 현재 프로세스의 이미지를 <b>다른 프로그램으로 교체</b> (이미 만들어진 프로세스 구조를 재활용)</li>
+      <li><code>wait()</code>: 자식 프로세스의 종료를 기다림</li>
+    </ul>
+    <div class="tip">
+      <b>fork() 예제 (핵심 포인트):</b><br>
+      <code>pid = fork();</code> 이후 <b>if (pid == 0)</b> 이면 자식 프로세스, <b>else</b>이면 부모 프로세스 코드가 실행된다.<br>
+      자식과 부모는 fork() 호출 시점 이후부터 각자의 메모리 공간에서 독립적으로 실행을 이어간다.
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⌨️</span>주요 개념 — 자주 나오는 UNIX/Linux 명령어</h2>
+    <table>
+      <tr><th>명령어</th><th>기능</th></tr>
+      <tr><td>ls</td><td>디렉터리 목록 출력</td></tr>
+      <tr><td>cd</td><td>디렉터리 이동</td></tr>
+      <tr><td>pwd</td><td>현재 작업 디렉터리의 절대경로 출력</td></tr>
+      <tr><td>chmod</td><td>파일 접근 권한 변경</td></tr>
+      <tr><td>chown</td><td>파일 소유자·그룹 변경</td></tr>
+      <tr><td>grep</td><td>파일에서 특정 패턴(문자열)을 포함한 줄 검색</td></tr>
+      <tr><td>ps</td><td>프로세스의 현재 상태 출력</td></tr>
+      <tr><td>kill</td><td>문제 있는 프로세스를 종료</td></tr>
+      <tr><td>fsck</td><td>파일시스템 점검·복구</td></tr>
+      <tr><td>mount / umount</td><td>파일시스템을 디렉터리에 연결 / 연결 해제</td></tr>
+      <tr><td>ln</td><td>파일 링크 생성 (기본은 하드링크, -s는 심볼릭링크)</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> <code>ps</code>는 "프로세스 간 통신 경로 설정"이 아니라 <b>프로세스 현재 상태 출력</b>. <code>pwd</code>는 비밀번호 설정이 아니라 <b>현재 경로 출력</b>. <code>umount</code>는 연결이 아니라 <b>연결 해제</b> (연결은 mount).</div>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🪟</span>주요 개념 — Windows 실행창 명령어</h2>
+    <table>
+      <tr><th>명령어</th><th>기능</th></tr>
+      <tr><td>dxdiag</td><td>DirectX 진단 도구로 <b>컴퓨터 사양 확인</b></td></tr>
+      <tr><td>msconfig</td><td>부팅 시 <b>시작 프로그램 관리</b></td></tr>
+      <tr><td>regedit</td><td><b>레지스트리</b>(환경설정·시스템정보 저장소) 열람·수정·삭제</td></tr>
+      <tr><td>mstsc</td><td><b>원격 데스크톱</b> 연결 실행</td></tr>
+    </table>
+    <p><b>프린터 설정:</b> 로컬 프린터와 네트워크 프린터 <b>둘 다</b> 기본 프린터로 설정 가능하며, 한 대의 프린터를 여러 컴퓨터가 네트워크로 공유할 수 있다.</p>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>커널 기능 vs 쉘 기능 구분 — <b>사용자 명령어 관리·윈도우 관리는 쉘</b></li>
+      <li>i-node에는 <b>파일 이름이 없다</b> (디렉터리가 이름↔i-node 매핑을 관리)</li>
+      <li>chmod 숫자 표기(rwx=4+2+1) 계산 문제, ls -l 결과 해석 문제</li>
+      <li>익명 파이프(부모-자식 필요) vs 지명 파이프(관계 무관) 구분</li>
+      <li>fork() 자식은 0, 부모는 자식 PID 반환 — if(pid==0) 분기 결과 예측 문제</li>
+      <li>SIGKILL(강제종료) vs SIGTERM(정상종료) vs SIGCHLD(자식종료 알림) 구분</li>
+      <li>dxdiag·msconfig·regedit·mstsc 등 Windows 실행창 명령어 기능 매칭</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>익명 파이프</th><th>지명 파이프</th></tr>
+      <tr><td>관계</td><td>부모-자식 관계 필요</td><td>관계 없는 프로세스도 가능</td></tr>
+      <tr><td>존재 기간</td><td>일시적</td><td>파일처럼 영구적</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>fork()</th><th>exec()</th></tr>
+      <tr><td>동작</td><td>프로세스를 <b>복사</b>해서 새로 생성</td><td>현재 프로세스를 <b>다른 프로그램으로 교체</b></td></tr>
+      <tr><td>메모리</td><td>부모 메모리를 복사</td><td>기존 프로세스 구조를 재활용</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">커널</span>
+      <span class="chip">쉘</span>
+      <span class="chip">부트블록</span>
+      <span class="chip">슈퍼블록</span>
+      <span class="chip">i-node</span>
+      <span class="chip">chmod</span>
+      <span class="chip">ls -l</span>
+      <span class="chip">하드링크</span>
+      <span class="chip">named pipe</span>
+      <span class="chip">anonymous pipe</span>
+      <span class="chip">SIGKILL</span>
+      <span class="chip">SIGTERM</span>
+      <span class="chip">SIGCHLD</span>
+      <span class="chip">fork</span>
+      <span class="chip">exec</span>
+      <span class="chip">wait</span>
+      <span class="chip">dxdiag</span>
+      <span class="chip">msconfig</span>
+      <span class="chip">regedit</span>
+      <span class="chip">mstsc</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

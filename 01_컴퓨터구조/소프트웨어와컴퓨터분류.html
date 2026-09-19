@@ -43,12 +43,40 @@
     </table>
     <div class="tip"><b>함정 주의:</b> "프리프로세서가 고급언어를 기계어로 번역한다"는 설명은 컴파일러에 대한 설명이다 — 프리프로세서는 번역기가 아니라 사전 처리기다.</div>
 
-    <h3>폰노이만(Von Neumann) 구조와 프로그램 내장 방식</h3>
+    <h3>폰노이만(Von Neumann) 구조와 프로그램 내장 방식 <span class="page-ref">📖 기출문제집 p.22</span></h3>
     <ul>
       <li>프로그램과 데이터를 같은 <b>내부 기억장치</b>에 저장해두고, 명령어를 순서대로 꺼내(인출) 해독·실행하는 방식</li>
       <li>목적: 매번 배선판을 다시 세팅해야 하는 번거로움 해결</li>
       <li>데이터 메모리와 프로그램 메모리가 구분되지 않고 <b>하나의 버스</b>를 공유 → 이 때문에 <b>폰노이만 병목(Von Neumann bottleneck)</b> 현상 발생</li>
     </ul>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 300" role="img" aria-label="프로그램 외장 방식과 프로그램 내장 방식의 비교: 외장 방식은 배선판과 데이터 메모리가 분리되어 있고, 내장 방식은 프로그램과 데이터가 같은 메모리에 함께 저장된다">
+        <defs>
+          <marker id="arV" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <text x="175" y="24" font-size="13" text-anchor="middle" font-weight="700">프로그램 외장 방식 (ENIAC)</text>
+        <rect x="55" y="45" width="240" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="175" y="75" font-size="12" text-anchor="middle">배선판 (플러그보드)</text>
+        <text x="175" y="93" font-size="10.5" text-anchor="middle" opacity="0.7">프로그램 = 스위치·배선</text>
+        <rect x="55" y="140" width="240" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="175" y="175" font-size="12" text-anchor="middle">데이터 메모리</text>
+        <text x="175" y="230" font-size="11" text-anchor="middle" opacity="0.8">작업을 바꿀 때마다 배선을</text>
+        <text x="175" y="246" font-size="11" text-anchor="middle" opacity="0.8">전부 다시 연결해야 함</text>
+
+        <line x1="335" y1="130" x2="385" y2="130" stroke="currentColor" stroke-width="1.5" marker-end="url(#arV)"/>
+
+        <text x="545" y="24" font-size="13" text-anchor="middle" font-weight="700">프로그램 내장 방식 (폰노이만)</text>
+        <rect x="425" y="45" width="240" height="155" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="545" y="65" font-size="11.5" text-anchor="middle" opacity="0.8">주기억장치 (하나의 공간)</text>
+        <rect x="440" y="80" width="210" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="545" y="109" font-size="12" text-anchor="middle">프로그램 (명령어)</text>
+        <rect x="440" y="140" width="210" height="50" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="545" y="169" font-size="12" text-anchor="middle">데이터</text>
+        <text x="545" y="230" font-size="11" text-anchor="middle" opacity="0.8">CPU가 같은 메모리에서</text>
+        <text x="545" y="246" font-size="11" text-anchor="middle" opacity="0.8">명령어를 순서대로 인출·실행</text>
+      </svg>
+      <figcaption>프로그램 외장 방식은 프로그램이 배선(하드웨어)으로 표현되어 작업을 바꿀 때마다 다시 배선해야 했지만, 프로그램 내장 방식은 명령어를 데이터처럼 메모리에 저장해두고 CPU가 순서대로 읽어 실행한다 — "프로그램도 메모리에 저장된 데이터"라는 것이 핵심.</figcaption>
+    </figure>
     <table>
       <tr><th>컴퓨터</th><th>방식</th><th>비고</th></tr>
       <tr><td>ENIAC</td><td>프로그램 <b>외장</b> 방식</td><td>스위치·배선판으로 프로그램 표현 (내장방식 아님)</td></tr>
@@ -58,7 +86,7 @@
     </table>
     <div class="tip"><b>함정 주의:</b> "프로그램 내장 방식의 최초 컴퓨터는 ENIAC"이라는 설명은 틀렸다 — ENIAC은 프로그램 외장 방식이며, 내장 방식의 최초는 EDSAC이다.</div>
 
-    <h3>컴퓨터의 발전 과정</h3>
+    <h3>컴퓨터의 발전 과정 <span class="page-ref">📖 기출문제집 p.22~23</span></h3>
     <ul>
       <li>고급 언어(포트란, 코볼)는 <b>2세대 컴퓨터</b>부터 사용 (3세대=집적회로(IC) 도입 시기라고 헷갈리기 쉬움)</li>
       <li>애플사는 <b>1970년대</b>에 개인용 컴퓨터 출시</li>

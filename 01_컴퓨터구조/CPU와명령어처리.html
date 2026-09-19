@@ -43,13 +43,53 @@
     </table>
     <div class="analogy"><b>비유:</b> PC = "다음에 읽을 페이지 번호", MAR = "책장에서 그 페이지를 찾기 위한 색인", MBR = "찾은 내용을 옮겨 담는 바구니", IR = "지금 읽고 있는 문장"</div>
 
-    <h3>제어장치 vs 연산장치 구성요소 구분</h3>
+    <h3>제어장치 vs 연산장치 구성요소 구분 <span class="page-ref">📖 기출문제집 p.90~91</span></h3>
     <table>
       <tr><th>제어장치 (CU)</th><th>연산장치 (ALU)</th></tr>
       <tr><td>PC, IR, MAR, MBR</td><td>누산기(AC), 시프트 레지스터</td></tr>
       <tr><td>순서 제어 논리장치, 명령어 해독기</td><td>가산기, 보수기</td></tr>
     </table>
     <div class="tip"><b>함정:</b> "시프트 레지스터"는 제어장치가 아니라 <b>연산장치</b>에 해당한다 (자주 나오는 오답 선택지)</div>
+
+    <h4 style="margin:18px 0 6px;font-size:14px;">ALU는 실제로 어떻게 동작하나 — CPU 안에서의 위치</h4>
+    <p>ALU 자체는 "생각"하지 않는다. <b>제어장치(CU)가 보낸 연산선택 신호(Opcode)</b>에 따라 미리 만들어둔 회로 중 하나를 골라 전기 신호를 흘려보내는 것뿐이다. 덧셈/뺄셈은 <a href="논리회로.html">4비트 병렬 가산기/감산기</a> 같은 회로가, AND·OR 같은 논리연산은 게이트 배열이, 곱셈·나눗셈은 덧셈과 시프트의 반복으로 처리된다.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 420" role="img" aria-label="ALU 동작 구조: 제어장치가 연산선택 신호를 ALU에 보내고, 레지스터 A와 B의 값이 ALU에 입력되어 결과 레지스터와 상태 레지스터로 출력된다">
+        <defs>
+          <marker id="ar4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="220" y="20" width="200" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="50" font-size="14" text-anchor="middle">제어장치 (CU)</text>
+        <line x1="320" y1="70" x2="320" y2="148" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+        <text x="330" y="110" font-size="11.5">연산선택 신호 (Opcode)</text>
+
+        <rect x="30" y="150" width="150" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="175" font-size="12.5" text-anchor="middle">레지스터 A</text>
+        <text x="105" y="192" font-size="11" text-anchor="middle" opacity="0.75">(피연산자 1)</text>
+        <line x1="180" y1="180" x2="258" y2="192" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+
+        <rect x="30" y="250" width="150" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="275" font-size="12.5" text-anchor="middle">레지스터 B</text>
+        <text x="105" y="292" font-size="11" text-anchor="middle" opacity="0.75">(피연산자 2)</text>
+        <line x1="180" y1="280" x2="258" y2="268" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+
+        <rect x="260" y="150" width="180" height="160" rx="10" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="350" y="220" font-size="20" text-anchor="middle" font-weight="700">ALU</text>
+        <text x="350" y="245" font-size="11" text-anchor="middle" opacity="0.75">가산기·보수기·시프트회로</text>
+        <text x="350" y="260" font-size="11" text-anchor="middle" opacity="0.75">논리게이트의 조합</text>
+
+        <line x1="440" y1="210" x2="530" y2="210" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+        <rect x="530" y="180" width="90" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="575" y="205" font-size="12" text-anchor="middle">결과</text>
+        <text x="575" y="222" font-size="12" text-anchor="middle">레지스터/AC</text>
+
+        <line x1="350" y1="310" x2="350" y2="358" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+        <rect x="220" y="360" width="260" height="50" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="350" y="390" font-size="12.5" text-anchor="middle">상태 레지스터 (Flag: Carry·Zero·Sign·Overflow)</text>
+      </svg>
+      <figcaption>ALU는 CU의 연산선택 신호(Opcode)로 동작이 결정되는 조합회로 묶음이다. 두 피연산자를 받아 결과를 내놓는 동시에, 그 결과의 특징(자리올림 발생·0인지·음수인지·범위초과인지)을 상태 레지스터(Flag)에 남겨 CU의 다음 판단(분기 등)에 쓰인다.</figcaption>
+    </figure>
+    <div class="tip"><b>Flag가 쓰이는 예:</b> "만약 계산 결과가 0이면 점프하라"는 조건분기 명령어는 CU가 ALU 연산 직후의 <b>Zero 플래그</b>를 확인해서 처리한다 — ALU와 제어장치가 분리돼 있어도 반드시 협업해야 하는 이유.</div>
 
     <h3>오퍼랜드 수에 따른 명령어 분류</h3>
     <table>
@@ -59,10 +99,49 @@
       <tr><td>2-주소 명령어</td><td>연산 결과가 오퍼랜드 중 하나에 저장 (일반적인 CPU 명령어 형태)</td></tr>
       <tr><td>3-주소 명령어</td><td>두 개의 피연산자 + 결과 저장 위치까지 모두 명시</td></tr>
     </table>
+    <p><b>계산 방법:</b> 스택은 <b>후입선출(LIFO)</b>이다. 숫자를 만나면 그냥 쌓고(PUSH), 연산자를 만나면 <b>스택 맨 위에서 2개를 꺼내</b> 계산한 뒤 그 결과를 다시 쌓는다(PUSH). 이 규칙만 지키면 순서대로 손으로 따라가도 답이 나온다.</p>
     <div class="tip">
-      <b>0-주소 명령어(스택) 계산 예제:</b> PUSH C → PUSH A → PUSH B → ADD → MUL → POP Z<br>
-      ADD 시점에 스택 맨 위 B, A를 꺼내 <b>A+B</b>를 다시 삽입 → MUL 시점에 (A+B)와 C를 꺼내 <b>C×(A+B)</b> 삽입 → <b>Z = (A+B) × C</b>
+      <b>0-주소 명령어(스택) 계산 예제: PUSH C → PUSH A → PUSH B → ADD → MUL → POP Z</b> <span class="page-ref">📖 기출문제집 p.97</span>
+      <ol class="steps">
+        <li>PUSH C → 스택: [C]</li>
+        <li>PUSH A → 스택: [C, A]</li>
+        <li>PUSH B → 스택: [C, A, B]</li>
+        <li>ADD → 맨 위 2개(B, A)를 꺼내 <b>A+B</b> 계산 후 다시 삽입 → 스택: [C, (A+B)]</li>
+        <li>MUL → 맨 위 2개((A+B), C)를 꺼내 <b>C×(A+B)</b> 계산 후 다시 삽입 → 스택: [C×(A+B)]</li>
+        <li>POP Z → 결과를 꺼내 Z에 저장 → <b>Z = (A+B) × C</b></li>
+      </ol>
     </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 620 200" role="img" aria-label="스택 계산 과정: PUSH C, A, B 이후 ADD로 A+B를 만들고 MUL로 C 곱을 만드는 스택 상태 변화">
+        <text x="70" y="20" font-size="12.5" text-anchor="middle">PUSH C,A,B 직후</text>
+        <rect x="30" y="120" width="80" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="140" font-size="12" text-anchor="middle">B</text>
+        <rect x="30" y="90" width="80" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="110" font-size="12" text-anchor="middle">A</text>
+        <rect x="30" y="60" width="80" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="70" y="80" font-size="12" text-anchor="middle">C</text>
+        <text x="70" y="165" font-size="10.5" opacity="0.7">↑ top</text>
+
+        <line x1="150" y1="105" x2="220" y2="105" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+        <text x="185" y="98" font-size="11" text-anchor="middle">ADD</text>
+
+        <text x="300" y="20" font-size="12.5" text-anchor="middle">ADD 이후</text>
+        <rect x="260" y="90" width="80" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="110" font-size="12" text-anchor="middle">A+B</text>
+        <rect x="260" y="60" width="80" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="300" y="80" font-size="12" text-anchor="middle">C</text>
+        <text x="300" y="135" font-size="10.5" opacity="0.7">↑ top</text>
+
+        <line x1="380" y1="105" x2="450" y2="105" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar4)"/>
+        <text x="415" y="98" font-size="11" text-anchor="middle">MUL</text>
+
+        <text x="540" y="20" font-size="12.5" text-anchor="middle">MUL 이후 → POP Z</text>
+        <rect x="480" y="90" width="120" height="30" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="540" y="110" font-size="12" text-anchor="middle">C×(A+B)</text>
+        <text x="540" y="135" font-size="10.5" opacity="0.7">↑ top → Z에 저장</text>
+      </svg>
+      <figcaption>스택 기반 0-주소 명령어의 실행 흐름 — 숫자는 쌓이고, 연산자는 스택 맨 위 2개를 소비해 결과 1개로 되돌려 놓는다.</figcaption>
+    </figure>
     <p><b>OP-Code(연산자) 비트 수가 많을수록</b> 표현 가능한 명령어 종류가 많아진다. (오퍼랜드 필드가 아니라 OP-Code 필드가 명령어 종류 개수를 결정)</p>
 
     <h3>주소지정 방식 (Addressing Mode)</h3>

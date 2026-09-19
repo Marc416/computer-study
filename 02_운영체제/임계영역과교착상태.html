@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>임계영역과 교착상태 | 컴퓨터일반</title>
+<link rel="stylesheet" href="../assets/css/study.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="breadcrumb"><a href="../index.html">홈</a> / <a href="index.html">02. 운영체제</a> / 임계영역과 교착상태</div>
+  <h1 class="page-title">임계영역과 교착상태</h1>
+  <p class="page-subtitle">상호배제·세마포어·교착상태 4조건과 해결법 · PART 02. 운영체제론</p>
+
+  <div class="summary-box">
+    <span class="tag">핵심 요약</span>
+    <p>임계영역 문제 해결의 3조건: <b>상호배제·진행·한정대기</b>. 세마포어(P/V 연산)로 이를 구현한다.</p>
+    <p>교착상태는 <b>상호배제·점유와대기·비선점·순환대기</b> 4가지 조건을 <b>모두</b> 만족해야 발생한다 — 예방은 이 중 하나(상호배제 제외)를 부정하는 것.</p>
+  </div>
+
+  <section class="block">
+    <h2><span class="emoji">🔒</span>주요 개념 — 임계영역과 상호배제</h2>
+
+    <h3>임계영역(Critical Section)이란?</h3>
+    <p>둘 이상의 프로세스가 동시에 접근하면 안 되는 <b>공유자원(임계자원)</b>을 이용하는 프로그램 코드 부분. 한 프로세스가 임계영역에서 실행 중이면 다른 프로세스는 진입할 수 없고, 그 시점에는 <b>공유데이터의 읽기·쓰기가 불가능</b>하다.</p>
+
+    <h3>임계영역 문제 해결의 3가지 필수 조건</h3>
+    <table>
+      <tr><th>조건</th><th>의미</th></tr>
+      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 프로세스가 임계영역에 있으면 다른 프로세스는 <b>진입 불가</b></td></tr>
+      <tr><td>진행 (Progress)</td><td>임계영역이 비어있을 때, 누가 들어갈지는 <b>무한정 연기되지 않고</b> 유한 시간 내 결정되어야 함</td></tr>
+      <tr><td>한정 대기 (Bounded Waiting)</td><td>진입 요청 후 허용될 때까지, 다른 프로세스가 먼저 진입하는 <b>횟수에 한계</b>가 있어야 함</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> 해결책은 프로세스의 <b>수행 속도에 대해 어떤 가정도 하면 안 된다</b> (속도와 무관하게 항상 일정한 결과가 보장돼야 함).</div>
+
+    <h3>세마포어 (Semaphore)</h3>
+    <ul>
+      <li>다익스트라(Dijkstra)가 제안한 <b>동기화 도구</b>, 정수형 공유 변수(counter)와 P·V 연산으로 정의</li>
+      <li><b>P 연산(wait)</b>: counter를 1 감소, 자원 사용 <b>허가를 기다리며 임계영역에 진입</b>하는 연산</li>
+      <li><b>V 연산(signal)</b>: counter를 1 증가, 자원 사용을 마치고 <b>임계영역에서 나오며</b> 대기 중인 프로세스를 깨움</li>
+      <li>종류: <b>이진(binary) 세마포어</b> (0/1만 가짐), <b>계수형(counting) 세마포어</b> (여러 개 자원 관리)</li>
+      <li>세마포어 연산 자체는 <b>수행 중 인터럽트되지 않는다</b> (원자적 연산)</li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "P연산=signal, V연산=wait"처럼 뒤바꿔 내는 문제 주의. <b>P=wait=진입, V=signal=탈출</b>. 또한 세마포어 구현 시 <b>바쁜 대기(busy waiting)</b>는 CPU 시간을 낭비하는 단점이 있다 (장점 아님).</div>
+
+    <h3>모니터(Monitor)</h3>
+    <p>공유자원을 <b>내부적으로 숨기고</b> 접근을 위한 인터페이스만 제공하여, 자원을 보호하고 프로세스 간 동기화를 자동으로 처리하는 고수준 동기화 도구.</p>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔗</span>주요 개념 — 교착상태(Deadlock)</h2>
+
+    <h3>교착상태 발생 4대 필요조건 (모두 만족해야 발생) <span class="page-ref">📖 기출문제집 p.231</span></h3>
+    <table>
+      <tr><th>조건</th><th>의미</th></tr>
+      <tr><td>상호 배제 (Mutual Exclusion)</td><td>한 번에 한 프로세스만 자원 사용 가능</td></tr>
+      <tr><td>점유와 대기 (Hold and Wait)</td><td>자원을 <b>가진 채로</b> 다른 자원을 요청하며 대기</td></tr>
+      <tr><td>비선점 (Non-preemption)</td><td>자원을 <b>강제로 빼앗을 수 없음</b> — 점유 프로세스가 끝나야 해제</td></tr>
+      <tr><td>순환 대기 (Circular Wait)</td><td>프로세스들이 <b>원형으로</b> 서로 상대의 자원을 요청</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> "조건 중 하나만 만족해도 발생한다"는 틀렸다 — <b>4가지를 모두 만족</b>해야 교착상태가 발생한다. 또한 이 4조건은 "비환형 대기"가 아니라 "<b>순환(환형) 대기</b>"가 맞는 조건 이름이다.</div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 500 400" role="img" aria-label="자원할당그래프: P1은 R1을 할당받은 채 R2를 요청하고, P2는 R2를 할당받은 채 R1을 요청하여 순환 대기가 발생한다">
+        <defs>
+          <marker id="dl1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <circle cx="90" cy="90" r="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="90" y="95" font-size="14" text-anchor="middle">P1</text>
+        <rect x="330" y="55" width="110" height="65" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="385" y="92" font-size="14" text-anchor="middle">R1</text>
+        <circle cx="90" cy="320" r="42" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="90" y="325" font-size="14" text-anchor="middle">P2</text>
+        <rect x="330" y="285" width="110" height="65" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="385" y="322" font-size="14" text-anchor="middle">R2</text>
+
+        <line x1="330" y1="80" x2="134" y2="82" stroke="currentColor" stroke-width="1.5" marker-end="url(#dl1)"/>
+        <text x="230" y="70" font-size="11" text-anchor="middle">할당</text>
+
+        <line x1="118" y1="122" x2="352" y2="283" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#dl1)"/>
+        <text x="270" y="220" font-size="11" text-anchor="middle">요청</text>
+
+        <line x1="330" y1="315" x2="134" y2="318" stroke="currentColor" stroke-width="1.5" marker-end="url(#dl1)"/>
+        <text x="230" y="335" font-size="11" text-anchor="middle">할당</text>
+
+        <line x1="118" y1="288" x2="352" y2="122" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#dl1)"/>
+        <text x="150" y="220" font-size="11" text-anchor="middle">요청</text>
+
+        <text x="240" y="205" font-size="12" text-anchor="middle" font-weight="700">순환 대기</text>
+      </svg>
+      <figcaption>자원할당그래프(Resource Allocation Graph) — 실선은 "할당", 점선은 "요청"이다. P1→R2→P2→R1→P1으로 화살표가 원을 그리는 <b>순환(사이클)</b>이 생기면 상호배제·점유와대기·비선점 조건이 이미 성립한 상태에서 순환대기까지 겹쳐 교착상태가 확정된다.</figcaption>
+    </figure>
+
+    <h3>교착상태 처리 방법 4가지</h3>
+    <table>
+      <tr><th>방법</th><th>전략</th><th>구체적 기법</th></tr>
+      <tr><td><b>예방 (Prevention)</b></td><td>4조건 중 <b>상호배제를 제외한</b> 하나를 부정 → 발생 가능성을 원천 차단</td><td>점유대기 부정(자원 일괄할당), 비선점 부정(자원 강제회수), 순환대기 부정(자원에 고유번호 부여, 오름차순으로만 요청)</td></tr>
+      <tr><td><b>회피 (Avoidance)</b></td><td>발생 가능성은 인정하되, <b>안전 상태를 유지</b>하도록 자원 할당을 통제</td><td><b>은행원(banker's) 알고리즘</b></td></tr>
+      <tr><td><b>탐지/발견 (Detection)</b></td><td>발생을 허용한 뒤 <b>자원 할당 그래프의 사이클</b> 등으로 탐지</td><td>자원할당그래프 사이클 검사</td></tr>
+      <tr><td><b>회복 (Recovery)</b></td><td>탐지된 교착상태 관련 <b>프로세스·자원을 제거/철회</b></td><td>프로세스 강제 종료, 자원 선점</td></tr>
+    </table>
+    <div class="tip"><b>함정 주의:</b> <b>상호배제는 예방 대상에서 제외</b> — 상호배제 자체를 부정하면 임계영역 보호가 무너지므로 교착상태 예방 방법으로 쓸 수 없다.</div>
+
+    <h3>은행원(Banker's) 알고리즘 — 교착상태 회피</h3>
+    <ul>
+      <li>자원 요청이 들어오면, <b>일단 할당했다고 가정(시뮬레이션)</b>하고 안전 상태(safe state)가 유지되는지 검사</li>
+      <li>안전하면 할당, <b>불안전(unsafe) 상태</b>가 될 것 같으면 할당을 거부(대기)</li>
+      <li>회피(avoidance) 알고리즘이지 <b>회복(recovery) 알고리즘이 아님</b></li>
+    </ul>
+    <div class="tip"><b>함정 주의:</b> "불안전 상태는 항상 교착상태로 빠진다"는 틀렸다 — 불안전 상태는 교착상태로 빠질 <b>가능성이 있을 뿐</b>, 반드시 빠지는 것은 아니다.</div>
+
+    <h3>기타 관련 문제</h3>
+    <ul>
+      <li>가변분할 메모리의 <b>외부 단편화</b>는 통합(coalescing)·압축(compaction)으로 해결 (교착상태와는 별개 문제, 짝지어 나오는 문제 주의)</li>
+      <li>자원형이 1개, 자원 수 R, 프로세스 수 P, 프로세스당 최대 요구자원 수 k일 때 교착상태를 근본적으로 방지하는 조건: <b>R ≥ (k-1) × P + 1</b></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">📌</span>시험 빈출 포인트</h2>
+    <ul class="point-list">
+      <li>임계영역 해결 3조건: 상호배제·진행·한정대기 (순서·이름 정확히 암기)</li>
+      <li>세마포어 P(wait)=진입/감소, V(signal)=탈출/증가 — 뒤바꿔 내는 문제 많음</li>
+      <li>교착상태 4조건은 <b>모두 만족</b>해야 발생 (하나만 만족 X)</li>
+      <li>예방(prevention)은 <b>상호배제 제외</b>한 3조건 중 하나를 부정</li>
+      <li>은행원 알고리즘 = <b>회피(avoidance)</b>, 회복(recovery) 아님</li>
+      <li>자원에 고유번호를 매겨 오름차순으로만 요청하게 하는 것 = <b>순환대기 조건의 부정</b></li>
+      <li>바쁜 대기(busy waiting)는 세마포어의 <b>단점</b> (CPU 시간 낭비)</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">⚖️</span>헷갈리는 개념 비교</h2>
+    <table>
+      <tr><th>구분</th><th>교착상태 예방</th><th>교착상태 회피</th><th>교착상태 탐지·회복</th></tr>
+      <tr><td>전략</td><td>4조건 중 하나 원천 차단</td><td>안전상태 유지하며 자원 할당</td><td>발생 허용 후 찾아서 해결</td></tr>
+      <tr><td>대표 기법</td><td>자원 순서화, 일괄 할당</td><td>은행원 알고리즘</td><td>자원할당그래프, 프로세스 강제종료</td></tr>
+      <tr><td>단점</td><td>자원 이용률 저하</td><td>최대 요구량을 미리 알아야 함</td><td>오버헤드, 이미 발생 후 대응</td></tr>
+    </table>
+    <table>
+      <tr><th>구분</th><th>P 연산 (wait)</th><th>V 연산 (signal)</th></tr>
+      <tr><td>동작</td><td>counter -1, 자원 사용 시작(진입)</td><td>counter +1, 자원 반납(탈출)</td></tr>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2><span class="emoji">🔑</span>기출 키워드</h2>
+    <div class="keywords">
+      <span class="chip">임계영역</span>
+      <span class="chip">Critical Section</span>
+      <span class="chip">상호배제</span>
+      <span class="chip">진행</span>
+      <span class="chip">한정대기</span>
+      <span class="chip">세마포어</span>
+      <span class="chip">P연산</span>
+      <span class="chip">V연산</span>
+      <span class="chip">바쁜대기</span>
+      <span class="chip">모니터</span>
+      <span class="chip">교착상태</span>
+      <span class="chip">Deadlock</span>
+      <span class="chip">점유와대기</span>
+      <span class="chip">비선점</span>
+      <span class="chip">순환대기</span>
+      <span class="chip">교착상태예방</span>
+      <span class="chip">교착상태회피</span>
+      <span class="chip">은행원알고리즘</span>
+      <span class="chip">자원할당그래프</span>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

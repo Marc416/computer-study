@@ -22,22 +22,46 @@
   <section class="block">
     <h2><span class="emoji">💡</span>주요 개념</h2>
 
-    <h3>BIOS(Basic Input Output System)</h3>
+    <h3>BIOS(Basic Input Output System) <span class="page-ref">📖 기출문제집 p.23~24</span></h3>
     <ul>
       <li>운영체제가 입출력장치·주변장치를 구동하기 위한 <b>가장 기본적인 루틴들의 집합</b></li>
       <li>IBM-PC 호환기종에서는 <b>ROM</b>에 저장 → 흔히 롬바이오스(ROM-BIOS)라 부름</li>
       <li>구성: 스타트업 루틴(POST), 서비스 처리 루틴(입출력 기본 서비스), 하드웨어 인터럽트 처리 루틴</li>
     </ul>
-    <div class="tip">
-      <b>컴퓨터 부팅 과정 순서</b><br>
-      ① POST(Power-On Self Test) 실행 — 하드웨어 장치 점검<br>
-      ② BIOS 정보를 읽어 RAM에 복사(시스템 초기화)<br>
-      ③ 부트스트랩 로더가 <b>보조기억장치</b>에 있는 운영체제를 찾아 <b>주기억장치</b>로 적재<br>
-      ④ 부팅 완료 후 CPU 제어권이 운영체제로 넘어감
-    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 420 460" role="img" aria-label="컴퓨터 부팅 순서도: 전원 on, POST 하드웨어 점검, BIOS 정보를 RAM에 복사, 부트스트랩 로더가 보조기억장치에서 운영체제를 찾아 주기억장치에 적재, 제어권을 운영체제로 이관하는 5단계 흐름">
+        <defs>
+          <marker id="arB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+        <rect x="60" y="10" width="300" height="50" rx="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="40" font-size="13" text-anchor="middle">전원 ON</text>
+        <line x1="210" y1="60" x2="210" y2="88" stroke="currentColor" stroke-width="1.5" marker-end="url(#arB)"/>
+
+        <rect x="40" y="90" width="340" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="115" font-size="13" text-anchor="middle">① POST (Power-On Self Test)</text>
+        <text x="210" y="133" font-size="11" text-anchor="middle" opacity="0.75">하드웨어 장치 상태 점검</text>
+        <line x1="210" y1="150" x2="210" y2="178" stroke="currentColor" stroke-width="1.5" marker-end="url(#arB)"/>
+
+        <rect x="40" y="180" width="340" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="205" font-size="13" text-anchor="middle">② BIOS(ROM) 정보를 RAM에 복사</text>
+        <text x="210" y="223" font-size="11" text-anchor="middle" opacity="0.75">= 시스템 초기화(initialize)</text>
+        <line x1="210" y1="240" x2="210" y2="268" stroke="currentColor" stroke-width="1.5" marker-end="url(#arB)"/>
+
+        <rect x="40" y="270" width="340" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="210" y="295" font-size="13" text-anchor="middle">③ 부트스트랩 로더 실행</text>
+        <text x="210" y="313" font-size="11" text-anchor="middle" opacity="0.75">보조기억장치에서 운영체제를 찾음</text>
+        <text x="210" y="329" font-size="11" text-anchor="middle" opacity="0.75">→ 주기억장치로 적재(load)</text>
+        <line x1="210" y1="340" x2="210" y2="368" stroke="currentColor" stroke-width="1.5" marker-end="url(#arB)"/>
+
+        <rect x="60" y="370" width="300" height="60" rx="25" fill="none" stroke="currentColor" stroke-width="2"/>
+        <text x="210" y="397" font-size="13" text-anchor="middle" font-weight="700">④ 제어권을 운영체제로 이관</text>
+        <text x="210" y="415" font-size="11" text-anchor="middle" opacity="0.75">부팅 완료</text>
+      </svg>
+      <figcaption>컴퓨터 부팅 순서 — BIOS는 ROM에서 실행되어 하드웨어를 점검·초기화한 뒤, 정작 운영체제 자체는 보조기억장치에서 찾아 주기억장치로 옮기고 CPU 제어권을 넘겨준다. "BIOS가 곧 운영체제"가 아니라는 점이 핵심.</figcaption>
+    </figure>
     <div class="tip"><b>함정 주의:</b> CMOS 셋업(메인보드에서 값 설정)은 BIOS가 부팅 중에 "항상 하는 일"이 아니다 — POST·시스템 초기화·부트스트랩 로더 로드와 구분할 것.</div>
 
-    <h3>정보처리 시스템(운영체제 처리방식)의 분류</h3>
+    <h3>정보처리 시스템(운영체제 처리방식)의 분류 <span class="page-ref">📖 기출문제집 p.25</span></h3>
     <table>
       <tr><th>방식</th><th>정의</th><th>비고</th></tr>
       <tr><td>일괄 처리 시스템 (Batch)</td><td>일정 기간·양의 작업을 모아 한꺼번에 처리</td><td>CPU와 I/O 속도차로 CPU 유휴시간 많음</td></tr>
@@ -56,7 +80,7 @@
     </table>
     <p>다중 프로세서 시스템에서는 각 프로세서의 로컬 캐시 간 데이터 일치를 보장하는 <b>캐시 일관성(Cache Coherence)</b> 문제를 반드시 고려해야 한다.</p>
 
-    <h3>마이크로프로세서 분류: CISC vs RISC</h3>
+    <h3>마이크로프로세서 분류: CISC vs RISC <span class="page-ref">📖 기출문제집 p.31</span></h3>
     <table>
       <tr><th>구분</th><th>CISC</th><th>RISC</th></tr>
       <tr><td>명령어 종류</td><td>많음 (복잡)</td><td>적음 (단순·축약)</td></tr>

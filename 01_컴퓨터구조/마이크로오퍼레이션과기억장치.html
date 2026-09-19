@@ -58,8 +58,29 @@
   <section class="block">
     <h2><span class="emoji">🗄️</span>주요 개념 — 기억장치의 종류</h2>
 
-    <h3>기억장치 계층 구조</h3>
+    <h3>기억장치 계층 구조 <span class="page-ref">📖 기출문제집 p.114~115</span></h3>
     <p>레지스터 → 캐시 → 주기억장치(RAM) → 보조기억장치(HDD/SSD) 순으로 <b>계층이 낮아질수록 속도는 느려지고, 용량은 커지며, 비트당 가격은 싸진다.</b></p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 300" role="img" aria-label="기억장치 계층 피라미드: 위로 갈수록 레지스터처럼 빠르고 비싸고 용량이 작으며, 아래로 갈수록 보조기억장치처럼 느리고 저렴하고 용량이 크다">
+        <polygon points="320,20 400,90 240,90" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="65" font-size="12" text-anchor="middle">레지스터</text>
+        <polygon points="240,90 400,90 440,160 200,160" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="132" font-size="12" text-anchor="middle">캐시</text>
+        <polygon points="200,160 440,160 480,230 160,230" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="202" font-size="12" text-anchor="middle">주기억장치 (RAM/ROM)</text>
+        <polygon points="160,230 480,230 520,290 120,290" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="320" y="266" font-size="12" text-anchor="middle">보조기억장치 (HDD/SSD)</text>
+
+        <line x1="560" y1="30" x2="560" y2="280" stroke="currentColor" stroke-width="1.5" marker-end="url(#armh)"/>
+        <text x="570" y="45" font-size="11">속도 ↓</text>
+        <text x="570" y="150" font-size="11">용량 ↑</text>
+        <text x="570" y="270" font-size="11">가격(비트당) ↓</text>
+        <defs>
+          <marker id="armh" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="currentColor"/></marker>
+        </defs>
+      </svg>
+      <figcaption>위로 갈수록 좁고(용량 작음) 빠르고 비싸며, 아래로 갈수록 넓고(용량 큼) 느리고 저렴하다 — CPU에 가까운 계층일수록 속도를 우선하고, 멀어질수록 저장 용량을 우선한다.</figcaption>
+    </figure>
     <div class="tip">캐시기억장치의 적중률·지역성·교체 알고리즘(LRU/FIFO/LFU)·쓰기 정책(Write-Through/Write-Back) 등 상세 내용은 <b>캐시기억장치 문서</b>를 참고.</div>
 
     <h3>SRAM vs DRAM</h3>
@@ -74,6 +95,12 @@
       <tr><td>휘발성</td><td>휘발성</td><td>휘발성</td></tr>
     </table>
     <div class="tip"><b>함정 주의:</b> SRAM도 DRAM과 마찬가지로 <b>휘발성</b>이다 (비휘발성 아님). 전원이 공급되는 동안만 데이터를 유지한다.</div>
+    <figure class="diagram">
+      <img src="../assets/images/ram-dimm-module.jpg" alt="실제 DDR4 RAM DIMM 모듈 사진 - 초록색 기판에 검은 메모리 칩들이 나열되어 있고 옆면에 금색 단자가 있다">
+      <figcaption>주기억장치(DRAM)의 실물 — 메인보드 RAM 슬롯에 꽂는 DIMM 모듈. 기판 위에 나열된 검은 칩 하나하나가 축전기로 데이터를 저장하는 DRAM 셀 집합이다. SRAM은 이런 완제품 모듈보다는 CPU 칩 내부(캐시)에 함께 집적되어 있어 눈으로 직접 보기 어렵다.
+        <span class="credit">사진: ElooKoN, <a href="https://commons.wikimedia.org/wiki/File:RAM_Module_(SDRAM-DDR4).jpg" target="_blank" rel="noopener">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ko" target="_blank" rel="noopener">CC BY-SA 4.0</a> (크기 조정됨)</span>
+      </figcaption>
+    </figure>
 
     <h3>ROM의 종류</h3>
     <table>
@@ -96,8 +123,39 @@
     </table>
     <p>공통점: 전원이 꺼져도 데이터 보존(<b>비휘발성</b>), 덮어쓰기(overwrite) 전에 반드시 <b>지우기(erase) 선행 필요</b>, 지우기 속도는 읽기보다 느림.</p>
 
-    <h3>RAID (Redundant Array of Independent Disks)</h3>
+    <h3>RAID (Redundant Array of Independent Disks) <span class="page-ref">📖 기출문제집 p.141~142</span></h3>
     <p>여러 개의 디스크를 하나의 논리적 디스크처럼 묶어 <b>신뢰성 또는 처리 속도</b>를 향상시키는 기술.</p>
+    <figure class="diagram">
+      <svg viewBox="0 0 640 220" role="img" aria-label="RAID 0과 RAID 1 비교: RAID 0은 데이터를 두 디스크에 나눠 저장해 복구가 불가능하고, RAID 1은 같은 데이터를 두 디스크에 그대로 복사해 저장한다">
+        <text x="150" y="20" font-size="13" text-anchor="middle" font-weight="700">RAID 0 (스트라이핑)</text>
+        <rect x="60" y="40" width="90" height="60" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="65" font-size="12" text-anchor="middle">A</text>
+        <text x="105" y="85" font-size="12" text-anchor="middle">C</text>
+        <text x="105" y="118" font-size="11" text-anchor="middle" opacity="0.75">디스크1</text>
+        <rect x="180" y="40" width="90" height="60" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="225" y="65" font-size="12" text-anchor="middle">B</text>
+        <text x="225" y="85" font-size="12" text-anchor="middle">D</text>
+        <text x="225" y="118" font-size="11" text-anchor="middle" opacity="0.75">디스크2</text>
+        <text x="150" y="145" font-size="11" text-anchor="middle">데이터 A,B,C,D를 <tspan font-weight="700">나눠서</tspan> 저장</text>
+        <text x="150" y="163" font-size="11" text-anchor="middle" opacity="0.8">→ 디스크 하나만 고장나도 데이터 유실</text>
+
+        <line x1="320" y1="70" x2="320" y2="70" stroke="currentColor"/>
+        <line x1="318" y1="20" x2="318" y2="200" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+
+        <text x="480" y="20" font-size="13" text-anchor="middle" font-weight="700">RAID 1 (미러링)</text>
+        <rect x="390" y="40" width="90" height="60" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="435" y="65" font-size="12" text-anchor="middle">A</text>
+        <text x="435" y="85" font-size="12" text-anchor="middle">B</text>
+        <text x="435" y="118" font-size="11" text-anchor="middle" opacity="0.75">디스크1</text>
+        <rect x="510" y="40" width="90" height="60" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="555" y="65" font-size="12" text-anchor="middle">A</text>
+        <text x="555" y="85" font-size="12" text-anchor="middle">B</text>
+        <text x="555" y="118" font-size="11" text-anchor="middle" opacity="0.75">디스크2 (복사본)</text>
+        <text x="480" y="145" font-size="11" text-anchor="middle">데이터 A,B를 두 디스크에 <tspan font-weight="700">그대로 복제</tspan></text>
+        <text x="480" y="163" font-size="11" text-anchor="middle" opacity="0.8">→ 한 디스크가 죽어도 복구 가능 (용량 효율 50%)</text>
+      </svg>
+      <figcaption>RAID 0은 데이터를 쪼개 분산 저장해 속도만 높이고 중복이 없어 복구가 불가능하지만, RAID 1은 같은 데이터를 통째로 복제해 저장 공간을 절반만 쓰는 대신 장애에 견딘다.</figcaption>
+    </figure>
     <table>
       <tr><th>레벨</th><th>기법</th><th>특징</th></tr>
       <tr><td>RAID 0</td><td>스트라이핑 (Striping)</td><td>데이터를 여러 디스크에 분산 저장. 속도↑ 하지만 <b>중복 저장 없음 → 오류 복구 불가</b></td></tr>
